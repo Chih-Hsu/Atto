@@ -1,11 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/tutorial_navigation"
     app:startDestination="@id/wallpaperFragment">
 
     <fragment
         android:id="@+id/wallpaperFragment"
-        android:name="com.chihwhsu.atto.tutorial_wallpaper.WallpaperFragment"
-        android:label="WallpaperFragment" />
+        android:name="com.chihwhsu.atto.tutorial1_wallpaper.WallpaperFragment"
+        android:label="WallpaperFragment"
+        tools:layout="@layout/fragment_wallpaper">
+        <action
+            android:id="@+id/action_wallpaperFragment_to_dockSelectFragment"
+            app:destination="@id/dockSelectFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/dockSelectFragment"
+        android:name="com.chihwhsu.atto.tutorial2_dock.DockSelectFragment"
+        android:label="DockSelectFragment"
+        tools:layout="@layout/fragment_dock_select"/>
 </navigation>

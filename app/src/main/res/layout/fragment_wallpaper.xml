@@ -7,7 +7,7 @@
     android:background="@drawable/tutorial_background">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tutorial1_title_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
@@ -22,7 +22,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/tutorail1_description"
         style="@style/standard_text_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -35,7 +35,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/tutorial1_title_text" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/wallpaper_recyclerview"
@@ -45,12 +45,12 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/tutorail1_description"
         tools:listitem="@layout/item_wallpaper"
         android:layout_marginTop="24dp"/>
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/text_keep_wallpaper"
         style="@style/standard_text_style"
         android:fontFamily="@font/roboto_medium"
         android:layout_width="wrap_content"
@@ -82,7 +82,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5"
+        app:layout_constraintTop_toBottomOf="@+id/text_keep_wallpaper"
         app:strokeColor="@color/dark_grey" />
 
 

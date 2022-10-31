@@ -4,6 +4,12 @@
     package="com.chihwhsu.atto">
 
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
+    <uses-permission
+        android:name="android.permission.QUERY_ALL_PACKAGES"
+        tools:ignore="QueryAllPackagesPermission" />
+    <uses-permission
+        android:name="android.permission.BIND_APPWIDGET"
+        tools:ignore="ProtectedPermissions" />
 
     <application
         android:allowBackup="true"
@@ -18,7 +24,8 @@
         <activity
             android:name=".SettingActivity"
             android:exported="true"
-            android:label="Atto Setting">
+            android:label="Atto Setting"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

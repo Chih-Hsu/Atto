@@ -1,9 +1,7 @@
-package com.chihwhsu.atto.tutorial_wallpaper
+package com.chihwhsu.atto.tutorial1_wallpaper
 
 import android.app.WallpaperManager
-import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,9 +9,9 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
-import com.chihwhsu.atto.R
 import com.chihwhsu.atto.databinding.FragmentWallpaperBinding
 import com.chihwhsu.atto.factory.WallpaperViewModelFactory
 
@@ -44,7 +42,16 @@ class WallpaperFragment : Fragment() {
             val drawable = adapter.currentList.get(currentPosition).image
             val bitmap = drawable.toBitmap(drawable.minimumWidth,drawable.minimumHeight)
             WallpaperManager.getInstance(requireContext()).setBitmap(bitmap)
+            viewModel.navigateToNext()
         }
+
+        viewModel.navigationToNext.observe(viewLifecycleOwner, Observer { canNavigate ->
+            if (canNavigate){
+            findNavController().navigate(WallpaperFragmentDirections.actionWallpaperFragmentToDockSelectFragment())
+            viewModel.doneNavigateToNext()}
+        })
+
+
 
 
 

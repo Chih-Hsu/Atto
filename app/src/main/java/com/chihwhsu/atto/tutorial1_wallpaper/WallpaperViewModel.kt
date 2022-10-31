@@ -1,4 +1,4 @@
-package com.chihwhsu.atto.tutorial_wallpaper
+package com.chihwhsu.atto.tutorial1_wallpaper
 
 import android.content.res.Resources
 import androidx.core.content.res.ResourcesCompat
@@ -13,6 +13,9 @@ class WallpaperViewModel(val resource :Resources) : ViewModel() {
     private var _wallpapers = MutableLiveData<List<Wallpaper>>()
     val wallpapers : LiveData<List<Wallpaper>> get() = _wallpapers
 
+    private var _navigationToNext = MutableLiveData<Boolean>()
+    val navigationToNext : LiveData<Boolean> get() = _navigationToNext
+
     init {
         val wallpaperList = mutableListOf<Wallpaper>(Wallpaper(1,ResourcesCompat.getDrawable(resource,
             R.drawable.wallpaper_plant,null)!!),
@@ -22,5 +25,13 @@ class WallpaperViewModel(val resource :Resources) : ViewModel() {
                 R.drawable.wallpaper_black,null)!!))
 
         _wallpapers.value = wallpaperList
+    }
+
+    fun navigateToNext(){
+        _navigationToNext.value = true
+    }
+
+    fun doneNavigateToNext(){
+        _navigationToNext.value = false
     }
 }

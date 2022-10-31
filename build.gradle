@@ -4,18 +4,16 @@ buildscript {
     ext {
         version_android_gradle_plugin = '7.2.2'
         version_core = '1.8.0'
+        navigation_version = "2.5.3"
     }
     repositories {
         google()
         mavenCentral()
     }
+
     dependencies {
-//        classpath "com.android.tools.build:gradle:$version_android_gradle_plugin"
-//        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.10"
-//        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$version_navigation"
-//        classpath("org.jlleitschuh.gradle:ktlint-gradle:$version_ktlint")
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navigation_version"
+        classpath 'com.google.gms:google-services:4.3.14'
     }
 }
 
