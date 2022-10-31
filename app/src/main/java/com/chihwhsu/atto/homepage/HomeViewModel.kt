@@ -20,6 +20,9 @@ class HomeViewModel : ViewModel() {
     private var _closeCard = MutableLiveData<Boolean>()
     val closeCard : LiveData<Boolean> get() = _closeCard
 
+    private var _navigateToEdit = MutableLiveData<Event>()
+    val navigateToEdit : LiveData<Event> get() = _navigateToEdit
+
     init {
         val list = mutableListOf<Event>(
             Event(1, true),
@@ -63,5 +66,9 @@ class HomeViewModel : ViewModel() {
         _closeCard.value = true
         _showCard.value = false
         Log.d("showCard","value = ${showCard.value}")
+    }
+
+    fun navigateToEdit(){
+        _navigateToEdit.value = event.value
     }
 }

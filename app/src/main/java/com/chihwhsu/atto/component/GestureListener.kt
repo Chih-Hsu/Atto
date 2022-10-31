@@ -42,6 +42,7 @@ class GestureListener(val viewModel: HomeViewModel) : GestureDetector.OnGestureL
 
     override fun onLongPress(e: MotionEvent?) {
         Log.d("gesture","onLongPress")
+        viewModel.navigateToEdit()
     }
 
     override fun onFling(

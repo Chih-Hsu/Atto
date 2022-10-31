@@ -1,10 +1,12 @@
 package com.chihwhsu.atto.homepage
 
+import android.animation.ObjectAnimator
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.view.animation.AnimationUtils
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -13,11 +15,11 @@ import com.chihwhsu.atto.component.GestureListener
 import com.chihwhsu.atto.component.GridSpacingItemDecoration
 import com.chihwhsu.atto.databinding.FragmentHomeBinding
 
-class HomeFragment : Fragment() ,View.OnTouchListener{
+class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var viewModel: HomeViewModel
-    private lateinit var gestureDetector:GestureDetector
+    private lateinit var gestureDetector: GestureDetector
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,10 +43,34 @@ class HomeFragment : Fragment() ,View.OnTouchListener{
         //RecyclerView setting
         binding.eventList.adapter = adapter
         binding.eventList.addItemDecoration(
-            GridSpacingItemDecoration(5, resources.getDimensionPixelSize(R.dimen.space_event_grid), true))
+            GridSpacingItemDecoration(
+                5,
+                resources.getDimensionPixelSize(R.dimen.space_event_grid),
+                true
+            )
+        )
 
         viewModel.eventList.observe(viewLifecycleOwner, Observer { list ->
             adapter.submitList(list)
+        })
+
+        // set Gesture Listener
+        val gestureListener = GestureListener(viewModel)
+        gestureDetector = GestureDetector(requireContext(), gestureListener)
+//        binding.eventDetail.setOnTouchListener(object : View.OnTouchListener {
+//            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+//                return gestureDetector.onTouchEvent(event)
+//            }
+//        })
+
+        binding.gestureArea.setOnTouchListener(object : View.OnTouchListener {
+            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+
+                if (v == binding.eventDetail){
+
+                }
+                return gestureDetector.onTouchEvent(event)
+            }
         })
 
 
@@ -55,48 +81,55 @@ class HomeFragment : Fragment() ,View.OnTouchListener{
 
         // show card animation
         viewModel.showCard.observe(viewLifecycleOwner, Observer { showCard ->
-
             if (showCard) {
-                binding.eventList.startAnimation(
-                    AnimationUtils.loadAnimation(
-                        requireContext(),
-                        R.anim.slide_down
-                    )
-                )
+                val height = binding.eventList.height
+                ObjectAnimator.ofFloat(
+                    binding.eventList,
+                    "translationY",
+                    0F,
+                    0F,
+                    height.toFloat() * 4 / 5
+                ).apply {
+                    setDuration(300)
+                    start()
+                }
+
                 binding.eventDetail.visibility = View.VISIBLE
-                binding.eventDetail.startAnimation(
-                    AnimationUtils.loadAnimation(
-                        requireContext(),
-                        R.anim.fade_in
-                    )
-                )
+                ObjectAnimator.ofFloat(binding.eventDetail, "alpha", 0f, 1f).apply {
+                    setDuration(300)
+                    start()
+                }
+
+
             }
         })
-
-        val gestureListener = GestureListener(viewModel)
-        gestureDetector = GestureDetector(requireContext(),gestureListener)
-        binding.eventDetail.setOnTouchListener(this)
 
 
         viewModel.closeCard.observe(viewLifecycleOwner, Observer { close ->
             if (close == true) {
-                binding.eventDetail.startAnimation(
-                    AnimationUtils.loadAnimation(
-                        requireContext(),
-                        R.anim.fade_out
-                    )
-                )
-                binding.eventList.startAnimation(
-                    AnimationUtils.loadAnimation(
-                        requireContext(),
-                        R.anim.slide_up
-                    )
-                )
-                binding.eventDetail.visibility = View.INVISIBLE
-                Log.d("gesture", "call invisible function")
+                val height = binding.eventList.height
+                ObjectAnimator.ofFloat(
+                    binding.eventList,
+                    "translationY",
+                    height.toFloat() * 4 / 5,
+                    0F,
+                    0F
+                ).apply {
+                    setDuration(300)
+                    start()
+                }
+
+                ObjectAnimator.ofFloat(binding.eventDetail, "alpha", 1f, 0f).apply {
+                    setDuration(300)
+                    start()
+                }
+                binding.eventDetail.visibility = View.GONE
             }
         })
 
+        viewModel.navigateToEdit.observe(viewLifecycleOwner, Observer {
+            Toast.makeText(requireContext(),"event is $it",Toast.LENGTH_SHORT).show()
+        })
 
 
         return binding.root
@@ -105,16 +138,23 @@ class HomeFragment : Fragment() ,View.OnTouchListener{
 
     override fun onPause() {
         super.onPause()
-        binding.eventDetail.visibility = View.INVISIBLE
+        initAnimation()
+    }
+
+    private fun initAnimation() {
+        binding.eventDetail.visibility = View.GONE
+        val height = binding.eventList.height
+        val animation = ObjectAnimator.ofFloat(
+            binding.eventList,
+            "translationY",
+            height.toFloat() * 4 / 5,
+            0F,
+            0F
+        )
+        animation.setDuration(1000)
+        animation.start()
         viewModel.initAnimation()
     }
 
-    override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-//        Log.d("gesture","onTouch")
-
-//        val action = event?.action
-//        if (action == MotionEvent.)
-        return gestureDetector.onTouchEvent(event)
-    }
 
 }

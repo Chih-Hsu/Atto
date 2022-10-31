@@ -17,4 +17,10 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onStop() {
+        super.onStop()
+        // close desktop entry activity when onStop,then setting activity can work as expect
+        finish()
+    }
+
 }
