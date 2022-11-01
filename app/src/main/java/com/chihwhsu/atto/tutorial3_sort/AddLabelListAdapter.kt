@@ -1,4 +1,4 @@
-package com.chihwhsu.atto.tutorial2_dock
+package com.chihwhsu.atto.tutorial3_sort
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -11,7 +11,7 @@ import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.databinding.ItemAppListBinding
 import com.chihwhsu.atto.ext.createGrayscale
 
-class AppListAdapter (val viewModel: SettingViewModel, val onClickListener:AppOnClickListener) : ListAdapter<App, AppListAdapter.AppViewHolder>(object :
+class AddLabelListAdapter (val viewModel: SettingViewModel, val onClickListener:AppOnClickListener) : ListAdapter<App, AddLabelListAdapter.AppViewHolder>(object :
     DiffUtil.ItemCallback<App>(){
     override fun areItemsTheSame(oldItem: App, newItem: App): Boolean {
         return oldItem.packageName == newItem.packageName
@@ -30,11 +30,9 @@ class AppListAdapter (val viewModel: SettingViewModel, val onClickListener:AppOn
     inner class AppViewHolder(val binding:ItemAppListBinding): RecyclerView.ViewHolder(binding.root){
 
         fun bind(item:App){
-//            binding.iconImage.setImageDrawable(item.icon)
             item.icon?.let {
                 binding.iconImage.setImageBitmap(it.createGrayscale())
             }
-
 
             itemView.setOnClickListener {
                 onClickListener.onClick(item.appLabel)

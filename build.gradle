@@ -5,6 +5,7 @@ buildscript {
         version_android_gradle_plugin = '7.2.2'
         version_core = '1.8.0'
         navigation_version = "2.5.3"
+        version_room = '2.4.3'
     }
     repositories {
         google()

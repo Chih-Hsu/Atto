@@ -20,5 +20,32 @@
         android:id="@+id/dockSelectFragment"
         android:name="com.chihwhsu.atto.tutorial2_dock.DockSelectFragment"
         android:label="DockSelectFragment"
-        tools:layout="@layout/fragment_dock_select"/>
+        tools:layout="@layout/fragment_dock_select">
+        <action
+            android:id="@+id/action_dockSelectFragment_to_sortFragment"
+            app:destination="@id/sortFragment" />
+        <action
+            android:id="@+id/action_dockSelectFragment_to_wallpaperFragment"
+            app:destination="@id/wallpaperFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/sortFragment"
+        android:name="com.chihwhsu.atto.tutorial3_sort.SortFragment"
+        android:label="SortFragment"
+        tools:layout="@layout/fragment_app_sortting">
+        <action
+            android:id="@+id/action_sortFragment_to_addLabelFragment"
+            app:destination="@id/addLabelFragment" />
+        <action
+            android:id="@+id/action_sortFragment_to_dockSelectFragment"
+            app:destination="@id/dockSelectFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addLabelFragment"
+        android:name="com.chihwhsu.atto.tutorial3_sort.AddLabelFragment"
+        android:label="AddLabelFragment" >
+        <action
+            android:id="@+id/action_addLabelFragment_to_sortFragment"
+            app:destination="@id/sortFragment" />
+    </fragment>
 </navigation>

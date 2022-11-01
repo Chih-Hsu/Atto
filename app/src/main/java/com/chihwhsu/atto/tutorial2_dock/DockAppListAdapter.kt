@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.databinding.ItemAppListBinding
 import com.chihwhsu.atto.databinding.ItemDockBinding
+import com.chihwhsu.atto.ext.createGrayscale
 
 
 class DockAppListAdapter () : ListAdapter<App, DockAppListAdapter.AppViewHolder>(object :
@@ -24,7 +25,10 @@ class DockAppListAdapter () : ListAdapter<App, DockAppListAdapter.AppViewHolder>
     inner class AppViewHolder(val binding: ItemDockBinding): RecyclerView.ViewHolder(binding.root){
 
         fun bind(item: App){
-            binding.dockIconImage.setImageDrawable(item.icon)
+
+            item.icon?.let {
+                binding.dockIconImage.setImageBitmap(it.createGrayscale())
+            }
         }
     }
 

@@ -6,10 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.chihwhsu.atto.databinding.FragmentDockSelectBinding
-import com.chihwhsu.atto.factory.DockSelectViewModelFactory
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
+import androidx.navigation.fragment.findNavController
+import com.chihwhsu.atto.SettingActivity
 
 class DockSelectFragment : Fragment() {
 
@@ -20,23 +20,21 @@ class DockSelectFragment : Fragment() {
     ): View? {
         val binding = FragmentDockSelectBinding.inflate(inflater,container,false)
 
-        // viewModel setting
-        val viewModelFactory = DockSelectViewModelFactory(requireActivity().applicationContext)
-        val viewModel = ViewModelProvider(this,viewModelFactory).get(DockSelectViewModel::class.java)
+        val settingViewModel = (requireActivity() as SettingActivity).viewModel
 
         // recyclerview setting
-        val appListAdapter = AppListAdapter(viewModel,AppListAdapter.AppOnClickListener { appLabel ->
-            viewModel.selectApp(appLabel)
+        val appListAdapter = AppListAdapter(settingViewModel,AppListAdapter.AppOnClickListener { appLabel ->
+            settingViewModel.selectApp(appLabel)
         })
         binding.appListRecyclerview.adapter = appListAdapter
 
-        viewModel.appList.observe(viewLifecycleOwner, Observer {
+        settingViewModel.appList.observe(viewLifecycleOwner, Observer {
             appListAdapter.submitList(it)
         })
 
         val dockListAdapter = DockAppListAdapter()
         binding.dockRecyclerview.adapter = dockListAdapter
-        viewModel.dockAppList.observe(viewLifecycleOwner, Observer {
+        settingViewModel.dockAppList.observe(viewLifecycleOwner, Observer {
             dockListAdapter.submitList(it)
         })
 
@@ -44,7 +42,7 @@ class DockSelectFragment : Fragment() {
         // searchView
         binding.appSearchView.setOnQueryTextListener(object : OnQueryTextListener{
                 override fun onQueryTextChange(newText: String?): Boolean {
-                    viewModel.filterList(newText)
+                    settingViewModel.filterList(newText)
                     return true
                 }
 
@@ -52,6 +50,16 @@ class DockSelectFragment : Fragment() {
                     return false
                 }
         })
+
+        binding.buttonNext.setOnClickListener {
+            findNavController().navigate(DockSelectFragmentDirections.actionDockSelectFragmentToSortFragment())
+        }
+
+        binding.buttonPrevious.setOnClickListener {
+            findNavController().navigate(DockSelectFragmentDirections.actionDockSelectFragmentToWallpaperFragment())
+        }
+
+
 
         return binding.root
     }
