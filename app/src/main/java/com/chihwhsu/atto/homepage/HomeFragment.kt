@@ -29,14 +29,8 @@ class HomeFragment : Fragment() {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
 
-//        binding.textView.setOnClickListener {
-//            val bitMap = BitmapFactory.decodeResource(resources,R.drawable.wallpaper_plant)
-//            WallpaperManager.getInstance(requireContext()).setBitmap(bitMap)
-//        }
-
 
         val adapter = EventAdapter(EventAdapter.EventClickListener { event ->
-//            binding.eventDetail.visibility = View.INVISIBLE
             viewModel.setEvent(event)
         })
 

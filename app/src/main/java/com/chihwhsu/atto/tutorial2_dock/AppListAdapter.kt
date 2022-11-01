@@ -5,13 +5,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.chihwhsu.atto.SettingViewModel
 import com.chihwhsu.atto.R
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.databinding.ItemAppListBinding
 import com.chihwhsu.atto.ext.createGrayscale
 
-class AppListAdapter (val viewModel: SettingViewModel, val onClickListener:AppOnClickListener) : ListAdapter<App, AppListAdapter.AppViewHolder>(object :
+class AppListAdapter (val viewModel: DockViewModel, val onClickListener:AppOnClickListener) : ListAdapter<App, AppListAdapter.AppViewHolder>(object :
     DiffUtil.ItemCallback<App>(){
     override fun areItemsTheSame(oldItem: App, newItem: App): Boolean {
         return oldItem.packageName == newItem.packageName
@@ -30,20 +29,25 @@ class AppListAdapter (val viewModel: SettingViewModel, val onClickListener:AppOn
     inner class AppViewHolder(val binding:ItemAppListBinding): RecyclerView.ViewHolder(binding.root){
 
         fun bind(item:App){
-//            binding.iconImage.setImageDrawable(item.icon)
+
+            checkItemInDock(item)
+
             item.icon?.let {
                 binding.iconImage.setImageBitmap(it.createGrayscale())
             }
 
-
             itemView.setOnClickListener {
                 onClickListener.onClick(item.appLabel)
-                viewModel.dockAppList.value?.let {
-                    if (it.contains(item)){
-                        binding.iconBackground.setBackgroundResource(R.drawable.icon_background_selected)
-                    }else{
-                        binding.iconBackground.setBackgroundResource(R.drawable.icon_background)
-                    }
+                checkItemInDock(item)
+            }
+        }
+
+        private fun checkItemInDock(item:App){
+            viewModel.dockAppList.value?.let {
+                if (it.contains(item)){
+                    binding.iconBackground.setBackgroundResource(R.drawable.icon_background_selected)
+                }else{
+                    binding.iconBackground.setBackgroundResource(R.drawable.icon_background)
                 }
             }
         }

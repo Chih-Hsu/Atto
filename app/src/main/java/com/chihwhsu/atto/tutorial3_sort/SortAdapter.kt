@@ -1,14 +1,10 @@
 package com.chihwhsu.atto.tutorial3_sort
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.chihwhsu.atto.R
-import com.chihwhsu.atto.SettingViewModel
-import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.data.AppListItem
 import com.chihwhsu.atto.databinding.ItemAppListBinding
 import com.chihwhsu.atto.databinding.ItemLabelBinding

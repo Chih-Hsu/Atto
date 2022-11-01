@@ -5,9 +5,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import com.chihwhsu.atto.data.database.AttoDatabase
 import com.chihwhsu.atto.databinding.FragmentMainBinding
+import com.chihwhsu.atto.ext.getVmFactory
+import com.chihwhsu.atto.factory.MainViewModelFactory
+import com.chihwhsu.atto.tutorial2_dock.DockAppListAdapter
+import com.chihwhsu.atto.tutorial3_sort.SortViewModel
 
 class MainFragment : Fragment() {
+
+    private val viewModel by viewModels<MainViewModel> { getVmFactory() }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -22,6 +32,17 @@ class MainFragment : Fragment() {
         binding.viewPager.post {
             binding.viewPager.setCurrentItem(1, true)
         }
+
+        val dockAdapter = DockAdapter(DockAdapter.DockOnClickListener {
+                    val launchAppIntent = requireContext().packageManager.getLaunchIntentForPackage(it)
+                    startActivity(launchAppIntent)
+        })
+        binding.dockRecyclerview.adapter = dockAdapter
+        viewModel.dockList.observe(viewLifecycleOwner, Observer {
+            dockAdapter.submitList(it)
+        })
+
+
 
 
         return binding.root

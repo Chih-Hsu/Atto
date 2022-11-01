@@ -7,23 +7,26 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import com.chihwhsu.atto.databinding.FragmentWallpaperBinding
+import com.chihwhsu.atto.ext.getVmFactory
 import com.chihwhsu.atto.factory.WallpaperViewModelFactory
 
 class WallpaperFragment : Fragment() {
+
+    private val viewModel by viewModels<WallpaperViewModel> { getVmFactory(resources) }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val binding = FragmentWallpaperBinding.inflate(inflater,container,false)
-        val viewModelFactory = WallpaperViewModelFactory(resources)
-        val viewModel = ViewModelProvider(this,viewModelFactory).get(WallpaperViewModel::class.java)
 
         val adapter = WallpaperAdapter()
         binding.wallpaperRecyclerview.adapter = adapter

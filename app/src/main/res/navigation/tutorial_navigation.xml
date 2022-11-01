@@ -13,8 +13,8 @@
         <action
             android:id="@+id/action_wallpaperFragment_to_dockSelectFragment"
             app:destination="@id/dockSelectFragment"
-            app:enterAnim="@android:anim/slide_in_left"
-            app:exitAnim="@android:anim/slide_out_right" />
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left" />
     </fragment>
     <fragment
         android:id="@+id/dockSelectFragment"
@@ -23,10 +23,14 @@
         tools:layout="@layout/fragment_dock_select">
         <action
             android:id="@+id/action_dockSelectFragment_to_sortFragment"
-            app:destination="@id/sortFragment" />
+            app:destination="@id/sortFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left" />
         <action
             android:id="@+id/action_dockSelectFragment_to_wallpaperFragment"
-            app:destination="@id/wallpaperFragment" />
+            app:destination="@id/wallpaperFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/sortFragment"
@@ -35,13 +39,19 @@
         tools:layout="@layout/fragment_app_sortting">
         <action
             android:id="@+id/action_sortFragment_to_addLabelFragment"
-            app:destination="@id/addLabelFragment" />
+            app:destination="@id/addLabelFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left" />
         <action
             android:id="@+id/action_sortFragment_to_dockSelectFragment"
-            app:destination="@id/dockSelectFragment" />
+            app:destination="@id/dockSelectFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right" />
         <action
             android:id="@+id/action_sortFragment_to_getUsageFragment"
-            app:destination="@id/getUsageFragment" />
+            app:destination="@id/getUsageFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left" />
     </fragment>
     <fragment
         android:id="@+id/addLabelFragment"
@@ -50,7 +60,9 @@
         tools:layout="@layout/fragment_add_label">
         <action
             android:id="@+id/action_addLabelFragment_to_sortFragment"
-            app:destination="@id/sortFragment" />
+            app:destination="@id/sortFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/getUsageFragment"
@@ -59,6 +71,18 @@
         tools:layout="@layout/fragment_get_usage">
         <action
             android:id="@+id/action_getUsageFragment_to_sortFragment"
-            app:destination="@id/sortFragment" />
+            app:destination="@id/sortFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right" />
+        <action
+            android:id="@+id/action_getUsageFragment_to_setDefaultFragment"
+            app:destination="@id/setDefaultFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left" />
     </fragment>
+    <fragment
+        android:id="@+id/setDefaultFragment"
+        android:name="com.chihwhsu.atto.tutorial5_set_default.SetDefaultFragment"
+        android:label="SetDefaultFragment"
+        tools:layout="@layout/fragment_set_default"/>
 </navigation>

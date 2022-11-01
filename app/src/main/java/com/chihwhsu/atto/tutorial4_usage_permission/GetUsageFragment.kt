@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.chihwhsu.atto.databinding.FragmentGetUsageBinding
 
 
@@ -34,6 +35,15 @@ class GetUsageFragment : Fragment() {
             }else{
                 buttonView.setText("Off")
             }
+        }
+
+//        val use = UsageStats
+        binding.buttonNext.setOnClickListener {
+            findNavController().navigate(GetUsageFragmentDirections.actionGetUsageFragmentToSetDefaultFragment())
+        }
+
+        binding.buttonPrevious.setOnClickListener {
+            findNavController().navigate(GetUsageFragmentDirections.actionGetUsageFragmentToSortFragment())
         }
 
 

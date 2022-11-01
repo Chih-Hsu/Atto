@@ -4,21 +4,11 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.chihwhsu.atto.data.database.AttoDatabase
-import com.chihwhsu.atto.factory.MainViewModelFactory
 
 
 class SettingActivity : AppCompatActivity() {
 
-    val viewModel by viewModels<SettingViewModel> {
-        MainViewModelFactory(
-            packageManager,
-            resources,
-            AttoDatabase.getInstance(applicationContext).attoDatabaseDao
-        )
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

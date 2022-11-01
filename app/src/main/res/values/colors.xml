@@ -17,4 +17,6 @@
     <color name="yellow">#FFDE03</color>
     <color name="brown">#B48B3D</color>
     <color name="trans_black">#33000000</color>
+
+    <color name="half_trasparency">#55FFFFFF</color>
 </resources>

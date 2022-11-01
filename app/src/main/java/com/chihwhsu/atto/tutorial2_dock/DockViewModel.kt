@@ -1,10 +1,9 @@
-package com.chihwhsu.atto
+package com.chihwhsu.atto.tutorial2_dock
 
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.content.res.Resources
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,8 +16,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.util.*
 
-
-class SettingViewModel(private val packageManager: PackageManager, val resources: Resources, val database:AttoDatabaseDao) : ViewModel() {
+class DockViewModel(private val packageManager: PackageManager, val resources: Resources, val database: AttoDatabaseDao) : ViewModel() {
 
     // Create a Coroutine scope using a job to be able to cancel when needed
     private var viewModelJob = Job()
@@ -84,12 +82,14 @@ class SettingViewModel(private val packageManager: PackageManager, val resources
                     if (app.appLabel == appLabel && !dockList.contains(app) && dockAppList.size < 5) {
                         dockList.add(app)
                         _dockAppList.value = dockList
+
                         coroutineScope.launch(Dispatchers.IO) {
                             database.updateLabel(app.appLabel,"dock")
                         }
                     } else if (app.appLabel == appLabel && dockList.contains(app)) {
                         dockList.remove(app)
                         _dockAppList.value = dockList
+
                         coroutineScope.launch(Dispatchers.IO) {
                             database.updateLabel(app.appLabel,null)
                         }
@@ -125,7 +125,4 @@ class SettingViewModel(private val packageManager: PackageManager, val resources
             database.updateLabel(appName, label)
         }
     }
-
-
-
 }
