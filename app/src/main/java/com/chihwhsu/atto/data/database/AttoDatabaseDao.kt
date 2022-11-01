@@ -1,21 +1,20 @@
 package com.chihwhsu.atto.data.database
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 import com.chihwhsu.atto.data.App
 
 @Dao
 interface AttoDatabaseDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(app: App)
-
 
     @Update
     fun update(app: App)
+
+    @Query("Update app_table set label = :label where package_name = :packageName")
+    fun updateLabel(packageName: String , label : String?)
 
     @Query("DELETE from app_table WHERE package_name = :packageName")
     fun delete(packageName : String)

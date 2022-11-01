@@ -4,19 +4,20 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.content.res.Resources
-import android.graphics.*
-import android.graphics.drawable.Drawable
-import androidx.core.graphics.drawable.toBitmap
-import androidx.core.graphics.drawable.toDrawable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.chihwhsu.atto.data.App
+import com.chihwhsu.atto.data.database.AttoDatabaseDao
 import com.chihwhsu.atto.ext.convertToBitmap
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import java.util.*
 
 
-class SettingViewModel(private val packageManager: PackageManager, val resources: Resources) : ViewModel() {
+class SettingViewModel(private val packageManager: PackageManager, val resources: Resources, val database:AttoDatabaseDao) : ViewModel() {
 
     private var _appList = MutableLiveData<List<App>>()
     val appList: LiveData<List<App>> get() = _appList
@@ -27,6 +28,12 @@ class SettingViewModel(private val packageManager: PackageManager, val resources
     // 扣掉已分類的list
     private var _labelAppList = MutableLiveData<List<App>>()
     val labelAppList: LiveData<List<App>> get() = _labelAppList
+
+    // Create a Coroutine scope using a job to be able to cancel when needed
+    private var viewModelJob = Job()
+
+    // the Coroutine runs using the Main (UI) dispatcher
+    private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
 
     val originalList = mutableListOf<App>()
@@ -52,15 +59,15 @@ class SettingViewModel(private val packageManager: PackageManager, val resources
                 app.activityInfo.applicationInfo
             )
 
-//            newImage.setTint(Color.LTGRAY)
 
             val newApp = App(appName, appPackageName, appImage.convertToBitmap())
             currentAppList.add(newApp)
+            coroutineScope.launch(Dispatchers.IO) {
+                database.insert(newApp)
+            }
         }
-
         _appList.value = currentAppList
         originalList.addAll(currentAppList)
-
     }
 
 
@@ -79,9 +86,15 @@ class SettingViewModel(private val packageManager: PackageManager, val resources
                     if (app.appLabel == appLabel && !dockList.contains(app) && dockAppList.size < 5) {
                         dockList.add(app)
                         _dockAppList.value = dockList
+                        coroutineScope.launch(Dispatchers.IO) {
+                            database.updateLabel(app.packageName,"dock")
+                        }
                     } else if (app.appLabel == appLabel && dockList.contains(app)) {
                         dockList.remove(app)
                         _dockAppList.value = dockList
+                        coroutineScope.launch(Dispatchers.IO) {
+                            database.updateLabel(app.packageName,null)
+                        }
                     } else {
 
                     }
