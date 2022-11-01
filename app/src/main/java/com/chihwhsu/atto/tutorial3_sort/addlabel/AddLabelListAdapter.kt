@@ -1,17 +1,16 @@
-package com.chihwhsu.atto.tutorial3_sort
+package com.chihwhsu.atto.tutorial3_sort.addlabel
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.chihwhsu.atto.SettingViewModel
 import com.chihwhsu.atto.R
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.databinding.ItemAppListBinding
 import com.chihwhsu.atto.ext.createGrayscale
 
-class AddLabelListAdapter (val viewModel: SettingViewModel, val onClickListener:AppOnClickListener) : ListAdapter<App, AddLabelListAdapter.AppViewHolder>(object :
+class AddLabelListAdapter (val viewModel: AddLabelViewModel, val onClickListener: AppOnClickListener) : ListAdapter<App, AddLabelListAdapter.AppViewHolder>(object :
     DiffUtil.ItemCallback<App>(){
     override fun areItemsTheSame(oldItem: App, newItem: App): Boolean {
         return oldItem.packageName == newItem.packageName
@@ -22,8 +21,8 @@ class AddLabelListAdapter (val viewModel: SettingViewModel, val onClickListener:
     }
 }) {
 
-    class AppOnClickListener(val onClickListener:(appLabel:String)->Unit){
-        fun onClick(appLabel: String) = onClickListener(appLabel)
+    class AppOnClickListener(val onClickListener:(app:App)->Unit){
+        fun onClick(app: App) = onClickListener(app)
 
     }
 
@@ -35,13 +34,16 @@ class AddLabelListAdapter (val viewModel: SettingViewModel, val onClickListener:
             }
 
             itemView.setOnClickListener {
-                onClickListener.onClick(item.appLabel)
-                viewModel.dockAppList.value?.let {
-                    if (it.contains(item)){
+                onClickListener.onClick(item)
+
+                viewModel.noLabelAppList.value?.let {
+                    if (viewModel.remainList.contains(item)){
                         binding.iconBackground.setBackgroundResource(R.drawable.icon_background_selected)
+
                     }else{
                         binding.iconBackground.setBackgroundResource(R.drawable.icon_background)
                     }
+
                 }
             }
         }

@@ -42,7 +42,7 @@
     </fragment>
     <fragment
         android:id="@+id/addLabelFragment"
-        android:name="com.chihwhsu.atto.tutorial3_sort.AddLabelFragment"
+        android:name="com.chihwhsu.atto.tutorial3_sort.addlabel.AddLabelFragment"
         android:label="AddLabelFragment" >
         <action
             android:id="@+id/action_addLabelFragment_to_sortFragment"

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.content.res.Resources
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -19,24 +20,21 @@ import java.util.*
 
 class SettingViewModel(private val packageManager: PackageManager, val resources: Resources, val database:AttoDatabaseDao) : ViewModel() {
 
-    private var _appList = MutableLiveData<List<App>>()
-    val appList: LiveData<List<App>> get() = _appList
-
-    private var _dockAppList = MutableLiveData<List<App>>()
-    val dockAppList: LiveData<List<App>> get() = _dockAppList
-
-    // 扣掉已分類的list
-    private var _labelAppList = MutableLiveData<List<App>>()
-    val labelAppList: LiveData<List<App>> get() = _labelAppList
-
     // Create a Coroutine scope using a job to be able to cancel when needed
     private var viewModelJob = Job()
 
     // the Coroutine runs using the Main (UI) dispatcher
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
+    private var _appList = MutableLiveData<List<App>>()
+    val appList: LiveData<List<App>> get() = _appList
 
-    val originalList = mutableListOf<App>()
+    private var _dockAppList = MutableLiveData<List<App>>()
+    val dockAppList: LiveData<List<App>> get() = _dockAppList
+
+
+
+    private val originalList = mutableListOf<App>()
 
     init {
         getAppList()
@@ -87,13 +85,13 @@ class SettingViewModel(private val packageManager: PackageManager, val resources
                         dockList.add(app)
                         _dockAppList.value = dockList
                         coroutineScope.launch(Dispatchers.IO) {
-                            database.updateLabel(app.packageName,"dock")
+                            database.updateLabel(app.appLabel,"dock")
                         }
                     } else if (app.appLabel == appLabel && dockList.contains(app)) {
                         dockList.remove(app)
                         _dockAppList.value = dockList
                         coroutineScope.launch(Dispatchers.IO) {
-                            database.updateLabel(app.packageName,null)
+                            database.updateLabel(app.appLabel,null)
                         }
                     } else {
 
@@ -122,21 +120,11 @@ class SettingViewModel(private val packageManager: PackageManager, val resources
         }
     }
 
-    fun removeLabelList() {
-        val allList = appList.value
-        val dockList = dockAppList.value
-        val newList = mutableListOf<App>()
-
-        allList?.let { all ->
-            newList.addAll(all)
-            dockList?.let { dock ->
-                newList.removeAll(dock)
-            }
+    fun updateAppLabel(appName :String , label : String){
+        coroutineScope.launch(Dispatchers.IO) {
+            database.updateLabel(appName, label)
         }
-        _labelAppList.value = newList
     }
-
-
 
 
 

@@ -13,8 +13,8 @@ interface AttoDatabaseDao {
     @Update
     fun update(app: App)
 
-    @Query("Update app_table set label = :label where package_name = :packageName")
-    fun updateLabel(packageName: String , label : String?)
+    @Query("Update app_table set label = :label where appLabel = :appName")
+    fun updateLabel(appName: String , label : String?)
 
     @Query("DELETE from app_table WHERE package_name = :packageName")
     fun delete(packageName : String)
@@ -24,6 +24,15 @@ interface AttoDatabaseDao {
 
     @Query("SELECT * FROM app_table ORDER BY sort ASC")
     fun getAllApps(): LiveData<List<App>>
+
+    @Query("Select * from app_table where label is NULL ")
+    fun getNoLabelApps() : LiveData<List<App>>
+
+    @Query("SELECT * from app_table where label = :label ")
+    fun getSpecificLabelApps(label:String) : LiveData<List<App>>
+
+    @Query("select * from app_table where label not like '%dock%'")
+    fun getAllAppsWithoutDock():LiveData<List<App>>
 
 }
 

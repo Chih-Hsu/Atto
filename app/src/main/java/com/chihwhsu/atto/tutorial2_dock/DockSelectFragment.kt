@@ -59,8 +59,6 @@ class DockSelectFragment : Fragment() {
             findNavController().navigate(DockSelectFragmentDirections.actionDockSelectFragmentToWallpaperFragment())
         }
 
-
-
         return binding.root
     }
 
