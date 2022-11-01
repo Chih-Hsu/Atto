@@ -55,7 +55,7 @@ class SortFragment : Fragment() {
         }
 
         binding.buttonNext.setOnClickListener {
-            
+            findNavController().navigate(SortFragmentDirections.actionSortFragmentToGetUsageFragment())
         }
 
 

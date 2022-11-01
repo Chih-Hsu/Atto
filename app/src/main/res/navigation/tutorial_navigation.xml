@@ -39,13 +39,26 @@
         <action
             android:id="@+id/action_sortFragment_to_dockSelectFragment"
             app:destination="@id/dockSelectFragment" />
+        <action
+            android:id="@+id/action_sortFragment_to_getUsageFragment"
+            app:destination="@id/getUsageFragment" />
     </fragment>
     <fragment
         android:id="@+id/addLabelFragment"
         android:name="com.chihwhsu.atto.tutorial3_sort.addlabel.AddLabelFragment"
-        android:label="AddLabelFragment" >
+        android:label="AddLabelFragment"
+        tools:layout="@layout/fragment_add_label">
         <action
             android:id="@+id/action_addLabelFragment_to_sortFragment"
+            app:destination="@id/sortFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/getUsageFragment"
+        android:name="com.chihwhsu.atto.tutorial4_usage_permission.GetUsageFragment"
+        android:label="GetUsageFragment"
+        tools:layout="@layout/fragment_get_usage">
+        <action
+            android:id="@+id/action_getUsageFragment_to_sortFragment"
             app:destination="@id/sortFragment" />
     </fragment>
 </navigation>
