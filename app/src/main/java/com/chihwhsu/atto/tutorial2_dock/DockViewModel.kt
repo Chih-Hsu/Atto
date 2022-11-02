@@ -84,14 +84,16 @@ class DockViewModel(private val packageManager: PackageManager, val resources: R
                         _dockAppList.value = dockList
 
                         coroutineScope.launch(Dispatchers.IO) {
-                            database.updateLabel(app.appLabel,"dock")
+                            database.updateLabel(appLabel,"dock")
+                            database.updateSort(appLabel,dockList.indexOf(app))
                         }
                     } else if (app.appLabel == appLabel && dockList.contains(app)) {
                         dockList.remove(app)
                         _dockAppList.value = dockList
 
                         coroutineScope.launch(Dispatchers.IO) {
-                            database.updateLabel(app.appLabel,null)
+                            database.updateLabel(appLabel,null)
+                            database.updateSort(appLabel,-1)
                         }
                     } else {
 

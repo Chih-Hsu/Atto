@@ -30,12 +30,10 @@ class AppListViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
         for (label in labelStringList){
 
             val list = appList.filter { it.label == label }.map { AppListItem.AppItem(it) }
+            list.sortedBy { it.app.sort }
             var totalAppUsage = 0L
             for (item in list){
                 totalAppUsage  +=  item.app.getUsage(context)
-                Log.d("calendar","$item")
-                Log.d("calendar","${item.app.getUsage(context)}")
-
             }
 
             val labelItem = AppListItem.LabelItem(label,totalAppUsage)

@@ -16,6 +16,9 @@ interface AttoDatabaseDao {
     @Query("Update app_table set label = :label where appLabel = :appName")
     fun updateLabel(appName: String , label : String?)
 
+    @Query("UPDATE app_table set sort = :sort where appLabel = :appName")
+    fun updateSort(appName: String , sort:Int)
+
     @Query("DELETE from app_table WHERE package_name = :packageName")
     fun delete(packageName : String)
 

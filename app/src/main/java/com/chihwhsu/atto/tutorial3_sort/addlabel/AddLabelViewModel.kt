@@ -35,6 +35,7 @@ class AddLabelViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
         coroutineScope.launch(Dispatchers.IO){
             for (app in remainList) {
                 databaseDao.updateLabel(app.appLabel,label)
+                databaseDao.updateSort(app.appLabel,remainList.indexOf(app))
             }
             withContext(Dispatchers.Main){
                 _navigateToSort.value = true

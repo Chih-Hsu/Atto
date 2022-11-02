@@ -33,8 +33,9 @@ class MainFragment : Fragment() {
             startActivity(launchAppIntent)
         })
         binding.dockRecyclerview.adapter = dockAdapter
-        viewModel.dockList.observe(viewLifecycleOwner, Observer {
-            dockAdapter.submitList(it)
+        viewModel.dockList.observe(viewLifecycleOwner, Observer { list ->
+            list.sortedBy { it.sort }
+            dockAdapter.submitList(list)
         })
 
 
