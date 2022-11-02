@@ -42,7 +42,7 @@ class SortFragment : Fragment() {
             }
         }
         viewModel.appList.observe(viewLifecycleOwner, Observer {
-            adapter.submitList(viewModel.resetList(it))
+            adapter.submitList(viewModel.resetList(it,requireContext()))
 //            Log.d("select","$it")
         })
 

@@ -36,6 +36,8 @@ class AppListAdapter (val viewModel: DockViewModel, val onClickListener:AppOnCli
                 binding.iconImage.setImageBitmap(it.createGrayscale())
             }
 
+            binding.appName.text = item.appLabel
+
             itemView.setOnClickListener {
                 onClickListener.onClick(item.appLabel)
                 checkItemInDock(item)

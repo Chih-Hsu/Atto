@@ -14,6 +14,7 @@ import com.chihwhsu.atto.data.AppListItem
 import com.chihwhsu.atto.databinding.ItemAppListBinding
 import com.chihwhsu.atto.databinding.ItemLabelBinding
 import com.chihwhsu.atto.ext.createGrayscale
+import com.chihwhsu.atto.ext.toFormat
 
 class AppListAdapter  (val appOnClickListener : AppOnClickListener,val viewModel: AppListViewModel) : ListAdapter<AppListItem, RecyclerView.ViewHolder>(object :
     DiffUtil.ItemCallback<AppListItem>(){
@@ -45,6 +46,9 @@ class AppListAdapter  (val appOnClickListener : AppOnClickListener,val viewModel
                 text = item.title
                 setTextColor(ResourcesCompat.getColor(itemView.resources,R.color.light_grey,null))
             }
+            Log.d("calendarAA","${item.time}")
+
+            binding.textUsageTime.text = item.time.toFormat()
 
 
             itemView.setOnClickListener {
@@ -52,7 +56,7 @@ class AppListAdapter  (val appOnClickListener : AppOnClickListener,val viewModel
                 if (viewModel.isHide.containsKey(item.title)){
                     val value = viewModel.isHide.get(item.title) as Boolean
                     viewModel.isHide.put(item.title,!value)
-                    Log.d("select","update ${viewModel.isHide}")
+
 
                 }else{
                     viewModel.isHide.put(item.title,true)
@@ -72,6 +76,9 @@ class AppListAdapter  (val appOnClickListener : AppOnClickListener,val viewModel
             item.app.icon?.let {
                 binding.iconImage.setImageBitmap(it.createGrayscale())
             }
+
+            binding.appName.text = item.app.appLabel
+
             itemView.setOnClickListener {
                 appOnClickListener.onClick(item.app.packageName)
             }

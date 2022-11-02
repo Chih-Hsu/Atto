@@ -17,7 +17,7 @@ import com.chihwhsu.atto.databinding.ItemLabelBinding
 import com.chihwhsu.atto.ext.createGrayscale
 
 
-class AppListDialogAdapter  (val appOnClickListener : AppOnClickListener) : ListAdapter<AppListItem, RecyclerView.ViewHolder>(object :
+class AppListBottomAdapter  (val appOnClickListener : AppOnClickListener) : ListAdapter<AppListItem, RecyclerView.ViewHolder>(object :
     DiffUtil.ItemCallback<AppListItem>(){
     override fun areItemsTheSame(oldItem: AppListItem, newItem: AppListItem): Boolean {
         return oldItem.id == newItem.id
@@ -58,6 +58,9 @@ class AppListDialogAdapter  (val appOnClickListener : AppOnClickListener) : List
             item.app.icon?.let {
                 binding.iconImage.setImageBitmap(it.createGrayscale())
             }
+
+            binding.appName.text = item.app.appLabel
+
             itemView.setOnClickListener {
                 appOnClickListener.onClick(item.app.packageName)
             }

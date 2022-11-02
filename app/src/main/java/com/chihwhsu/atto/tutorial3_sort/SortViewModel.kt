@@ -1,5 +1,6 @@
 package com.chihwhsu.atto.tutorial3_sort
 
+import android.content.Context
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.ViewModel
@@ -12,7 +13,7 @@ class SortViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
     val appList = databaseDao.getAllAppsWithoutDock()
 
 
-    fun resetList(appList : List<App>):List<AppListItem>{
+    fun resetList(appList : List<App>,context:Context):List<AppListItem>{
 
 
 
@@ -30,8 +31,15 @@ class SortViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
 
 
         for (label in labelStringList){
-            val labelItem = AppListItem.LabelItem(label)
+
             val list = appList.filter { it.label == label }.map { AppListItem.AppItem(it) }
+
+            val totalAppUsage = 0L
+            for (item in list){
+                totalAppUsage + item.app.getUsage(context)
+            }
+
+            val labelItem = AppListItem.LabelItem(label,totalAppUsage)
             newList.add(labelItem)
             newList.addAll(list)
         }

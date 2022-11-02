@@ -10,8 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="@dimen/large_margin"
-        android:layout_marginEnd="@dimen/large_margin"
         android:layout_marginTop="72dp"
+        android:layout_marginEnd="@dimen/large_margin"
+        android:layout_marginBottom="150dp"
         android:orientation="vertical"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -20,5 +21,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:spanCount="5" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

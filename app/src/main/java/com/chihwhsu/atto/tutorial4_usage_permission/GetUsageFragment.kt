@@ -38,6 +38,7 @@ class GetUsageFragment : Fragment() {
             }
         }
 
+
 //        val use = UsageStats
         binding.buttonNext.setOnClickListener {
             findNavController().navigate(GetUsageFragmentDirections.actionGetUsageFragmentToSetDefaultFragment())

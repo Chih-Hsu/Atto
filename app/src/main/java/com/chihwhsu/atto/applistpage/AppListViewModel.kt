@@ -1,5 +1,7 @@
 package com.chihwhsu.atto.applistpage
 
+import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.data.AppListItem
@@ -9,7 +11,7 @@ class AppListViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
 
     val appList = databaseDao.getAllAppsWithoutDock()
 
-    fun resetList(appList : List<App>):List<AppListItem>{
+    fun resetList(appList : List<App> , context: Context):List<AppListItem>{
 
 
 
@@ -25,10 +27,18 @@ class AppListViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
 
         val newList = mutableListOf<AppListItem>()
 
-
         for (label in labelStringList){
-            val labelItem = AppListItem.LabelItem(label)
+
             val list = appList.filter { it.label == label }.map { AppListItem.AppItem(it) }
+            var totalAppUsage = 0L
+            for (item in list){
+                totalAppUsage  +=  item.app.getUsage(context)
+                Log.d("calendar","$item")
+                Log.d("calendar","${item.app.getUsage(context)}")
+
+            }
+
+            val labelItem = AppListItem.LabelItem(label,totalAppUsage)
             newList.add(labelItem)
             newList.addAll(list)
         }

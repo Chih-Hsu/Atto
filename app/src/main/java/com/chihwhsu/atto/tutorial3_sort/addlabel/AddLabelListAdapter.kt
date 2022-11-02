@@ -37,6 +37,8 @@ class AddLabelListAdapter (val viewModel: AddLabelViewModel, val onClickListener
                 binding.iconImage.setImageBitmap(it.createGrayscale())
             }
 
+            binding.appName.text = item.appLabel
+
             // Default background
             binding.iconBackground.setBackgroundResource(R.drawable.icon_background)
 

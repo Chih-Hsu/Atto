@@ -1,5 +1,6 @@
 package com.chihwhsu.atto.data
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import androidx.room.ColumnInfo
@@ -7,6 +8,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.chihwhsu.atto.data.database.AttoConverter
+import com.chihwhsu.atto.util.UsageStatesManager
 
 @Entity(tableName = "app_table")
 @TypeConverters(AttoConverter::class)
@@ -28,4 +30,8 @@ data class App (
     @ColumnInfo(name = "sort")
     val sort : Int = -1
         ) {
+
+
+    fun getUsage(context: Context) =
+        UsageStatesManager.getUsage(context,packageName)
 }

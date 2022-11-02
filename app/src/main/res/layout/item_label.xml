@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:text="Label"
         android:textAllCaps="true"
-        android:textAlignment="center"
+        android:textAlignment="viewStart"
         android:textColor="@color/black"
         android:textSize="30sp"
         android:layout_marginBottom="8dp"

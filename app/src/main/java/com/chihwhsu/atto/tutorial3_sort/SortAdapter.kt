@@ -46,6 +46,7 @@ class SortAdapter () : ListAdapter<AppListItem, RecyclerView.ViewHolder>(object 
             item.app.icon?.let {
                 binding.iconImage.setImageBitmap(it.createGrayscale())
             }
+            binding.appName.text = item.app.appLabel
 
         }
     }

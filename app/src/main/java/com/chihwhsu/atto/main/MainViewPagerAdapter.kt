@@ -2,6 +2,7 @@ package com.chihwhsu.atto.main
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.chihwhsu.atto.applistpage.AppListContainerFragment
 import com.chihwhsu.atto.applistpage.AppListFragment
 import com.chihwhsu.atto.homepage.HomeFragment
 import com.chihwhsu.atto.widgetpage.WidgetFragment
@@ -16,7 +17,7 @@ class MainViewPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) 
 
             0 -> WidgetFragment()
             1 -> HomeFragment()
-            2 -> AppListFragment()
+            2 -> AppListContainerFragment()
             else -> throw IllegalArgumentException("Unknown Fragment")
         }
     }

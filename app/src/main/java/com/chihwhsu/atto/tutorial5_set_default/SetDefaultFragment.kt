@@ -43,4 +43,9 @@ class SetDefaultFragment : Fragment() {
             action = Settings.ACTION_HOME_SETTINGS
         })
     }
+
+    override fun onStop() {
+        super.onStop()
+        requireActivity().finish()
+    }
 }

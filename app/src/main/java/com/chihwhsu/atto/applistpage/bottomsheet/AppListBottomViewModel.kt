@@ -5,9 +5,9 @@ import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.data.AppListItem
 import com.chihwhsu.atto.data.database.AttoDatabaseDao
 
-class AppListDialogViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
+class AppListBottomViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
 
-    val appList = databaseDao.getAllAppsWithoutDock()
+    val appList = databaseDao.getAllApps()
 
 
 

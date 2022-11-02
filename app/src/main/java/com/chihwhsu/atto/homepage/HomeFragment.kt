@@ -14,6 +14,7 @@ import com.chihwhsu.atto.R
 import com.chihwhsu.atto.component.GestureListener
 import com.chihwhsu.atto.component.GridSpacingItemDecoration
 import com.chihwhsu.atto.databinding.FragmentHomeBinding
+import com.chihwhsu.atto.util.UsageStatesManager
 
 class HomeFragment : Fragment() {
 
@@ -124,6 +125,8 @@ class HomeFragment : Fragment() {
         viewModel.navigateToEdit.observe(viewLifecycleOwner, Observer {
             Toast.makeText(requireContext(),"event is $it",Toast.LENGTH_SHORT).show()
         })
+
+
 
 
         return binding.root

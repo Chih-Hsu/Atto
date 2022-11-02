@@ -46,7 +46,7 @@ class WallpaperViewModel(val resource: Resources) : ViewModel() {
             Wallpaper(
                 1, ResourcesCompat.getDrawable(
                     resource,
-                    R.drawable.wallpaper_black, null
+                    R.drawable.guraaaa, null
                 )!!
             )
         )
