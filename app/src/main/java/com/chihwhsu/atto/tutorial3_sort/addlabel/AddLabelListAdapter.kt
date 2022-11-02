@@ -28,24 +28,34 @@ class AddLabelListAdapter (val viewModel: AddLabelViewModel, val onClickListener
 
     inner class AppViewHolder(val binding:ItemAppListBinding): RecyclerView.ViewHolder(binding.root){
 
+
         fun bind(item:App){
+
+            checkItemInDock(item)
+
             item.icon?.let {
                 binding.iconImage.setImageBitmap(it.createGrayscale())
             }
 
+            // Default background
+            binding.iconBackground.setBackgroundResource(R.drawable.icon_background)
+
             itemView.setOnClickListener {
                 onClickListener.onClick(item)
-
-                viewModel.noLabelAppList.value?.let {
-                    if (viewModel.remainList.contains(item)){
-                        binding.iconBackground.setBackgroundResource(R.drawable.icon_background_selected)
-
-                    }else{
-                        binding.iconBackground.setBackgroundResource(R.drawable.icon_background)
-                    }
-
-                }
+                checkItemInDock(item)
             }
+        }
+
+        private fun checkItemInDock(item:App){
+
+                if (viewModel.remainList.contains(item)){
+                    binding.iconBackground.setBackgroundResource(R.drawable.icon_background_selected)
+
+                }else{
+                    binding.iconBackground.setBackgroundResource(R.drawable.icon_background)
+                }
+
+
         }
     }
 

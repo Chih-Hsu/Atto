@@ -23,7 +23,12 @@ class AppListFragment : Fragment() {
     ): View? {
         val binding = FragmentAppListBinding.inflate(inflater,container,false)
 
-        val adapter = SortAdapter()
+        val adapter = AppListAdapter(
+            AppListAdapter.AppOnClickListener {
+                val launchAppIntent = requireContext().packageManager.getLaunchIntentForPackage(it)
+                startActivity(launchAppIntent)
+        },
+        viewModel)
         binding.appRecyclerView.adapter = adapter
 
         val layoutManager = binding.appRecyclerView.layoutManager as GridLayoutManager

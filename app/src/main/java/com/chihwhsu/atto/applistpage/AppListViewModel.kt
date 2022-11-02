@@ -39,5 +39,9 @@ class AppListViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
 
     }
 
+    val isHide = mutableMapOf<String,Boolean>()
+
+
+
 
 }

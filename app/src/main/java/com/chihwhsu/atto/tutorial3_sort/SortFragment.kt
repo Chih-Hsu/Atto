@@ -1,23 +1,16 @@
 package com.chihwhsu.atto.tutorial3_sort
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.chihwhsu.atto.data.database.AttoDatabase
 import com.chihwhsu.atto.databinding.FragmentAppSorttingBinding
 import com.chihwhsu.atto.ext.getVmFactory
-import com.chihwhsu.atto.factory.SortViewModelFactory
-import com.chihwhsu.atto.tutorial1_wallpaper.WallpaperViewModel
-import com.chihwhsu.atto.tutorial2_dock.AppListAdapter
-import com.chihwhsu.atto.tutorial3_sort.addlabel.AddLabelListAdapter
 
 class SortFragment : Fragment() {
 

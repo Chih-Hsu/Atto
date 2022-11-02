@@ -29,7 +29,6 @@ class AddLabelViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
         }else{
             remainList.remove(app)
         }
-        Log.d("select","$remainList")
     }
 
     fun updateAppLabel(label : String){

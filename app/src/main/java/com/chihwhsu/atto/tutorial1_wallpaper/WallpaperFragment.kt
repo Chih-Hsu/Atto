@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.LinearSnapHelper
 import com.chihwhsu.atto.databinding.FragmentWallpaperBinding
 import com.chihwhsu.atto.ext.getVmFactory
 import com.chihwhsu.atto.factory.WallpaperViewModelFactory
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class WallpaperFragment : Fragment() {
 
@@ -40,12 +42,12 @@ class WallpaperFragment : Fragment() {
         })
 
         binding.checkButton.setOnClickListener {
+
             val manager = binding.wallpaperRecyclerview.layoutManager as LinearLayoutManager
             val currentPosition = manager.findFirstVisibleItemPosition()
             val drawable = adapter.currentList.get(currentPosition).image
-            val bitmap = drawable.toBitmap(drawable.minimumWidth,drawable.minimumHeight)
-            WallpaperManager.getInstance(requireContext()).setBitmap(bitmap)
-            viewModel.navigateToNext()
+            viewModel.setWallPaper(requireContext(),drawable)
+//            viewModel.navigateToNext()
         }
 
         viewModel.navigationToNext.observe(viewLifecycleOwner, Observer { canNavigate ->

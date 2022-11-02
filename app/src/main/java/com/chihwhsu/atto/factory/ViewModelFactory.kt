@@ -3,6 +3,7 @@ package com.chihwhsu.atto.factory
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.chihwhsu.atto.applistpage.AppListViewModel
+import com.chihwhsu.atto.applistpage.bottomsheet.AppListDialogViewModel
 import com.chihwhsu.atto.data.database.AttoDatabaseDao
 import com.chihwhsu.atto.main.MainViewModel
 import com.chihwhsu.atto.tutorial2_dock.DockViewModel
@@ -28,6 +29,9 @@ class ViewModelFactory constructor(
 
                 isAssignableFrom(AddLabelViewModel::class.java) ->
                     AddLabelViewModel(databaseDao)
+
+                isAssignableFrom(AppListDialogViewModel::class.java) ->
+                    AppListDialogViewModel(databaseDao)
 
                 else ->
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")

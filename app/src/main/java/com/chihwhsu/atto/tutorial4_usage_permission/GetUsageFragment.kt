@@ -29,6 +29,7 @@ class GetUsageFragment : Fragment() {
             if (isChecked){
                 if (!isAccessGranted()) {
                     val intent = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
+//                    val newIntent = Intent(Settings.ACTION_APP_USAGE_SETTINGS)
                     startActivity(intent)
                 }
                 buttonView.setText("On")

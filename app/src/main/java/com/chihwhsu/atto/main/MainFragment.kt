@@ -7,13 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import com.chihwhsu.atto.data.database.AttoDatabase
 import com.chihwhsu.atto.databinding.FragmentMainBinding
 import com.chihwhsu.atto.ext.getVmFactory
-import com.chihwhsu.atto.factory.MainViewModelFactory
-import com.chihwhsu.atto.tutorial2_dock.DockAppListAdapter
-import com.chihwhsu.atto.tutorial3_sort.SortViewModel
 
 class MainFragment : Fragment() {
 
@@ -34,8 +29,8 @@ class MainFragment : Fragment() {
         }
 
         val dockAdapter = DockAdapter(DockAdapter.DockOnClickListener {
-                    val launchAppIntent = requireContext().packageManager.getLaunchIntentForPackage(it)
-                    startActivity(launchAppIntent)
+            val launchAppIntent = requireContext().packageManager.getLaunchIntentForPackage(it)
+            startActivity(launchAppIntent)
         })
         binding.dockRecyclerview.adapter = dockAdapter
         viewModel.dockList.observe(viewLifecycleOwner, Observer {
