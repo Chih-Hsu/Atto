@@ -4,11 +4,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.chihwhsu.atto.R
+import com.chihwhsu.atto.applistpage.AppListAdapter
 import com.chihwhsu.atto.applistpage.AppListViewModel
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.data.AppListItem
@@ -17,7 +19,7 @@ import com.chihwhsu.atto.databinding.ItemLabelBinding
 import com.chihwhsu.atto.ext.createGrayscale
 
 
-class AppListBottomAdapter  (val appOnClickListener : AppOnClickListener) : ListAdapter<AppListItem, RecyclerView.ViewHolder>(object :
+class AppListBottomAdapter  (val appOnClickListener : AppOnClickListener,val longClickListener: AppListAdapter.LongClickListener) : ListAdapter<AppListItem, RecyclerView.ViewHolder>(object :
     DiffUtil.ItemCallback<AppListItem>(){
     override fun areItemsTheSame(oldItem: AppListItem, newItem: AppListItem): Boolean {
         return oldItem.id == newItem.id
@@ -37,6 +39,10 @@ class AppListBottomAdapter  (val appOnClickListener : AppOnClickListener) : List
 
     class AppOnClickListener(val onClickListener:(packageName:String)->Unit){
         fun onClick(packageName: String) = onClickListener(packageName)
+    }
+
+    class LongClickListener(val onClickListener:(app:App)->Unit){
+        fun onClick(app : App) = onClickListener(app)
     }
 
 
@@ -64,6 +70,13 @@ class AppListBottomAdapter  (val appOnClickListener : AppOnClickListener) : List
             itemView.setOnClickListener {
                 appOnClickListener.onClick(item.app.packageName)
             }
+
+            itemView.setOnLongClickListener(object :View.OnLongClickListener{
+                override fun onLongClick(v: View?): Boolean {
+                    longClickListener.onClick(item.app)
+                    return true
+                }
+            })
 
         }
 

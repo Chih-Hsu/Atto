@@ -72,7 +72,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
         app:spanCount="5"
-        tools:listitem="@layout/item_app_list" />
+        tools:listitem="@layout/item_app_list"
+        android:requiresFadingEdge="vertical"
+        android:fadingEdge="vertical"
+        android:fadingEdgeLength="50dp"/>
 
     <androidx.appcompat.widget.SearchView
         android:id="@+id/app_search_view"

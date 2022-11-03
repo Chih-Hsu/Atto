@@ -8,6 +8,7 @@ import com.chihwhsu.atto.data.database.AttoDatabaseDao
 import com.chihwhsu.atto.main.MainViewModel
 import com.chihwhsu.atto.tutorial3_sort.SortViewModel
 import com.chihwhsu.atto.tutorial3_sort.addlabel.AddLabelViewModel
+import com.chihwhsu.atto.usagelimit.UsageLimitViewModel
 
 class ViewModelFactory constructor(
     private val databaseDao: AttoDatabaseDao
@@ -30,6 +31,9 @@ class ViewModelFactory constructor(
 
                 isAssignableFrom(AppListBottomViewModel::class.java) ->
                     AppListBottomViewModel(databaseDao)
+
+                isAssignableFrom(UsageLimitViewModel::class.java) ->
+                    UsageLimitViewModel(databaseDao)
 
                 else ->
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")

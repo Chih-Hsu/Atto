@@ -25,7 +25,10 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:spanCount="5" />
+        app:spanCount="5"
+        android:requiresFadingEdge="vertical"
+        android:fadingEdge="vertical"
+        android:fadingEdgeLength="50dp"/>
     </com.chihwhsu.atto.component.NestedScrollableHost>
 
 

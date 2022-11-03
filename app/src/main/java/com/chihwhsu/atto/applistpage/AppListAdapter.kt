@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -16,7 +17,7 @@ import com.chihwhsu.atto.databinding.ItemLabelBinding
 import com.chihwhsu.atto.ext.createGrayscale
 import com.chihwhsu.atto.ext.toFormat
 
-class AppListAdapter  (val appOnClickListener : AppOnClickListener,val viewModel: AppListViewModel) : ListAdapter<AppListItem, RecyclerView.ViewHolder>(object :
+class AppListAdapter  (val appOnClickListener : AppOnClickListener,val longClickListener: LongClickListener,val viewModel: AppListViewModel) : ListAdapter<AppListItem, RecyclerView.ViewHolder>(object :
     DiffUtil.ItemCallback<AppListItem>(){
     override fun areItemsTheSame(oldItem: AppListItem, newItem: AppListItem): Boolean {
         return oldItem.id == newItem.id
@@ -36,6 +37,10 @@ class AppListAdapter  (val appOnClickListener : AppOnClickListener,val viewModel
 
     class AppOnClickListener(val onClickListener:(packageName:String)->Unit){
         fun onClick(packageName: String) = onClickListener(packageName)
+    }
+
+    class LongClickListener(val onClickListener:(app:App)->Unit){
+        fun onClick(app : App) = onClickListener(app)
     }
 
 
@@ -81,7 +86,14 @@ class AppListAdapter  (val appOnClickListener : AppOnClickListener,val viewModel
 
             itemView.setOnClickListener {
                 appOnClickListener.onClick(item.app.packageName)
+
             }
+            itemView.setOnLongClickListener(object :View.OnLongClickListener{
+                override fun onLongClick(v: View?): Boolean {
+                    longClickListener.onClick(item.app)
+                    return true
+                }
+            })
 
         }
 

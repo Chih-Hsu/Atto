@@ -28,7 +28,7 @@ class AppListBottomViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
     }
 
     fun toAppListItem(appList : List<App>):List<AppListItem>{
-        return appList.map { AppListItem.AppItem(it) }
+        return appList.map { AppListItem.AppItem(it) }.sortedBy { it.app.appLabel.first()}
     }
 
 

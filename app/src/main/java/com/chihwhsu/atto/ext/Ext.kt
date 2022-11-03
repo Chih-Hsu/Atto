@@ -25,13 +25,6 @@ fun Bitmap.createGrayscale(): Bitmap? {
 
 
 fun Long.toFormat(): String? {
-    // Create a DateFormatter object for displaying date in specified format.
-//    val formatter = SimpleDateFormat("hh:mm")
-
-    // Create a calendar object that will convert the date and time value in milliseconds to date.
-//    val calendar = Calendar.getInstance()
-//    calendar.timeInMillis = this
-
     val hours = this/(1000*60*60)
     val minutes = this/(1000*60) - hours*60
     return "${hours}h${minutes}m"
