@@ -41,21 +41,20 @@ class EventAdapter(val onClickListener: EventClickListener) :
 //                onClickListener.onClick(event)
 //            }
 
-            if (event.isDone) {
-                binding.eventDone.visibility = View.VISIBLE
-                binding.eventDoing.visibility = View.INVISIBLE
-                binding.eventDone.drawable.setColorFilter(
-                    ResourcesCompat.getColor(
-                        itemView.resources,
-                        R.color.red,
-                        null
-                    ), PorterDuff.Mode.SRC_IN
-                )
-//                binding.eventDone.drawable.colorFilter = BlendModeColorFilter(ResourcesCompat.getColor(itemView.resources,R.color.red,null),BlendMode.SRC_IN)
-            } else {
-                binding.eventDone.visibility = View.INVISIBLE
-                binding.eventDoing.visibility = View.VISIBLE
-            }
+//            if (event.isDone) {
+//                binding.eventDone.visibility = View.VISIBLE
+//                binding.eventDoing.visibility = View.INVISIBLE
+//                binding.eventDone.drawable.setColorFilter(
+//                    ResourcesCompat.getColor(
+//                        itemView.resources,
+//                        R.color.red,
+//                        null
+//                    ), PorterDuff.Mode.SRC_IN
+//                )
+//            } else {
+//                binding.eventDone.visibility = View.INVISIBLE
+//                binding.eventDoing.visibility = View.VISIBLE
+//            }
         }
     }
 

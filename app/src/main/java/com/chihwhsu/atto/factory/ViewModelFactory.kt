@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.chihwhsu.atto.applistpage.AppListViewModel
 import com.chihwhsu.atto.applistpage.bottomsheet.AppListBottomViewModel
+import com.chihwhsu.atto.clock.pomodoro.PomodoroViewModel
 import com.chihwhsu.atto.data.database.AttoDatabaseDao
 import com.chihwhsu.atto.main.MainViewModel
 import com.chihwhsu.atto.tutorial3_sort.SortViewModel
@@ -34,6 +35,9 @@ class ViewModelFactory constructor(
 
                 isAssignableFrom(UsageLimitViewModel::class.java) ->
                     UsageLimitViewModel(databaseDao)
+
+                isAssignableFrom(PomodoroViewModel::class.java) ->
+                    PomodoroViewModel(databaseDao)
 
                 else ->
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")

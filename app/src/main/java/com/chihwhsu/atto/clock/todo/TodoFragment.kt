@@ -31,6 +31,11 @@ class TodoFragment : Fragment() {
 
         initDateAndTimePicker()
 
+        val currentTime = System.currentTimeMillis() + 600000
+        val simpleFormat = SimpleDateFormat("a  hh:mm")
+        binding.hourMinute.text = simpleFormat.format(currentTime)
+        val monthFormat = SimpleDateFormat("MMMM dd")
+        binding.monthDays.text = monthFormat.format(currentTime).uppercase()
 
 
 
@@ -64,17 +69,19 @@ class TodoFragment : Fragment() {
 
         timePicker.addOnPositiveButtonClickListener {
             // replace textview text
+            val amPm = if (timePicker.hour<=12)"AM" else "PM"
             binding.hourMinute.text = resources.getString(
-                R.string.hh_mm,
+                R.string.a_hh_mm,
+                amPm,
                 timePicker.hour.formatHour(),
                 timePicker.minute.formatMinutes()
             )
 
-            binding.am.text = if (timePicker.hour <= 12) {
-                "am"
-            } else {
-                "pm"
-            }
+//            binding.am.text = if (timePicker.hour <= 12) {
+//                "am"
+//            } else {
+//                "pm"
+//            }
         }
 
     }

@@ -1,5 +1,6 @@
 package com.chihwhsu.atto.clock.alarm
 
+
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +15,10 @@ import com.chihwhsu.atto.R
 import com.chihwhsu.atto.databinding.FragmentAlarmBinding
 import com.chihwhsu.atto.ext.formatHour
 import com.chihwhsu.atto.ext.formatMinutes
+import com.chihwhsu.atto.ext.toFormat
 import com.google.android.material.timepicker.MaterialTimePicker
+import java.text.SimpleDateFormat
+import java.util.*
 
 class AlarmFragment : Fragment() {
 
@@ -46,34 +50,47 @@ class AlarmFragment : Fragment() {
             }
         }
 
+
         viewModel.dayList.observe(viewLifecycleOwner, Observer {
             setBackground(list, it)
         })
+
+        // Set current time
+        val currentTime = System.currentTimeMillis() + 600000
+        val simpleFormat = SimpleDateFormat("a  hh:mm")
+        binding.hourMinute.text = simpleFormat.format(currentTime)
 
         binding.button.setOnClickListener {
         }
 
         // RingTone Spinner
-        binding.ringtoneSpinner.adapter = ArrayAdapter<String>(
-            requireContext(),
-            R.layout.item_ringtone_spinner,
-            viewModel.ringToneList
-        )
-        binding.ringtoneSpinner.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onNothingSelected(p0: AdapterView<*>?) {
+        viewModel.ringToneList.observe(viewLifecycleOwner, Observer {
+            binding.ringtoneSpinner.adapter = ArrayAdapter<String>(
+                requireContext(),
+                R.layout.item_ringtone_spinner,
+                it
+            )
+
+            binding.ringtoneSpinner.onItemSelectedListener =
+                object : AdapterView.OnItemSelectedListener {
+                    override fun onNothingSelected(p0: AdapterView<*>?) {
+                    }
+
+                    override fun onItemSelected(
+                        Adapter: AdapterView<*>?,
+                        view: View?,
+                        position: Int,
+                        id: Long
+                    ) {
+
+                       viewModel.setRingTonePosition(position)
+
+
+                    }
                 }
-
-                override fun onItemSelected(
-                    Adapter: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
+        })
 
 
-                }
-            }
 
         // TimePicker
         val timePicker = MaterialTimePicker.Builder()
@@ -86,20 +103,39 @@ class AlarmFragment : Fragment() {
         timePicker.apply {
             addOnPositiveButtonClickListener {
 
+                val time = hour.toLong()*60*60*1000 + minute.toLong()*60*1000
+                val amPm = if (hour<=12)"AM" else "PM"
+                viewModel.setAlarmTime(time)
+
                 // replace textview text
                 binding.hourMinute.text = resources.getString(
-                    R.string.hh_mm,
-                    timePicker.hour.formatHour(),
-                    timePicker.minute.formatMinutes()
+                    R.string.a_hh_mm,
+                    amPm,
+                    hour.formatHour(),
+                    minute.formatMinutes()
                 )
 
-                binding.am.text = if (timePicker.hour <= 12) {
-                    "am"
-                } else {
-                    "pm"
-                }
+//                binding.am.text = if (timePicker.hour <= 12) {
+//                    "am"
+//                } else {
+//                    "pm"
+//                }
             }
+        }
+        binding.vibrationSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked){
+                viewModel.setVibration()
+            }
+        }
 
+        binding.snoozeSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked){
+                viewModel.setSnooze()
+            }
+        }
+
+        binding.button.setOnClickListener {
+            viewModel.saveEvent()
         }
 
 

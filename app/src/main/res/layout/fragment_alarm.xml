@@ -7,36 +7,37 @@
     android:background="@color/light_grey">
 
     <TextView
-        android:id="@+id/am"
+        android:id="@+id/month_days"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="70dp"
-        android:layout_marginTop="150dp"
+        android:layout_marginBottom="-24dp"
         android:fontFamily="@font/k2d"
-        android:text="am"
+        android:text="ALARM AT"
         android:textColor="@color/black"
-        android:textSize="45sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/hour_minute"
+        app:layout_constraintStart_toStartOf="@+id/hour_minute" />
+
 
     <TextView
         android:id="@+id/hour_minute"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/k2d"
-        android:text="07:55"
+        android:text="am  07:55"
         android:textColor="@color/black"
-        android:textSize="60sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/am"
+        android:textSize="50sp"
+        android:layout_marginTop="150dp"
         app:layout_constraintEnd_toStartOf="@+id/guideline7"
-        app:layout_constraintStart_toStartOf="@+id/guideline7" />
+        app:layout_constraintStart_toStartOf="@+id/guideline7"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="230dp" />
+        app:layout_constraintGuide_begin="180dp" />
 
     <TextView
         android:id="@+id/monday"
@@ -183,7 +184,7 @@
         app:layout_constraintTop_toTopOf="@+id/text_vibration" />
 
     <com.google.android.material.switchmaterial.SwitchMaterial
-        android:id="@+id/routine_switch"
+        android:id="@+id/snooze_switch"
         style="@style/Widget.AppCompat.CompoundButton.Switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -210,7 +211,7 @@
         android:layout_height="50dp"
         android:layout_marginTop="@dimen/standard_margin"
         android:background="@drawable/white_round_background"
-        app:layout_constraintEnd_toEndOf="@+id/routine_switch"
+        app:layout_constraintEnd_toEndOf="@+id/snooze_switch"
         app:layout_constraintStart_toStartOf="@+id/text_alarm"
         app:layout_constraintTop_toBottomOf="@+id/text_alarm" />
 
@@ -224,7 +225,7 @@
         android:text="確  認"
         app:backgroundTint="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/routine_switch"
+        app:layout_constraintEnd_toEndOf="@+id/snooze_switch"
         app:layout_constraintStart_toStartOf="@+id/text_alarm" />
 
     <ImageView

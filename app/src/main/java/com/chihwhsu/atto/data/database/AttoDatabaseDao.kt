@@ -37,5 +37,8 @@ interface AttoDatabaseDao {
     @Query("select * from app_table where label not like '%dock%'")
     fun getAllAppsWithoutDock():LiveData<List<App>>
 
+    @Query("SELECT label FROM app_table")
+    fun getLabelList():LiveData<List<String>>
+
 }
 

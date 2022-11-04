@@ -1,23 +1,17 @@
 package com.chihwhsu.atto.tutorial1_wallpaper
 
-import android.app.WallpaperManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import com.chihwhsu.atto.databinding.FragmentWallpaperBinding
 import com.chihwhsu.atto.ext.getVmFactory
-import com.chihwhsu.atto.factory.WallpaperViewModelFactory
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 class WallpaperFragment : Fragment() {
 
@@ -45,7 +39,6 @@ class WallpaperFragment : Fragment() {
 
             val manager = binding.wallpaperRecyclerview.layoutManager as LinearLayoutManager
             val currentPosition = manager.findFirstVisibleItemPosition()
-
             val drawable = adapter.currentList.get(currentPosition).image
             viewModel.setWallPaper(requireContext(),drawable)
 //            viewModel.navigateToNext()
