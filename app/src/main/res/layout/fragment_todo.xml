@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_grey">
+
+
+    <TextView
+        android:id="@+id/month_days"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="-24dp"
+        android:fontFamily="@font/k2d"
+        android:text="NOVEMBER 12"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/hour_minute"
+        app:layout_constraintStart_toStartOf="@+id/am" />
+
+    <TextView
+        android:id="@+id/am"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="150dp"
+        android:fontFamily="@font/k2d"
+        android:text="am"
+        android:textColor="@color/black"
+        android:textSize="45sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/hour_minute"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/k2d"
+        android:text="07:55"
+        android:textColor="@color/black"
+        android:textSize="60sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/am"
+        app:layout_constraintEnd_toStartOf="@+id/guideline7"
+        app:layout_constraintStart_toStartOf="@+id/guideline7" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="230dp" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/materialDivider2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        app:layout_constraintBottom_toTopOf="@+id/todo_title"
+        app:layout_constraintTop_toBottomOf="@+id/hour_minute" />
+
+    <EditText
+        android:id="@+id/todo_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/standard_margin"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="@dimen/standard_margin"
+        android:fontFamily="@font/k2d"
+        android:hint="TITLE"
+        android:textColorHint="@color/black"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/image_time_edit" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/standard_margin"
+        android:layout_marginTop="@dimen/standard_margin"
+        android:layout_marginEnd="@dimen/standard_margin"
+        android:fontFamily="@font/k2d"
+        android:gravity="left|top"
+        android:hint="CONTENT"
+        android:textColorHint="@color/black"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/todo_title" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="120dp"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:text="確  認"
+        app:backgroundTint="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/todo_title"
+        app:layout_constraintStart_toStartOf="@+id/todo_title" />
+
+    <ImageView
+        android:id="@+id/image_time_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/hour_minute"
+        app:layout_constraintStart_toEndOf="@+id/hour_minute"
+        app:srcCompat="@drawable/ic_baseline_edit_calendar_24"
+        android:layout_marginBottom="30dp"
+        android:layout_marginStart="@dimen/standard_margin"/>
+
+    <ImageView
+        android:id="@+id/image_day_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/month_days"
+        app:layout_constraintStart_toEndOf="@+id/month_days"
+        app:layout_constraintTop_toTopOf="@+id/month_days"
+        app:srcCompat="@drawable/ic_baseline_edit_calendar_24"
+        android:layout_marginStart="@dimen/standard_margin"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

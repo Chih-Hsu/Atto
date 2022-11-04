@@ -29,3 +29,26 @@ fun Long.toFormat(): String? {
     val minutes = this/(1000*60) - hours*60
     return "${hours}h${minutes}m"
 }
+
+fun Int.formatHour() : String{
+    val newHour = if (this > 12){
+        (this-12)
+    } else {
+        this
+    }
+
+    return if (newHour < 10){
+        "0${newHour}"
+    } else{
+        "$newHour"
+    }
+}
+
+fun Int.formatMinutes():String{
+    return if (this < 10){
+        "0$this"
+    } else {
+        this.toString()
+    }
+
+}

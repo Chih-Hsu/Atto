@@ -45,6 +45,7 @@ class WallpaperFragment : Fragment() {
 
             val manager = binding.wallpaperRecyclerview.layoutManager as LinearLayoutManager
             val currentPosition = manager.findFirstVisibleItemPosition()
+
             val drawable = adapter.currentList.get(currentPosition).image
             viewModel.setWallPaper(requireContext(),drawable)
 //            viewModel.navigateToNext()

@@ -10,6 +10,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import com.chihwhsu.atto.NavigationDirections
 import com.chihwhsu.atto.R
 import com.chihwhsu.atto.component.GestureListener
 import com.chihwhsu.atto.component.GridSpacingItemDecoration
@@ -125,6 +127,10 @@ class HomeFragment : Fragment() {
         viewModel.navigateToEdit.observe(viewLifecycleOwner, Observer {
             Toast.makeText(requireContext(),"event is $it",Toast.LENGTH_SHORT).show()
         })
+
+        binding.clockMinutes.setOnClickListener {
+            findNavController().navigate(NavigationDirections.actionGlobalClockFragment())
+        }
 
 
 

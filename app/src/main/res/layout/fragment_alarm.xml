@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_grey">
+
+    <TextView
+        android:id="@+id/am"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="150dp"
+        android:fontFamily="@font/k2d"
+        android:text="am"
+        android:textColor="@color/black"
+        android:textSize="45sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/hour_minute"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/k2d"
+        android:text="07:55"
+        android:textColor="@color/black"
+        android:textSize="60sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/am"
+        app:layout_constraintEnd_toStartOf="@+id/guideline7"
+        app:layout_constraintStart_toStartOf="@+id/guideline7" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="230dp" />
+
+    <TextView
+        android:id="@+id/monday"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="@dimen/standard_margin"
+        android:layout_marginTop="80dp"
+        android:background="@drawable/week_corner_background"
+        android:fontFamily="@font/k2d_bold"
+        android:gravity="center"
+        android:text="M"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toStartOf="@+id/tuesday"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/hour_minute" />
+
+    <TextView
+        android:id="@+id/tuesday"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/week_corner_background"
+        android:fontFamily="@font/k2d_bold"
+        android:gravity="center"
+        android:text="T"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toStartOf="@+id/wednesday"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/monday"
+        app:layout_constraintTop_toTopOf="@+id/monday" />
+
+    <TextView
+        android:id="@+id/wednesday"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/week_corner_background"
+        android:fontFamily="@font/k2d_bold"
+        android:gravity="center"
+        android:text="W"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toStartOf="@+id/thursday"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tuesday"
+        app:layout_constraintTop_toTopOf="@+id/tuesday" />
+
+    <TextView
+        android:id="@+id/thursday"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/week_corner_background"
+        android:fontFamily="@font/k2d_bold"
+        android:gravity="center"
+        android:text="T"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toStartOf="@+id/friday"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/wednesday"
+        app:layout_constraintTop_toTopOf="@+id/wednesday" />
+
+    <TextView
+        android:id="@+id/friday"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/week_corner_background"
+        android:fontFamily="@font/k2d_bold"
+        android:gravity="center"
+        android:text="F"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toStartOf="@+id/saturday"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/thursday"
+        app:layout_constraintTop_toTopOf="@+id/thursday" />
+
+    <TextView
+        android:id="@+id/saturday"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/week_corner_background"
+        android:fontFamily="@font/k2d_bold"
+        android:gravity="center"
+        android:text="S"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toStartOf="@+id/sunday"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/friday"
+        app:layout_constraintTop_toTopOf="@+id/friday" />
+
+    <TextView
+        android:id="@+id/sunday"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="@dimen/standard_margin"
+        android:background="@drawable/week_corner_background"
+        android:fontFamily="@font/k2d_bold"
+        android:gravity="center"
+        android:text="S"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/saturday"
+        app:layout_constraintTop_toTopOf="@+id/saturday" />
+
+
+    <TextView
+        android:id="@+id/text_vibration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:fontFamily="@font/k2d"
+        android:gravity="center"
+        android:text="震 動"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/monday"
+        app:layout_constraintTop_toBottomOf="@+id/monday" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/materialDivider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        app:layout_constraintBottom_toTopOf="@+id/text_routine"
+        app:layout_constraintTop_toBottomOf="@+id/text_vibration" />
+
+    <TextView
+        android:id="@+id/text_routine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/k2d"
+        android:gravity="center"
+        android:text="貪 睡"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/text_vibration"
+        app:layout_constraintTop_toBottomOf="@+id/text_vibration" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/vibration_switch"
+        style="@style/Widget.AppCompat.CompoundButton.Switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/text_vibration"
+        app:layout_constraintEnd_toEndOf="@+id/sunday"
+        app:layout_constraintTop_toTopOf="@+id/text_vibration" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/routine_switch"
+        style="@style/Widget.AppCompat.CompoundButton.Switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/text_routine"
+        app:layout_constraintEnd_toEndOf="@+id/vibration_switch"
+        app:layout_constraintTop_toTopOf="@+id/text_routine" />
+
+
+    <TextView
+        android:id="@+id/text_alarm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/k2d"
+        android:text="Alarm Sound"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="@+id/text_routine"
+        app:layout_constraintTop_toBottomOf="@+id/text_routine" />
+
+    <Spinner
+        android:id="@+id/ringtone_spinner"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="@dimen/standard_margin"
+        android:background="@drawable/white_round_background"
+        app:layout_constraintEnd_toEndOf="@+id/routine_switch"
+        app:layout_constraintStart_toStartOf="@+id/text_alarm"
+        app:layout_constraintTop_toBottomOf="@+id/text_alarm" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="120dp"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:text="確  認"
+        app:backgroundTint="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/routine_switch"
+        app:layout_constraintStart_toStartOf="@+id/text_alarm" />
+
+    <ImageView
+        android:id="@+id/image_time_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/hour_minute"
+        app:layout_constraintStart_toEndOf="@+id/hour_minute"
+        app:srcCompat="@drawable/ic_baseline_edit_calendar_24"
+        android:layout_marginBottom="30dp"
+        android:layout_marginStart="@dimen/standard_margin"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

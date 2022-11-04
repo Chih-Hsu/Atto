@@ -9,7 +9,7 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="light_grey">#FFF4F4F4</color>
-    <color name="mid_gray">#FF767676</color>
+    <color name="mid_gray">#10000000</color>
     <color name="cold_gray">#D7DDE8</color>
     <color name="blue_gray">#757F9A</color>
     <color name="dark_grey">#75000000</color>

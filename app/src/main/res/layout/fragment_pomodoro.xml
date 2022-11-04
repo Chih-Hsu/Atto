@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_grey">
+
+    <TextView
+        android:id="@+id/month_days"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="-24dp"
+        android:fontFamily="@font/k2d"
+        android:text="START FROM"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/hour_minute"
+        app:layout_constraintStart_toStartOf="@+id/am" />
+
+
+    <TextView
+        android:id="@+id/am"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="150dp"
+        android:fontFamily="@font/k2d"
+        android:text="am"
+        android:textColor="@color/black"
+        android:textSize="45sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/hour_minute"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/k2d"
+        android:text="07:55"
+        android:textColor="@color/black"
+        android:textSize="60sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/am"
+        app:layout_constraintEnd_toStartOf="@+id/guideline7"
+        app:layout_constraintStart_toStartOf="@+id/guideline7" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="230dp" />
+
+    <ImageView
+        android:id="@+id/image_time_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/hour_minute"
+        app:layout_constraintStart_toEndOf="@+id/hour_minute"
+        app:srcCompat="@drawable/ic_baseline_edit_calendar_24"
+        android:layout_marginBottom="30dp"
+        android:layout_marginStart="@dimen/standard_margin"/>
+
+    <TextView
+        android:id="@+id/text_work_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:fontFamily="@font/k2d"
+        android:gravity="center"
+        android:text="專 注 時 間"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:layout_marginStart="@dimen/large_margin"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/hour_minute" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/materialDivider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        app:layout_constraintBottom_toTopOf="@+id/text_break_time"
+        app:layout_constraintTop_toBottomOf="@+id/text_work_time" />
+
+    <TextView
+        android:id="@+id/text_break_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:fontFamily="@font/k2d"
+        android:gravity="center"
+        android:text="休 息 時 間"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/text_work_time"
+        app:layout_constraintTop_toBottomOf="@+id/text_work_time" />
+
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/materialDivider2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        app:layout_constraintBottom_toTopOf="@+id/text_routine"
+        app:layout_constraintTop_toBottomOf="@+id/text_break_time" />
+
+    <TextView
+        android:id="@+id/text_routine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:fontFamily="@font/k2d"
+        android:gravity="center"
+        android:text="循 環 次 數"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/text_break_time"
+        app:layout_constraintTop_toBottomOf="@+id/text_break_time" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/materialDivider3"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        app:layout_constraintBottom_toTopOf="@+id/text_block_app"
+        app:layout_constraintTop_toBottomOf="@+id/text_routine" />
+
+    <TextView
+        android:id="@+id/text_block_app"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:fontFamily="@font/k2d"
+        android:gravity="center"
+        android:text="專注時間禁用App"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/text_routine"
+        app:layout_constraintTop_toBottomOf="@+id/text_routine" />
+
+
+    <Spinner
+        android:id="@+id/label_spinner"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="@dimen/standard_margin"
+        android:spinnerMode="dialog"
+        android:background="@drawable/white_round_background"
+        app:layout_constraintEnd_toEndOf="@+id/text_time3"
+        app:layout_constraintStart_toStartOf="@+id/text_block_app"
+        app:layout_constraintTop_toBottomOf="@+id/text_block_app" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="120dp"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:text="確  認"
+        app:backgroundTint="@color/black"
+        android:layout_marginStart="@dimen/standard_margin"
+        android:layout_marginEnd="@dimen/standard_margin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/text_min1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/k2d"
+        android:text="min"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        android:layout_marginEnd="@dimen/standard_margin"
+        app:layout_constraintBottom_toBottomOf="@+id/text_work_time"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/text_work_time" />
+
+    <TextView
+        android:id="@+id/text_min2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/k2d"
+        android:text="min"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/text_break_time"
+        app:layout_constraintEnd_toEndOf="@+id/text_min1"
+        app:layout_constraintTop_toTopOf="@+id/text_break_time" />
+
+    <TextView
+        android:id="@+id/text_time3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/k2d"
+        android:text="次"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/text_routine"
+        app:layout_constraintEnd_toEndOf="@+id/text_min1"
+        app:layout_constraintTop_toTopOf="@+id/text_routine" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/vibration_switch"
+        style="@style/Widget.AppCompat.CompoundButton.Switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/text_block_app"
+        app:layout_constraintEnd_toEndOf="@+id/text_min1"
+        app:layout_constraintTop_toTopOf="@+id/text_block_app" />
+
+    <EditText
+        android:id="@+id/edit_work_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/k2d"
+        android:inputType="number"
+        android:text="25"
+        android:maxLength="2"
+        android:layout_marginEnd="@dimen/standard_margin"
+        android:textColor="@color/black"
+        android:textSize="35sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/text_min1"
+        app:layout_constraintEnd_toStartOf="@+id/text_min1" />
+
+    <EditText
+        android:id="@+id/edit_break_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/k2d"
+        android:inputType="number"
+        android:text="25"
+        android:maxLength="2"
+        android:layout_marginEnd="@dimen/standard_margin"
+        android:textColor="@color/black"
+        android:textSize="35sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/text_min2"
+        app:layout_constraintEnd_toStartOf="@+id/text_min1" />
+
+    <EditText
+        android:id="@+id/edit_routine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/k2d"
+        android:inputType="number"
+        android:text="7"
+        android:maxLength="1"
+        android:layout_marginEnd="@dimen/standard_margin"
+        android:textColor="@color/black"
+        android:textSize="35sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/text_time3"
+        app:layout_constraintEnd_toStartOf="@+id/text_min1" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

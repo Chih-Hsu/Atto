@@ -44,4 +44,9 @@
             android:name="app"
             app:argType="com.chihwhsu.atto.data.App" />
     </fragment>
+    <fragment
+        android:id="@+id/clockFragment"
+        android:name="com.chihwhsu.atto.clock.ClockFragment"
+        android:label="ClockFragment"
+        tools:layout="@layout/fragment_clock"/><action android:id="@+id/action_global_clockFragment" app:destination="@id/clockFragment"/>
 </navigation>
