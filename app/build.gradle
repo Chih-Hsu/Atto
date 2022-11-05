@@ -55,6 +55,9 @@ dependencies {
     implementation "androidx.room:room-runtime:$version_room"
     kapt "androidx.room:room-compiler:$version_room"
 
+    // Moshi
+    implementation "com.squareup.moshi:moshi:$version_moshi"
+    implementation "com.squareup.moshi:moshi-kotlin:$version_moshi"
 
 //    implementation 'com.github.User:Repo:Tag'
 //    implementation 'com.github.Dimezis:BlurView:version-2.0.2'

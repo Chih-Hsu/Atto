@@ -3,6 +3,7 @@ package com.chihwhsu.atto.data.database
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.chihwhsu.atto.data.App
+import com.chihwhsu.atto.data.Event
 
 @Dao
 interface AttoDatabaseDao {
@@ -39,6 +40,13 @@ interface AttoDatabaseDao {
 
     @Query("SELECT label FROM app_table")
     fun getLabelList():LiveData<List<String>>
+
+
+
+    // Event
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(event: Event)
 
 }
 

@@ -5,7 +5,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -21,6 +23,7 @@ import java.text.SimpleDateFormat
 
 class PomodoroFragment : Fragment() {
 
+    private lateinit var binding: FragmentPomodoroBinding
     private val viewModel by viewModels<PomodoroViewModel> { getVmFactory() }
 
     override fun onCreateView(
@@ -28,31 +31,89 @@ class PomodoroFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = FragmentPomodoroBinding.inflate(inflater,container,false)
+        binding = FragmentPomodoroBinding.inflate(inflater,container,false)
 
         // set current time
         val currentTime = System.currentTimeMillis() + 60000
         val simpleFormat = SimpleDateFormat("a hh:mm")
         binding.hourMinute.text = simpleFormat.format(currentTime)
 
+
+
+
+        setTimePicker()
+
+        binding.editWorkTime.doAfterTextChanged { number ->
+            if (!number.isNullOrEmpty()) {
+                viewModel.setWorkTime(number.toString().toLong())
+            }
+        }
+
+        binding.editBreakTime.doAfterTextChanged { number ->
+            if (!number.isNullOrEmpty()) {
+                viewModel.setBreakTime(number.toString().toLong())
+            }
+        }
+
+        binding.editRoutine.doAfterTextChanged { number ->
+            if (!number.isNullOrEmpty()){
+                viewModel.setRoutineRound(number.toString().toInt())
+            }
+
+        }
+
+        binding.lockAppSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+            viewModel.setLockAppMode()
+        }
+
+        binding.button.setOnClickListener {
+            viewModel.saveEvent()
+        }
+
+        // Spinner
         viewModel.labelList.observe(viewLifecycleOwner, Observer {
             val setList = it.toSet()
             val newList = mutableListOf<String>()
-            newList.add("All Apps")
+            newList.add("全部")
             for (item in setList){
                 if (!item.isNullOrEmpty() && item != "dock"){
                     newList.add(item)
                 }
             }
-//            Log.d("pomodoro","$it new = $newList")
+
             binding.labelSpinner.adapter = ArrayAdapter<String>(requireContext(),
                 R.layout.item_ringtone_spinner,newList)
+
+            binding.labelSpinner.onItemSelectedListener =
+                object : AdapterView.OnItemSelectedListener {
+                    override fun onNothingSelected(p0: AdapterView<*>?) {
+                    }
+
+                    override fun onItemSelected(
+                        Adapter: AdapterView<*>?,
+                        view: View?,
+                        position: Int,
+                        id: Long
+                    ) {
+                            viewModel.setLockAppLabel(newList[position])
+
+                    }
+                }
         })
 
 
+
+
+
+
+
+        return binding.root
+    }
+
+    private fun setTimePicker(){
+
         val timePicker =
             MaterialTimePicker.Builder().build()
-
 
         binding.imageTimeEdit.setOnClickListener {
             timePicker.show(parentFragmentManager,"Time")
@@ -60,6 +121,8 @@ class PomodoroFragment : Fragment() {
 
         timePicker.addOnPositiveButtonClickListener {
             // replace textview text
+            val time = timePicker.hour.toLong()*60*60*1000 + timePicker.minute.toLong()*60*1000
+            viewModel.setBeginTime(time)
             val amPm = if (timePicker.hour<=12)"AM" else "PM"
             binding.hourMinute.text = resources.getString(
                 R.string.a_hh_mm,
@@ -68,29 +131,6 @@ class PomodoroFragment : Fragment() {
                 timePicker.minute.formatMinutes()
             )
 
-//            binding.am.text = if (timePicker.hour <= 12) {
-//                "am"
-//            } else {
-//                "pm"
-//            }
         }
-
-
-
-
-
-
-
-//        Log.d("calendar", "${binding.datePicker.month}")
-//
-//        binding.datePicker.setOnDateChangedListener { view, year, monthOfYear, dayOfMonth ->
-//            Log.d("calendar", "${dayOfMonth}")
-//        }
-//
-//        binding.datePicker.setBackgroundResource(R.drawable.week_corner_background_select)
-//        binding.datePicker
-
-
-        return binding.root
     }
 }

@@ -52,3 +52,14 @@ fun Int.formatMinutes():String{
     }
 
 }
+
+fun getTimeFrom00am(time: Long):Long{
+    val today = Calendar.getInstance()
+    today[Calendar.MILLISECOND] = 0
+    today[Calendar.SECOND] = 0
+    today[Calendar.MINUTE] = 0
+    today[Calendar.HOUR_OF_DAY] = 0
+    today.timeInMillis
+
+    return time - today.timeInMillis
+}

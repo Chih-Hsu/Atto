@@ -2,6 +2,7 @@ package com.chihwhsu.atto.clock.alarm
 
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,13 +10,13 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.chihwhsu.atto.R
 import com.chihwhsu.atto.databinding.FragmentAlarmBinding
 import com.chihwhsu.atto.ext.formatHour
 import com.chihwhsu.atto.ext.formatMinutes
-import com.chihwhsu.atto.ext.toFormat
+import com.chihwhsu.atto.ext.getVmFactory
 import com.google.android.material.timepicker.MaterialTimePicker
 import java.text.SimpleDateFormat
 import java.util.*
@@ -23,6 +24,7 @@ import java.util.*
 class AlarmFragment : Fragment() {
 
     private lateinit var binding: FragmentAlarmBinding
+    private val viewModel by viewModels<AlarmViewModel> { getVmFactory() }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,7 +33,6 @@ class AlarmFragment : Fragment() {
     ): View? {
         binding = FragmentAlarmBinding.inflate(inflater, container, false)
 
-        val viewModel = ViewModelProvider(this).get(AlarmViewModel::class.java)
         viewModel.getRingTone(requireContext())
 
         val list = listOf(
@@ -123,21 +124,16 @@ class AlarmFragment : Fragment() {
             }
         }
         binding.vibrationSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked){
                 viewModel.setVibration()
-            }
         }
 
         binding.snoozeSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked){
                 viewModel.setSnooze()
-            }
         }
 
         binding.button.setOnClickListener {
             viewModel.saveEvent()
         }
-
 
 
 

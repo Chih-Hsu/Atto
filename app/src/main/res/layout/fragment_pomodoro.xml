@@ -188,7 +188,7 @@
         app:layout_constraintTop_toTopOf="@+id/text_routine" />
 
     <com.google.android.material.switchmaterial.SwitchMaterial
-        android:id="@+id/vibration_switch"
+        android:id="@+id/lock_app_switch"
         style="@style/Widget.AppCompat.CompoundButton.Switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -202,7 +202,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/k2d"
         android:inputType="number"
-        android:text="25"
+        android:text="45"
         android:maxLength="2"
         android:layout_marginEnd="@dimen/standard_margin"
         android:textColor="@color/black"
@@ -216,7 +216,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/k2d"
         android:inputType="number"
-        android:text="25"
+        android:text="15"
         android:maxLength="2"
         android:layout_marginEnd="@dimen/standard_margin"
         android:textColor="@color/black"
@@ -230,7 +230,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/k2d"
         android:inputType="number"
-        android:text="7"
+        android:text="1"
         android:maxLength="1"
         android:layout_marginEnd="@dimen/standard_margin"
         android:textColor="@color/black"

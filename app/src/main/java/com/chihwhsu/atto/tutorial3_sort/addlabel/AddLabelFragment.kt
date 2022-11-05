@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -28,7 +29,14 @@ class AddLabelFragment : Fragment() {
             viewModel.addToList(app)
         })
         binding.appListRecyclerview.adapter = listAdapter
+
+
+
         viewModel.noLabelAppList.observe(viewLifecycleOwner, Observer {
+            viewModel.getData()
+        })
+
+        viewModel.filterList.observe(viewLifecycleOwner, Observer {
             listAdapter.submitList(it)
         })
 
@@ -41,6 +49,18 @@ class AddLabelFragment : Fragment() {
             if (canNavigate){
                 findNavController().navigate(AddLabelFragmentDirections.actionAddLabelFragmentToSortFragment())
                 viewModel.doneNavigation()
+            }
+        })
+
+        // searchView
+        binding.appSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextChange(newText: String?): Boolean {
+                viewModel.filterList(newText)
+                return true
+            }
+
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
             }
         })
 

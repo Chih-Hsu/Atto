@@ -10,10 +10,12 @@ import androidx.lifecycle.ViewModel
 import com.chihwhsu.atto.clock.ClockFragment.Companion.ALARM_TYPE
 import com.chihwhsu.atto.data.Event
 import com.chihwhsu.atto.data.RingTone
+import com.chihwhsu.atto.data.database.AttoDatabaseDao
+import com.chihwhsu.atto.ext.getTimeFrom00am
 import kotlinx.coroutines.*
 import java.util.*
 
-class AlarmViewModel : ViewModel() {
+class AlarmViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
 
     // Create a Coroutine scope using a job to be able to cancel when needed
     private var viewModelJob = Job()
@@ -28,7 +30,8 @@ class AlarmViewModel : ViewModel() {
     val ringToneList: LiveData<List<String>> get() = _ringToneList
 
     // for create Event
-    private var alarmTime = System.currentTimeMillis()+600000 //current time + 10 minutes
+    private var alarmTime = getTimeFrom00am(System.currentTimeMillis()+600000)
+    //current time + 10 minutes
     private var selectRingTonePosition : Int = -1
     private val routineList = mutableListOf(false, false, false, false, false, false, false)
     private var needVibration = false
@@ -38,6 +41,7 @@ class AlarmViewModel : ViewModel() {
 
 
     init {
+
         _dayList.value = routineList
     }
 
@@ -83,7 +87,7 @@ class AlarmViewModel : ViewModel() {
     }
 
     fun setVibration(){
-        needVibration = true
+        needVibration = !needVibration
     }
 
     fun setSnooze(){
@@ -101,6 +105,10 @@ class AlarmViewModel : ViewModel() {
                 snoozeMode = needSnooze,
                 type = ALARM_TYPE
             )
+
+        coroutineScope.launch(Dispatchers.IO) {
+            databaseDao.insert(newEvent)
+        }
 
         Log.d("clock","$newEvent")
 

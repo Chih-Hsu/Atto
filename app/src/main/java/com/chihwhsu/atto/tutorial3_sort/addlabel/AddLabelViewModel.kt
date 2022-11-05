@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.data.database.AttoDatabaseDao
 import kotlinx.coroutines.*
+import java.util.*
 
 class AddLabelViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
 
@@ -19,15 +20,28 @@ class AddLabelViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
     private var _navigateToSort = MutableLiveData<Boolean>()
     val navigateToSort : LiveData<Boolean> get() = _navigateToSort
 
+    private var _filterList = MutableLiveData<List<App>>()
+    val filterList : LiveData<List<App>> get() = _filterList
+
     val noLabelAppList = databaseDao.getNoLabelApps()
 
     val remainList = mutableListOf<App>()
+
+
+    private val originalList = mutableListOf<App>()
 
     fun addToList(app:App){
         if (!remainList.contains(app)){
      remainList.add(app)
         }else{
             remainList.remove(app)
+        }
+    }
+
+    fun getData(){
+        noLabelAppList.value?.let {
+            _filterList.value = it
+            originalList.addAll(it)
         }
     }
 
@@ -45,5 +59,23 @@ class AddLabelViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
 
     fun doneNavigation(){
         _navigateToSort.value = false
+    }
+
+    fun filterList(text: String?) {
+        if (!text.isNullOrEmpty()) {
+            val list = mutableListOf<App>()
+            originalList.let {
+                for (item in it) {
+                    if (item.appLabel.lowercase(Locale.ROOT)
+                            .contains(text.lowercase(Locale.ROOT))
+                    ) {
+                        list.add(item)
+                    }
+                }
+            }
+            _filterList.value = list
+        } else {
+            _filterList.value = originalList
+        }
     }
 }
