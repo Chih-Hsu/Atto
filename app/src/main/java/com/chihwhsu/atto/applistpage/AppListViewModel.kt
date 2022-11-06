@@ -33,7 +33,7 @@ class AppListViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
             list.sortedBy { it.app.sort }
             var totalAppUsage = 0L
             for (item in list){
-                totalAppUsage  +=  item.app.getUsage(context)
+                totalAppUsage  +=  item.app.getTodayUsage(context)
             }
 
             val labelItem = AppListItem.LabelItem(label,totalAppUsage)

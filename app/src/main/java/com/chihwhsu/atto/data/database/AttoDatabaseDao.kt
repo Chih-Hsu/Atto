@@ -20,6 +20,9 @@ interface AttoDatabaseDao {
     @Query("UPDATE app_table set sort = :sort where appLabel = :appName")
     fun updateSort(appName: String , sort:Int)
 
+    @Query("Update app_table set theme = :theme where appLabel = :appName")
+    fun updateTheme(appName: String , theme : Int?)
+
     @Query("DELETE from app_table WHERE package_name = :packageName")
     fun delete(packageName : String)
 
@@ -47,6 +50,12 @@ interface AttoDatabaseDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(event: Event)
+
+//    @Query("SELECT * FROM event_table where alarm_time BETWEEN :todayStart and :todayEnd order by alarm_time")
+//    fun getTodayEvents(todayStart:Long,todayEnd:Long) : LiveData<List<Event>>
+
+    @Query("SELECT * FROM event_table order by alarm_time asc")
+    fun getAllEvents() : LiveData<List<Event>>
 
 }
 

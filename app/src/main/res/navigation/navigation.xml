@@ -20,10 +20,12 @@
             app:argType="com.chihwhsu.atto.data.App" />
         <action
             android:id="@+id/action_appInfoDialog_to_usageLimitDialog"
-            app:destination="@id/usageLimitDialog" />
+            app:destination="@id/usageLimitDialog"
+            app:popUpTo="@id/mainFragment" />
         <action
             android:id="@+id/action_appInfoDialog_to_appDetailFragment"
-            app:destination="@id/appDetailFragment" />
+            app:destination="@id/appDetailFragment"
+            app:popUpTo="@id/mainFragment" />
     </dialog>
     <action android:id="@+id/action_global_appInfoDialog" app:destination="@id/appInfoDialog" />
     <dialog
@@ -43,10 +45,18 @@
         <argument
             android:name="app"
             app:argType="com.chihwhsu.atto.data.App" />
+        <action
+            android:id="@+id/action_appDetailFragment_to_appListBottomFragment"
+            app:destination="@id/appListBottomFragment"
+            app:popUpTo="@id/mainFragment" />
     </fragment>
     <fragment
         android:id="@+id/clockFragment"
         android:name="com.chihwhsu.atto.clock.ClockFragment"
         android:label="ClockFragment"
         tools:layout="@layout/fragment_clock"/><action android:id="@+id/action_global_clockFragment" app:destination="@id/clockFragment"/>
+    <fragment
+        android:id="@+id/appListBottomFragment"
+        android:name="com.chihwhsu.atto.applistpage.bottomsheet.AppListBottomFragment"
+        android:label="AppListBottomFragment" />
 </navigation>

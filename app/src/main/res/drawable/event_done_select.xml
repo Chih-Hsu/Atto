@@ -14,7 +14,9 @@
                 <size android:height="88dp"
                     android:width="88dp"/>
                 <stroke android:width="20dp" android:color="@color/red" />
+
             </shape>
+
         </rotate>
     </item>
     <item

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.chihwhsu.atto.clock.ClockFragment
 import com.chihwhsu.atto.data.Event
 import com.chihwhsu.atto.data.database.AttoDatabaseDao
+import com.chihwhsu.atto.ext.getCurrentDay
 import com.chihwhsu.atto.ext.getTimeFrom00am
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -48,9 +49,10 @@ class TodoViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
     }
 
     fun saveEvent(){
-        val totalTime = alarmTime+eventDay
+//        val totalTime = alarmTime+eventDay
         val newEvent = Event(
-            alarmTime = totalTime,
+            alarmTime = alarmTime,
+            alarmDay = getCurrentDay(),
             type = ClockFragment.TODO_TYPE,
             title = eventTitle,
             content = eventContent

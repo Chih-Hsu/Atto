@@ -8,7 +8,7 @@ import com.chihwhsu.atto.homepage.HomeViewModel
 
 class GestureListener(val viewModel: HomeViewModel) : GestureDetector.OnGestureListener {
 
-    private val MIN_MOVE = 200
+    private val MIN_MOVE = 100
 
     class OnScrollListener(val closeCard :()->Unit){
         fun closeCard() = closeCard
@@ -56,12 +56,6 @@ class GestureListener(val viewModel: HomeViewModel) : GestureDetector.OnGestureL
 
             viewModel.beginCloseCard()
 
-            Log.d("gesture","move > 200")
-
-
-        } else if (e1!!.y - e2!!.y < MIN_MOVE) {
-//            closeCard
-            Log.d("gesture","move < 200")
 
 
         }

@@ -1,15 +1,16 @@
 package com.chihwhsu.atto.homepage
 
-import android.util.Log
+
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.chihwhsu.atto.data.Event
+import com.chihwhsu.atto.data.database.AttoDatabaseDao
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
 
-    private var _eventList = MutableLiveData<List<Event>>()
-    val eventList : LiveData<List<Event>> get() = _eventList
+//    private var _eventList = MutableLiveData<List<Event>>()
+//    val eventList : LiveData<List<Event>> get() = _eventList
 
     private var _event = MutableLiveData<Event>()
     val event : LiveData<Event> get() = _event
@@ -20,12 +21,20 @@ class HomeViewModel : ViewModel() {
     private var _closeCard = MutableLiveData<Boolean>()
     val closeCard : LiveData<Boolean> get() = _closeCard
 
-    private var _navigateToEdit = MutableLiveData<Event>()
-    val navigateToEdit : LiveData<Event> get() = _navigateToEdit
+    private var _navigateToEdit = MutableLiveData<Boolean>().also {
+        it.value = false
+    }
+    val navigateToEdit : LiveData<Boolean> get() = _navigateToEdit
+
+    val eventList = databaseDao.getAllEvents()
 
     init {
 
+
+
     }
+
+
 
     fun setEvent(clickEvent: Event){
         _event.value = clickEvent
@@ -45,6 +54,10 @@ class HomeViewModel : ViewModel() {
     }
 
     fun navigateToEdit(){
-        _navigateToEdit.value = event.value
+        if (closeCard.value == false) {
+            _navigateToEdit.value = false
+        }else{
+            _navigateToEdit.value = !navigateToEdit.value!!
+        }
     }
 }

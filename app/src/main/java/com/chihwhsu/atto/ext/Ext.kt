@@ -1,9 +1,12 @@
 package com.chihwhsu.atto.ext
 
+import android.content.res.Resources
 import android.graphics.*
 import android.graphics.drawable.Drawable
 import androidx.core.graphics.drawable.toBitmap
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.ZoneId
 import java.util.*
 
 
@@ -53,13 +56,22 @@ fun Int.formatMinutes():String{
 
 }
 
-fun getTimeFrom00am(time: Long):Long{
-    val today = Calendar.getInstance()
-    today[Calendar.MILLISECOND] = 0
-    today[Calendar.SECOND] = 0
-    today[Calendar.MINUTE] = 0
-    today[Calendar.HOUR_OF_DAY] = 0
-    today.timeInMillis
 
-    return time - today.timeInMillis
+fun Float.toDp():Int{
+    return (this / Resources.getSystem().displayMetrics.density).toInt()
+}
+
+
+fun getTimeFrom00am(time: Long):Long{
+    val todayStart = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+
+    return time - todayStart
+}
+
+fun getCurrentDay():Long{
+    return LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+}
+
+fun getEndOfToday():Long {
+    return LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()+ 86400000
 }

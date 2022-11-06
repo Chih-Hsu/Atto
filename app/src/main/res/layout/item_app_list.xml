@@ -46,5 +46,15 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginBottom="8dp"/>
 
+    <ImageView
+        android:id="@+id/kana_image"
+        android:layout_width="30dp"
+        android:layout_height="80dp"
+        android:layout_marginEnd="-7dp"
+        android:src="@drawable/sticker_2"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/app_name"
+        app:layout_constraintEnd_toEndOf="@+id/icon_background" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

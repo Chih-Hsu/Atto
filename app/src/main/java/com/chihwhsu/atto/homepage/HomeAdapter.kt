@@ -1,24 +1,17 @@
 package com.chihwhsu.atto.homepage
 
-import android.annotation.SuppressLint
-import android.content.res.Resources
-import android.graphics.*
-import android.os.Build
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
-import androidx.annotation.RequiresApi
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.chihwhsu.atto.R
 import com.chihwhsu.atto.data.Event
 import com.chihwhsu.atto.databinding.ItemEventBinding
+import com.chihwhsu.atto.ext.getTimeFrom00am
 
-class EventAdapter(val onClickListener: EventClickListener) :
-    ListAdapter<Event, EventAdapter.EventViewHolder>(object : DiffUtil.ItemCallback<Event>() {
+class HomeAdapter(val onClickListener: EventClickListener,val viewModel :HomeViewModel) :
+    ListAdapter<Event, HomeAdapter.EventViewHolder>(object : DiffUtil.ItemCallback<Event>() {
         override fun areContentsTheSame(oldItem: Event, newItem: Event): Boolean {
             return oldItem == newItem
         }
@@ -37,24 +30,26 @@ class EventAdapter(val onClickListener: EventClickListener) :
 
         fun bind(event: Event) {
 
-//            itemView.setOnClickListener {
-//                onClickListener.onClick(event)
-//            }
+            itemView.setOnClickListener {
+                onClickListener.onClick(event)
+            }
 
-//            if (event.isDone) {
-//                binding.eventDone.visibility = View.VISIBLE
-//                binding.eventDoing.visibility = View.INVISIBLE
-//                binding.eventDone.drawable.setColorFilter(
-//                    ResourcesCompat.getColor(
-//                        itemView.resources,
-//                        R.color.red,
-//                        null
-//                    ), PorterDuff.Mode.SRC_IN
-//                )
-//            } else {
-//                binding.eventDone.visibility = View.INVISIBLE
-//                binding.eventDoing.visibility = View.VISIBLE
-//            }
+
+            if (getTimeFrom00am(System.currentTimeMillis()) > event.alarmTime) {
+                if (event == viewModel.event.value){
+                    binding.eventDone.setImageResource(R.drawable.event_done_select)
+
+                }else{
+                    binding.eventDone.setImageResource(R.drawable.event_done)
+
+                }
+            } else {
+                if (event == viewModel.event.value){
+                    binding.eventDone.setImageResource(R.drawable.event_doing_select)
+                }else{
+                    binding.eventDone.setImageResource(R.drawable.event_doing)
+                }
+            }
         }
     }
 

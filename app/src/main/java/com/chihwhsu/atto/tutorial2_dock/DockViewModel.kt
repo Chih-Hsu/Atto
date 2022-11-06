@@ -54,8 +54,6 @@ class DockViewModel(private val packageManager: PackageManager, val resources: R
                 app.iconResource,
                 app.activityInfo.applicationInfo
             )
-
-
             val newApp = App(appName, appPackageName, appImage.convertToBitmap())
             currentAppList.add(newApp)
             coroutineScope.launch(Dispatchers.IO) {

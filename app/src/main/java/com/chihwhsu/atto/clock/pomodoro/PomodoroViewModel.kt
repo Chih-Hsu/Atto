@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.chihwhsu.atto.clock.ClockFragment
 import com.chihwhsu.atto.data.Event
 import com.chihwhsu.atto.data.database.AttoDatabaseDao
+import com.chihwhsu.atto.ext.getCurrentDay
 import com.chihwhsu.atto.ext.getTimeFrom00am
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -69,6 +70,7 @@ class PomodoroViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
             val workEvent = Event(
                 startTime = workStartTime,
                 alarmTime = workEndBreakStart,
+                alarmDay = getCurrentDay(),
                 type = ClockFragment.POMODORO_TYPE,
                 lockApp = lockAppMode,
                 lockAppLabel = lockAppLabel
@@ -77,6 +79,7 @@ class PomodoroViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
             val breakEvent = Event(
                 startTime = workEndBreakStart,
                 alarmTime = breakEndTime,
+                alarmDay = getCurrentDay(),
                 type = ClockFragment.POMODORO_TYPE,
                 lockApp = lockAppMode,
                 lockAppLabel = lockAppLabel

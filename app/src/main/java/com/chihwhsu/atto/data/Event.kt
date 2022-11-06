@@ -18,6 +18,8 @@ data class Event(
     val alarmSoundUri: Uri = Uri.EMPTY,
     @ColumnInfo(name = "alarm_name")
     val alarmSoundName: String ="",
+    @ColumnInfo(name = "alarm_day")
+    val alarmDay : Long,
     @ColumnInfo(name = "type")
     val type: Int = -1,
     @ColumnInfo(name = "routine")

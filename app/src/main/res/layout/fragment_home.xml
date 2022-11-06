@@ -34,11 +34,27 @@
         app:layout_constraintStart_toStartOf="@id/clock_month"
         app:layout_constraintTop_toTopOf="@id/clock_month" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/event_list"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/clock_minutes"
+        app:spanCount="5"
+        tools:listitem="@layout/item_event" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/gesture_area"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/clock_minutes"
+        android:visibility="gone"
         >
 
         <androidx.cardview.widget.CardView
@@ -66,6 +82,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="NEXT TODO"
+                android:textColor="@color/mid_gray"
                 android:layout_marginStart="@dimen/standard_margin"
                 android:layout_marginTop="@dimen/standard_margin"
                 app:layout_constraintStart_toStartOf="parent"
@@ -81,6 +98,7 @@
                 app:layout_constraintTop_toBottomOf="@id/event_title" />
 
                 <TextView
+                    android:id="@+id/event_alarm_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="am 12:15"
@@ -109,24 +127,53 @@
 
         </androidx.cardview.widget.CardView>
 
+        <androidx.cardview.widget.CardView
+            android:id="@+id/event_edit_card"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginTop="8dp"
+            app:cardCornerRadius="16dp"
+            android:layout_marginStart="@dimen/large_margin"
+            android:layout_marginEnd="@dimen/large_margin"
+            app:layout_constraintTop_toBottomOf="@id/event_detail"
+            android:visibility="gone">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="延後 5 分鐘"
+                    android:textColor="@color/black"
+                    style="@style/standard_text_style"
+                    android:layout_marginStart="@dimen/large_margin"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="刪 除"
+                    android:textColor="@color/black"
+                    style="@style/standard_text_style"
+                    android:layout_marginEnd="@dimen/large_margin"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </androidx.cardview.widget.CardView>
+
 
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/event_list"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="24dp"
-        android:layout_marginStart="24dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/clock_minutes"
-        android:layout_marginTop="24dp"
-        app:spanCount="5"
-        tools:listitem="@layout/item_event"/>
 
     <!--    <ImageView-->
     <!--        android:layout_width="match_parent"-->

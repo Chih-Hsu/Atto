@@ -4,8 +4,13 @@
     android:fillEnabled="true"
     >
 
-    <translate android:fromYDelta="75%"
-        android:toYDelta="0%"
+    <translate android:fromYDelta="0%"
+        android:toYDelta="-80%"
+        android:duration="300"
+        />
+
+    <alpha android:fromAlpha="1"
+        android:toAlpha="0"
         android:duration="300"
         />
 </set>

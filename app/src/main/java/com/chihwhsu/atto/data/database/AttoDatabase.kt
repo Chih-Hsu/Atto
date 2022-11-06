@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.data.Event
 
-@Database(entities = [App::class,Event::class], version = 3, exportSchema = false)
+@Database(entities = [App::class,Event::class], version = 4, exportSchema = false)
 abstract class AttoDatabase : RoomDatabase() {
 
     abstract val attoDatabaseDao: AttoDatabaseDao

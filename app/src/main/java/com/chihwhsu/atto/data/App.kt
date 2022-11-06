@@ -2,8 +2,8 @@ package com.chihwhsu.atto.data
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import android.os.Parcelable
+import android.util.Log
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -12,6 +12,8 @@ import com.chihwhsu.atto.data.database.AttoConverter
 import com.chihwhsu.atto.data.database.AttoDatabaseDao
 import com.chihwhsu.atto.util.UsageStatesManager
 import kotlinx.parcelize.Parcelize
+import java.io.File
+
 
 @Parcelize
 @Entity(tableName = "app_table")
@@ -36,10 +38,34 @@ data class App (
         ) :Parcelable {
 
 
-    fun getUsage(context: Context) =
-        UsageStatesManager.getUsage(context,packageName)
+    fun getTodayUsage(context: Context) =
+        UsageStatesManager.getTodayUsage(context,packageName)
+
+    fun getTotalUsage(context: Context) =
+        UsageStatesManager.getTotalUsage(context,packageName)
+
+    fun get24HourUsageList(context: Context) =
+        UsageStatesManager.get24hrUsageList(context,packageName)
+
 
     fun lock(databaseDao: AttoDatabaseDao,hours:Int,minutes:Int){
 
+    }
+
+    fun analyseStorage(context: Context) : Long {
+        val appBaseFolder = context.filesDir.parentFile
+        val totalSize = browseFiles(appBaseFolder)
+        return totalSize
+    }
+
+    private fun browseFiles(dir: File): Long {
+        var dirSize: Long = 0
+        for (f in dir.listFiles()) {
+            dirSize += f.length()
+            if (f.isDirectory) {
+                dirSize += browseFiles(f)
+            }
+        }
+        return dirSize
     }
 }

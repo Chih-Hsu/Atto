@@ -11,6 +11,7 @@ import com.chihwhsu.atto.clock.ClockFragment.Companion.ALARM_TYPE
 import com.chihwhsu.atto.data.Event
 import com.chihwhsu.atto.data.RingTone
 import com.chihwhsu.atto.data.database.AttoDatabaseDao
+import com.chihwhsu.atto.ext.getCurrentDay
 import com.chihwhsu.atto.ext.getTimeFrom00am
 import kotlinx.coroutines.*
 import java.util.*
@@ -100,6 +101,7 @@ class AlarmViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
                 alarmTime = alarmTime,
                 alarmSoundName = ringTone.name,
                 alarmSoundUri = ringTone.path,
+                alarmDay = getCurrentDay(),
                 routine = routineList,
                 vibration = needVibration,
                 snoozeMode = needSnooze,

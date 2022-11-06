@@ -20,11 +20,14 @@ class EventConverter {
     @TypeConverter
     fun convertJsonToBooleanList(json: String?): List<Boolean>? {
         json?.let {
-            val type = Types.newParameterizedType(List::class.java, String::class.java)
+            val type = Types.newParameterizedType(List::class.java, Boolean::class.javaObjectType)
             val adapter: JsonAdapter<List<Boolean>> = Moshi.Builder().build().adapter(type)
-            return adapter.fromJson(it)
+
+            return adapter.fromJson(json)
         }
+
         return null
+
     }
 //    @TypeConverter
 //    fun convertListToJson(list: List<String>?): String? {

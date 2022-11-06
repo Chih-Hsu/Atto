@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.chihwhsu.atto.R
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.data.AppListItem
+import com.chihwhsu.atto.data.Theme
 import com.chihwhsu.atto.databinding.ItemAppListBinding
 import com.chihwhsu.atto.databinding.ItemLabelBinding
 import com.chihwhsu.atto.ext.createGrayscale
@@ -77,12 +78,24 @@ class AppListAdapter  (val appOnClickListener : AppOnClickListener,val longClick
         fun bind(item: AppListItem.AppItem){
 
             showAppOrNot(item.app)
-
+            binding.appName.text = item.app.appLabel
             item.app.icon?.let {
                 binding.iconImage.setImageBitmap(it.createGrayscale())
             }
 
-            binding.appName.text = item.app.appLabel
+            when (item.app.theme) {
+                Theme.DEFAULT.index -> { binding.iconBackground.setBackgroundResource(R.drawable.icon_background) }
+                Theme.BLACK.index -> {
+                    binding.iconBackground.setBackgroundResource(R.drawable.icon_background_black)
+                }
+                Theme.HIGH_LIGHT.index -> {
+                    binding.iconBackground.setBackgroundResource(R.drawable.icon_backgroung_hightlight)
+                }
+                Theme.KANAHEI.index -> { binding.kanaImage.visibility = View.VISIBLE
+                }
+            }
+
+
 
             itemView.setOnClickListener {
                 appOnClickListener.onClick(item.app.packageName)

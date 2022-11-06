@@ -14,6 +14,7 @@ import com.chihwhsu.atto.applistpage.AppListAdapter
 import com.chihwhsu.atto.applistpage.AppListViewModel
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.data.AppListItem
+import com.chihwhsu.atto.data.Theme
 import com.chihwhsu.atto.databinding.ItemAppListBinding
 import com.chihwhsu.atto.databinding.ItemLabelBinding
 import com.chihwhsu.atto.ext.createGrayscale
@@ -60,12 +61,22 @@ class AppListBottomAdapter  (val appOnClickListener : AppOnClickListener,val lon
     inner class AppViewHolder(val binding: ItemAppListBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(item: AppListItem.AppItem){
 
-
+            binding.appName.text = item.app.appLabel
             item.app.icon?.let {
                 binding.iconImage.setImageBitmap(it.createGrayscale())
             }
 
-            binding.appName.text = item.app.appLabel
+            when (item.app.theme) {
+                Theme.DEFAULT.index -> { binding.iconBackground.setBackgroundResource(R.drawable.icon_background) }
+                Theme.BLACK.index -> {
+                    binding.iconBackground.setBackgroundResource(R.drawable.icon_background_black)
+                }
+                Theme.HIGH_LIGHT.index -> {
+                    binding.iconBackground.setBackgroundResource(R.drawable.icon_backgroung_hightlight)
+                }
+                Theme.KANAHEI.index -> { binding.kanaImage.visibility = View.VISIBLE
+                }
+            }
 
             itemView.setOnClickListener {
                 appOnClickListener.onClick(item.app.packageName)

@@ -1,6 +1,7 @@
 package com.chihwhsu.atto.tutorial3_sort
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -37,6 +38,7 @@ class SortAdapter () : ListAdapter<AppListItem, RecyclerView.ViewHolder>(object 
 
         fun bind( item : AppListItem.LabelItem){
             binding.textLabel.text = item.title
+            binding.textUsageTime.visibility = View.INVISIBLE
         }
     }
 

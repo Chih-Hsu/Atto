@@ -8,6 +8,7 @@ import com.chihwhsu.atto.clock.alarm.AlarmViewModel
 import com.chihwhsu.atto.clock.pomodoro.PomodoroViewModel
 import com.chihwhsu.atto.clock.todo.TodoViewModel
 import com.chihwhsu.atto.data.database.AttoDatabaseDao
+import com.chihwhsu.atto.homepage.HomeViewModel
 import com.chihwhsu.atto.main.MainViewModel
 import com.chihwhsu.atto.tutorial3_sort.SortViewModel
 import com.chihwhsu.atto.tutorial3_sort.addlabel.AddLabelViewModel
@@ -20,6 +21,10 @@ class ViewModelFactory constructor(
     override fun <T : ViewModel> create(modelClass: Class<T>) =
         with(modelClass) {
             when {
+
+                isAssignableFrom(HomeViewModel::class.java) ->
+                    HomeViewModel(databaseDao)
+
                 isAssignableFrom(SortViewModel::class.java) ->
                     SortViewModel(databaseDao)
 
