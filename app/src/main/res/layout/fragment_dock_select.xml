@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/tutorial_background">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:fontFamily="@font/roboto_medium"
+        android:letterSpacing="0.1"
+        android:text="設定常用應用程式"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView4"
+        style="@style/standard_text_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/roboto_medium"
+        android:gravity="center"
+        android:text="選擇您常用的應用程式\n方便在各個頁面快速點選使用"
+        android:textColor="@color/dark_grey"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginStart="@dimen/large_margin"
+        android:layout_marginTop="@dimen/large_margin"
+        android:layout_marginEnd="@dimen/large_margin"
+        android:background="@drawable/dock_outline"
+        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        tools:layout_editor_absoluteX="24dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/dock_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="12dp"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="5"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/app_list_recyclerview"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="@dimen/large_margin"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="@dimen/standard_margin"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constraintBottom_toTopOf="@+id/app_search_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+        app:spanCount="5"
+        tools:listitem="@layout/item_app_list"
+        android:requiresFadingEdge="vertical"
+        android:fadingEdge="vertical"
+        android:fadingEdgeLength="50dp"/>
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/app_search_view"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_marginBottom="100dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginEnd="100dp"
+        android:background="@drawable/searchview_outline"
+        style="@style/standard_text_style"
+        android:gravity="center"
+        android:maxLength="15"
+        app:queryHint="SEARCH APP"
+        app:iconifiedByDefault="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_next"
+        style="@style/Widget.Material3.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_medium"
+        android:letterSpacing="0.2"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:text="下一步"
+        android:textColor="@color/light_grey"
+        android:textSize="12sp"
+        android:layout_marginBottom="36dp"
+        android:layout_marginEnd="36dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:strokeColor="@color/dark_grey" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_previous"
+        style="@style/Widget.Material3.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_medium"
+        android:letterSpacing="0.2"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:text="上一步"
+        android:textColor="@color/light_grey"
+        android:textSize="12sp"
+        android:layout_marginBottom="36dp"
+        android:layout_marginStart="36dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:strokeColor="@color/dark_grey" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

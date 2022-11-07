@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TextClock
+        android:id="@+id/clock_month"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="169dp"
+        android:fontFamily="@font/k2d"
+        android:format12Hour="MMMM"
+        android:letterSpacing="0.05"
+        android:textAllCaps="true"
+        android:textColor="@color/light_grey"
+        android:textSize="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextClock
+        android:id="@+id/clock_minutes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:fontFamily="@font/k2d"
+        android:format12Hour="a h:mm"
+        android:textAllCaps="false"
+        android:textColor="@color/light_grey"
+        android:textSize="48sp"
+        app:layout_constraintStart_toStartOf="@id/clock_month"
+        app:layout_constraintTop_toTopOf="@id/clock_month" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/event_list"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/clock_minutes"
+        app:spanCount="5"
+        tools:listitem="@layout/item_event" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/gesture_area"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/clock_minutes"
+        android:visibility="gone"
+        >
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/event_detail"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            app:cardCornerRadius="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="36dp"
+            android:layout_marginEnd="24dp"
+            app:layout_constraintTop_toTopOf="parent"
+            android:alpha="0"
+            android:visibility="visible">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+            <TextView
+                android:id="@+id/event_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="NEXT TODO"
+                android:textColor="@color/mid_gray"
+                android:layout_marginStart="@dimen/standard_margin"
+                android:layout_marginTop="@dimen/standard_margin"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                style="@style/standard_text_style" />
+
+            <TextView
+                android:id="@+id/event_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="34324324"
+                app:layout_constraintStart_toStartOf="@id/event_title"
+                app:layout_constraintTop_toBottomOf="@id/event_title" />
+
+                <TextView
+                    android:id="@+id/event_alarm_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="am 12:15"
+                    android:letterSpacing="0.05"
+                    android:fontFamily="@font/k2d"
+                    android:textSize="16sp"
+                    android:textColor="@color/brown"
+                    android:textAlignment="viewEnd"
+                    android:layout_marginEnd="@dimen/standard_margin"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/event_title"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Long Press to Edit"
+                    android:letterSpacing="0.05"
+                    android:fontFamily="@font/k2d"
+                    android:textSize="12sp"
+                    android:textAlignment="center"
+                    android:textColor="@color/dark_grey"
+                    android:layout_marginBottom="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/event_edit_card"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginTop="8dp"
+            app:cardCornerRadius="16dp"
+            android:layout_marginStart="@dimen/large_margin"
+            android:layout_marginEnd="@dimen/large_margin"
+            app:layout_constraintTop_toBottomOf="@id/event_detail"
+            android:visibility="gone">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="延後 5 分鐘"
+                    android:textColor="@color/black"
+                    style="@style/standard_text_style"
+                    android:layout_marginStart="@dimen/large_margin"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="刪 除"
+                    android:textColor="@color/black"
+                    style="@style/standard_text_style"
+                    android:layout_marginEnd="@dimen/large_margin"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </androidx.cardview.widget.CardView>
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!--    <ImageView-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="150dp"-->
+    <!--        android:src="@drawable/bottom_shadow"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        android:visibility="gone"/>-->
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

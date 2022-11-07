@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.chihwhsu.atto.main.MainFragment"
+        android:label="MainFragment"
+        tools:layout="@layout/fragment_main"/>
+    <dialog
+        android:id="@+id/appInfoDialog"
+        android:name="com.chihwhsu.atto.appinfodialog.AppInfoDialog"
+        android:label="AppInfoDialog"
+        tools:layout="@layout/dialog_app_info">
+        <argument
+            android:name="app"
+            app:argType="com.chihwhsu.atto.data.App" />
+        <action
+            android:id="@+id/action_appInfoDialog_to_usageLimitDialog"
+            app:destination="@id/usageLimitDialog"
+            app:popUpTo="@id/mainFragment" />
+        <action
+            android:id="@+id/action_appInfoDialog_to_appDetailFragment"
+            app:destination="@id/appDetailFragment"
+            app:popUpTo="@id/mainFragment" />
+    </dialog>
+    <action android:id="@+id/action_global_appInfoDialog" app:destination="@id/appInfoDialog" />
+    <dialog
+        android:id="@+id/usageLimitDialog"
+        android:name="com.chihwhsu.atto.usagelimit.UsageLimitDialog"
+        android:label="UsageLimitDialog"
+        tools:layout="@layout/dialog_usage_limit">
+        <argument
+            android:name="app"
+            app:argType="com.chihwhsu.atto.data.App" />
+    </dialog>
+    <fragment
+        android:id="@+id/appDetailFragment"
+        android:name="com.chihwhsu.atto.appdetail.AppDetailFragment"
+        android:label="AppDetailFragment"
+        tools:layout="@layout/fragment_app_detail">
+        <argument
+            android:name="app"
+            app:argType="com.chihwhsu.atto.data.App" />
+        <action
+            android:id="@+id/action_appDetailFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/clockFragment"
+        android:name="com.chihwhsu.atto.clock.ClockFragment"
+        android:label="ClockFragment"
+        tools:layout="@layout/fragment_clock"/><action android:id="@+id/action_global_clockFragment" app:destination="@id/clockFragment"/>
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.chihwhsu.atto.homepage.HomeFragment"
+        android:label="HomeFragment" />
+</navigation>

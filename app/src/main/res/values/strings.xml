@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Atto</string>
+    <string name="a_hh_mm">%1s %2s:%3s</string>
+    <string name="MM_DD">%1s %2s</string>
 </resources>

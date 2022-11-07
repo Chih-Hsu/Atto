@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/tutorial_background">
+
+    <TextView
+        android:id="@+id/tutorial4_title_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:fontFamily="@font/roboto_medium"
+        android:letterSpacing="0.1"
+        android:text="使用時間追蹤功能"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tutorial4_description"
+        style="@style/standard_text_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/roboto_medium"
+        android:gravity="center"
+        android:text="使用時間追蹤功能能\n記錄每個應用程式的
+使用時間，並顯示在畫面上。\n
+此功能需要取的{應用程式使用量}授權。"
+        android:textColor="@color/dark_grey"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tutorial4_title_text" />
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_next"
+        style="@style/Widget.Material3.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="36dp"
+        android:layout_marginBottom="36dp"
+        android:fontFamily="@font/roboto_medium"
+        android:letterSpacing="0.2"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:text="下一步"
+        android:textColor="@color/light_grey"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:strokeColor="@color/dark_grey" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_previous"
+        style="@style/Widget.Material3.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:layout_marginBottom="36dp"
+        android:fontFamily="@font/roboto_medium"
+        android:letterSpacing="0.2"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:text="上一步"
+        android:textColor="@color/light_grey"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:strokeColor="@color/dark_grey" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switch_usage"
+        style="@style/TextAppearance.AppCompat.Widget.Switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:text="Off"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tutorial4_description" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switch_usage"
+        app:srcCompat="@drawable/tutorial4"
+        android:layout_marginTop="60dp"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

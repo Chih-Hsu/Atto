@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="4dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/icon_background"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@drawable/icon_background"
+        android:padding="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="4dp">
+
+        <ImageView
+            android:id="@+id/icon_image"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_launcher_foreground"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/lock_image"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/money_lock"
+            app:layout_constraintBottom_toBottomOf="@+id/icon_image"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/icon_image"
+            android:visibility="invisible"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/roboto_medium"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="8sp"
+        android:maxEms="6"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/icon_background"
+        app:layout_constraintStart_toStartOf="@id/icon_background"
+        tools:text="app" />
+
+    <ImageView
+        android:id="@+id/kana_image"
+        android:layout_width="30dp"
+        android:layout_height="80dp"
+        android:layout_marginEnd="-7dp"
+        android:src="@drawable/sticker_2"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/app_name"
+        app:layout_constraintEnd_toEndOf="@+id/icon_background" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

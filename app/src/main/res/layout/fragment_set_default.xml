@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/tutorial_background">
+
+    <TextView
+        android:id="@+id/tutorial5_title_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:fontFamily="@font/roboto_medium"
+        android:letterSpacing="0.1"
+        android:text="將應用程式設為預設桌面"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/preview_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tutorial5_title_text"
+        app:srcCompat="@drawable/tutorial5"
+        android:layout_marginTop="48dp"/>
+
+    <TextView
+        android:id="@+id/text_set_default"
+        style="@style/standard_text_style"
+        android:fontFamily="@font/roboto_medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="設為預設程式"
+        android:textColor="@color/dark_grey"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/preview_image" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/check_button"
+        style="@style/Widget.Material3.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_medium"
+        android:letterSpacing="0.2"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:text="開始使用"
+        android:textColor="@color/light_grey"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_set_default"
+        app:strokeColor="@color/dark_grey" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
