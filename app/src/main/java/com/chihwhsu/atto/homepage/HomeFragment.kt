@@ -159,7 +159,7 @@ class HomeFragment : Fragment() {
                 val animation = AnimationUtils.loadAnimation(requireContext(),R.anim.slide_up)
                 binding.eventEditCard.animation = animation
                 animation.start()
-                binding.eventEditCard.visibility = View.INVISIBLE
+                binding.eventEditCard.visibility = View.GONE
 
             }
 

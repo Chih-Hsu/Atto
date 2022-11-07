@@ -1,17 +1,14 @@
 package com.chihwhsu.atto.applistpage.bottomsheet
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.chihwhsu.atto.R
 import com.chihwhsu.atto.applistpage.AppListAdapter
-import com.chihwhsu.atto.applistpage.AppListViewModel
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.data.AppListItem
 import com.chihwhsu.atto.data.Theme
@@ -20,8 +17,11 @@ import com.chihwhsu.atto.databinding.ItemLabelBinding
 import com.chihwhsu.atto.ext.createGrayscale
 
 
-class AppListBottomAdapter  (val appOnClickListener : AppOnClickListener,val longClickListener: AppListAdapter.LongClickListener) : ListAdapter<AppListItem, RecyclerView.ViewHolder>(object :
-    DiffUtil.ItemCallback<AppListItem>(){
+class AppListBottomAdapter(
+    val appOnClickListener: AppOnClickListener,
+    val longClickListener: AppListAdapter.LongClickListener
+) : ListAdapter<AppListItem, RecyclerView.ViewHolder>(object :
+    DiffUtil.ItemCallback<AppListItem>() {
     override fun areItemsTheSame(oldItem: AppListItem, newItem: AppListItem): Boolean {
         return oldItem.id == newItem.id
     }
@@ -31,35 +31,36 @@ class AppListBottomAdapter  (val appOnClickListener : AppOnClickListener,val lon
     }
 }) {
 
-    companion object{
+    companion object {
         const val APP_ITEM_VIEW_TYPE_LABEL = 0x00
         const val APP_ITEM_VIEW_TYPE_APP = 0x01
     }
 
 
-
-    class AppOnClickListener(val onClickListener:(packageName:String)->Unit){
+    class AppOnClickListener(val onClickListener: (packageName: String) -> Unit) {
         fun onClick(packageName: String) = onClickListener(packageName)
     }
 
-    class LongClickListener(val onClickListener:(app:App)->Unit){
-        fun onClick(app : App) = onClickListener(app)
+    class LongClickListener(val onClickListener: (app: App) -> Unit) {
+        fun onClick(app: App) = onClickListener(app)
     }
 
 
-    inner class LabelViewHolder(val binding: ItemLabelBinding): RecyclerView.ViewHolder(binding.root){
+    inner class LabelViewHolder(val binding: ItemLabelBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
-        fun bind( item : AppListItem.LabelItem){
+        fun bind(item: AppListItem.LabelItem) {
             binding.textLabel.apply {
                 text = item.title
-                setTextColor(ResourcesCompat.getColor(itemView.resources, R.color.light_grey,null))
+                setTextColor(ResourcesCompat.getColor(itemView.resources, R.color.light_grey, null))
             }
 
         }
     }
 
-    inner class AppViewHolder(val binding: ItemAppListBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(item: AppListItem.AppItem){
+    inner class AppViewHolder(val binding: ItemAppListBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: AppListItem.AppItem) {
 
             binding.appName.text = item.app.appLabel
             item.app.icon?.let {
@@ -67,22 +68,40 @@ class AppListBottomAdapter  (val appOnClickListener : AppOnClickListener,val lon
             }
 
             when (item.app.theme) {
-                Theme.DEFAULT.index -> { binding.iconBackground.setBackgroundResource(R.drawable.icon_background) }
+                Theme.DEFAULT.index -> {
+                    binding.iconBackground.setBackgroundResource(R.drawable.icon_background)
+                }
                 Theme.BLACK.index -> {
                     binding.iconBackground.setBackgroundResource(R.drawable.icon_background_black)
                 }
                 Theme.HIGH_LIGHT.index -> {
                     binding.iconBackground.setBackgroundResource(R.drawable.icon_backgroung_hightlight)
                 }
-                Theme.KANAHEI.index -> { binding.kanaImage.visibility = View.VISIBLE
+                Theme.KANAHEI.index -> {
+                    binding.kanaImage.visibility = View.VISIBLE
                 }
             }
 
-            itemView.setOnClickListener {
-                appOnClickListener.onClick(item.app.packageName)
+            // App is not locked
+            if (item.app.isEnable){
+
+                itemView.setOnClickListener {
+                    appOnClickListener.onClick(item.app.packageName)
+                }
+
+                binding.iconBackground.foreground = null
+                binding.lockImage.visibility = View.GONE
+
+            } else {
+
+                binding.iconBackground.foreground = ResourcesCompat.getDrawable(itemView.resources,R.drawable.icon_background_lock,null)
+                binding.lockImage.visibility = View.VISIBLE
+
             }
 
-            itemView.setOnLongClickListener(object :View.OnLongClickListener{
+
+
+            itemView.setOnLongClickListener(object : View.OnLongClickListener {
                 override fun onLongClick(v: View?): Boolean {
                     longClickListener.onClick(item.app)
                     return true
@@ -94,18 +113,21 @@ class AppListBottomAdapter  (val appOnClickListener : AppOnClickListener,val lon
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when(viewType){
+        return when (viewType) {
             APP_ITEM_VIEW_TYPE_LABEL -> {
                 LabelViewHolder(
                     ItemLabelBinding.inflate(
                         LayoutInflater.from(parent.context),
-                        parent,false))
+                        parent, false
+                    )
+                )
             }
 
             APP_ITEM_VIEW_TYPE_APP -> {
                 val view = ItemAppListBinding.inflate(
                     LayoutInflater.from(parent.context),
-                    parent,false)
+                    parent, false
+                )
                 return AppViewHolder(view)
             }
             else -> throw ClassCastException("Unknown viewType $viewType")
@@ -115,7 +137,7 @@ class AppListBottomAdapter  (val appOnClickListener : AppOnClickListener,val lon
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
-        when(holder){
+        when (holder) {
             is LabelViewHolder -> {
                 holder.bind((getItem(position) as AppListItem.LabelItem))
             }

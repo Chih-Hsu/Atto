@@ -4,7 +4,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -52,22 +51,17 @@ class AppListAdapter  (val appOnClickListener : AppOnClickListener,val longClick
                 text = item.title
                 setTextColor(ResourcesCompat.getColor(itemView.resources,R.color.light_grey,null))
             }
-            Log.d("calendarAA","${item.time}")
 
             binding.textUsageTime.text = item.time.toFormat()
 
 
             itemView.setOnClickListener {
-//                labelOnClickListener.onClick(item.title)
                 if (viewModel.isHide.containsKey(item.title)){
                     val value = viewModel.isHide.get(item.title) as Boolean
                     viewModel.isHide.put(item.title,!value)
 
-
                 }else{
                     viewModel.isHide.put(item.title,true)
-                    Log.d("select","first ${viewModel.isHide.get("TRY")}")
-
                 }
                 notifyDataSetChanged()
             }
@@ -110,7 +104,7 @@ class AppListAdapter  (val appOnClickListener : AppOnClickListener,val longClick
 
         }
 
-        fun showAppOrNot(app : App){
+        private fun showAppOrNot(app : App){
             if (viewModel.isHide.containsKey(app.label) && viewModel.isHide.get(app.label) == true){
                 // Show ItemView
                 itemView.visibility = View.VISIBLE

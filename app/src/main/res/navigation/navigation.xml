@@ -46,9 +46,8 @@
             android:name="app"
             app:argType="com.chihwhsu.atto.data.App" />
         <action
-            android:id="@+id/action_appDetailFragment_to_appListBottomFragment"
-            app:destination="@id/appListBottomFragment"
-            app:popUpTo="@id/mainFragment" />
+            android:id="@+id/action_appDetailFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
     </fragment>
     <fragment
         android:id="@+id/clockFragment"
@@ -56,7 +55,7 @@
         android:label="ClockFragment"
         tools:layout="@layout/fragment_clock"/><action android:id="@+id/action_global_clockFragment" app:destination="@id/clockFragment"/>
     <fragment
-        android:id="@+id/appListBottomFragment"
-        android:name="com.chihwhsu.atto.applistpage.bottomsheet.AppListBottomFragment"
-        android:label="AppListBottomFragment" />
+        android:id="@+id/homeFragment"
+        android:name="com.chihwhsu.atto.homepage.HomeFragment"
+        android:label="HomeFragment" />
 </navigation>

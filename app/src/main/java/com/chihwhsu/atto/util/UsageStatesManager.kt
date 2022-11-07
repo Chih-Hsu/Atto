@@ -24,9 +24,23 @@ object UsageStatesManager {
         val now = ZonedDateTime.now().toInstant().toEpochMilli()
 
         // from 0:00 to now
-        val states = usageStateManager.queryAndAggregateUsageStats(start, now)
+//        val states = usageStateManager.queryAndAggregateUsageStats(start, now)
 
-        return states.get(packageName)?.totalTimeInForeground ?: 0
+        val states = usageStateManager.queryUsageStats(
+            UsageStatsManager.INTERVAL_DAILY, start, now
+        )
+        var usageTime =-1L
+
+        for (state in states) {
+            val name = state.packageName
+            val totalTime = state.totalTimeInForeground
+            if (name == packageName) {
+                usageTime = totalTime
+            }
+
+        }
+
+        return usageTime
 
     }
 

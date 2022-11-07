@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -39,7 +40,6 @@ class AppDetailFragment : Fragment() {
                 appName.text = app.appLabel
                 iconImage.setImageBitmap(app.icon)
                 totalUsageTime.text = app.getTotalUsage(requireContext()).toFormat()
-//                Log.d("detail","${app.analyseStorage(requireContext())/1000000L}")
 
             }
             // get List
@@ -82,7 +82,6 @@ class AppDetailFragment : Fragment() {
 
 
 
-
         val adapter = AppDetailAdapter()
         val themeList = mutableListOf<Theme>(Theme.DEFAULT,Theme.BLACK,Theme.HIGH_LIGHT,Theme.KANAHEI)
         binding.backgroundRecyclerview.adapter = adapter
@@ -102,14 +101,10 @@ class AppDetailFragment : Fragment() {
         viewModel.navigateUp.observe(viewLifecycleOwner, Observer { canNavigate ->
             if (canNavigate) {
                 viewModel.doneNavigation()
-                findNavController().navigate(AppDetailFragmentDirections.actionAppDetailFragmentToAppListBottomFragment())
+                findNavController().navigateUp()
             }
 
         })
-
-
-
-
 
 
         return binding.root
