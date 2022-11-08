@@ -16,11 +16,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-<com.applandeo.materialcalendarview.CalendarView
-    android:id="@+id/calendar"
-    app:type="many_days_picker"
-    app:highlightedDaysLabelsColor="@color/yellow"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

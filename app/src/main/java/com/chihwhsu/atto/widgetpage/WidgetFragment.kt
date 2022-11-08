@@ -16,6 +16,7 @@ import com.applandeo.materialcalendarview.CalendarView
 import com.applandeo.materialcalendarview.EventDay
 import com.chihwhsu.atto.R
 import com.chihwhsu.atto.component.AlarmReceiver
+import com.chihwhsu.atto.component.UsageTimerService
 import com.chihwhsu.atto.databinding.FragmentWidgetBinding
 import java.util.*
 
@@ -32,26 +33,9 @@ class WidgetFragment : Fragment() {
 
 
        binding.textView2.setOnClickListener {
-           setAlarmTime(requireContext(),1000)
+//           setAlarmTime(requireContext(),1000)
+           startSimpleService()
        }
-
-        val events: MutableList<EventDay> = ArrayList()
-
-        val calendar = Calendar.getInstance()
-        calendar.set(2022, 10, 2);
-        val newCalendar = Calendar.getInstance()
-        newCalendar.set(2022,10,9)
-        events.add(EventDay(calendar, R.drawable.sample))
-        events.add(EventDay(newCalendar, R.drawable.sample))
-
-
-//        calendarView.setDate(calendar);
-        binding.calendar.setHighlightedDays(listOf(calendar,newCalendar))
-//        binding.calendar == CalendarView.MANY_DAYS_PICKER
-//        binding.calendar.selectedDates = listOf(calendar,newCalendar)
-//        binding.calendar.selectedDates.addAll(listOf(calendar,newCalendar))
-//        binding.calendar.setEvents(events)
-
 
 
         return binding.root
@@ -62,6 +46,11 @@ class WidgetFragment : Fragment() {
         val intent = Intent(requireContext(),AlarmReceiver::class.java)
         val sender = PendingIntent.getBroadcast(requireActivity().applicationContext,0,intent, FLAG_IMMUTABLE)
         alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtMillis, sender)
+    }
+    fun startSimpleService(){
+        val serviceIntent = Intent(this.context, UsageTimerService::class.java)
+        serviceIntent.putExtra("limitTime", 10000)
+        requireContext().startService(serviceIntent)
     }
 
 
