@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.chihwhsu.atto.applistpage.AppListViewModel
 import com.chihwhsu.atto.applistpage.bottomsheet.AppListBottomViewModel
+import com.chihwhsu.atto.clock.alarm.AlarmListViewModel
 import com.chihwhsu.atto.clock.alarm.AlarmViewModel
 import com.chihwhsu.atto.clock.pomodoro.PomodoroViewModel
 import com.chihwhsu.atto.clock.todo.TodoViewModel
@@ -51,6 +52,9 @@ class ViewModelFactory constructor(
 
                 isAssignableFrom(TodoViewModel::class.java) ->
                     TodoViewModel(databaseDao)
+
+                isAssignableFrom(AlarmListViewModel::class.java) ->
+                    AlarmListViewModel(databaseDao)
 
                 else ->
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")

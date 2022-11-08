@@ -57,5 +57,17 @@ interface AttoDatabaseDao {
     @Query("SELECT * FROM event_table order by alarm_time asc")
     fun getAllEvents() : LiveData<List<Event>>
 
+    @Query("DELETE from event_table WHERE id = :id")
+    fun deleteEvent(id: Long)
+
+    @Query("SELECT * FROM event_table WHERE id = :id")
+    fun getEvent(id: Long):Event
+
+    @Query("SELECT * FROM event_table WHERE type = :type order by alarm_time asc")
+    fun getTypeEvent(type: Int):LiveData<List<Event>>
+
+    @Query("Update event_table set alarm_time = :newAlarmTime where id = :id")
+    fun delayEvent5Minutes(id: Long,newAlarmTime:Long)
+
 }
 

@@ -12,10 +12,12 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.chihwhsu.atto.R
 import com.chihwhsu.atto.databinding.FragmentAlarmBinding
 import com.chihwhsu.atto.ext.formatHour
 import com.chihwhsu.atto.ext.formatMinutes
+import com.chihwhsu.atto.ext.getCurrentDay
 import com.chihwhsu.atto.ext.getVmFactory
 import com.google.android.material.timepicker.MaterialTimePicker
 import java.text.SimpleDateFormat
@@ -104,11 +106,12 @@ class AlarmFragment : Fragment() {
         timePicker.apply {
             addOnPositiveButtonClickListener {
 
-                val time = hour.toLong()*60*60*1000 + minute.toLong()*60*1000
-                val amPm = if (hour<=12)"AM" else "PM"
+                val time = getCurrentDay() + hour.toLong()*60*60*1000 + minute.toLong()*60*1000
+
                 viewModel.setAlarmTime(time)
 
                 // replace textview text
+                val amPm = if (hour<=12)"AM" else "PM"
                 binding.hourMinute.text = resources.getString(
                     R.string.a_hh_mm,
                     amPm,
@@ -134,6 +137,13 @@ class AlarmFragment : Fragment() {
         binding.button.setOnClickListener {
             viewModel.saveEvent()
         }
+
+        viewModel.navigateToAlarmList.observe(viewLifecycleOwner, Observer {
+            if (it == true) {
+                findNavController().navigate(AlarmFragmentDirections.actionAlarmFragmentToClockFragment())
+                viewModel.doneNavigation()
+            }
+        })
 
 
 

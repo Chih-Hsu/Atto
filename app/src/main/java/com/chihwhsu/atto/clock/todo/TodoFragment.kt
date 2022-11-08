@@ -16,6 +16,7 @@ import com.chihwhsu.atto.clock.alarm.AlarmViewModel
 import com.chihwhsu.atto.databinding.FragmentTodoBinding
 import com.chihwhsu.atto.ext.formatHour
 import com.chihwhsu.atto.ext.formatMinutes
+import com.chihwhsu.atto.ext.getCurrentDay
 import com.chihwhsu.atto.ext.getVmFactory
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker

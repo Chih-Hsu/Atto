@@ -4,22 +4,19 @@ import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.view.*
 import android.view.animation.AnimationUtils
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.chihwhsu.atto.NavigationDirections
 import com.chihwhsu.atto.R
-import com.chihwhsu.atto.clock.ClockFragment
 import com.chihwhsu.atto.component.GestureListener
 import com.chihwhsu.atto.component.GridSpacingItemDecoration
-import com.chihwhsu.atto.data.Event
+import com.chihwhsu.atto.data.Event.Companion.ALARM_TYPE
+import com.chihwhsu.atto.data.Event.Companion.POMODORO_WORK_TYPE
+import com.chihwhsu.atto.data.Event.Companion.TODO_TYPE
 import com.chihwhsu.atto.databinding.FragmentHomeBinding
-import com.chihwhsu.atto.ext.getEndOfToday
-import com.chihwhsu.atto.ext.getTimeFrom00am
-import com.chihwhsu.atto.ext.getVmFactory
-import com.chihwhsu.atto.ext.toFormat
+import com.chihwhsu.atto.ext.*
 
 class HomeFragment : Fragment() {
 
@@ -50,23 +47,15 @@ class HomeFragment : Fragment() {
         )
 
         viewModel.eventList.observe(viewLifecycleOwner, Observer { list ->
-            val filterList = mutableListOf<Event>()
-            for (event in list){
-                if (event.alarmTime < getEndOfToday()){
-                    filterList.add(event)
-                }
-            }
-            adapter.submitList(filterList)
+            val newList = list.filter { it.alarmTime < getEndOfToday() && it.alarmTime > getCurrentDay() }
+            val expiredList = list.filter { it.alarmTime < getCurrentDay() }
+                viewModel.deleteEvent(expiredList)
+            adapter.submitList(newList)
         })
 
         // set Gesture Listener
         val gestureListener = GestureListener(viewModel)
         gestureDetector = GestureDetector(requireContext(), gestureListener)
-//        binding.eventDetail.setOnTouchListener(object : View.OnTouchListener {
-//            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-//                return gestureDetector.onTouchEvent(event)
-//            }
-//        })
 
         binding.gestureArea.setOnTouchListener(object : View.OnTouchListener {
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
@@ -81,20 +70,29 @@ class HomeFragment : Fragment() {
 
         // set event detail on card
         viewModel.event.observe(viewLifecycleOwner, Observer { event ->
-            adapter.notifyDataSetChanged()
+
             binding.eventTitle.text = when(event.type){
-                ClockFragment.ALARM_TYPE -> "Wake Up"
-                ClockFragment.TODO_TYPE -> "NEXT TODO"
-                ClockFragment.POMODORO_TYPE -> "IT'S POMODORO"
+                ALARM_TYPE -> "Wake Up"
+                TODO_TYPE -> "NEXT TODO"
+                POMODORO_WORK_TYPE -> "IT'S POMODORO"
                 else -> "No Event"
             }
 
             binding.eventContent.text = when(event.type){
-                ClockFragment.TODO_TYPE -> event.content
+                TODO_TYPE -> event.content
                 else -> "No Content"
             }
 
-            binding.eventAlarmTime.text = event.alarmTime.toFormat()
+            binding.eventAlarmTime.text = getTimeFrom00am(event.alarmTime).toFormat()
+            adapter.notifyDataSetChanged()
+
+            binding.buttonDelete.setOnClickListener {
+                viewModel.deleteEvent(listOf(event))
+            }
+
+            binding.buttonDelay.setOnClickListener {
+                viewModel.delayEvent(event)
+            }
         })
 
         // show card animation

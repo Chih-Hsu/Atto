@@ -47,7 +47,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/clock_minutes"
         app:spanCount="5"
-        tools:listitem="@layout/item_event" />
+        tools:listitem="@layout/item_event"
+        android:requiresFadingEdge="vertical"
+        android:fadingEdge="vertical"
+        android:fadingEdgeLength="20dp"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/gesture_area"
@@ -143,6 +146,7 @@
                 android:layout_height="match_parent">
 
                 <TextView
+                    android:id="@+id/button_delay"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="延後 5 分鐘"
@@ -155,6 +159,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/button_delete"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="刪 除"

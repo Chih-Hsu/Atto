@@ -1,8 +1,12 @@
 package com.chihwhsu.atto
 
 import android.os.Bundle
+import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import eightbitlab.com.blurview.BlurView
+import eightbitlab.com.blurview.RenderScriptBlur
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -12,8 +16,6 @@ class MainActivity : AppCompatActivity() {
 
         // set NavigationBar color transparent
         window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
-
-
 
 
 

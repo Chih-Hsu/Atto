@@ -1,12 +1,18 @@
 package com.chihwhsu.atto.homepage
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.chihwhsu.atto.R
 import com.chihwhsu.atto.data.Event
+import com.chihwhsu.atto.data.Event.Companion.ALARM_TYPE
+import com.chihwhsu.atto.data.Event.Companion.POMODORO_BREAK_TYPE
+import com.chihwhsu.atto.data.Event.Companion.POMODORO_WORK_TYPE
+import com.chihwhsu.atto.data.Event.Companion.TODO_TYPE
 import com.chihwhsu.atto.databinding.ItemEventBinding
 import com.chihwhsu.atto.ext.getTimeFrom00am
 
@@ -34,20 +40,34 @@ class HomeAdapter(val onClickListener: EventClickListener,val viewModel :HomeVie
                 onClickListener.onClick(event)
             }
 
+            val color = when(event.type){
+                ALARM_TYPE -> ResourcesCompat.getColor(itemView.resources,R.color.yellow,null)
+                TODO_TYPE -> ResourcesCompat.getColor(itemView.resources,R.color.mid_gray,null)
+                POMODORO_WORK_TYPE -> ResourcesCompat.getColor(itemView.resources,R.color.red,null)
+                POMODORO_BREAK_TYPE -> ResourcesCompat.getColor(itemView.resources,R.color.brown,null)
+                else -> ResourcesCompat.getColor(itemView.resources,R.color.light_grey,null)
+            }
+
+            binding.eventImage.setColorFilter(color)
+
+
+
+
+
 
             if (getTimeFrom00am(System.currentTimeMillis()) > event.alarmTime) {
                 if (event == viewModel.event.value){
-                    binding.eventDone.setImageResource(R.drawable.event_done_select)
+                    binding.eventImage.setImageResource(R.drawable.event_done_select)
 
                 }else{
-                    binding.eventDone.setImageResource(R.drawable.event_done)
+                    binding.eventImage.setImageResource(R.drawable.event_done)
 
                 }
             } else {
                 if (event == viewModel.event.value){
-                    binding.eventDone.setImageResource(R.drawable.event_doing_select)
+                    binding.eventImage.setImageResource(R.drawable.event_doing_select)
                 }else{
-                    binding.eventDone.setImageResource(R.drawable.event_doing)
+                    binding.eventImage.setImageResource(R.drawable.event_doing)
                 }
             }
         }

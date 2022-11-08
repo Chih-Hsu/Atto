@@ -1,11 +1,16 @@
 package com.chihwhsu.atto.data
 
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.chihwhsu.atto.data.database.EventConverter
+import java.lang.reflect.Array.set
 
 @Entity(tableName = "event_table")
 @TypeConverters(EventConverter::class)
@@ -18,8 +23,6 @@ data class Event(
     val alarmSoundUri: Uri = Uri.EMPTY,
     @ColumnInfo(name = "alarm_name")
     val alarmSoundName: String ="",
-    @ColumnInfo(name = "alarm_day")
-    val alarmDay : Long,
     @ColumnInfo(name = "type")
     val type: Int = -1,
     @ColumnInfo(name = "routine")
@@ -41,8 +44,14 @@ data class Event(
 
 ) {
 
+    companion object{
+        const val ALARM_TYPE = 1
+        const val TODO_TYPE = 2
+        const val POMODORO_WORK_TYPE = 3
+        const val POMODORO_BREAK_TYPE = 4
+    }
 
-    // type = 1  Alarm
-    // type = 2  TodoList
-    // type = 3  Pomodoro
+
+
+
 }

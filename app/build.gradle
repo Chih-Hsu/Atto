@@ -63,10 +63,9 @@ dependencies {
     // Charts
     implementation 'com.diogobernardino:williamchart:3.10.1'
 
-// Tooltips
-//    implementation 'com.diogobernardino.williamchart:tooltip-slider:3.10.1'
-//    implementation 'com.diogobernardino.williamchart:tooltip-points:3.10.1'
 
+    // BlurView
+    implementation 'com.github.Dimezis:BlurView:version-2.0.2'
 
 //    implementation 'com.github.User:Repo:Tag'
 //    implementation 'com.github.Dimezis:BlurView:version-2.0.2'

@@ -12,11 +12,6 @@ import com.google.android.material.tabs.TabLayoutMediator
 
 class ClockFragment : Fragment() {
 
-    companion object{
-        const val ALARM_TYPE = 1
-        const val TODO_TYPE = 2
-        const val POMODORO_TYPE = 3
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -12,8 +12,10 @@
         tools:ignore="ProtectedPermissions" />
     <uses-permission
         android:name="android.permission.PACKAGE_USAGE_STATS"
-        tools:ignore="ProtectedPermissions"/>
+        tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
+<!--    <uses-permission android:name="android.permission.SET_ALARM" />-->
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -32,7 +34,8 @@
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.SECONDARY_HOME"/>
+
+                <category android:name="android.intent.category.SECONDARY_HOME" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -42,11 +45,15 @@
             android:theme="@style/HomeTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver android:name=".component.AlarmReceiver"/>
+
 
         <meta-data
             android:name="preloaded_fonts"

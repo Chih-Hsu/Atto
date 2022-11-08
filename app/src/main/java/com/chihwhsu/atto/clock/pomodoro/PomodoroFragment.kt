@@ -16,6 +16,7 @@ import com.chihwhsu.atto.applistpage.AppListViewModel
 import com.chihwhsu.atto.databinding.FragmentPomodoroBinding
 import com.chihwhsu.atto.ext.formatHour
 import com.chihwhsu.atto.ext.formatMinutes
+import com.chihwhsu.atto.ext.getCurrentDay
 import com.chihwhsu.atto.ext.getVmFactory
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
@@ -121,8 +122,8 @@ class PomodoroFragment : Fragment() {
 
         timePicker.addOnPositiveButtonClickListener {
             // replace textview text
-            val time = timePicker.hour.toLong()*60*60*1000 + timePicker.minute.toLong()*60*1000
-            viewModel.setBeginTime(time)
+            val time : Long = timePicker.hour.toLong()*60*60*1000 + timePicker.minute.toLong()*60*1000
+            viewModel.setBeginTime(time + getCurrentDay())
             val amPm = if (timePicker.hour<=12)"AM" else "PM"
             binding.hourMinute.text = resources.getString(
                 R.string.a_hh_mm,

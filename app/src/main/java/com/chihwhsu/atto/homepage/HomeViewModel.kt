@@ -6,11 +6,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.chihwhsu.atto.data.Event
 import com.chihwhsu.atto.data.database.AttoDatabaseDao
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 class HomeViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
 
-//    private var _eventList = MutableLiveData<List<Event>>()
-//    val eventList : LiveData<List<Event>> get() = _eventList
+    // Create a Coroutine scope using a job to be able to cancel when needed
+    private var viewModelJob = Job()
+
+    // the Coroutine runs using the Main (UI) dispatcher
+    private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     private var _event = MutableLiveData<Event>()
     val event : LiveData<Event> get() = _event
@@ -41,6 +48,22 @@ class HomeViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
         // if showCard is true then don't set value again
         if (showCard.value == false) {
             _showCard.value = true
+        }
+    }
+
+    fun deleteEvent(eventList : List<Event>){
+        coroutineScope.launch(Dispatchers.IO) {
+            for (event in eventList) {
+                databaseDao.deleteEvent(event.id)
+            }
+        }
+    }
+
+    fun delayEvent(event : Event){
+        coroutineScope.launch(Dispatchers.IO) {
+            val currentEvent = databaseDao.getEvent(event.id)
+            val newTime = currentEvent.alarmTime + 5*60*1000
+            databaseDao.delayEvent5Minutes(event.id,newTime)
         }
     }
 
