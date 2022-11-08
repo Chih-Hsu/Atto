@@ -67,6 +67,7 @@ dependencies {
     // BlurView
     implementation 'com.github.Dimezis:BlurView:version-2.0.2'
 
+    implementation 'com.applandeo:material-calendar-view:1.7.0'
 //    implementation 'com.github.User:Repo:Tag'
 //    implementation 'com.github.Dimezis:BlurView:version-2.0.2'
 

@@ -5,10 +5,12 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
+import com.chihwhsu.atto.component.AlarmReceiver
 import com.chihwhsu.atto.data.database.EventConverter
 import java.lang.reflect.Array.set
 
@@ -49,6 +51,34 @@ data class Event(
         const val TODO_TYPE = 2
         const val POMODORO_WORK_TYPE = 3
         const val POMODORO_BREAK_TYPE = 4
+
+    }
+
+    fun setAlarmTime(context: Context){
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(context, AlarmReceiver::class.java)
+        // send Ringtone uri to service
+        intent.putExtra("Ringtone",alarmSoundUri)
+        // To check start or cancel
+        intent.putExtra("Alarm",true)
+        val sender = PendingIntent.getBroadcast(context,0,intent,
+            PendingIntent.FLAG_IMMUTABLE
+        )
+        alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, alarmTime, sender)
+    }
+
+    fun stopAlarm(context: Context){
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(context, AlarmReceiver::class.java)
+        // send Ringtone uri to service
+//        intent.putExtra("Ringtone",alarmSoundUri)
+        // To check start or cancel
+        intent.putExtra("Alarm",false)
+        val sender = PendingIntent.getBroadcast(context,0,intent,
+            PendingIntent.FLAG_IMMUTABLE
+        )
+        sender.cancel()
+        alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, alarmTime, sender)
     }
 
 

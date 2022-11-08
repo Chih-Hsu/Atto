@@ -56,7 +56,8 @@
         tools:layout="@layout/fragment_clock">
         <action
             android:id="@+id/action_clockFragment_to_alarmFragment"
-            app:destination="@id/alarmFragment" />
+            app:destination="@id/alarmFragment"
+            app:popUpTo="@id/mainFragment" />
     </fragment><action android:id="@+id/action_global_clockFragment" app:destination="@id/clockFragment"/>
     <fragment
         android:id="@+id/homeFragment"
@@ -68,6 +69,7 @@
         android:label="AlarmFragment" >
         <action
             android:id="@+id/action_alarmFragment_to_clockFragment"
-            app:destination="@id/clockFragment" />
+            app:destination="@id/clockFragment"
+            app:popUpTo="@id/mainFragment" />
     </fragment>
 </navigation>

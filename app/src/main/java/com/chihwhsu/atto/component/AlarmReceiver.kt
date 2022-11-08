@@ -12,23 +12,25 @@ import android.widget.Toast
 class AlarmReceiver : BroadcastReceiver() {
 
 
-
     override fun onReceive(context: Context?, intent: Intent) {
-        context?.let {
-            val vibrator = it.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-            vibrator.vibrate(2000)
 
-            val ringTone = RingtoneManager
-                .getRingtone(it, Uri.parse("content://media/internal/audio/media/202?title=Aquila&canonical=1)"))
+        if (intent.getBooleanExtra("Alarm", false)) {
+            context?.let {
+                // Only vibrate in foreground
+                val vibrator = it.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                vibrator.vibrate(5000)
+                val ringTone = RingtoneManager
+                    .getRingtone(
+                        it,
+                        intent.getParcelableExtra<Uri>("Ringtone")
+                    )
 
-            ringTone.play()
+                ringTone.play()
+
+            }
+        } else {
+
 
         }
-
-
-        Log.d("clock","succeed")
-            Toast.makeText(context, "hello alarm", Toast.LENGTH_LONG).show()
-            println("hello alarm")
-
     }
 }

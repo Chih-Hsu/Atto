@@ -25,6 +25,9 @@ class AlarmViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
     private var _ringToneList = MutableLiveData<List<String>>()
     val ringToneList: LiveData<List<String>> get() = _ringToneList
 
+    private var _event = MutableLiveData<Event>()
+    val event : LiveData<Event> get() = _event
+
     private var _navigateToAlarmList = MutableLiveData<Boolean>().also {
         it.value = false
     }
@@ -107,9 +110,12 @@ class AlarmViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
                 type = ALARM_TYPE
             )
 
+        _event.value = newEvent
         coroutineScope.launch(Dispatchers.IO) {
             databaseDao.insert(newEvent)
         }
+
+
 
         _navigateToAlarmList.value = true
     }

@@ -138,6 +138,11 @@ class AlarmFragment : Fragment() {
             viewModel.saveEvent()
         }
 
+        viewModel.event.observe(viewLifecycleOwner, Observer {
+            it.setAlarmTime(requireContext())
+            Log.d("alarm","step 1 work")
+        })
+
         viewModel.navigateToAlarmList.observe(viewLifecycleOwner, Observer {
             if (it == true) {
                 findNavController().navigate(AlarmFragmentDirections.actionAlarmFragmentToClockFragment())
