@@ -10,9 +10,11 @@ import android.view.animation.AnimationUtils
 import android.widget.TextView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.chihwhsu.atto.R
 import com.chihwhsu.atto.applistpage.bottomsheet.AppListBottomViewModel
+import com.chihwhsu.atto.data.AppLockTimer
 import com.chihwhsu.atto.databinding.DialogUsageLimitBinding
 import com.chihwhsu.atto.ext.getVmFactory
 import com.chihwhsu.atto.util.clickAnimation
@@ -85,6 +87,10 @@ class UsageLimitDialog : BottomSheetDialogFragment() {
         viewModel.newMinutes.observe(viewLifecycleOwner, Observer {
             binding.textMinutes.text = it.toString()
         })
+
+        binding.buttonSend.setOnClickListener {
+            viewModel.lockApp(app)
+        }
 
 
 

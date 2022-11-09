@@ -48,15 +48,28 @@ object UsageStatesManager {
 
         val usageStateManager =
             context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
-        val start = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+//        val start = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+        val start = LocalDate.now().withDayOfYear(1).atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
         val now = ZonedDateTime.now().toInstant().toEpochMilli()
 
         // from 0:00 to now
-        val states = usageStateManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST,0,now)
+//        val states = usageStateManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST,0,now)
+        val states = usageStateManager.queryUsageStats(
+            UsageStatsManager.INTERVAL_YEARLY, start, now
+        )
+        var usageTime =-1L
+
+        for (state in states) {
+            val name = state.packageName
+            val totalTime = state.totalTimeInForeground
+            if (name == packageName) {
+                usageTime = totalTime
+            }
+
+        }
 
 
-
-        return states.filter { it.packageName == packageName }.first().totalTimeInForeground ?: 0
+        return usageTime
 
     }
 
@@ -139,6 +152,53 @@ object UsageStatesManager {
         }
 
         return list
+
+
+    }
+
+    fun getUsageFromStartTime( context : Context, packageName : String ,startTime : Long ) : Long{
+        val usageStateManager =
+            context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
+
+        val now = System.currentTimeMillis()
+
+        val list = mutableListOf<Float>()
+
+
+            val usageEvents = usageStateManager.queryEvents(startTime, now)
+
+            val currentHourEventList = mutableListOf<Pair<Int, Long>>()
+            var currentHourUsage = 0L
+            while (usageEvents.hasNextEvent()) {
+                val currentEvent = UsageEvents.Event()
+                usageEvents.getNextEvent(currentEvent)
+                if (currentEvent.packageName == packageName) {
+                    if (currentEvent.eventType == 1 || currentEvent.eventType == 2 || currentEvent.eventType == 23) {
+                        val newMap = Pair<Int, Long>(currentEvent.eventType, currentEvent.timeStamp)
+                        currentHourEventList.add(newMap)
+                    }
+                }
+            }
+
+            if (currentHourEventList.size != 0) {
+                for (position in 0 until currentHourEventList.size - 1) {
+
+                    if (currentHourEventList.get(position).first == UsageEvents.Event.ACTIVITY_RESUMED) {
+
+                        if (currentHourEventList.get(position + 1).first == UsageEvents.Event.ACTIVITY_PAUSED || currentHourEventList.get(
+                                position + 1
+                            ).first == UsageEvents.Event.ACTIVITY_STOPPED
+                        ) {
+                            val start = currentHourEventList.get(position).second
+                            val end = currentHourEventList.get(position + 1).second
+                            currentHourUsage += (end - start)
+                        }
+                    }
+                }
+            }
+
+
+        return currentHourUsage
 
 
     }

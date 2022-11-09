@@ -1,5 +1,7 @@
 package com.chihwhsu.atto.component
 
+import android.app.AlertDialog
+import android.app.Dialog
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -8,6 +10,7 @@ import android.net.Uri
 import android.os.Vibrator
 import android.util.Log
 import android.widget.Toast
+import androidx.core.app.DialogCompat
 
 class AlarmReceiver : BroadcastReceiver() {
 
@@ -26,6 +29,7 @@ class AlarmReceiver : BroadcastReceiver() {
                     )
 
                 ringTone.play()
+
 
             }
         } else {

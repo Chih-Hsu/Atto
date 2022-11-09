@@ -38,9 +38,15 @@ class MainFragment : Fragment() {
             dockAdapter.submitList(list)
         })
 
+        viewModel.timerList.observe(viewLifecycleOwner, Observer {
+            viewModel.checkUsageTimer(requireContext())
+        })
+
+
 
 
 
         return binding.root
     }
+
 }

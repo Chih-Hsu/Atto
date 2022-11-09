@@ -4,7 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.chihwhsu.atto.data.App
+import com.chihwhsu.atto.data.AppLockTimer
 import com.chihwhsu.atto.data.database.AttoDatabaseDao
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 class UsageLimitViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
 
@@ -13,6 +18,12 @@ class UsageLimitViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
 
     private var _newMinutes = MutableLiveData<Int>()
     val newMinutes: LiveData<Int> get() = _newMinutes
+
+    // Create a Coroutine scope using a job to be able to cancel when needed
+    private var viewModelJob = Job()
+
+    // the Coroutine runs using the Main (UI) dispatcher
+    private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     init {
         _newHour.value = 0
@@ -60,9 +71,17 @@ class UsageLimitViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
     }
 
     fun lockApp(app:App){
+
         val hour = newHour.value ?: 0
         val minutes = newMinutes.value ?: 0
-        app.lock(databaseDao,hour,minutes)
+        val time = hour.toLong()*60*60*1000 + minutes.toLong()*60*1000
+        val newAppLockTimer = AppLockTimer(0,app.packageName,System.currentTimeMillis(),time)
+
+        coroutineScope.launch(Dispatchers.IO) {
+            databaseDao.insert(newAppLockTimer)
+        }
+
+
     }
 
 }

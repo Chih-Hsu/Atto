@@ -48,8 +48,8 @@ data class App (
         UsageStatesManager.get24hrUsageList(context,packageName)
 
 
-    fun lock(databaseDao: AttoDatabaseDao,hours:Int,minutes:Int){
-
+    fun getUsageTimeFromStart(context: Context, startTime : Long):Long{
+        return UsageStatesManager.getUsageFromStartTime(context,packageName,startTime)
     }
 
     fun analyseStorage(context: Context) : Long {

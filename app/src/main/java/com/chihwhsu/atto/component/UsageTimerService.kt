@@ -29,8 +29,6 @@ class UsageTimerService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
-
-
         val time = intent?.getIntExtra("limitTime",0)?.div(1000)
 
         Log.d("limit","$time")

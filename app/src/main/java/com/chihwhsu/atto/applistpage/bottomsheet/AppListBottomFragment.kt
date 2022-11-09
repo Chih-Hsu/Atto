@@ -10,10 +10,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.chihwhsu.atto.NavigationDirections
 import com.chihwhsu.atto.applistpage.AppListAdapter
 import com.chihwhsu.atto.databinding.DialogAppListBinding
 import com.chihwhsu.atto.ext.getVmFactory
+import java.util.*
 
 class AppListBottomFragment : Fragment() {
 
@@ -40,6 +43,35 @@ class AppListBottomFragment : Fragment() {
         })
 
         binding.appRecyclerView.adapter = adapter
+
+        val simpleCallback = object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.START or ItemTouchHelper.END,0){
+
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                val fromPosition = viewHolder.adapterPosition
+                val toPosition = target.adapterPosition
+                val arrayList = java.util.ArrayList(adapter.currentList)
+                Collections.swap(arrayList,fromPosition,toPosition)
+
+
+
+                adapter.notifyItemMoved(fromPosition,toPosition)
+
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                TODO("Not yet implemented")
+            }
+        }
+
+        val itemHelper = ItemTouchHelper(simpleCallback)
+        itemHelper.attachToRecyclerView(binding.appRecyclerView)
+
+
 
         viewModel.appList.observe(viewLifecycleOwner, Observer {
             viewModel.getData()

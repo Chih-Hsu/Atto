@@ -55,6 +55,7 @@ class GetUsageFragment : Fragment() {
     }
 
     private fun isAccessGranted(): Boolean {
+
         return try {
             val packageManager: PackageManager = requireActivity().packageManager
             val applicationInfo = packageManager.getApplicationInfo(requireActivity().packageName, 0)
@@ -70,6 +71,5 @@ class GetUsageFragment : Fragment() {
         }
     }
 
-//    Context.APP_OPS_SERVICE
 
 }
