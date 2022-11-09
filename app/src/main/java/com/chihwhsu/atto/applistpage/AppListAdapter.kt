@@ -89,18 +89,33 @@ class AppListAdapter  (val appOnClickListener : AppOnClickListener,val longClick
                 }
             }
 
-
-
-            itemView.setOnClickListener {
-                appOnClickListener.onClick(item.app.packageName)
-
-            }
+//            itemView.setOnClickListener {
+//                appOnClickListener.onClick(item.app.packageName)
+//
+//            }
             itemView.setOnLongClickListener(object :View.OnLongClickListener{
                 override fun onLongClick(v: View?): Boolean {
                     longClickListener.onClick(item.app)
                     return true
                 }
             })
+
+            // App is not locked
+            if (item.app.isEnable){
+
+                itemView.setOnClickListener {
+                    appOnClickListener.onClick(item.app.packageName)
+                }
+
+                binding.iconBackground.foreground = null
+                binding.lockImage.visibility = View.GONE
+
+            } else {
+
+                binding.iconBackground.foreground = ResourcesCompat.getDrawable(itemView.resources,R.drawable.icon_background_lock,null)
+                binding.lockImage.visibility = View.VISIBLE
+
+            }
 
         }
 

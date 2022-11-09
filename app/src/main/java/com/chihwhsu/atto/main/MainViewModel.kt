@@ -24,11 +24,10 @@ class MainViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
     fun checkUsageTimer(context: Context) {
         Log.d("applock","list = ${timerList.value}")
         timerList.value?.let { timers ->
+
             for (timer in timers) {
 
                 coroutineScope.launch(Dispatchers.IO) {
-
-
 
                 val app = databaseDao.getApp(timer.packageName)
                 app?.let {

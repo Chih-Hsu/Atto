@@ -27,6 +27,9 @@ interface AttoDatabaseDao {
     @Query("UPDATE app_table set is_enable = :doLock where package_name = :packageName")
     fun lockApp(packageName : String, doLock : Boolean)
 
+    @Query("UPDATE app_table set is_enable = :unLock WHERE is_enable = :lock")
+    fun unLockAllApp(unLock : Boolean,lock:Boolean)
+
     @Query("DELETE from app_table WHERE package_name = :packageName")
     fun delete(packageName: String)
 
@@ -83,6 +86,9 @@ interface AttoDatabaseDao {
 
     @Query("DELETE FROM usage_tracker_table WHERE id = :id")
     fun deleteTimer(id : Long)
+
+    @Query("DELETE FROM usage_tracker_table")
+    fun deleteAllTimer()
 
     @Query("UPDATE usage_tracker_table SET target_time = :remainTime")
     fun updateTimer(remainTime : Long)

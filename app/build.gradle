@@ -59,15 +59,16 @@ dependencies {
     implementation "com.squareup.moshi:moshi:$version_moshi"
     implementation "com.squareup.moshi:moshi-kotlin:$version_moshi"
 
-
     // Charts
     implementation 'com.diogobernardino:williamchart:3.10.1'
-
 
     // BlurView
     implementation 'com.github.Dimezis:BlurView:version-2.0.2'
 
     implementation 'com.applandeo:material-calendar-view:1.7.0'
+
+    // WorkManager (Kotlin + coroutines)
+    implementation("androidx.work:work-runtime-ktx:$version_work")
 
 
 
