@@ -12,10 +12,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.chihwhsu.atto.component.AlarmReceiver
 import com.chihwhsu.atto.component.UsageTimerService
 import com.chihwhsu.atto.databinding.FragmentWidgetBinding
+import com.chihwhsu.atto.util.AlarmManagerUtil
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -34,19 +36,14 @@ class WidgetFragment : Fragment() {
 
 
        binding.textView2.setOnClickListener {
-//           setAlarmTime(requireContext(),1000)
-//           startUsageService()
-           Log.d("calendar","${binding.sss.selectedDates}")
+
+           AlarmManagerUtil.setAlarm(
+               requireActivity().applicationContext,0,19,14,0,0,"Hi",2
+           )
+
+           Toast.makeText(requireContext(),"Set Alarm Success",Toast.LENGTH_SHORT).show()
        }
-        val calen = GregorianCalendar(2022,12,9)
-        val calen2 = GregorianCalendar(2022,12,15)
-        binding.sss.selectedDates = listOf(calen,calen2)
-        binding.sss.isClickable = true
-//        binding.sss.setDisabledDays(listOf(calen,calen2))
 
-
-        val startTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(166666), ZoneId.systemDefault())
-        startTime.dayOfWeek
 
 
         return binding.root
