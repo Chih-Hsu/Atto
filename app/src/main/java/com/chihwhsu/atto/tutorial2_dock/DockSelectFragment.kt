@@ -35,6 +35,11 @@ class DockSelectFragment : Fragment() {
         })
         binding.appListRecyclerview.adapter = appListAdapter
 
+
+        viewModel.dataList.observe(viewLifecycleOwner, Observer {
+            viewModel.setAppList(it)
+        })
+
         viewModel.appList.observe(viewLifecycleOwner, Observer {
             appListAdapter.submitList(it)
         })

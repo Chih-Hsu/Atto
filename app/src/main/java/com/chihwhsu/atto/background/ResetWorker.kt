@@ -30,7 +30,7 @@ class ResetWorker(appContext: Context, workerParams: WorkerParameters):
         val currentDate = Calendar.getInstance()
         val dueDate = Calendar.getInstance()
 
-        // 设置在大约 05:00:00 AM 执行
+        // Set new OneTime worker
         dueDate.set(Calendar.HOUR_OF_DAY, 0)
         dueDate.set(Calendar.MINUTE, 0)
         dueDate.set(Calendar.SECOND, 0)

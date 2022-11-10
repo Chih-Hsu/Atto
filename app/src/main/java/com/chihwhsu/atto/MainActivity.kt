@@ -12,6 +12,8 @@ import androidx.work.WorkManager
 import com.chihwhsu.atto.background.ResetWorker
 import eightbitlab.com.blurview.BlurView
 import eightbitlab.com.blurview.RenderScriptBlur
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -24,10 +26,14 @@ class MainActivity : AppCompatActivity() {
         // set NavigationBar color transparent
         window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
 
-
         setResetWorker()
+    }
 
-
+    override fun onStart() {
+        super.onStart()
+        GlobalScope.launch {
+            AttoApplication.instance.attoRepository.updateAppData()
+        }
     }
 
     override fun onStop() {
@@ -37,6 +43,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setResetWorker(){
+
         val currentDate = Calendar.getInstance()
         val dueDate = Calendar.getInstance()
 
@@ -55,7 +62,8 @@ class MainActivity : AppCompatActivity() {
             .addTag("reset worker")
             .build()
 
-        WorkManager.getInstance(this).enqueue(dailyWorkRequest)
+        WorkManager.getInstance(this)
+            .enqueue(dailyWorkRequest)
     }
 
 }

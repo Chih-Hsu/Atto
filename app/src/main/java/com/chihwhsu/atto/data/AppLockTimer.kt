@@ -18,7 +18,7 @@ data class AppLockTimer(
     val id:Long = 0,
     @ColumnInfo(name = "package_name")
     val packageName:String,
-    @ColumnInfo(name = "usage_time")
+    @ColumnInfo(name = "start_time")
     val startTime:Long = 0,
     @ColumnInfo(name = "target_time")
     val targetTime:Long = 0,

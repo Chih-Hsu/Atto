@@ -16,6 +16,9 @@ import androidx.fragment.app.Fragment
 import com.chihwhsu.atto.component.AlarmReceiver
 import com.chihwhsu.atto.component.UsageTimerService
 import com.chihwhsu.atto.databinding.FragmentWidgetBinding
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.*
 
 
@@ -42,6 +45,8 @@ class WidgetFragment : Fragment() {
 //        binding.sss.setDisabledDays(listOf(calen,calen2))
 
 
+        val startTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(166666), ZoneId.systemDefault())
+        startTime.dayOfWeek
 
 
         return binding.root

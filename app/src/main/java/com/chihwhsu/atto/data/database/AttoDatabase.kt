@@ -8,7 +8,11 @@ import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.data.AppLockTimer
 import com.chihwhsu.atto.data.Event
 
-@Database(entities = [App::class,Event::class,AppLockTimer::class], version = 7, exportSchema = false)
+@Database(
+    entities = [App::class, Event::class, AppLockTimer::class],
+    version = 8,
+    exportSchema = false
+)
 abstract class AttoDatabase : RoomDatabase() {
 
     abstract val attoDatabaseDao: AttoDatabaseDao
