@@ -11,7 +11,7 @@ import java.util.*
 
 
 // check icon is drawable or AdaptiveIconDrawable
-fun Drawable.convertToBitmap(): Bitmap = this.toBitmap(this.minimumWidth,this.minimumHeight,null)
+fun Drawable.convertToBitmap(): Bitmap = this.toBitmap(this.minimumWidth, this.minimumHeight, null)
 
 fun Bitmap.createGrayscale(): Bitmap? {
     val width: Int = this.width
@@ -28,27 +28,27 @@ fun Bitmap.createGrayscale(): Bitmap? {
 
 
 fun Long.toFormat(): String? {
-    val hours = this/(1000*60*60)
-    val minutes = this/(1000*60) - hours*60
+    val hours = this / (1000 * 60 * 60)
+    val minutes = this / (1000 * 60) - hours * 60
     return "${hours}h${minutes}m"
 }
 
-fun Int.formatHour() : String{
-    val newHour = if (this > 12){
-        (this-12)
+fun Int.formatHour(): String {
+    val newHour = if (this > 12) {
+        (this - 12)
     } else {
         this
     }
 
-    return if (newHour < 10){
+    return if (newHour < 10) {
         "0${newHour}"
-    } else{
+    } else {
         "$newHour"
     }
 }
 
-fun Int.formatMinutes():String{
-    return if (this < 10){
+fun Int.formatMinutes(): String {
+    return if (this < 10) {
         "0$this"
     } else {
         this.toString()
@@ -57,21 +57,22 @@ fun Int.formatMinutes():String{
 }
 
 
-fun Float.toDp():Int{
+fun Float.toDp(): Int {
     return (this / Resources.getSystem().displayMetrics.density).toInt()
 }
 
 
-fun getTimeFrom00am(time: Long):Long{
+fun getTimeFrom00am(time: Long): Long {
     val todayStart = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
 
     return time - todayStart
 }
 
-fun getCurrentDay():Long{
+fun getCurrentDay(): Long {
     return LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
 }
 
-fun getEndOfToday():Long {
-    return LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()+ 86400000
+fun getEndOfToday(): Long {
+    return LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()
+        .toEpochMilli() + 86400000
 }

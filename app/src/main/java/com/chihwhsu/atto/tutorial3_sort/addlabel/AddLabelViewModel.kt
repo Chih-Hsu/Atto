@@ -6,10 +6,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.data.database.AttoDatabaseDao
+import com.chihwhsu.atto.data.database.AttoRepository
 import kotlinx.coroutines.*
 import java.util.*
 
-class AddLabelViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
+class AddLabelViewModel(private val repository: AttoRepository) : ViewModel() {
 
     // Create a Coroutine scope using a job to be able to cancel when needed
     private var viewModelJob = Job()
@@ -23,7 +24,7 @@ class AddLabelViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
     private var _filterList = MutableLiveData<List<App>>()
     val filterList : LiveData<List<App>> get() = _filterList
 
-    val noLabelAppList = databaseDao.getNoLabelApps()
+    val noLabelAppList = repository.getNoLabelApps()
 
     val remainList = mutableListOf<App>()
 
@@ -48,8 +49,8 @@ class AddLabelViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
     fun updateAppLabel(label : String){
         coroutineScope.launch(Dispatchers.IO){
             for (app in remainList) {
-                databaseDao.updateLabel(app.appLabel,label)
-                databaseDao.updateSort(app.appLabel,remainList.indexOf(app))
+                repository.updateLabel(app.appLabel,label)
+                repository.updateSort(app.appLabel,remainList.indexOf(app))
             }
             withContext(Dispatchers.Main){
                 _navigateToSort.value = true

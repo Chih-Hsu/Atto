@@ -51,7 +51,8 @@ class AppListAdapter  (val appOnClickListener : AppOnClickListener,val longClick
                 text = item.title
                 setTextColor(ResourcesCompat.getColor(itemView.resources,R.color.light_grey,null))
             }
-
+            Log.w("list","item.time: ${item.time}")
+            Log.w("list","item.time: ${item.time.toFormat()}")
             binding.textUsageTime.text = item.time.toFormat()
 
 

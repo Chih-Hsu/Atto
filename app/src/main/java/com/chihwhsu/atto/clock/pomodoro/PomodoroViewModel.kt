@@ -6,12 +6,13 @@ import com.chihwhsu.atto.data.Event
 import com.chihwhsu.atto.data.Event.Companion.POMODORO_BREAK_TYPE
 import com.chihwhsu.atto.data.Event.Companion.POMODORO_WORK_TYPE
 import com.chihwhsu.atto.data.database.AttoDatabaseDao
+import com.chihwhsu.atto.data.database.AttoRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-class PomodoroViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
+class PomodoroViewModel(private val repository: AttoRepository) : ViewModel() {
 
 
     // Create a Coroutine scope using a job to be able to cancel when needed
@@ -20,7 +21,7 @@ class PomodoroViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
     // the Coroutine runs using the Main (UI) dispatcher
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-    val labelList = databaseDao.getLabelList()
+    val labelList = repository.getLabelList()
 
 
     // for create Event
@@ -82,8 +83,8 @@ class PomodoroViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
             )
 
             coroutineScope.launch(Dispatchers.IO) {
-                databaseDao.insert(workEvent)
-                databaseDao.insert(breakEvent)
+                repository.insert(workEvent)
+                repository.insert(breakEvent)
             }
 
         }

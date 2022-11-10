@@ -18,13 +18,14 @@ fun Fragment.getVmFactory(resources: Resources): WallpaperViewModelFactory {
 }
 
 fun Fragment.getVmFactory(): ViewModelFactory{
-    val databaseDao = AttoDatabase.getInstance(requireContext()).attoDatabaseDao
-    return ViewModelFactory(databaseDao)
+//    val databaseDao = AttoDatabase.getInstance(requireContext()).attoDatabaseDao
+    val repository = (requireContext().applicationContext as AttoApplication).attoRepository
+    return ViewModelFactory(repository)
 }
 
 fun Fragment.getVmFactory(packageManager: PackageManager): DockViewModelFactory {
     val databaseDao = AttoDatabase.getInstance(requireContext()).attoDatabaseDao
-    val repository = AttoApplication.instance.attoRepository
+    val repository = (requireContext().applicationContext as AttoApplication).attoRepository
     return DockViewModelFactory(packageManager,resources,repository)
 }
 

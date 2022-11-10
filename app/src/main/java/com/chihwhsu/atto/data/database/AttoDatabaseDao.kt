@@ -9,7 +9,7 @@ import com.chihwhsu.atto.data.Event
 @Dao
 interface AttoDatabaseDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(app: App)
 
     @Update

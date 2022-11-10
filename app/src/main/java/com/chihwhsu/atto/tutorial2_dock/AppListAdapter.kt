@@ -45,11 +45,14 @@ class AppListAdapter (val viewModel: DockViewModel, val onClickListener:AppOnCli
         }
 
         private fun checkItemInDock(item:App){
-            viewModel.dockAppList.value?.let {
-                if (it.contains(item)){
+            viewModel.dockAppList.value?.let { list ->
+                if (!list.filter { it.appLabel == item.appLabel }.isEmpty()){
                     binding.iconBackground.setBackgroundResource(R.drawable.icon_background_selected)
+//                   notifyItemChanged(adapterPosition)
                 }else{
                     binding.iconBackground.setBackgroundResource(R.drawable.icon_background)
+//                    notifyItemChanged(adapterPosition)
+
                 }
             }
         }

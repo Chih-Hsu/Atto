@@ -47,8 +47,13 @@ class DockSelectFragment : Fragment() {
         val dockListAdapter = DockAppListAdapter()
         binding.dockRecyclerview.adapter = dockListAdapter
 
+        viewModel.dockList.observe(viewLifecycleOwner, Observer {
+            viewModel.setDockList(it)
+//            dockListAdapter.submitList(it)
+        })
+
         viewModel.dockAppList.observe(viewLifecycleOwner, Observer {
-            dockListAdapter.submitList(it)
+              dockListAdapter.submitList(it)
         })
 
 

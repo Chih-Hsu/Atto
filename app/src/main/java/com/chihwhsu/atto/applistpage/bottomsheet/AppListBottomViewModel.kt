@@ -7,11 +7,12 @@ import androidx.lifecycle.ViewModel
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.data.AppListItem
 import com.chihwhsu.atto.data.database.AttoDatabaseDao
+import com.chihwhsu.atto.data.database.AttoRepository
 import java.util.*
 
-class AppListBottomViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
+class AppListBottomViewModel(private val repository: AttoRepository) : ViewModel() {
 
-    var appList = databaseDao.getAllApps()
+    var appList = repository.getAllApps()
 
     private var _filterList = MutableLiveData<List<App>>()
     val filterList : LiveData<List<App>> get() = _filterList

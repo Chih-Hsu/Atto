@@ -6,12 +6,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.chihwhsu.atto.data.Event
 import com.chihwhsu.atto.data.database.AttoDatabaseDao
+import com.chihwhsu.atto.data.database.AttoRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-class HomeViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
+class HomeViewModel(private val repository: AttoRepository) : ViewModel() {
 
     // Create a Coroutine scope using a job to be able to cancel when needed
     private var viewModelJob = Job()
@@ -33,7 +34,7 @@ class HomeViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
     }
     val navigateToEdit : LiveData<Boolean> get() = _navigateToEdit
 
-    val eventList = databaseDao.getAllEvents()
+    val eventList = repository.getAllEvents()
 
     init {
 
@@ -54,16 +55,16 @@ class HomeViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
     fun deleteEvent(eventList : List<Event>){
         coroutineScope.launch(Dispatchers.IO) {
             for (event in eventList) {
-                databaseDao.deleteEvent(event.id)
+                repository.deleteEvent(event.id)
             }
         }
     }
 
     fun delayEvent(event : Event){
         coroutineScope.launch(Dispatchers.IO) {
-            val currentEvent = databaseDao.getEvent(event.id)
+            val currentEvent = repository.getEvent(event.id)
             val newTime = currentEvent.alarmTime + 5*60*1000
-            databaseDao.delayEvent5Minutes(event.id,newTime)
+            repository.delayEvent5Minutes(event.id)
         }
     }
 

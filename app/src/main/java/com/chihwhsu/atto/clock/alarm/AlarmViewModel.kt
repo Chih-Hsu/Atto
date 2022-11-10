@@ -9,9 +9,10 @@ import com.chihwhsu.atto.data.Event
 import com.chihwhsu.atto.data.Event.Companion.ALARM_TYPE
 import com.chihwhsu.atto.data.RingTone
 import com.chihwhsu.atto.data.database.AttoDatabaseDao
+import com.chihwhsu.atto.data.database.AttoRepository
 import kotlinx.coroutines.*
 
-class AlarmViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
+class AlarmViewModel(private val repository: AttoRepository) : ViewModel() {
 
     // Create a Coroutine scope using a job to be able to cancel when needed
     private var viewModelJob = Job()
@@ -112,7 +113,7 @@ class AlarmViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
 
         _event.value = newEvent
         coroutineScope.launch(Dispatchers.IO) {
-            databaseDao.insert(newEvent)
+            repository.insert(newEvent)
         }
 
 

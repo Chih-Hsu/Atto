@@ -34,10 +34,10 @@ object UsageStatesManager {
         for (state in states) {
             val name = state.packageName
             val totalTime = state.totalTimeInForeground
-            if (name == packageName) {
-                usageTime = totalTime
-            }
 
+            if (name == packageName) {
+                usageTime += totalTime
+            }
         }
 
         return usageTime

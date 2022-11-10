@@ -28,28 +28,30 @@ class AppListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = FragmentAppListBinding.inflate(inflater,container,false)
+        val binding = FragmentAppListBinding.inflate(inflater, container, false)
 
         val adapter = AppListAdapter(
             AppListAdapter.AppOnClickListener {
                 val launchAppIntent = requireContext().packageManager.getLaunchIntentForPackage(it)
                 startActivity(launchAppIntent)
-        },AppListAdapter.LongClickListener { app ->
-//          findNavController().navigate(NavigationDirections.actionGlobalAppInfoDialog(app))
-            }
-        ,viewModel)
+            }, AppListAdapter.LongClickListener { app ->
+                findNavController().navigate(NavigationDirections.actionGlobalAppInfoDialog(app))
+            }, viewModel)
         binding.appRecyclerView.adapter = adapter
 
-        val simpleCallback = object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.START or ItemTouchHelper.END,0){
+        val simpleCallback = object : ItemTouchHelper.SimpleCallback(
+            ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.START or ItemTouchHelper.END,
+            0
+        ) {
 
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,
                 target: RecyclerView.ViewHolder
             ): Boolean {
-//                if (viewHolder.getItemViewType() != target.getItemViewType()) {
-//                    return true
-//                }
+                if (viewHolder.getItemViewType() != target.getItemViewType()) {
+                    return false
+                }
 //                if (viewHolder.itemViewType != target.itemViewType){
 //                    val fromItem = adapter.currentList.get(viewHolder.adapterPosition)
 //                    val toItem = adapter.currentList.get(target.adapterPosition)
@@ -79,9 +81,9 @@ class AppListFragment : Fragment() {
 
         val layoutManager = binding.appRecyclerView.layoutManager as GridLayoutManager
 
-        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup(){
+        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
-                return when(adapter.getItemViewType(position)){
+                return when (adapter.getItemViewType(position)) {
                     SortAdapter.APP_ITEM_VIEW_TYPE_LABEL -> 5
                     SortAdapter.APP_ITEM_VIEW_TYPE_APP -> 1
                     else -> 1
@@ -90,7 +92,7 @@ class AppListFragment : Fragment() {
         }
 
         viewModel.appList.observe(viewLifecycleOwner, Observer {
-            adapter.submitList(viewModel.resetList(it,requireContext()))
+            adapter.submitList(viewModel.resetList(it, requireContext()))
         })
 
         return binding.root

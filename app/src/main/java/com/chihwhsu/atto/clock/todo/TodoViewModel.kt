@@ -4,13 +4,14 @@ import androidx.lifecycle.ViewModel
 import com.chihwhsu.atto.data.Event
 import com.chihwhsu.atto.data.Event.Companion.TODO_TYPE
 import com.chihwhsu.atto.data.database.AttoDatabaseDao
+import com.chihwhsu.atto.data.database.AttoRepository
 import com.chihwhsu.atto.ext.getTimeFrom00am
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-class TodoViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
+class TodoViewModel(private val repository: AttoRepository) : ViewModel() {
 
     // Create a Coroutine scope using a job to be able to cancel when needed
     private var viewModelJob = Job()
@@ -54,7 +55,7 @@ class TodoViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
         )
 
         coroutineScope.launch(Dispatchers.IO) {
-            databaseDao.insert(newEvent)
+            repository.insert(newEvent)
         }
 
 

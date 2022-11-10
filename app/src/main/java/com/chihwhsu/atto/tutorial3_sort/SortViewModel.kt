@@ -1,21 +1,16 @@
 package com.chihwhsu.atto.tutorial3_sort
 
 import android.content.Context
-import android.util.Log
-import android.view.View
 import androidx.lifecycle.ViewModel
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.data.AppListItem
-import com.chihwhsu.atto.data.database.AttoDatabaseDao
+import com.chihwhsu.atto.data.database.AttoRepository
 
-class SortViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
+class SortViewModel(private val repository: AttoRepository) : ViewModel() {
 
-    val appList = databaseDao.getAllAppsWithoutDock()
-
+    val appList = repository.getAllAppsWithoutDock()
 
     fun resetList(appList : List<App>,context:Context):List<AppListItem>{
-
-
 
         // Get all label
         val labelStringList = mutableListOf<String>()
