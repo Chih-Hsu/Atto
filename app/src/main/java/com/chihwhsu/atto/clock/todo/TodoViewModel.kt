@@ -20,7 +20,7 @@ class TodoViewModel(private val repository: AttoRepository) : ViewModel() {
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     // for create Event
-    private var alarmTime = System.currentTimeMillis()+600000
+    private var alarmTime = getTimeFrom00am(System.currentTimeMillis())+600000
 
     private var eventDay = System.currentTimeMillis() - getTimeFrom00am(System.currentTimeMillis())
 

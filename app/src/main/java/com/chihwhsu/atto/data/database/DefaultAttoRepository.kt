@@ -56,6 +56,10 @@ class DefaultAttoRepository(
         attoLocalDataSource.unLockAllApp()
     }
 
+    override fun unLockSpecificLabelApp(label: String) {
+        attoLocalDataSource.unLockSpecificLabelApp(label)
+    }
+
     override suspend fun delete(packageName: String) {
         withContext(ioDispatcher) {
             attoLocalDataSource.delete(packageName)
@@ -72,7 +76,7 @@ class DefaultAttoRepository(
 
     override fun getAllApps(): LiveData<List<App>> {
 
-            return attoLocalDataSource.getAllApps()
+        return attoLocalDataSource.getAllApps()
 
     }
 
@@ -97,11 +101,11 @@ class DefaultAttoRepository(
         return attoLocalDataSource.getAllEvents()
     }
 
-    override suspend fun deleteEvent(id: Long) {
+    override suspend fun deleteEvent(id: Int) {
         return attoLocalDataSource.deleteEvent(id)
     }
 
-    override suspend fun getEvent(id: Long): Event {
+    override suspend fun getEvent(id: Int): Event? {
         return attoLocalDataSource.getEvent(id)
     }
 
@@ -109,8 +113,20 @@ class DefaultAttoRepository(
         return attoLocalDataSource.getTypeEvent(type)
     }
 
-    override suspend fun delayEvent5Minutes(id: Long) {
+    override suspend fun delayEvent5Minutes(id: Int) {
         return attoLocalDataSource.delayEvent5Minutes(id)
+    }
+
+    override fun lockAllApp() {
+        attoLocalDataSource.lockAllApp()
+    }
+
+    override fun lockSpecificLabelApp(label: String) {
+        attoLocalDataSource.lockSpecificLabelApp(label)
+    }
+
+    override fun isPomodoroIsExist(): Boolean {
+        return attoLocalDataSource.isPomodoroIsExist()
     }
 
     override suspend fun deleteTimer(id: Long) {
@@ -135,7 +151,7 @@ class DefaultAttoRepository(
 
     override suspend fun updateAppData() {
 
-        withContext(Dispatchers.Main){
+        withContext(Dispatchers.Main) {
             val roomApps = attoLocalDataSource.getAllApps()
             val systemApps = attoSystemDataSource.getAllApps()
 
@@ -170,8 +186,7 @@ class DefaultAttoRepository(
                         }
                     }
 
-        }
-
+                }
 
 
             }

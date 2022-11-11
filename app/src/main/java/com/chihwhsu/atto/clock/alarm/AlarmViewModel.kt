@@ -2,13 +2,13 @@ package com.chihwhsu.atto.clock.alarm
 
 import android.content.Context
 import android.media.RingtoneManager
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.chihwhsu.atto.data.Event
 import com.chihwhsu.atto.data.Event.Companion.ALARM_TYPE
 import com.chihwhsu.atto.data.RingTone
-import com.chihwhsu.atto.data.database.AttoDatabaseDao
 import com.chihwhsu.atto.data.database.AttoRepository
 import kotlinx.coroutines.*
 
@@ -38,12 +38,12 @@ class AlarmViewModel(private val repository: AttoRepository) : ViewModel() {
     private var alarmTime = System.currentTimeMillis()+600000
 
     //current time + 10 minutes
-    private var selectRingTonePosition : Int = -1
+    private var selectRingTonePosition : Int = 0
     private val routineList = mutableListOf(false, false, false, false, false, false, false)
     private var needVibration = false
     private var needSnooze = false
 
-    private val listRingTone = mutableListOf<RingTone>()
+    private val ringtoneList = mutableListOf<RingTone>()
 
 
     init {
@@ -69,11 +69,11 @@ class AlarmViewModel(private val repository: AttoRepository) : ViewModel() {
                 val uri = ringToneManager.getRingtoneUri(number)
                 uri?.let {
                     val newRingTone = RingTone(ringtoneName, uri)
-                    listRingTone.add(newRingTone)
+                    ringtoneList.add(newRingTone)
                 }
             }
             val stringList = mutableListOf<String>()
-            for (item in listRingTone) {
+            for (item in ringtoneList) {
                 stringList.add(item.name)
 
             }
@@ -100,7 +100,7 @@ class AlarmViewModel(private val repository: AttoRepository) : ViewModel() {
     }
 
     fun saveEvent() {
-        val ringTone = listRingTone[selectRingTonePosition]
+        val ringTone = ringtoneList[selectRingTonePosition]
             val newEvent = Event(
                 alarmTime = alarmTime,
                 alarmSoundName = ringTone.name,

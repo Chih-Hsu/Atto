@@ -23,7 +23,6 @@ class MainViewModel(private val repository: AttoRepository) : ViewModel() {
 
 
     fun checkUsageTimer(context: Context) {
-        Log.d("applock","list = ${timerList.value}")
         timerList.value?.let { timers ->
 
             for (timer in timers) {
@@ -32,7 +31,6 @@ class MainViewModel(private val repository: AttoRepository) : ViewModel() {
 
                 val app = repository.getApp(timer.packageName)
                 app?.let {
-                    Log.d("applock","app = ${app.appLabel} timer = ${timer.targetTime}")
                     val usageTime = it.getUsageTimeFromStart(context, timer.startTime)
                     if ( usageTime >= timer.targetTime) {
                         repository.lockApp(it.packageName)
@@ -42,7 +40,7 @@ class MainViewModel(private val repository: AttoRepository) : ViewModel() {
                     }
                 }
                 }
-            }
         }
+    }
     }
 }

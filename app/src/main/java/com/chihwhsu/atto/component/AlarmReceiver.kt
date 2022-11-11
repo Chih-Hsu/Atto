@@ -6,6 +6,7 @@ import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Vibrator
 import android.util.Log
+import com.chihwhsu.atto.AlarmActivity
 import com.chihwhsu.atto.MainActivity
 import com.chihwhsu.atto.clock.alarm.AlarmFragment
 import com.chihwhsu.atto.util.AlarmManagerUtil
@@ -20,7 +21,7 @@ class AlarmReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
 
-        val msg = intent!!.getStringExtra("msg")
+        val ringTone = intent!!.getStringExtra("ringTone")
         val intervalMillis = intent.getLongExtra("intervalMillis", 0)
         if (intervalMillis != 0L) {
             AlarmManagerUtil.setAlarmTime(
@@ -29,11 +30,13 @@ class AlarmReceiver : BroadcastReceiver() {
             )
         }
 
-        Log.d("clocktest","Work")
+
         val flag = intent.getIntExtra("soundOrVibrator", 0)
-        val clockIntent = Intent(context, MainActivity::class.java)
-        clockIntent.putExtra("msg", msg)
+        val id = intent.getIntExtra("id",0)
+        val clockIntent = Intent(context, AlarmActivity::class.java)
+        clockIntent.putExtra("ringTone", ringTone)
         clockIntent.putExtra("flag", flag)
+        clockIntent.putExtra("id",id)
         clockIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         context!!.startActivity(clockIntent)
     }

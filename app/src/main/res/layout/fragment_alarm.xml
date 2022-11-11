@@ -168,7 +168,7 @@
         android:layout_marginTop="24dp"
         android:fontFamily="@font/k2d"
         android:gravity="center"
-        android:text="貪 睡"
+        android:text="重 複"
         android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/text_vibration"

@@ -10,7 +10,7 @@ import com.chihwhsu.atto.data.Event
 
 @Database(
     entities = [App::class, Event::class, AppLockTimer::class],
-    version = 8,
+    version = 10,
     exportSchema = false
 )
 abstract class AttoDatabase : RoomDatabase() {

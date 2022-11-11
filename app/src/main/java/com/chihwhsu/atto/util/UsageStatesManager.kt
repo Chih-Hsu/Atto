@@ -1,13 +1,8 @@
 package com.chihwhsu.atto.util
 
-import android.app.usage.EventStats
 import android.app.usage.UsageEvents
-import android.app.usage.UsageStats
 import android.app.usage.UsageStatsManager
 import android.content.Context
-import android.util.Log
-import com.chihwhsu.atto.ext.getTimeFrom00am
-import com.chihwhsu.atto.ext.toFormat
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -29,7 +24,7 @@ object UsageStatesManager {
         val states = usageStateManager.queryUsageStats(
             UsageStatsManager.INTERVAL_DAILY, start, now
         )
-        var usageTime =-1L
+        var usageTime =0L
 
         for (state in states) {
             val name = state.packageName
@@ -57,7 +52,7 @@ object UsageStatesManager {
         val states = usageStateManager.queryUsageStats(
             UsageStatsManager.INTERVAL_YEARLY, start, now
         )
-        var usageTime =-1L
+        var usageTime =0L
 
         for (state in states) {
             val name = state.packageName
@@ -85,7 +80,7 @@ object UsageStatesManager {
 
 
         val states = usageStateManager.queryAndAggregateUsageStats(start, now)
-        var usageTime = -1L
+        var usageTime = 0L
 
         val value = states.get("com.chihwhsu.atto")?.totalTimeInForeground
 

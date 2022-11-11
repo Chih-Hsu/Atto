@@ -14,6 +14,7 @@ import eightbitlab.com.blurview.BlurView
 import eightbitlab.com.blurview.RenderScriptBlur
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.time.Duration
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -61,6 +62,7 @@ class MainActivity : AppCompatActivity() {
             .setInitialDelay(timeDiff, TimeUnit.MILLISECONDS)
             .addTag("reset worker")
             .build()
+        
 
         WorkManager.getInstance(this)
             .enqueue(dailyWorkRequest)

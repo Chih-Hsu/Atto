@@ -1,5 +1,6 @@
 package com.chihwhsu.atto.clock.pomodoro
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.chihwhsu.atto.data.Event
@@ -7,10 +8,7 @@ import com.chihwhsu.atto.data.Event.Companion.POMODORO_BREAK_TYPE
 import com.chihwhsu.atto.data.Event.Companion.POMODORO_WORK_TYPE
 import com.chihwhsu.atto.data.database.AttoDatabaseDao
 import com.chihwhsu.atto.data.database.AttoRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class PomodoroViewModel(private val repository: AttoRepository) : ViewModel() {
 
@@ -23,14 +21,20 @@ class PomodoroViewModel(private val repository: AttoRepository) : ViewModel() {
 
     val labelList = repository.getLabelList()
 
+    private var isOtherPomodoroInRoom = false
+
 
     // for create Event
-    private var beginTime : Long = System.currentTimeMillis() + 600000
+    private var beginTime: Long = System.currentTimeMillis() + 600000
     private var workTime: Long = 45 * 60 * 1000
     private var breakTime: Long = 15 * 60 * 1000
     private var routineRound = 1
     private var lockAppMode = false
     private var lockAppLabel = ""
+
+    init {
+
+    }
 
 
     fun setBeginTime(time: Long) {
@@ -57,7 +61,12 @@ class PomodoroViewModel(private val repository: AttoRepository) : ViewModel() {
         lockAppLabel = label
     }
 
-    fun saveEvent() {
+    fun checkCanCreate():Boolean{
+        checkPomodoroInRoom()
+        return isOtherPomodoroInRoom
+    }
+
+    fun saveEvent(context: Context) {
 
 
         for (count in 0 until routineRound) {
@@ -65,7 +74,7 @@ class PomodoroViewModel(private val repository: AttoRepository) : ViewModel() {
             val workEndBreakStart = beginTime + workTime + (breakTime + workTime) * count
             val breakEndTime = beginTime + (workTime + breakTime) * (count + 1)
 
-            Log.d("clock","start = $workStartTime   end = $workEndBreakStart")
+            Log.d("clock", "start = $workStartTime   end = $workEndBreakStart")
             val workEvent = Event(
                 startTime = workStartTime,
                 alarmTime = workEndBreakStart,
@@ -82,6 +91,9 @@ class PomodoroViewModel(private val repository: AttoRepository) : ViewModel() {
                 lockAppLabel = lockAppLabel
             )
 
+            workEvent.setPomodoroAlarmTime(context, POMODORO_WORK_TYPE, workEvent.id.toInt())
+            breakEvent.setPomodoroAlarmTime(context, POMODORO_BREAK_TYPE, breakEvent.id.toInt())
+
             coroutineScope.launch(Dispatchers.IO) {
                 repository.insert(workEvent)
                 repository.insert(breakEvent)
@@ -90,5 +102,11 @@ class PomodoroViewModel(private val repository: AttoRepository) : ViewModel() {
         }
 
 
+    }
+
+    fun checkPomodoroInRoom(){
+       coroutineScope.launch(Dispatchers.Default) {
+           isOtherPomodoroInRoom = repository.isPomodoroIsExist()
+       }
     }
 }

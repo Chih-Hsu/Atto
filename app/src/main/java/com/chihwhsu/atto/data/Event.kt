@@ -1,38 +1,35 @@
 package com.chihwhsu.atto.data
 
-import android.app.AlarmManager
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import android.net.Uri
-import android.util.Log
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
-import com.chihwhsu.atto.component.AlarmReceiver
 import com.chihwhsu.atto.data.database.EventConverter
-import java.lang.reflect.Array.set
+import com.chihwhsu.atto.ext.getTimeFrom00am
+import com.chihwhsu.atto.util.AlarmManagerUtil
+import java.util.*
 
 @Entity(tableName = "event_table")
 @TypeConverters(EventConverter::class)
 data class Event(
-    @PrimaryKey(autoGenerate = true)
-    val id: Long = 0L,
+    @PrimaryKey(autoGenerate = false)
+    val id: Int = UUID.randomUUID().hashCode(),
     @ColumnInfo(name = "alarm_time")
     val alarmTime: Long = 0L,
     @ColumnInfo(name = "alarm_uri")
     val alarmSoundUri: Uri = Uri.EMPTY,
     @ColumnInfo(name = "alarm_name")
-    val alarmSoundName: String ="",
+    val alarmSoundName: String = "",
     @ColumnInfo(name = "type")
     val type: Int = -1,
     @ColumnInfo(name = "routine")
     val routine: List<Boolean>? = emptyList(), //only alarm
     @ColumnInfo(name = "vibration")
-    val vibration : Boolean? = false, //only alarm
+    val vibration: Boolean? = false, //only alarm
     @ColumnInfo(name = "snooze_mode")
-    val snoozeMode : Boolean? = false, //only alarm
+    val snoozeMode: Boolean? = false, //only alarm
     @ColumnInfo(name = "title")
     val title: String? = "", //only todolist
     @ColumnInfo(name = "content")
@@ -46,7 +43,7 @@ data class Event(
 
 ) {
 
-    companion object{
+    companion object {
         const val ALARM_TYPE = 1
         const val TODO_TYPE = 2
         const val POMODORO_WORK_TYPE = 3
@@ -54,34 +51,87 @@ data class Event(
 
     }
 
-    fun setAlarmTime(context: Context){
-        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(context, AlarmReceiver::class.java)
-        // send Ringtone uri to service
-        intent.putExtra("Ringtone",alarmSoundUri)
-        // To check start or cancel
-        intent.putExtra("Alarm",true)
-        val sender = PendingIntent.getBroadcast(context,0,intent,
-            PendingIntent.FLAG_IMMUTABLE
-        )
-        alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, alarmTime, sender)
+    fun setAlarmTime(applicationContext: Context,newId:Int) {
+
+        val remindWay = if (vibration == true) {
+            2
+        } else if (vibration == false) {
+            1
+        } else {
+            0
+        }
+
+        val time = getTimeFrom00am(alarmTime)
+        val hours = time / (1000 * 60 * 60)
+        val minutes = time / (1000 * 60) - hours * 60
+
+        // 2 is repeat every week, 0 is one time , 1 is everyday
+        val flag = if (snoozeMode == true) 2 else 0
+
+        val routineDays = mutableListOf<Int>()
+        routine?.let {
+            for (boolean in it) {
+                if (boolean) {
+                    routineDays.add(it.indexOf(boolean) + 1)  // index of monday is 0 , so + 1
+                }
+            }
+        }
+
+        if (routineDays.isEmpty()) {
+            AlarmManagerUtil.setAlarm(
+                // applicationContext only
+                applicationContext,
+                flag,
+                hours.toInt(),
+                minutes.toInt(),
+                newId,
+                0,
+                alarmSoundUri.toString(),
+                remindWay,
+            )
+        } else {
+            for (day in routineDays) {
+                AlarmManagerUtil.setAlarm(
+                    // applicationContext only
+                    applicationContext,
+                    flag,
+                    hours.toInt(),
+                    minutes.toInt(),
+                    newId,
+                    day,
+                    alarmSoundUri.toString(),
+                    remindWay,
+                )
+            }
+        }
     }
 
-    fun stopAlarm(context: Context){
-        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(context, AlarmReceiver::class.java)
-        // send Ringtone uri to service
-//        intent.putExtra("Ringtone",alarmSoundUri)
-        // To check start or cancel
-        intent.putExtra("Alarm",false)
-        val sender = PendingIntent.getBroadcast(context,0,intent,
-            PendingIntent.FLAG_IMMUTABLE
+    fun stopAlarm(applicationContext: Context) {
+        AlarmManagerUtil.cancelAlarm(
+            applicationContext, id
         )
-        sender.cancel()
-        alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, alarmTime, sender)
     }
 
 
+    fun setPomodoroAlarmTime(applicationContext: Context,type: Int,newId: Int) {
 
+        val time = getTimeFrom00am(startTime!!)
+        val hours = time / (1000 * 60 * 60)
+        val minutes = time / (1000 * 60) - hours * 60
+
+
+            AlarmManagerUtil.setAlarm(
+                // applicationContext only
+                applicationContext,
+                0,
+                hours.toInt(),
+                minutes.toInt(),
+                newId,
+                0,
+                "content://media/internal/audio/media/203?title=Crayon%20Rock&canonical=1",
+                1,
+            )
+
+    }
 
 }

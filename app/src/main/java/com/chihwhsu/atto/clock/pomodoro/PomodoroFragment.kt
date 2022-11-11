@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -35,7 +36,7 @@ class PomodoroFragment : Fragment() {
         binding = FragmentPomodoroBinding.inflate(inflater,container,false)
 
         // set current time
-        val currentTime = System.currentTimeMillis() + 60000
+        val currentTime = System.currentTimeMillis() + 600000
         val simpleFormat = SimpleDateFormat("a hh:mm")
         binding.hourMinute.text = simpleFormat.format(currentTime)
 
@@ -68,7 +69,13 @@ class PomodoroFragment : Fragment() {
         }
 
         binding.button.setOnClickListener {
-            viewModel.saveEvent()
+
+            if (!viewModel.checkCanCreate()){
+                viewModel.saveEvent(requireActivity().applicationContext)
+            }else{
+                Toast.makeText(requireContext(),"Pomodoro already set",Toast.LENGTH_SHORT).show()
+            }
+
         }
 
         // Spinner
@@ -101,8 +108,6 @@ class PomodoroFragment : Fragment() {
                     }
                 }
         })
-
-
 
 
 

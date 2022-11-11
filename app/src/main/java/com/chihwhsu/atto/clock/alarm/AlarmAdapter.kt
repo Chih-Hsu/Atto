@@ -13,7 +13,7 @@ import com.chihwhsu.atto.databinding.ItemAlarmListBinding
 import com.chihwhsu.atto.ext.getTimeFrom00am
 import com.chihwhsu.atto.ext.toFormat
 
-class AlarmAdapter(val onClickListener:AlarmOnClickListener) : ListAdapter<Event,AlarmAdapter.AlarmViewHolder>(object :DiffUtil.ItemCallback<Event>(){
+class AlarmAdapter(val onClickListener:AlarmOnClickListener,val onCheckChangeListener: AlarmCheckChangeListener) : ListAdapter<Event,AlarmAdapter.AlarmViewHolder>(object :DiffUtil.ItemCallback<Event>(){
     override fun areContentsTheSame(oldItem: Event, newItem: Event): Boolean {
         return oldItem == newItem
     }
@@ -25,6 +25,10 @@ class AlarmAdapter(val onClickListener:AlarmOnClickListener) : ListAdapter<Event
 
     class AlarmOnClickListener(val onClickListener:(event: Event)->Unit){
         fun onClick(event: Event) = onClickListener(event)
+    }
+
+    class AlarmCheckChangeListener(val onCheckChangeListener:(boolean: Boolean,event : Event)->Unit){
+        fun onCheckChange(boolean: Boolean , event : Event) = onCheckChangeListener(boolean , event)
     }
 
 
@@ -42,6 +46,15 @@ class AlarmAdapter(val onClickListener:AlarmOnClickListener) : ListAdapter<Event
                 binding.friday.setBackgroundResource(if (it[4])R.drawable.week_corner_background_select else R.drawable.week_corner_background)
                 binding.saturday.setBackgroundResource(if (it[5])R.drawable.week_corner_background_select else R.drawable.week_corner_background)
                 binding.sunday.setBackgroundResource(if (it[6])R.drawable.week_corner_background_select else R.drawable.week_corner_background)
+            }
+            binding.switchOpen.isChecked = true
+
+            binding.switchOpen.setOnCheckedChangeListener { buttonView, isChecked ->
+                if (isChecked){
+                    onCheckChangeListener.onCheckChange(true , item)
+                }else{
+                    onCheckChangeListener.onCheckChange(false , item)
+                }
             }
             }
 

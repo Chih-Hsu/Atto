@@ -1,20 +1,15 @@
 package com.chihwhsu.atto.clock.alarm
 
 
-import android.app.AlertDialog
-import android.app.Service
-import android.content.DialogInterface
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Vibrator
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -140,8 +135,7 @@ class AlarmFragment : Fragment() {
         }
 
         viewModel.event.observe(viewLifecycleOwner, Observer {
-            it.setAlarmTime(requireContext())
-            Log.d("alarm","step 1 work")
+            it.setAlarmTime(requireActivity().applicationContext,it.id)
         })
 
         viewModel.navigateToAlarmList.observe(viewLifecycleOwner, Observer {
@@ -150,15 +144,6 @@ class AlarmFragment : Fragment() {
                 viewModel.doneNavigation()
             }
         })
-
-
-        //////
-        val intent = requireActivity().intent
-        val message = intent.getStringExtra("msg")
-        val flag = intent.getIntExtra("flag",0)
-        showDialogInBroadcastReceiver(message,flag)
-
-
 
 
 
@@ -175,46 +160,5 @@ class AlarmFragment : Fragment() {
             }
         }
     }
-
-    fun showDialogInBroadcastReceiver(message:String?,flag:Int){
-        if (flag == 1 || flag == 2) {
-            mediaPlayer = MediaPlayer.create(requireContext(), R.raw.in_call_alarm)
-            mediaPlayer.isLooping = true
-            mediaPlayer.start()
-        }
-        //数组参数意义：第一个参数为等待指定时间后开始震动，震动时间为第二个参数。后边的参数依次为等待震动和震动的时间
-        //第二个参数为重复次数，-1为不重复，0为一直震动
-        //数组参数意义：第一个参数为等待指定时间后开始震动，震动时间为第二个参数。后边的参数依次为等待震动和震动的时间
-        //第二个参数为重复次数，-1为不重复，0为一直震动
-        if (flag == 0 || flag == 2) {
-            vibrator = requireActivity().getSystemService(Service.VIBRATOR_SERVICE) as Vibrator
-            vibrator.vibrate(longArrayOf(100, 10, 100, 600), 0)
-        }
-
-        val dialog = AlertDialog.Builder(requireContext(),R.style.Theme_dialog)
-            .setTitle("Wake Up")
-            .setMessage(message)
-            .setPositiveButton("Stop",object :DialogInterface.OnClickListener{
-                override fun onClick(dialog: DialogInterface?, which: Int) {
-                    if (flag == 1 || flag == 2) {
-                        mediaPlayer.stop()
-                        mediaPlayer.release()
-                    }
-                    if (flag == 0 || flag == 2) {
-                        vibrator.cancel()
-                    }
-                    dialog?.dismiss()
-                }
-            })
-            .create()
-
-        dialog.show()
-
-
-
-    }
-
-
-
 
 }

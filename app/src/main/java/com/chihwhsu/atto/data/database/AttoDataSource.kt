@@ -1,6 +1,7 @@
 package com.chihwhsu.atto.data.database
 
 import androidx.lifecycle.LiveData
+import androidx.room.Query
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.data.AppLockTimer
 import com.chihwhsu.atto.data.Event
@@ -29,6 +30,8 @@ interface AttoDataSource {
 
 
     suspend fun unLockAllApp()
+
+    fun unLockSpecificLabelApp(label: String)
 
 
     suspend fun delete(packageName: String)
@@ -68,16 +71,21 @@ interface AttoDataSource {
     fun getAllEvents(): LiveData<List<Event>>
 
 
-    suspend fun deleteEvent(id: Long)
+    suspend fun deleteEvent(id: Int)
 
 
-    suspend fun getEvent(id: Long): Event
+    suspend fun getEvent(id: Int): Event?
 
 
     fun getTypeEvent(type: Int): LiveData<List<Event>>
 
+    suspend fun delayEvent5Minutes(id: Int)
 
-    suspend fun delayEvent5Minutes(id: Long)
+    fun lockAllApp()
+
+    fun lockSpecificLabelApp(label: String)
+
+    fun isPomodoroIsExist() : Boolean
 
 
     // AppLockTimer

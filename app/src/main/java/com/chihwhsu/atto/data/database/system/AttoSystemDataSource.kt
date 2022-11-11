@@ -49,6 +49,10 @@ class AttoSystemDataSource(val context: Context) : AttoDataSource {
         TODO("Not yet implemented")
     }
 
+    override fun unLockSpecificLabelApp(label: String) {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun delete(packageName: String) {
         TODO("Not yet implemented")
     }
@@ -109,11 +113,11 @@ class AttoSystemDataSource(val context: Context) : AttoDataSource {
         TODO("Not yet implemented")
     }
 
-    override suspend fun deleteEvent(id: Long) {
+    override suspend fun deleteEvent(id: Int) {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getEvent(id: Long): Event {
+    override suspend fun getEvent(id: Int): Event? {
         TODO("Not yet implemented")
     }
 
@@ -121,7 +125,19 @@ class AttoSystemDataSource(val context: Context) : AttoDataSource {
         TODO("Not yet implemented")
     }
 
-    override suspend fun delayEvent5Minutes(id: Long) {
+    override suspend fun delayEvent5Minutes(id: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun lockAllApp() {
+        TODO("Not yet implemented")
+    }
+
+    override fun lockSpecificLabelApp(label: String) {
+        TODO("Not yet implemented")
+    }
+
+    override fun isPomodoroIsExist(): Boolean {
         TODO("Not yet implemented")
     }
 

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -12,7 +13,10 @@ import com.chihwhsu.atto.clock.ClockFragmentDirections
 import com.chihwhsu.atto.data.Event
 import com.chihwhsu.atto.data.database.AttoDatabase
 import com.chihwhsu.atto.databinding.FragmentAlarmListBinding
+import com.chihwhsu.atto.ext.getTimeFrom00am
 import com.chihwhsu.atto.ext.getVmFactory
+import com.chihwhsu.atto.ext.toFormat
+import com.chihwhsu.atto.util.AlarmManagerUtil
 
 class AlarmListFragment : Fragment() {
 
@@ -28,6 +32,12 @@ class AlarmListFragment : Fragment() {
 
         val adapter =  AlarmAdapter(AlarmAdapter.AlarmOnClickListener {
             viewModel.deleteEvent(it.id)
+        },AlarmAdapter.AlarmCheckChangeListener { isChecked , event ->
+            if (isChecked){
+                event.setAlarmTime(requireActivity().applicationContext,event.id.toInt())
+            }else{
+                event.stopAlarm(requireActivity().applicationContext)
+            }
         })
         binding.recyclerviewAlarm.adapter = adapter
 
@@ -38,11 +48,6 @@ class AlarmListFragment : Fragment() {
         binding.buttonAdd.setOnClickListener {
             findNavController().navigate(ClockFragmentDirections.actionClockFragmentToAlarmFragment())
         }
-
-
-
-
-
 
 
 

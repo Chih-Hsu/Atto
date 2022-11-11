@@ -5,7 +5,9 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import com.chihwhsu.atto.component.AlarmReceiver
+import com.chihwhsu.atto.ext.toMinuteSecondFormat
 import java.util.*
 
 object AlarmManagerUtil {
@@ -17,7 +19,7 @@ object AlarmManagerUtil {
         val sender = PendingIntent
             .getBroadcast(
                 context,
-                intent.getIntExtra("id", 0), intent, PendingIntent.FLAG_CANCEL_CURRENT
+                intent.getIntExtra("id", 0), intent, PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
 
         val interval = intent.getLongExtra("intervalMills",0)
@@ -25,14 +27,15 @@ object AlarmManagerUtil {
         alarmManager.setWindow(AlarmManager.RTC_WAKEUP,time,interval,sender)
     }
 
-    fun cancelAlarm(context: Context,action:String,id:Int){
+    fun cancelAlarm(context: Context,id:Int){
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(action)
+//        val intent = Intent(action)
+        val intent = Intent(context,AlarmReceiver::class.java)
         val sender = PendingIntent.getBroadcast(
             context,
             id,
             intent,
-            PendingIntent.FLAG_CANCEL_CURRENT
+            PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
         alarmManager.cancel(sender)
     }
@@ -44,14 +47,16 @@ object AlarmManagerUtil {
         minute: Int,
         id: Int,
         week: Int,
-        tips: String?,
-        soundOrVibrator: Int
+        ringTone: String?,
+        soundOrVibrator: Int,
     ) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val calendar = Calendar.getInstance()
         var intervalMillis: Long = 0
         calendar[calendar[Calendar.YEAR], calendar[Calendar.MONTH], calendar[Calendar.DAY_OF_MONTH], hour, minute] =
             10
+
+//        calendar.set(calendar[Calendar.SECOND],0)
         if (flag == 0) {
             intervalMillis = 0
         } else if (flag == 1) {
@@ -62,7 +67,7 @@ object AlarmManagerUtil {
         val intent = Intent(context, AlarmReceiver::class.java)
 //        val intent = Intent(ALARM_ACTION)
         intent.putExtra("intervalMillis", intervalMillis)
-        intent.putExtra("msg", tips)
+        intent.putExtra("ringTone", ringTone)
         intent.putExtra("id", id)
         intent.putExtra("soundOrVibrator", soundOrVibrator)
         val sender =
@@ -113,6 +118,16 @@ object AlarmManagerUtil {
                 dateTime + 24 * 3600 * 1000
             }
         }
+
+        val minutes = time / (1000 * 60)
+        val second = time / (1000) - minutes*60
+
+        if (second != 0L){
+            time = time-second
+        }
+
+
+
         return time
     }
 

@@ -27,8 +27,17 @@ interface AttoDatabaseDao {
     @Query("UPDATE app_table set is_enable = :doLock where package_name = :packageName")
     fun lockApp(packageName : String, doLock : Boolean)
 
-    @Query("UPDATE app_table set is_enable = :unLock WHERE is_enable = :lock")
-    fun unLockAllApp(unLock : Boolean,lock:Boolean)
+    @Query("UPDATE app_table set is_enable = :notEnable where is_enable = :isEnable")
+    fun lockAllApp(notEnable: Boolean,isEnable: Boolean)
+
+    @Query("UPDATE app_table set is_enable =:notEnable where label = :label")
+    fun lockSpecificLabelApp(label: String,notEnable: Boolean)
+
+    @Query("UPDATE app_table set is_enable = :isEnable WHERE is_enable = :notEnable")
+    fun unLockAllApp(isEnable: Boolean,notEnable:Boolean)
+
+    @Query("UPDATE app_table set is_enable =:isEnable where label = :label")
+    fun unLockSpecificLabelApp(label: String,isEnable: Boolean)
 
     @Query("DELETE from app_table WHERE package_name = :packageName")
     fun delete(packageName: String)
@@ -67,16 +76,20 @@ interface AttoDatabaseDao {
     fun getAllEvents(): LiveData<List<Event>>
 
     @Query("DELETE from event_table WHERE id = :id")
-    fun deleteEvent(id: Long)
+    fun deleteEvent(id: Int)
 
     @Query("SELECT * FROM event_table WHERE id = :id")
-    fun getEvent(id: Long): Event
+    fun getEvent(id: Int): Event
 
     @Query("SELECT * FROM event_table WHERE type = :type order by alarm_time asc")
     fun getTypeEvent(type: Int): LiveData<List<Event>>
 
     @Query("Update event_table set alarm_time = :newAlarmTime where id = :id")
-    fun delayEvent5Minutes(id: Long, newAlarmTime: Long)
+    fun delayEvent5Minutes(id: Int, newAlarmTime: Long)
+
+    @Query("SELECT EXISTS(SELECT * FROM event_table WHERE type = :type or :type2)")
+    fun isPomodoroIsExist(type: Int,type2:Int) : Boolean
+
 
 
     // AppLockTimer

@@ -33,6 +33,12 @@ fun Long.toFormat(): String? {
     return "${hours}h${minutes}m"
 }
 
+fun Long.toMinuteSecondFormat():String{
+    val minutes = this / (1000 * 60)
+    val second = this / (1000) - minutes*60
+    return "${minutes}:${second}"
+}
+
 fun Int.formatHour(): String {
     val newHour = if (this > 12) {
         (this - 12)

@@ -62,8 +62,6 @@ class HomeViewModel(private val repository: AttoRepository) : ViewModel() {
 
     fun delayEvent(event : Event){
         coroutineScope.launch(Dispatchers.IO) {
-            val currentEvent = repository.getEvent(event.id)
-            val newTime = currentEvent.alarmTime + 5*60*1000
             repository.delayEvent5Minutes(event.id)
         }
     }

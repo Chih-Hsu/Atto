@@ -13,6 +13,7 @@ import com.chihwhsu.atto.R
 import com.chihwhsu.atto.component.GestureListener
 import com.chihwhsu.atto.component.GridSpacingItemDecoration
 import com.chihwhsu.atto.data.Event.Companion.ALARM_TYPE
+import com.chihwhsu.atto.data.Event.Companion.POMODORO_BREAK_TYPE
 import com.chihwhsu.atto.data.Event.Companion.POMODORO_WORK_TYPE
 import com.chihwhsu.atto.data.Event.Companion.TODO_TYPE
 import com.chihwhsu.atto.databinding.FragmentHomeBinding
@@ -34,7 +35,7 @@ class HomeFragment : Fragment() {
 
         val adapter = HomeAdapter(HomeAdapter.EventClickListener { event ->
             viewModel.setEvent(event)
-        },viewModel)
+        }, viewModel)
 
         //RecyclerView setting
         binding.eventList.adapter = adapter
@@ -47,9 +48,11 @@ class HomeFragment : Fragment() {
         )
 
         viewModel.eventList.observe(viewLifecycleOwner, Observer { list ->
-            val newList = list.filter { it.alarmTime < getEndOfToday() && it.alarmTime > getCurrentDay() }
-            val expiredList = list.filter { it.alarmTime < getCurrentDay() }
-                viewModel.deleteEvent(expiredList)
+            val newList =
+                list.filter { it.alarmTime < getEndOfToday() && it.alarmTime > getCurrentDay() }
+            val expiredList = list.filter {  it.alarmTime < System.currentTimeMillis()+60000 } // Delete event after 1 minute
+            viewModel.deleteEvent(expiredList)
+            binding.animationNoEvent.visibility = if (newList.isEmpty()) View.VISIBLE else View.GONE
             adapter.submitList(newList)
         })
 
@@ -71,19 +74,28 @@ class HomeFragment : Fragment() {
         // set event detail on card
         viewModel.event.observe(viewLifecycleOwner, Observer { event ->
 
-            binding.eventTitle.text = when(event.type){
+            binding.eventTitle.text = when (event.type) {
                 ALARM_TYPE -> "Wake Up"
                 TODO_TYPE -> "NEXT TODO"
-                POMODORO_WORK_TYPE -> "IT'S POMODORO"
+                POMODORO_WORK_TYPE  -> "IT'S POMODORO"
+                POMODORO_BREAK_TYPE -> "IT'S POMODORO"
                 else -> "No Event"
             }
 
-            binding.eventContent.text = when(event.type){
+            binding.eventContent.text = when (event.type) {
                 TODO_TYPE -> event.content
                 else -> "No Content"
             }
 
-            binding.eventAlarmTime.text = getTimeFrom00am(event.alarmTime).toFormat()
+            binding.eventAlarmTime.text = if (event.type == ALARM_TYPE || event.type == TODO_TYPE
+            ) {
+                getTimeFrom00am(event.alarmTime).toFormat()
+            } else {
+                event.startTime?.let {
+                    getTimeFrom00am(it).toFormat()
+                }
+
+            }
             adapter.notifyDataSetChanged()
 
             binding.buttonDelete.setOnClickListener {
@@ -107,7 +119,7 @@ class HomeFragment : Fragment() {
                     "translationY",
                     0F,
                     0F,
-                    height.toFloat()*2/5
+                    height.toFloat() * 2 / 5
                 ).apply {
                     duration = 500
                     start()
@@ -148,20 +160,20 @@ class HomeFragment : Fragment() {
         })
 
         viewModel.navigateToEdit.observe(viewLifecycleOwner, Observer { showEdit ->
-            if (showEdit){
+            if (showEdit) {
                 binding.eventEditCard.visibility = View.VISIBLE
-                val animation = AnimationUtils.loadAnimation(requireContext(),R.anim.slide_down)
+                val animation = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_down)
                 binding.eventEditCard.animation = animation
                 animation.start()
             } else {
-                val animation = AnimationUtils.loadAnimation(requireContext(),R.anim.slide_up)
+                val animation = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_up)
                 binding.eventEditCard.animation = animation
                 animation.start()
                 binding.eventEditCard.visibility = View.GONE
 
             }
 
-         })
+        })
 
         binding.clockMinutes.setOnClickListener {
             findNavController().navigate(NavigationDirections.actionGlobalClockFragment())

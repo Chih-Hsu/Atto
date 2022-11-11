@@ -14,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.chihwhsu.atto.AlarmActivity
 import com.chihwhsu.atto.component.AlarmReceiver
 import com.chihwhsu.atto.component.UsageTimerService
 import com.chihwhsu.atto.databinding.FragmentWidgetBinding
@@ -37,11 +38,9 @@ class WidgetFragment : Fragment() {
 
        binding.textView2.setOnClickListener {
 
-           AlarmManagerUtil.setAlarm(
-               requireActivity().applicationContext,0,19,14,0,0,"Hi",2
-           )
+           val intent = Intent(requireContext(),AlarmActivity::class.java)
+           startActivity(intent)
 
-           Toast.makeText(requireContext(),"Set Alarm Success",Toast.LENGTH_SHORT).show()
        }
 
 

@@ -47,7 +47,11 @@ class AttoLocalDataSource(private val context: Context) : AttoDataSource {
     }
 
     override suspend  fun unLockAllApp() {
-        AttoDatabase.getInstance(context).attoDatabaseDao.unLockAllApp(false, true)
+        AttoDatabase.getInstance(context).attoDatabaseDao.unLockAllApp(true, false)
+    }
+
+    override fun unLockSpecificLabelApp(label: String) {
+        AttoDatabase.getInstance(context).attoDatabaseDao.unLockSpecificLabelApp(label,true)
     }
 
     override suspend  fun delete(packageName: String) {
@@ -86,11 +90,11 @@ class AttoLocalDataSource(private val context: Context) : AttoDataSource {
         return AttoDatabase.getInstance(context).attoDatabaseDao.getAllEvents()
     }
 
-    override suspend  fun deleteEvent(id: Long) {
+    override suspend  fun deleteEvent(id: Int) {
         AttoDatabase.getInstance(context).attoDatabaseDao.deleteEvent(id)
     }
 
-    override suspend  fun getEvent(id: Long): Event {
+    override suspend  fun getEvent(id: Int): Event? {
         return AttoDatabase.getInstance(context).attoDatabaseDao.getEvent(id)
     }
 
@@ -98,10 +102,24 @@ class AttoLocalDataSource(private val context: Context) : AttoDataSource {
         return AttoDatabase.getInstance(context).attoDatabaseDao.getTypeEvent(type)
     }
 
-    override suspend  fun delayEvent5Minutes(id: Long) {
+    override suspend  fun delayEvent5Minutes(id: Int) {
         val currentEvent = getEvent(id)
-        val newTime = currentEvent.alarmTime + 5*60*1000
-        AttoDatabase.getInstance(context).attoDatabaseDao.delayEvent5Minutes(id,newTime)
+        currentEvent?.let {
+            val newTime = currentEvent.alarmTime + 5*60*1000
+            AttoDatabase.getInstance(context).attoDatabaseDao.delayEvent5Minutes(id,newTime)
+        }
+    }
+
+    override fun lockAllApp() {
+        AttoDatabase.getInstance(context).attoDatabaseDao.lockAllApp(false,true)
+    }
+
+    override fun lockSpecificLabelApp(label: String) {
+        AttoDatabase.getInstance(context).attoDatabaseDao.lockSpecificLabelApp(label,false)
+    }
+
+    override fun isPomodoroIsExist(): Boolean {
+        return AttoDatabase.getInstance(context).attoDatabaseDao.isPomodoroIsExist(Event.POMODORO_WORK_TYPE,Event.POMODORO_BREAK_TYPE)
     }
 
     override suspend  fun deleteTimer(id: Long) {
