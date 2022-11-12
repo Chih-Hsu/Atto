@@ -59,6 +59,10 @@ interface AttoDataSource {
 
     suspend fun updateAppData()
 
+    fun getAllAppNotLiveData():List<App>?
+
+    fun deleteSpecificLabel(label: String)
+
 
 
 
@@ -86,6 +90,7 @@ interface AttoDataSource {
     fun lockSpecificLabelApp(label: String)
 
     fun isPomodoroIsExist() : Boolean
+
 
 
     // AppLockTimer

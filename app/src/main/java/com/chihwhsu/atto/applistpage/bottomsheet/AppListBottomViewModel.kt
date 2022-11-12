@@ -1,12 +1,10 @@
 package com.chihwhsu.atto.applistpage.bottomsheet
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.data.AppListItem
-import com.chihwhsu.atto.data.database.AttoDatabaseDao
 import com.chihwhsu.atto.data.database.AttoRepository
 import java.util.*
 
@@ -29,7 +27,9 @@ class AppListBottomViewModel(private val repository: AttoRepository) : ViewModel
     }
 
     fun toAppListItem(appList : List<App>):List<AppListItem>{
-        return appList.map { AppListItem.AppItem(it) }.sortedBy { it.app.appLabel.first()}
+        return appList.filter { it.appLabel != "Atto" }
+            .map { AppListItem.AppItem(it) }
+            .sortedBy { it.app.appLabel.first()}
     }
 
 

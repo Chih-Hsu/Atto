@@ -32,9 +32,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        GlobalScope.launch {
-            AttoApplication.instance.attoRepository.updateAppData()
-        }
     }
 
     override fun onStop() {
@@ -62,7 +59,7 @@ class MainActivity : AppCompatActivity() {
             .setInitialDelay(timeDiff, TimeUnit.MILLISECONDS)
             .addTag("reset worker")
             .build()
-        
+
 
         WorkManager.getInstance(this)
             .enqueue(dailyWorkRequest)

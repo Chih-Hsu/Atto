@@ -28,15 +28,22 @@ class AddLabelViewModel(private val repository: AttoRepository) : ViewModel() {
 
     val remainList = mutableListOf<App>()
 
+    // for edit
+    private var editLabel :String? = null
 
     private val originalList = mutableListOf<App>()
 
     fun addToList(app:App){
-        if (!remainList.contains(app)){
+//        if (!remainList.contains(app)){
+        if (remainList.filter { it.appLabel == app.appLabel }.isEmpty()){
      remainList.add(app)
         }else{
             remainList.remove(app)
         }
+    }
+
+    fun setEditLabel(label: String){
+        editLabel = label
     }
 
     fun getData(){

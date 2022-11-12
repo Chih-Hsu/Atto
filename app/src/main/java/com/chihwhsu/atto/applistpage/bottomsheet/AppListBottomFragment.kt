@@ -1,5 +1,6 @@
 package com.chihwhsu.atto.applistpage.bottomsheet
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.chihwhsu.atto.NavigationDirections
+import com.chihwhsu.atto.SettingActivity
 import com.chihwhsu.atto.applistpage.AppListAdapter
 import com.chihwhsu.atto.databinding.DialogAppListBinding
 import com.chihwhsu.atto.ext.getVmFactory
@@ -35,16 +37,25 @@ class AppListBottomFragment : Fragment() {
         val adapter = AppListBottomAdapter(
             // ClickListener
             AppListBottomAdapter.AppOnClickListener {
-            val launchAppIntent = requireContext().packageManager.getLaunchIntentForPackage(it)
-            startActivity(launchAppIntent)
-        }   // LongClickListener
+                if (it == "com.chihwhsu.atto") {
+                    val intent = Intent(requireContext(), SettingActivity::class.java)
+                    startActivity(intent)
+                } else {
+                    val launchAppIntent =
+                        requireContext().packageManager.getLaunchIntentForPackage(it)
+                    startActivity(launchAppIntent)
+                }
+            }   // LongClickListener
             , AppListAdapter.LongClickListener { app ->
-            findNavController().navigate(NavigationDirections.actionGlobalAppInfoDialog(app))
-        })
+                findNavController().navigate(NavigationDirections.actionGlobalAppInfoDialog(app))
+            })
 
         binding.appRecyclerView.adapter = adapter
 
-        val simpleCallback = object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.START or ItemTouchHelper.END,0){
+        val simpleCallback = object : ItemTouchHelper.SimpleCallback(
+            ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.START or ItemTouchHelper.END,
+            0
+        ) {
 
             override fun onMove(
                 recyclerView: RecyclerView,
@@ -54,11 +65,11 @@ class AppListBottomFragment : Fragment() {
                 val fromPosition = viewHolder.adapterPosition
                 val toPosition = target.adapterPosition
                 val arrayList = java.util.ArrayList(adapter.currentList)
-                Collections.swap(arrayList,fromPosition,toPosition)
+                Collections.swap(arrayList, fromPosition, toPosition)
 
 
 
-                adapter.notifyItemMoved(fromPosition,toPosition)
+                adapter.notifyItemMoved(fromPosition, toPosition)
 
                 return false
             }

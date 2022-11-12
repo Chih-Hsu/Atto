@@ -63,6 +63,12 @@ interface AttoDatabaseDao {
     @Query("SELECT label FROM app_table")
     fun getLabelList(): LiveData<List<String>>
 
+    @Query("SELECT * FROM app_table")
+    fun getAllAppNotLiveData():List<App>?
+
+    @Query("UPDATE app_table SET label = null WHERE label = :label")
+    fun deleteSpecificLabel(label: String)
+
 
     // Event
 

@@ -80,10 +80,13 @@ class AppListBottomAdapter(
                 Theme.KANAHEI.index -> {
                     binding.kanaImage.visibility = View.VISIBLE
                 }
+                else -> {
+                    binding.iconBackground.setBackgroundResource(R.drawable.icon_background)
+                }
             }
 
             // App is not locked
-            if (item.app.isEnable){
+            if (item.app.isEnable) {
 
                 itemView.setOnClickListener {
                     appOnClickListener.onClick(item.app.packageName)
@@ -94,7 +97,11 @@ class AppListBottomAdapter(
 
             } else {
 
-                binding.iconBackground.foreground = ResourcesCompat.getDrawable(itemView.resources,R.drawable.icon_background_lock,null)
+                binding.iconBackground.foreground = ResourcesCompat.getDrawable(
+                    itemView.resources,
+                    R.drawable.icon_background_lock,
+                    null
+                )
                 binding.lockImage.visibility = View.VISIBLE
 
             }

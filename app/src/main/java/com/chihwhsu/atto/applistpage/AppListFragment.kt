@@ -1,5 +1,6 @@
 package com.chihwhsu.atto.applistpage
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.chihwhsu.atto.NavigationDirections
+import com.chihwhsu.atto.SettingActivity
 import com.chihwhsu.atto.data.AppListItem
 import com.chihwhsu.atto.databinding.FragmentAppListBinding
 import com.chihwhsu.atto.ext.getVmFactory
@@ -32,8 +34,14 @@ class AppListFragment : Fragment() {
 
         val adapter = AppListAdapter(
             AppListAdapter.AppOnClickListener {
-                val launchAppIntent = requireContext().packageManager.getLaunchIntentForPackage(it)
-                startActivity(launchAppIntent)
+                if (it == "com.chihwhsu.atto") {
+                    val intent = Intent(requireContext(), SettingActivity::class.java)
+                    startActivity(intent)
+                } else {
+                    val launchAppIntent =
+                        requireContext().packageManager.getLaunchIntentForPackage(it)
+                    startActivity(launchAppIntent)
+                }
             }, AppListAdapter.LongClickListener { app ->
                 findNavController().navigate(NavigationDirections.actionGlobalAppInfoDialog(app))
             }, viewModel)
@@ -92,7 +100,7 @@ class AppListFragment : Fragment() {
         }
 
         viewModel.appList.observe(viewLifecycleOwner, Observer {
-            adapter.submitList(viewModel.resetList(it, requireContext()))
+            adapter.submitList(viewModel.resetList(it.filter { it.appLabel != "Atto"}, requireContext()))
         })
 
         return binding.root

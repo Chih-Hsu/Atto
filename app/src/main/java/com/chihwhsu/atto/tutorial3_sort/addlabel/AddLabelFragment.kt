@@ -24,6 +24,12 @@ class AddLabelFragment : Fragment() {
 
         val binding = FragmentAddLabelBinding.inflate(inflater,container,false)
 
+        val editLabel = AddLabelFragmentArgs.fromBundle(requireArguments()).label
+
+        // if from edit button
+        editLabel?.let {
+            viewModel.setEditLabel(it)
+        }
 
         val listAdapter = AddLabelListAdapter(viewModel, AddLabelListAdapter.AppOnClickListener { app ->
             viewModel.addToList(app)

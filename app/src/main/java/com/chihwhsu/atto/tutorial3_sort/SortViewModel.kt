@@ -5,8 +5,18 @@ import androidx.lifecycle.ViewModel
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.data.AppListItem
 import com.chihwhsu.atto.data.database.AttoRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 class SortViewModel(private val repository: AttoRepository) : ViewModel() {
+
+    // Create a Coroutine scope using a job to be able to cancel when needed
+    private var viewModelJob = Job()
+
+    // the Coroutine runs using the Main (UI) dispatcher
+    private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     val appList = repository.getAllAppsWithoutDock()
 
@@ -42,6 +52,13 @@ class SortViewModel(private val repository: AttoRepository) : ViewModel() {
 //        Log.d("select","$newList")
 
         return newList
+
+    }
+
+    fun deleteLabel(label : String){
+        coroutineScope.launch(Dispatchers.Default){
+            repository.deleteSpecificLabel(label)
+        }
 
     }
 }

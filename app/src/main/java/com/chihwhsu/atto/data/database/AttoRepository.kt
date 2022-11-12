@@ -59,6 +59,10 @@ interface AttoRepository {
 
     suspend fun updateAppData()
 
+    fun getAllAppNotLiveData():List<App>?
+
+    fun deleteSpecificLabel(label: String)
+
 
     // Event
 

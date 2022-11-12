@@ -84,6 +84,14 @@ object AttoRemoteDataSource : AttoDataSource {
         TODO("Not yet implemented")
     }
 
+    override fun getAllAppNotLiveData(): List<App>? {
+        TODO("Not yet implemented")
+    }
+
+    override fun deleteSpecificLabel(label: String) {
+        TODO("Not yet implemented")
+    }
+
     override fun getAllEvents(): LiveData<List<Event>> {
         TODO("Not yet implemented")
     }

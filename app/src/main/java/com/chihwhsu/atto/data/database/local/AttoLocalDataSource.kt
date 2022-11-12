@@ -42,6 +42,14 @@ class AttoLocalDataSource(private val context: Context) : AttoDataSource {
         TODO("Not yet implemented")
     }
 
+    override fun getAllAppNotLiveData(): List<App>? {
+        return AttoDatabase.getInstance(context).attoDatabaseDao.getAllAppNotLiveData()
+    }
+
+    override fun deleteSpecificLabel(label: String) {
+        AttoDatabase.getInstance(context).attoDatabaseDao.deleteSpecificLabel(label)
+    }
+
     override suspend  fun lockApp(packageName: String) {
         AttoDatabase.getInstance(context).attoDatabaseDao.lockApp(packageName, false)
     }

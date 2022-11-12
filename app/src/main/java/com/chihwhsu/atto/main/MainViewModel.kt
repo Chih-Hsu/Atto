@@ -3,12 +3,10 @@ package com.chihwhsu.atto.main
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import com.chihwhsu.atto.AttoApplication
 import com.chihwhsu.atto.data.database.AttoDatabaseDao
 import com.chihwhsu.atto.data.database.AttoRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class MainViewModel(private val repository: AttoRepository) : ViewModel() {
 
@@ -42,5 +40,11 @@ class MainViewModel(private val repository: AttoRepository) : ViewModel() {
                 }
         }
     }
+    }
+
+    fun updateApp(){
+        coroutineScope.launch {
+                AttoApplication.instance.attoRepository.updateAppData()
+            }
     }
 }

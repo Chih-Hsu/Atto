@@ -5,9 +5,7 @@ import androidx.lifecycle.LiveData
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.data.AppLockTimer
 import com.chihwhsu.atto.data.Event
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 class DefaultAttoRepository(
     private val attoRemoteDataSource: AttoDataSource,
@@ -17,7 +15,7 @@ class DefaultAttoRepository(
 ) : AttoRepository {
 
     override suspend fun insert(app: App) {
-        withContext(Dispatchers.IO) {
+        withContext(ioDispatcher) {
             attoLocalDataSource.insert(app)
         }
     }
@@ -152,36 +150,44 @@ class DefaultAttoRepository(
     override suspend fun updateAppData() {
 
         withContext(Dispatchers.Main) {
-            val roomApps = attoLocalDataSource.getAllApps()
+
+            val roomApps = withContext(Dispatchers.Default) {
+                getAllAppNotLiveData()
+            }
+
             val systemApps = attoSystemDataSource.getAllApps()
 
+            Log.d("DefaultAtto", "room is ${roomApps}")
+            Log.d("DefaultAtto", "============================================")
+            Log.i("DefaultAtto", "system is ${systemApps.value}")
             withContext(ioDispatcher) {
 
-                if (roomApps.value.isNullOrEmpty()) {
+                if (roomApps.isNullOrEmpty()) {
                     systemApps.value?.let {
                         for (app in it) {
                             insert(app)
                         }
                     }
+
                 } else {
                     // 判斷system與room的差異
                     // room有的app就不更新
                     // room沒有的就insert
                     systemApps.value?.let { systemList ->
-                        roomApps.value?.let { roomList ->
 
-                            for (app in systemList) {
-                                if (!roomList.contains(app)) {
-                                    // room沒有的就insert
-                                    insert(app)
-                                }
+                        for (app in systemList) {
+//                            if (!roomApps.contains(app)) {
+                            if ( roomApps.none { it.appLabel == app.appLabel }){
+                                // room沒有的就insert
+                                insert(app)
                             }
+                        }
 
-                            for (app in roomList) {
-                                // room有system沒有代表已刪除，就從room delete
-                                if (!systemList.contains(app)) {
-                                    delete(app.packageName)
-                                }
+                        for (app in roomApps) {
+                            // room有system沒有代表已刪除，就從room delete
+//                            if (!systemList.contains(app)) {
+                            if (systemList.none{ it.appLabel == app.appLabel}) {
+                                delete(app.packageName)
                             }
                         }
                     }
@@ -193,5 +199,13 @@ class DefaultAttoRepository(
         }
 
 
+    }
+
+    override fun getAllAppNotLiveData(): List<App>? {
+        return attoLocalDataSource.getAllAppNotLiveData()
+    }
+
+    override fun deleteSpecificLabel(label: String) {
+        attoLocalDataSource.deleteSpecificLabel(label)
     }
 }
