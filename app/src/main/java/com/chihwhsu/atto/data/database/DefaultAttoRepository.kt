@@ -157,10 +157,7 @@ class DefaultAttoRepository(
 
             val systemApps = attoSystemDataSource.getAllApps()
 
-            Log.d("DefaultAtto", "room is ${roomApps}")
-            Log.d("DefaultAtto", "============================================")
-            Log.i("DefaultAtto", "system is ${systemApps.value}")
-            withContext(ioDispatcher) {
+           withContext(ioDispatcher) {
 
                 if (roomApps.isNullOrEmpty()) {
                     systemApps.value?.let {

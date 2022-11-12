@@ -29,6 +29,8 @@ class AddLabelFragment : Fragment() {
         // if from edit button
         editLabel?.let {
             viewModel.setEditLabel(it)
+            binding.editTextLabel.setText(it.uppercase())
+
         }
 
         val listAdapter = AddLabelListAdapter(viewModel, AddLabelListAdapter.AppOnClickListener { app ->
@@ -37,9 +39,14 @@ class AddLabelFragment : Fragment() {
         binding.appListRecyclerview.adapter = listAdapter
 
 
-
-        viewModel.noLabelAppList.observe(viewLifecycleOwner, Observer {
+        viewModel.appList.observe(viewLifecycleOwner, Observer {
             viewModel.getData()
+        })
+
+        viewModel.labelAppList.observe(viewLifecycleOwner, Observer {
+            if (editLabel != null) {
+                viewModel.setRemainList(it)
+            }
         })
 
         viewModel.filterList.observe(viewLifecycleOwner, Observer {

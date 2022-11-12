@@ -1,5 +1,6 @@
 package com.chihwhsu.atto.tutorial3_sort.addlabel
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -31,7 +32,7 @@ class AddLabelListAdapter (val viewModel: AddLabelViewModel, val onClickListener
 
         fun bind(item:App){
 
-            checkItemInDock(item)
+            checkItemInRemain(item)
 
             item.icon?.let {
                 binding.iconImage.setImageBitmap(it.createGrayscale())
@@ -40,19 +41,20 @@ class AddLabelListAdapter (val viewModel: AddLabelViewModel, val onClickListener
             binding.appName.text = item.appLabel
 
             // Default background
-            binding.iconBackground.setBackgroundResource(R.drawable.icon_background)
+//            binding.iconBackground.setBackgroundResource(R.drawable.icon_background)
 
             itemView.setOnClickListener {
                 onClickListener.onClick(item)
-                checkItemInDock(item)
+                checkItemInRemain(item)
             }
         }
 
-        private fun checkItemInDock(item:App){
+        private fun checkItemInRemain(item:App){
+//            Log.d("AddLabel","item == $item   boolean  = ${!viewModel.remainList.filter { it.appLabel == item.appLabel }.isEmpty()}")
+            Log.d("AddLabel","item == $item   boolean  = ${viewModel.remainList}")
 
-                if (viewModel.remainList.contains(item)){
+                if (!viewModel.remainList.filter { it.appLabel == item.appLabel }.isEmpty()){
                     binding.iconBackground.setBackgroundResource(R.drawable.icon_background_selected)
-
                 }else{
                     binding.iconBackground.setBackgroundResource(R.drawable.icon_background)
                 }

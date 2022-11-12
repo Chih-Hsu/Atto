@@ -24,7 +24,10 @@ class AddLabelViewModel(private val repository: AttoRepository) : ViewModel() {
     private var _filterList = MutableLiveData<List<App>>()
     val filterList : LiveData<List<App>> get() = _filterList
 
-    val noLabelAppList = repository.getNoLabelApps()
+    val appList = repository.getAllApps()
+
+    private var _labelAppList = MutableLiveData<List<App>>()
+    val labelAppList : LiveData<List<App>> get() = _labelAppList
 
     val remainList = mutableListOf<App>()
 
@@ -33,10 +36,16 @@ class AddLabelViewModel(private val repository: AttoRepository) : ViewModel() {
 
     private val originalList = mutableListOf<App>()
 
+    fun setRemainList(list: List<App>?){
+        list?.let {
+           remainList.addAll(it)
+        }
+
+    }
     fun addToList(app:App){
-//        if (!remainList.contains(app)){
+
         if (remainList.filter { it.appLabel == app.appLabel }.isEmpty()){
-     remainList.add(app)
+        remainList.add(app)
         }else{
             remainList.remove(app)
         }
@@ -44,21 +53,47 @@ class AddLabelViewModel(private val repository: AttoRepository) : ViewModel() {
 
     fun setEditLabel(label: String){
         editLabel = label
+
     }
 
     fun getData(){
-        noLabelAppList.value?.let {
+
+       val newList =  appList.value?.filter { it.label == editLabel || it.label == null  }
+
+        newList?.let {
             _filterList.value = it
             originalList.addAll(it)
         }
+
+        _labelAppList.value = originalList.filter { it.label?.lowercase() == editLabel?.lowercase() }
+//        Log.i("AddLabel","${originalList}")
+//        Log.d("AddLabel","${originalList.filter { it.label?.lowercase() == editLabel?.lowercase() }}")
     }
 
     fun updateAppLabel(label : String){
         coroutineScope.launch(Dispatchers.IO){
+
+
+            val oldLabelList = originalList.filter{it.label == editLabel }
+
+            if (oldLabelList.size > remainList.size){
+                for (app in oldLabelList){
+                    if (remainList.filter { it.appLabel == app.appLabel }.isEmpty()){
+                        // if true means the app already removed from the remainList,so remove it's label and sort
+                        repository.updateLabel(app.appLabel,null)
+                        repository.updateSort(app.appLabel,-1)
+                    }
+                }
+            }
+
             for (app in remainList) {
-                repository.updateLabel(app.appLabel,label)
+
+                repository.updateLabel(app.appLabel,label.lowercase())
                 repository.updateSort(app.appLabel,remainList.indexOf(app))
             }
+
+
+
             withContext(Dispatchers.Main){
                 _navigateToSort.value = true
             }
