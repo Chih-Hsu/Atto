@@ -152,6 +152,7 @@
                     android:text="延後 5 分鐘"
                     android:textColor="@color/black"
                     style="@style/standard_text_style"
+                    android:visibility="gone"
                     android:layout_marginStart="@dimen/large_margin"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"

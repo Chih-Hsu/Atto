@@ -74,7 +74,6 @@ class PomodoroViewModel(private val repository: AttoRepository) : ViewModel() {
             val workEndBreakStart = beginTime + workTime + (breakTime + workTime) * count
             val breakEndTime = beginTime + (workTime + breakTime) * (count + 1)
 
-            Log.d("clock", "start = $workStartTime   end = $workEndBreakStart")
             val workEvent = Event(
                 startTime = workStartTime,
                 alarmTime = workEndBreakStart,

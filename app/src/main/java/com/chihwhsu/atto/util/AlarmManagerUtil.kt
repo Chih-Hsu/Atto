@@ -7,12 +7,12 @@ import android.content.Intent
 import android.os.Build
 import android.util.Log
 import com.chihwhsu.atto.component.AlarmReceiver
+import com.chihwhsu.atto.ext.getTimeFrom00am
 import com.chihwhsu.atto.ext.toMinuteSecondFormat
 import java.util.*
 
 object AlarmManagerUtil {
 
-    val ALARM_ACTION = "com.atto.alarm"
 
     fun setAlarmTime(context: Context, time: Long, intent: Intent) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -23,7 +23,6 @@ object AlarmManagerUtil {
             )
 
         val interval = intent.getLongExtra("intervalMills",0)
-
         alarmManager.setWindow(AlarmManager.RTC_WAKEUP,time,interval,sender)
     }
 
@@ -76,6 +75,7 @@ object AlarmManagerUtil {
                 AlarmManager.RTC_WAKEUP, AlarmManagerUtil.calMethod(week, calendar.timeInMillis),
                 intervalMillis, sender
             )
+        Log.d("clockS","${AlarmManagerUtil.calMethod(week, calendar.timeInMillis)}")
 
     }
 
@@ -119,12 +119,9 @@ object AlarmManagerUtil {
             }
         }
 
-        val minutes = time / (1000 * 60)
-        val second = time / (1000) - minutes*60
 
-        if (second != 0L){
-            time = time-second
-        }
+        time -= 10000L
+
 
 
 

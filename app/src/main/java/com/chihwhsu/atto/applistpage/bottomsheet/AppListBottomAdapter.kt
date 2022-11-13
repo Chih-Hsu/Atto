@@ -54,7 +54,6 @@ class AppListBottomAdapter(
                 text = item.title
                 setTextColor(ResourcesCompat.getColor(itemView.resources, R.color.light_grey, null))
             }
-
         }
     }
 
@@ -106,17 +105,13 @@ class AppListBottomAdapter(
 
             }
 
-
-
             itemView.setOnLongClickListener(object : View.OnLongClickListener {
                 override fun onLongClick(v: View?): Boolean {
                     longClickListener.onClick(item.app)
                     return true
                 }
             })
-
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

@@ -19,7 +19,7 @@
         android:layout_marginBottom="-100dp"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
-        app:lottie_url="https://assets10.lottiefiles.com/packages/lf20_lhpm8hja.json"
+        app:lottie_rawRes="@raw/work"
         android:visibility="gone"/>
 
     <com.airbnb.lottie.LottieAnimationView
@@ -58,7 +58,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/k2d"
         android:letterSpacing="0.2"
-        android:text="15:54"
+        android:text="00:00"
         android:textSize="70sp"
         app:layout_constraintBottom_toTopOf="@+id/text_timeToWork"
         app:layout_constraintEnd_toEndOf="parent"

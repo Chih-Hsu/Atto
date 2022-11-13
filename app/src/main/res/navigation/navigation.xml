@@ -9,7 +9,16 @@
         android:id="@+id/mainFragment"
         android:name="com.chihwhsu.atto.main.MainFragment"
         android:label="MainFragment"
-        tools:layout="@layout/fragment_main"/>
+        tools:layout="@layout/fragment_main">
+        <action
+            android:id="@+id/action_mainFragment_to_widgetFragment"
+            app:destination="@id/widgetFragment" />
+        <argument
+            android:name="info"
+            app:argType="android.appwidget.AppWidgetProviderInfo"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
     <dialog
         android:id="@+id/appInfoDialog"
         android:name="com.chihwhsu.atto.appinfodialog.AppInfoDialog"
@@ -62,14 +71,36 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.chihwhsu.atto.homepage.HomeFragment"
-        android:label="HomeFragment" />
+        android:label="HomeFragment"
+        tools:layout="@layout/fragment_home"/>
     <fragment
         android:id="@+id/alarmFragment"
         android:name="com.chihwhsu.atto.clock.alarm.AlarmFragment"
-        android:label="AlarmFragment" >
+        android:label="AlarmFragment"
+        tools:layout="@layout/fragment_alarm">
         <action
             android:id="@+id/action_alarmFragment_to_clockFragment"
             app:destination="@id/clockFragment"
             app:popUpTo="@id/mainFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/widgetBottomSheetFragment"
+        android:name="com.chihwhsu.atto.widgetpage.widget_bottom_sheet.WidgetBottomSheetFragment"
+        android:label="WidgetBottomSheetFragment"
+        tools:layout="@layout/dialog_widget_bottom_sheet">
+        <action
+            android:id="@+id/action_widgetBottomSheetFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </dialog>
+    <action android:id="@+id/action_global_widgetBottomSheetFragment" app:destination="@id/widgetBottomSheetFragment" />
+    <fragment
+        android:id="@+id/widgetFragment"
+        android:name="com.chihwhsu.atto.widgetpage.WidgetFragment"
+        android:label="WidgetFragment" >
+        <argument
+            android:name="info"
+            app:argType="android.appwidget.AppWidgetProviderInfo"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
 </navigation>

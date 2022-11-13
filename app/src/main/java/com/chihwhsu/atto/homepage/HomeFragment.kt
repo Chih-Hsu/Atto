@@ -63,9 +63,6 @@ class HomeFragment : Fragment() {
         binding.gestureArea.setOnTouchListener(object : View.OnTouchListener {
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
 
-//                if (v == binding.eventDetail){
-//
-//                }
                 return gestureDetector.onTouchEvent(event)
             }
         })
