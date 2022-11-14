@@ -1,5 +1,6 @@
 package com.chihwhsu.atto
 
+import android.content.Intent
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -19,6 +20,9 @@ class AlarmActivityViewModel(val repository: AttoRepository) : ViewModel() {
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     private var eventId : Int? = null
+
+    private var _currentIntent = MutableLiveData<Intent>()
+    val currentIntent : LiveData<Intent> get() = _currentIntent
 
     fun getEvent(id : Int){
         eventId = id
@@ -57,5 +61,9 @@ class AlarmActivityViewModel(val repository: AttoRepository) : ViewModel() {
                 repository.unLockSpecificLabelApp(label)
             }
         }
+    }
+
+    fun setIntent(newIntent:Intent){
+        _currentIntent.value = newIntent
     }
 }

@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
+import com.chihwhsu.atto.NavigationDirections
 import com.chihwhsu.atto.data.Widget
 import com.chihwhsu.atto.databinding.DialogWidgetBottomSheetBinding
 import com.chihwhsu.atto.widgetpage.WidgetAdapter
@@ -44,7 +45,7 @@ class WidgetBottomSheetFragment : BottomSheetDialogFragment() {
         }
 
         val adapter = WidgetAdapter(WidgetAdapter.WidgetOnClickListener {
-            findNavController().navigate(WidgetBottomSheetFragmentDirections.actionWidgetBottomSheetFragmentToMainFragment(it))
+            findNavController().navigate(NavigationDirections.actionGlobalMainFragment(it))
         })
 
         binding.recyclerviewWidget.adapter = adapter

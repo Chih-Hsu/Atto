@@ -1,6 +1,6 @@
 package com.chihwhsu.atto.data.database
 
-import android.util.Log
+
 import androidx.lifecycle.LiveData
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.data.AppLockTimer
@@ -157,7 +157,7 @@ class DefaultAttoRepository(
 
             val systemApps = attoSystemDataSource.getAllApps()
 
-           withContext(ioDispatcher) {
+            withContext(ioDispatcher) {
 
                 if (roomApps.isNullOrEmpty()) {
                     systemApps.value?.let {
@@ -174,7 +174,7 @@ class DefaultAttoRepository(
 
                         for (app in systemList) {
 //                            if (!roomApps.contains(app)) {
-                            if ( roomApps.none { it.appLabel == app.appLabel }){
+                            if (roomApps.none { it.appLabel == app.appLabel }) {
                                 // room沒有的就insert
                                 insert(app)
                             }
@@ -183,7 +183,7 @@ class DefaultAttoRepository(
                         for (app in roomApps) {
                             // room有system沒有代表已刪除，就從room delete
 //                            if (!systemList.contains(app)) {
-                            if (systemList.none{ it.appLabel == app.appLabel}) {
+                            if (systemList.none { it.appLabel == app.appLabel }) {
                                 delete(app.packageName)
                             }
                         }

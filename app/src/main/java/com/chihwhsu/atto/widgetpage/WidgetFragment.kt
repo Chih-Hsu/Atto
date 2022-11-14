@@ -39,7 +39,6 @@ companion object{
         }
 //
         val widgetInfo = (requireParentFragment() as MainFragment).getWidgetInfo()
-        Log.d("testwi","$widgetInfo")
 
         val appWidgetHost = AppWidgetHost(requireActivity().applicationContext, HOST_ID)
         val appWidgetManager = AppWidgetManager.getInstance(requireActivity().applicationContext)
@@ -65,9 +64,6 @@ companion object{
 
 
 
-
-
-
         return binding.root
     }
 
@@ -77,7 +73,7 @@ companion object{
         requireContext().startService(serviceIntent)
     }
 
-    fun getWidgetPermission(appWidgetId:Int,info: AppWidgetProviderInfo){
+    private fun getWidgetPermission(appWidgetId:Int,info: AppWidgetProviderInfo){
 
         val intent = Intent(AppWidgetManager.ACTION_APPWIDGET_BIND).apply {
             putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)

@@ -41,8 +41,14 @@ class MainFragment : Fragment() {
         })
         binding.dockRecyclerview.adapter = dockAdapter
         viewModel.dockList.observe(viewLifecycleOwner, Observer { list ->
-            list.sortedBy { it.sort }
-            dockAdapter.submitList(list)
+            if (list.isNotEmpty()){
+                list.sortedBy { it.sort }
+                dockAdapter.submitList(list)
+                binding.constraintLayout.visibility = View.VISIBLE
+            } else {
+                binding.constraintLayout.visibility = View.GONE
+            }
+
         })
 
         viewModel.timerList.observe(viewLifecycleOwner, Observer {

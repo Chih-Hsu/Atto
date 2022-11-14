@@ -12,6 +12,8 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
+import com.chihwhsu.atto.NavigationDirections
 import com.chihwhsu.atto.R
 import com.chihwhsu.atto.applistpage.AppListViewModel
 import com.chihwhsu.atto.databinding.FragmentPomodoroBinding
@@ -68,15 +70,6 @@ class PomodoroFragment : Fragment() {
             viewModel.setLockAppMode()
         }
 
-        binding.button.setOnClickListener {
-
-            if (!viewModel.checkCanCreate()){
-                viewModel.saveEvent(requireActivity().applicationContext)
-            }else{
-                Toast.makeText(requireContext(),"Pomodoro already set",Toast.LENGTH_SHORT).show()
-            }
-
-        }
 
         // Spinner
         viewModel.labelList.observe(viewLifecycleOwner, Observer {
@@ -107,6 +100,19 @@ class PomodoroFragment : Fragment() {
 
                     }
                 }
+        })
+
+
+        binding.button.setOnClickListener {
+            if (!viewModel.checkCanCreate()){
+                viewModel.saveEvent(requireActivity().applicationContext)
+            }else{
+                Toast.makeText(requireContext(),"Pomodoro already set",Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        viewModel.navigateToHome.observe(viewLifecycleOwner, Observer {
+            findNavController().navigate(NavigationDirections.actionGlobalMainFragment())
         })
 
 

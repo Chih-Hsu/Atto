@@ -25,6 +25,9 @@ class AlarmActivity : AppCompatActivity() {
     private var currentRingtone: Ringtone? = null
     private var vibrator: Vibrator? = null
 
+    private var ringTone : String? = null
+    private var flag : Int? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,63 +45,29 @@ class AlarmActivity : AppCompatActivity() {
         val viewModel =
             ViewModelProvider(this, viewModelFactory).get(AlarmActivityViewModel::class.java)
 
-
         //////
         val intent = this.intent
-        val ringTone = intent.getStringExtra("ringTone")
-        val flag = intent.getIntExtra("flag", 0)
-        val id = intent.getIntExtra("id", 0)
+        viewModel.setIntent(intent)
+        viewModel.currentIntent.observe(this, Observer {
+            val id = intent.getIntExtra("id", 0)
+            viewModel.getEvent(id)
+        })
 
 
-        viewModel.getEvent(id)
+
 
         viewModel.event.observe(this, Observer { event ->
 
-//            Log.d("AlarmActivity","event is $event  type is ${event.type}" )
+            ringTone = intent.getStringExtra("ringTone")
+            flag = intent.getIntExtra("flag", 0)
+
             when (event.type) {
-
-                // Wrong type
-                0 -> {
-                    binding.animationWork.visibility = View.GONE
-                    binding.animationAlarm.visibility = View.VISIBLE
-                    binding.animationBreak.visibility = View.GONE
-                    binding.textCountDown.text =
-                        getTimeFrom00am(System.currentTimeMillis()).toFormat()
-                    binding.textTimeToWork.text = "Time To \nWake Up !"
-                    binding.materialButton.text = "Close"
-                    setVibratorAndRingTone(flag, ringTone!!)
-                }
-
-                // Alarm
-                Event.ALARM_TYPE -> {
-                    binding.animationWork.visibility = View.GONE
-                    binding.animationAlarm.visibility = View.VISIBLE
-                    binding.animationBreak.visibility = View.GONE
-                    binding.textCountDown.text =
-                        getTimeFrom00am(System.currentTimeMillis()).toFormat()
-                    binding.textTimeToWork.text = "Time To \nWake Up !"
-                    binding.materialButton.text = "Close"
-                    setVibratorAndRingTone(flag, ringTone!!)
-                }
-
-                // TodoList
-                Event.TODO_TYPE -> {
-                    binding.animationWork.visibility = View.GONE
-                    binding.animationAlarm.visibility = View.VISIBLE
-                    binding.animationBreak.visibility = View.GONE
-                    binding.textCountDown.text =
-                        getTimeFrom00am(System.currentTimeMillis()).toFormat()
-                    binding.textTimeToWork.text = "Time To \nWake Up !"
-                    binding.materialButton.text = "Close"
-                    setVibratorAndRingTone(flag, ringTone!!)
-                }
 
                 // Pomodoro Work
                 Event.POMODORO_WORK_TYPE -> {
                     binding.animationWork.visibility = View.VISIBLE
                     binding.animationAlarm.visibility = View.GONE
                     binding.animationBreak.visibility = View.GONE
-//                binding.textCountDown.text = getTimeFrom00am(System.currentTimeMillis()).toMinuteSecondFormat()
                     binding.textTimeToWork.text = "Time To \nWork !"
                     binding.materialButton.text = "Fuck Work"
 
@@ -158,6 +127,17 @@ class AlarmActivity : AppCompatActivity() {
                     countDownTimer.start()
 
                 }
+
+                else -> {
+                    binding.animationWork.visibility = View.GONE
+                    binding.animationAlarm.visibility = View.VISIBLE
+                    binding.animationBreak.visibility = View.GONE
+                    binding.textCountDown.text =
+                        getTimeFrom00am(System.currentTimeMillis()).toFormat()
+                    binding.textTimeToWork.text = "Time To \nWake Up !"
+                    binding.materialButton.text = "Close"
+                    setVibratorAndRingTone(flag!!, ringTone!!)
+                }
             }
         })
 
@@ -191,6 +171,11 @@ class AlarmActivity : AppCompatActivity() {
             // first pram is how to vibrate , second is repeatOrNot 0 is keep vibrate -1 is not repeat
             vibrator?.vibrate(longArrayOf(100, 10, 100, 600), 0)
         }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+
     }
 
 }

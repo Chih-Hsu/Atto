@@ -2,6 +2,8 @@ package com.chihwhsu.atto.clock.pomodoro
 
 import android.content.Context
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.chihwhsu.atto.data.Event
 import com.chihwhsu.atto.data.Event.Companion.POMODORO_BREAK_TYPE
@@ -18,6 +20,9 @@ class PomodoroViewModel(private val repository: AttoRepository) : ViewModel() {
 
     // the Coroutine runs using the Main (UI) dispatcher
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
+
+    private var _navigateToHome = MutableLiveData<Boolean>()
+    val navigateToHome : LiveData<Boolean> get() = _navigateToHome
 
     val labelList = repository.getLabelList()
 
@@ -100,12 +105,17 @@ class PomodoroViewModel(private val repository: AttoRepository) : ViewModel() {
 
         }
 
+        _navigateToHome.value = true
 
     }
 
-    fun checkPomodoroInRoom(){
+    private fun checkPomodoroInRoom(){
        coroutineScope.launch(Dispatchers.Default) {
            isOtherPomodoroInRoom = repository.isPomodoroIsExist()
        }
+    }
+
+    fun doneNavigation(){
+        _navigateToHome.value = false
     }
 }
