@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
+import com.chihwhsu.atto.component.CenterZoomLayoutManager
 import com.chihwhsu.atto.databinding.FragmentWallpaperBinding
 import com.chihwhsu.atto.ext.getVmFactory
 
@@ -30,6 +31,12 @@ class WallpaperFragment : Fragment() {
         // LinearSnapHelper
         val snapHelper = LinearSnapHelper()
         snapHelper.attachToRecyclerView(binding.wallpaperRecyclerview)
+
+
+        val layoutManager = CenterZoomLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
+        binding.wallpaperRecyclerview.layoutManager = layoutManager
+        binding.wallpaperRecyclerview.scrollToPosition(1)
+
 
         viewModel.wallpapers.observe(viewLifecycleOwner, Observer {
             adapter.submitList(it)
