@@ -9,7 +9,13 @@
         android:id="@+id/mainFragment"
         android:name="com.chihwhsu.atto.main.MainFragment"
         android:label="MainFragment"
-        tools:layout="@layout/fragment_main"/>
+        tools:layout="@layout/fragment_main">
+        <argument
+            android:name="info"
+            app:argType="android.appwidget.AppWidgetProviderInfo"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
     <dialog
         android:id="@+id/appInfoDialog"
         android:name="com.chihwhsu.atto.appinfodialog.AppInfoDialog"
@@ -53,9 +59,32 @@
         android:id="@+id/clockFragment"
         android:name="com.chihwhsu.atto.clock.ClockFragment"
         android:label="ClockFragment"
-        tools:layout="@layout/fragment_clock"/><action android:id="@+id/action_global_clockFragment" app:destination="@id/clockFragment"/>
+        tools:layout="@layout/fragment_clock">
+        <action
+            android:id="@+id/action_clockFragment_to_alarmFragment"
+            app:destination="@id/alarmFragment"
+            app:popUpTo="@id/mainFragment" />
+    </fragment><action android:id="@+id/action_global_clockFragment" app:destination="@id/clockFragment"/>
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.chihwhsu.atto.homepage.HomeFragment"
-        android:label="HomeFragment" />
+        android:label="HomeFragment"
+        tools:layout="@layout/fragment_home"/>
+    <fragment
+        android:id="@+id/alarmFragment"
+        android:name="com.chihwhsu.atto.clock.alarm.AlarmFragment"
+        android:label="AlarmFragment"
+        tools:layout="@layout/fragment_alarm">
+        <action
+            android:id="@+id/action_alarmFragment_to_clockFragment"
+            app:destination="@id/clockFragment"
+            app:popUpTo="@id/mainFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/widgetBottomSheetFragment"
+        android:name="com.chihwhsu.atto.widgetpage.widget_bottom_sheet.WidgetBottomSheetFragment"
+        android:label="WidgetBottomSheetFragment"
+        tools:layout="@layout/dialog_widget_bottom_sheet"/>
+    <action android:id="@+id/action_global_widgetBottomSheetFragment" app:destination="@id/widgetBottomSheetFragment" />
+    <action android:id="@+id/action_global_mainFragment" app:destination="@id/mainFragment" />
 </navigation>

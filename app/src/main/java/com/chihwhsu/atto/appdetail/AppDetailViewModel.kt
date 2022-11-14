@@ -8,7 +8,8 @@ import com.chihwhsu.atto.data.Theme
 import com.chihwhsu.atto.data.database.AttoDatabaseDao
 import kotlinx.coroutines.*
 
-class AppDetailViewModel(private val databaseDao: AttoDatabaseDao, private val argument : App) : ViewModel() {
+class AppDetailViewModel(private val databaseDao: AttoDatabaseDao, private val argument: App) :
+    ViewModel() {
 
     // Create a Coroutine scope using a job to be able to cancel when needed
     private var viewModelJob = Job()
@@ -19,28 +20,28 @@ class AppDetailViewModel(private val databaseDao: AttoDatabaseDao, private val a
     private var _app = MutableLiveData<App>().apply {
         value = argument
     }
-    val app : LiveData<App> get() = _app
+    val app: LiveData<App> get() = _app
 
     private var _dataPerHourList = MutableLiveData<List<Float>>()
-    val dataPerHourList : LiveData<List<Float>> get() = _dataPerHourList
+    val dataPerHourList: LiveData<List<Float>> get() = _dataPerHourList
 
-    private var _barSet = MutableLiveData<List<Pair<String,Float>>>()
-    val barSet : LiveData<List<Pair<String,Float>>> get() = _barSet
+    private var _barSet = MutableLiveData<List<Pair<String, Float>>>()
+    val barSet: LiveData<List<Pair<String, Float>>> get() = _barSet
 
     private var _navigateUp = MutableLiveData<Boolean>().also {
         it.value = false
     }
-    val navigateUp : LiveData<Boolean> get() = _navigateUp
+    val navigateUp: LiveData<Boolean> get() = _navigateUp
 
     init {
 
     }
 
-    fun setPerHourList(list : List<Float>){
+    fun setPerHourList(list: List<Float>) {
         _dataPerHourList.value = list
     }
 
-    fun createBarSet(){
+    fun createBarSet() {
 
         val list = dataPerHourList.value
 
@@ -76,18 +77,21 @@ class AppDetailViewModel(private val databaseDao: AttoDatabaseDao, private val a
         }
     }
 
-    fun updateTheme(theme:Theme){
+    fun updateTheme(theme: Theme) {
+
         coroutineScope.launch(Dispatchers.IO) {
             app.value?.let {
-                databaseDao.updateTheme(it.appLabel,theme.index)
-                withContext(Dispatchers.Main){
+                if (theme.index != it.theme) {
+                    databaseDao.updateTheme(it.appLabel, theme.index)
+                }
+                withContext(Dispatchers.Main) {
                     _navigateUp.value = true
                 }
             }
         }
     }
 
-    fun doneNavigation(){
+    fun doneNavigation() {
         _navigateUp.value = false
     }
 }

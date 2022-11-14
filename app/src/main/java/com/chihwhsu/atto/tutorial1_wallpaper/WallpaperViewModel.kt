@@ -3,17 +3,18 @@ package com.chihwhsu.atto.tutorial1_wallpaper
 import android.app.WallpaperManager
 import android.content.Context
 import android.content.res.Resources
-import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.recyclerview.widget.GridLayoutManager
 import com.chihwhsu.atto.R
 import com.chihwhsu.atto.data.Wallpaper
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 class WallpaperViewModel(val resource: Resources) : ViewModel() {
 
@@ -54,7 +55,7 @@ class WallpaperViewModel(val resource: Resources) : ViewModel() {
         _wallpapers.value = wallpaperList
     }
 
-    fun navigateToNext() {
+    private fun navigateToNext() {
         _navigationToNext.value = true
     }
 
@@ -63,7 +64,7 @@ class WallpaperViewModel(val resource: Resources) : ViewModel() {
     }
 
     fun setWallPaper(context: Context, image : Drawable ,){
-        coroutineScope.launch(Dispatchers.Default){
+        coroutineScope.launch(Dispatchers.IO){
             val bitmap = image.toBitmap(image.minimumWidth,image.minimumHeight)
             WallpaperManager.getInstance(context).setBitmap(bitmap)
         }

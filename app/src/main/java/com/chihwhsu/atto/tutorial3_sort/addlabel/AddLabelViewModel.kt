@@ -6,10 +6,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.data.database.AttoDatabaseDao
+import com.chihwhsu.atto.data.database.AttoRepository
 import kotlinx.coroutines.*
 import java.util.*
 
-class AddLabelViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
+class AddLabelViewModel(private val repository: AttoRepository) : ViewModel() {
 
     // Create a Coroutine scope using a job to be able to cancel when needed
     private var viewModelJob = Job()
@@ -23,34 +24,76 @@ class AddLabelViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
     private var _filterList = MutableLiveData<List<App>>()
     val filterList : LiveData<List<App>> get() = _filterList
 
-    val noLabelAppList = databaseDao.getNoLabelApps()
+    val appList = repository.getAllApps()
+
+    private var _labelAppList = MutableLiveData<List<App>>()
+    val labelAppList : LiveData<List<App>> get() = _labelAppList
 
     val remainList = mutableListOf<App>()
 
+    // for edit
+    private var editLabel :String? = null
 
     private val originalList = mutableListOf<App>()
 
+    fun setRemainList(list: List<App>?){
+        list?.let {
+           remainList.addAll(it)
+        }
+
+    }
     fun addToList(app:App){
-        if (!remainList.contains(app)){
-     remainList.add(app)
+
+        if (remainList.filter { it.appLabel == app.appLabel }.isEmpty()){
+        remainList.add(app)
         }else{
             remainList.remove(app)
         }
     }
 
+    fun setEditLabel(label: String){
+        editLabel = label
+
+    }
+
     fun getData(){
-        noLabelAppList.value?.let {
+
+       val newList =  appList.value?.filter { it.label == editLabel || it.label == null  }
+
+        newList?.let {
             _filterList.value = it
             originalList.addAll(it)
         }
+
+        _labelAppList.value = originalList.filter { it.label?.lowercase() == editLabel?.lowercase() }
+//        Log.i("AddLabel","${originalList}")
+//        Log.d("AddLabel","${originalList.filter { it.label?.lowercase() == editLabel?.lowercase() }}")
     }
 
     fun updateAppLabel(label : String){
         coroutineScope.launch(Dispatchers.IO){
-            for (app in remainList) {
-                databaseDao.updateLabel(app.appLabel,label)
-                databaseDao.updateSort(app.appLabel,remainList.indexOf(app))
+
+
+            val oldLabelList = originalList.filter{it.label == editLabel }
+
+            if (oldLabelList.size > remainList.size){
+                for (app in oldLabelList){
+                    if (remainList.filter { it.appLabel == app.appLabel }.isEmpty()){
+                        // if true means the app already removed from the remainList,so remove it's label and sort
+                        repository.updateLabel(app.appLabel,null)
+                        repository.updateSort(app.appLabel,-1)
+                    }
+                }
             }
+
+            for (app in remainList) {
+
+                repository.updateLabel(app.appLabel,label.lowercase())
+                repository.updateSort(app.appLabel,remainList.indexOf(app))
+            }
+
+
+
             withContext(Dispatchers.Main){
                 _navigateToSort.value = true
             }

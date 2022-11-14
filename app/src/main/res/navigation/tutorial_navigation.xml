@@ -41,7 +41,8 @@
             android:id="@+id/action_sortFragment_to_addLabelFragment"
             app:destination="@id/addLabelFragment"
             app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left" />
+            app:exitAnim="@anim/slide_out_left"
+            app:popUpTo="@id/sortFragment" />
         <action
             android:id="@+id/action_sortFragment_to_dockSelectFragment"
             app:destination="@id/dockSelectFragment"
@@ -62,7 +63,12 @@
             android:id="@+id/action_addLabelFragment_to_sortFragment"
             app:destination="@id/sortFragment"
             app:enterAnim="@android:anim/slide_in_left"
-            app:exitAnim="@android:anim/slide_out_right" />
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popUpTo="@id/dockSelectFragment" />
+        <argument
+            android:name="label"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/getUsageFragment"

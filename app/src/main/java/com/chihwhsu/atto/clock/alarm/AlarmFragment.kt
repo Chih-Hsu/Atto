@@ -1,8 +1,9 @@
 package com.chihwhsu.atto.clock.alarm
 
 
+import android.media.MediaPlayer
 import android.os.Bundle
-import android.util.Log
+import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,19 +13,23 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.chihwhsu.atto.R
 import com.chihwhsu.atto.databinding.FragmentAlarmBinding
 import com.chihwhsu.atto.ext.formatHour
 import com.chihwhsu.atto.ext.formatMinutes
+import com.chihwhsu.atto.ext.getCurrentDay
 import com.chihwhsu.atto.ext.getVmFactory
 import com.google.android.material.timepicker.MaterialTimePicker
 import java.text.SimpleDateFormat
-import java.util.*
 
 class AlarmFragment : Fragment() {
 
     private lateinit var binding: FragmentAlarmBinding
     private val viewModel by viewModels<AlarmViewModel> { getVmFactory() }
+
+    private lateinit var mediaPlayer: MediaPlayer
+    private lateinit var vibrator: Vibrator
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -85,8 +90,6 @@ class AlarmFragment : Fragment() {
                     ) {
 
                        viewModel.setRingTonePosition(position)
-
-
                     }
                 }
         })
@@ -104,11 +107,12 @@ class AlarmFragment : Fragment() {
         timePicker.apply {
             addOnPositiveButtonClickListener {
 
-                val time = hour.toLong()*60*60*1000 + minute.toLong()*60*1000
-                val amPm = if (hour<=12)"AM" else "PM"
+                val time = getCurrentDay() + hour.toLong()*60*60*1000 + minute.toLong()*60*1000
+
                 viewModel.setAlarmTime(time)
 
                 // replace textview text
+                val amPm = if (hour<=12)"AM" else "PM"
                 binding.hourMinute.text = resources.getString(
                     R.string.a_hh_mm,
                     amPm,
@@ -116,11 +120,6 @@ class AlarmFragment : Fragment() {
                     minute.formatMinutes()
                 )
 
-//                binding.am.text = if (timePicker.hour <= 12) {
-//                    "am"
-//                } else {
-//                    "pm"
-//                }
             }
         }
         binding.vibrationSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
@@ -135,7 +134,16 @@ class AlarmFragment : Fragment() {
             viewModel.saveEvent()
         }
 
+        viewModel.event.observe(viewLifecycleOwner, Observer {
+            it.setAlarmTime(requireActivity().applicationContext,it.id)
+        })
 
+        viewModel.navigateToAlarmList.observe(viewLifecycleOwner, Observer {
+            if (it == true) {
+                findNavController().navigate(AlarmFragmentDirections.actionAlarmFragmentToClockFragment())
+                viewModel.doneNavigation()
+            }
+        })
 
 
 
@@ -152,6 +160,5 @@ class AlarmFragment : Fragment() {
             }
         }
     }
-
 
 }

@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.chihwhsu.atto">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
     <uses-permission
         android:name="android.permission.QUERY_ALL_PACKAGES"
@@ -12,10 +14,14 @@
         tools:ignore="ProtectedPermissions" />
     <uses-permission
         android:name="android.permission.PACKAGE_USAGE_STATS"
-        tools:ignore="ProtectedPermissions"/>
-    <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" /> <!-- <uses-permission android:name="android.permission.SET_ALARM" /> -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
 
     <application
+        android:name=".AttoApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -26,13 +32,18 @@
         android:theme="@style/Theme.Atto"
         tools:targetApi="31">
         <activity
+            android:name=".AlarmActivity"
+            android:exported="false"
+            />
+        <activity
             android:name=".SettingActivity"
             android:exported="true"
             android:label="Atto Setting"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.SECONDARY_HOME"/>
+
+                <category android:name="android.intent.category.SECONDARY_HOME" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -42,11 +53,16 @@
             android:theme="@style/HomeTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver android:name=".component.AlarmReceiver" />
+
+        <service android:name=".component.UsageTimerService" />
 
         <meta-data
             android:name="preloaded_fonts"

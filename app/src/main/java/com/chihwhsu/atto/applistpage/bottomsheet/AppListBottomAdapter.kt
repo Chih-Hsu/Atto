@@ -54,7 +54,6 @@ class AppListBottomAdapter(
                 text = item.title
                 setTextColor(ResourcesCompat.getColor(itemView.resources, R.color.light_grey, null))
             }
-
         }
     }
 
@@ -80,10 +79,13 @@ class AppListBottomAdapter(
                 Theme.KANAHEI.index -> {
                     binding.kanaImage.visibility = View.VISIBLE
                 }
+                else -> {
+                    binding.iconBackground.setBackgroundResource(R.drawable.icon_background)
+                }
             }
 
             // App is not locked
-            if (item.app.isEnable){
+            if (item.app.isEnable) {
 
                 itemView.setOnClickListener {
                     appOnClickListener.onClick(item.app.packageName)
@@ -94,12 +96,14 @@ class AppListBottomAdapter(
 
             } else {
 
-                binding.iconBackground.foreground = ResourcesCompat.getDrawable(itemView.resources,R.drawable.icon_background_lock,null)
+                binding.iconBackground.foreground = ResourcesCompat.getDrawable(
+                    itemView.resources,
+                    R.drawable.icon_background_lock,
+                    null
+                )
                 binding.lockImage.visibility = View.VISIBLE
 
             }
-
-
 
             itemView.setOnLongClickListener(object : View.OnLongClickListener {
                 override fun onLongClick(v: View?): Boolean {
@@ -107,9 +111,7 @@ class AppListBottomAdapter(
                     return true
                 }
             })
-
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

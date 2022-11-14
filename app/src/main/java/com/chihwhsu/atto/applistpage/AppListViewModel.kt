@@ -6,14 +6,15 @@ import androidx.lifecycle.ViewModel
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.data.AppListItem
 import com.chihwhsu.atto.data.database.AttoDatabaseDao
+import com.chihwhsu.atto.data.database.AttoRepository
 
-class AppListViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
+class AppListViewModel(private val repository: AttoRepository) : ViewModel() {
 
-    val appList = databaseDao.getAllAppsWithoutDock()
+    val appList = repository.getAllAppsWithoutDock()
+
+    val isHide = mutableMapOf<String,Boolean>()
 
     fun resetList(appList : List<App> , context: Context):List<AppListItem>{
-
-
 
         // Get all label
         val labelStringList = mutableListOf<String>()
@@ -33,9 +34,10 @@ class AppListViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
             list.sortedBy { it.app.sort }
             var totalAppUsage = 0L
             for (item in list){
+
                 totalAppUsage  +=  item.app.getTodayUsage(context)
             }
-
+            Log.w("list","totalAppUsage: ${totalAppUsage}")
             val labelItem = AppListItem.LabelItem(label,totalAppUsage)
             newList.add(labelItem)
             newList.addAll(list)
@@ -46,10 +48,5 @@ class AppListViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
         return newList
 
     }
-
-    val isHide = mutableMapOf<String,Boolean>()
-
-
-
 
 }

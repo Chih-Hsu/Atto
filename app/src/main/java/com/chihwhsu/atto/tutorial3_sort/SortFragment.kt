@@ -21,20 +21,33 @@ class SortFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = FragmentAppSorttingBinding.inflate(inflater,container,false)
+        val binding = FragmentAppSorttingBinding.inflate(inflater, container, false)
 
         binding.addButton.setOnClickListener {
-            findNavController().navigate(SortFragmentDirections.actionSortFragmentToAddLabelFragment())
+            findNavController().navigate(
+                SortFragmentDirections.actionSortFragmentToAddLabelFragment(
+                    null
+                )
+            )
         }
 
-        val adapter = SortAdapter()
+        val adapter = SortAdapter(SortAdapter.DeleteOnClickListener { label ->
+            viewModel.deleteLabel(label)
+        },
+            SortAdapter.EditOnClickListener {
+                findNavController().navigate(
+                    SortFragmentDirections.actionSortFragmentToAddLabelFragment(
+                        it
+                    )
+                )
+            })
 
         binding.sortRecyclerView.adapter = adapter
         val layoutManager = binding.sortRecyclerView.layoutManager as GridLayoutManager
 
-        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup(){
+        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
-                return when(adapter.getItemViewType(position)){
+                return when (adapter.getItemViewType(position)) {
                     SortAdapter.APP_ITEM_VIEW_TYPE_LABEL -> 5
                     SortAdapter.APP_ITEM_VIEW_TYPE_APP -> 1
                     else -> 1
@@ -42,7 +55,7 @@ class SortFragment : Fragment() {
             }
         }
         viewModel.appList.observe(viewLifecycleOwner, Observer {
-            adapter.submitList(viewModel.resetList(it,requireContext()))
+            adapter.submitList(viewModel.resetList(it, requireContext()))
         })
 
         binding.buttonPrevious.setOnClickListener {

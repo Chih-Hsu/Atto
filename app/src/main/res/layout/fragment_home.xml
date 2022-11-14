@@ -47,7 +47,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/clock_minutes"
         app:spanCount="5"
-        tools:listitem="@layout/item_event" />
+        tools:listitem="@layout/item_event"
+        android:requiresFadingEdge="vertical"
+        android:fadingEdge="vertical"
+        android:fadingEdgeLength="20dp"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/gesture_area"
@@ -143,11 +146,13 @@
                 android:layout_height="match_parent">
 
                 <TextView
+                    android:id="@+id/button_delay"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="延後 5 分鐘"
                     android:textColor="@color/black"
                     style="@style/standard_text_style"
+                    android:visibility="gone"
                     android:layout_marginStart="@dimen/large_margin"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
@@ -155,6 +160,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/button_delete"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="刪 除"
@@ -174,6 +180,20 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animation_no_event"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="-100dp"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_url="https://assets6.lottiefiles.com/packages/lf20_gaqhg9zl.json"
+        android:visibility="gone"/>
 
     <!--    <ImageView-->
     <!--        android:layout_width="match_parent"-->

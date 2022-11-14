@@ -1,21 +1,26 @@
 package com.chihwhsu.atto.tutorial3_sort
 
 import android.content.Context
-import android.util.Log
-import android.view.View
 import androidx.lifecycle.ViewModel
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.data.AppListItem
-import com.chihwhsu.atto.data.database.AttoDatabaseDao
+import com.chihwhsu.atto.data.database.AttoRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
-class SortViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
+class SortViewModel(private val repository: AttoRepository) : ViewModel() {
 
-    val appList = databaseDao.getAllAppsWithoutDock()
+    // Create a Coroutine scope using a job to be able to cancel when needed
+    private var viewModelJob = Job()
 
+    // the Coroutine runs using the Main (UI) dispatcher
+    private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
+
+    val appList = repository.getAllAppsWithoutDock()
 
     fun resetList(appList : List<App>,context:Context):List<AppListItem>{
-
-
 
         // Get all label
         val labelStringList = mutableListOf<String>()
@@ -47,6 +52,13 @@ class SortViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
 //        Log.d("select","$newList")
 
         return newList
+
+    }
+
+    fun deleteLabel(label : String){
+        coroutineScope.launch(Dispatchers.Default){
+            repository.deleteSpecificLabel(label)
+        }
 
     }
 }

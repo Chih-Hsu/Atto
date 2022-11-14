@@ -4,10 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.chihwhsu.atto.applistpage.AppListViewModel
 import com.chihwhsu.atto.applistpage.bottomsheet.AppListBottomViewModel
+import com.chihwhsu.atto.clock.alarm.AlarmListViewModel
 import com.chihwhsu.atto.clock.alarm.AlarmViewModel
 import com.chihwhsu.atto.clock.pomodoro.PomodoroViewModel
 import com.chihwhsu.atto.clock.todo.TodoViewModel
 import com.chihwhsu.atto.data.database.AttoDatabaseDao
+import com.chihwhsu.atto.data.database.AttoRepository
 import com.chihwhsu.atto.homepage.HomeViewModel
 import com.chihwhsu.atto.main.MainViewModel
 import com.chihwhsu.atto.tutorial3_sort.SortViewModel
@@ -15,7 +17,7 @@ import com.chihwhsu.atto.tutorial3_sort.addlabel.AddLabelViewModel
 import com.chihwhsu.atto.usagelimit.UsageLimitViewModel
 
 class ViewModelFactory constructor(
-    private val databaseDao: AttoDatabaseDao
+    private val repository: AttoRepository
 ) : ViewModelProvider.NewInstanceFactory() {
 
     override fun <T : ViewModel> create(modelClass: Class<T>) =
@@ -23,34 +25,37 @@ class ViewModelFactory constructor(
             when {
 
                 isAssignableFrom(HomeViewModel::class.java) ->
-                    HomeViewModel(databaseDao)
+                    HomeViewModel(repository)
 
                 isAssignableFrom(SortViewModel::class.java) ->
-                    SortViewModel(databaseDao)
+                    SortViewModel(repository)
 
                 isAssignableFrom(MainViewModel::class.java) ->
-                    MainViewModel(databaseDao)
+                    MainViewModel(repository)
 
                 isAssignableFrom(AppListViewModel::class.java) ->
-                    AppListViewModel(databaseDao)
+                    AppListViewModel(repository)
 
                 isAssignableFrom(AddLabelViewModel::class.java) ->
-                    AddLabelViewModel(databaseDao)
+                    AddLabelViewModel(repository)
 
                 isAssignableFrom(AppListBottomViewModel::class.java) ->
-                    AppListBottomViewModel(databaseDao)
+                    AppListBottomViewModel(repository)
 
                 isAssignableFrom(UsageLimitViewModel::class.java) ->
-                    UsageLimitViewModel(databaseDao)
+                    UsageLimitViewModel(repository)
 
                 isAssignableFrom(PomodoroViewModel::class.java) ->
-                    PomodoroViewModel(databaseDao)
+                    PomodoroViewModel(repository)
 
                 isAssignableFrom(AlarmViewModel::class.java) ->
-                    AlarmViewModel(databaseDao)
+                    AlarmViewModel(repository)
 
                 isAssignableFrom(TodoViewModel::class.java) ->
-                    TodoViewModel(databaseDao)
+                    TodoViewModel(repository)
+
+                isAssignableFrom(AlarmListViewModel::class.java) ->
+                    AlarmListViewModel(repository)
 
                 else ->
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")

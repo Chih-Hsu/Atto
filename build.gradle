@@ -7,11 +7,15 @@ buildscript {
         navigation_version = "2.5.3"
         version_room = '2.4.3'
         version_moshi = "1.14.0"
+        version_work = "2.7.1"
+        version_lottie = "3.4.0"
     }
     repositories {
         google()
         mavenCentral()
         maven { url 'https://maven.google.com' }
+        maven { url 'https://jitpack.io' }
+        jcenter()
 
     }
 

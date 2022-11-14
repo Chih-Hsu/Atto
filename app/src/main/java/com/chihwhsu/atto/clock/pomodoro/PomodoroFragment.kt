@@ -7,15 +7,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
+import com.chihwhsu.atto.NavigationDirections
 import com.chihwhsu.atto.R
 import com.chihwhsu.atto.applistpage.AppListViewModel
 import com.chihwhsu.atto.databinding.FragmentPomodoroBinding
 import com.chihwhsu.atto.ext.formatHour
 import com.chihwhsu.atto.ext.formatMinutes
+import com.chihwhsu.atto.ext.getCurrentDay
 import com.chihwhsu.atto.ext.getVmFactory
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
@@ -34,7 +38,7 @@ class PomodoroFragment : Fragment() {
         binding = FragmentPomodoroBinding.inflate(inflater,container,false)
 
         // set current time
-        val currentTime = System.currentTimeMillis() + 60000
+        val currentTime = System.currentTimeMillis() + 600000
         val simpleFormat = SimpleDateFormat("a hh:mm")
         binding.hourMinute.text = simpleFormat.format(currentTime)
 
@@ -66,9 +70,6 @@ class PomodoroFragment : Fragment() {
             viewModel.setLockAppMode()
         }
 
-        binding.button.setOnClickListener {
-            viewModel.saveEvent()
-        }
 
         // Spinner
         viewModel.labelList.observe(viewLifecycleOwner, Observer {
@@ -102,6 +103,17 @@ class PomodoroFragment : Fragment() {
         })
 
 
+        binding.button.setOnClickListener {
+            if (!viewModel.checkCanCreate()){
+                viewModel.saveEvent(requireActivity().applicationContext)
+            }else{
+                Toast.makeText(requireContext(),"Pomodoro already set",Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        viewModel.navigateToHome.observe(viewLifecycleOwner, Observer {
+            findNavController().navigate(NavigationDirections.actionGlobalMainFragment())
+        })
 
 
 
@@ -121,8 +133,8 @@ class PomodoroFragment : Fragment() {
 
         timePicker.addOnPositiveButtonClickListener {
             // replace textview text
-            val time = timePicker.hour.toLong()*60*60*1000 + timePicker.minute.toLong()*60*1000
-            viewModel.setBeginTime(time)
+            val time : Long = timePicker.hour.toLong()*60*60*1000 + timePicker.minute.toLong()*60*1000
+            viewModel.setBeginTime(time + getCurrentDay())
             val amPm = if (timePicker.hour<=12)"AM" else "PM"
             binding.hourMinute.text = resources.getString(
                 R.string.a_hh_mm,

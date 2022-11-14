@@ -1,20 +1,18 @@
 package com.chihwhsu.atto.clock.pomodoro
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.chihwhsu.atto.clock.ClockFragment
 import com.chihwhsu.atto.data.Event
+import com.chihwhsu.atto.data.Event.Companion.POMODORO_BREAK_TYPE
+import com.chihwhsu.atto.data.Event.Companion.POMODORO_WORK_TYPE
 import com.chihwhsu.atto.data.database.AttoDatabaseDao
-import com.chihwhsu.atto.ext.getCurrentDay
-import com.chihwhsu.atto.ext.getTimeFrom00am
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import com.chihwhsu.atto.data.database.AttoRepository
+import kotlinx.coroutines.*
 
-class PomodoroViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
+class PomodoroViewModel(private val repository: AttoRepository) : ViewModel() {
 
 
     // Create a Coroutine scope using a job to be able to cancel when needed
@@ -23,16 +21,25 @@ class PomodoroViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
     // the Coroutine runs using the Main (UI) dispatcher
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-    val labelList = databaseDao.getLabelList()
+    private var _navigateToHome = MutableLiveData<Boolean>()
+    val navigateToHome : LiveData<Boolean> get() = _navigateToHome
+
+    val labelList = repository.getLabelList()
+
+    private var isOtherPomodoroInRoom = false
 
 
     // for create Event
-    private var beginTime = getTimeFrom00am(System.currentTimeMillis() + 600000)
+    private var beginTime: Long = System.currentTimeMillis() + 600000
     private var workTime: Long = 45 * 60 * 1000
     private var breakTime: Long = 15 * 60 * 1000
     private var routineRound = 1
     private var lockAppMode = false
     private var lockAppLabel = ""
+
+    init {
+
+    }
 
 
     fun setBeginTime(time: Long) {
@@ -40,11 +47,11 @@ class PomodoroViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
     }
 
     fun setWorkTime(time: Long) {
-        workTime = time * 60 * 1000
+        workTime = time * 60L * 1000L
     }
 
     fun setBreakTime(time: Long) {
-        breakTime = time * 60 * 1000
+        breakTime = time * 60L * 1000L
     }
 
     fun setRoutineRound(routine: Int) {
@@ -59,7 +66,12 @@ class PomodoroViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
         lockAppLabel = label
     }
 
-    fun saveEvent() {
+    fun checkCanCreate():Boolean{
+        checkPomodoroInRoom()
+        return isOtherPomodoroInRoom
+    }
+
+    fun saveEvent(context: Context) {
 
 
         for (count in 0 until routineRound) {
@@ -70,8 +82,7 @@ class PomodoroViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
             val workEvent = Event(
                 startTime = workStartTime,
                 alarmTime = workEndBreakStart,
-                alarmDay = getCurrentDay(),
-                type = ClockFragment.POMODORO_TYPE,
+                type = POMODORO_WORK_TYPE,
                 lockApp = lockAppMode,
                 lockAppLabel = lockAppLabel
             )
@@ -79,19 +90,32 @@ class PomodoroViewModel(val databaseDao: AttoDatabaseDao) : ViewModel() {
             val breakEvent = Event(
                 startTime = workEndBreakStart,
                 alarmTime = breakEndTime,
-                alarmDay = getCurrentDay(),
-                type = ClockFragment.POMODORO_TYPE,
+                type = POMODORO_BREAK_TYPE,
                 lockApp = lockAppMode,
                 lockAppLabel = lockAppLabel
             )
 
+            workEvent.setPomodoroAlarmTime(context, POMODORO_WORK_TYPE, workEvent.id.toInt())
+            breakEvent.setPomodoroAlarmTime(context, POMODORO_BREAK_TYPE, breakEvent.id.toInt())
+
             coroutineScope.launch(Dispatchers.IO) {
-                databaseDao.insert(workEvent)
-                databaseDao.insert(breakEvent)
+                repository.insert(workEvent)
+                repository.insert(breakEvent)
             }
 
         }
 
+        _navigateToHome.value = true
 
+    }
+
+    private fun checkPomodoroInRoom(){
+       coroutineScope.launch(Dispatchers.Default) {
+           isOtherPomodoroInRoom = repository.isPomodoroIsExist()
+       }
+    }
+
+    fun doneNavigation(){
+        _navigateToHome.value = false
     }
 }

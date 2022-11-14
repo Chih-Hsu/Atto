@@ -33,6 +33,8 @@ class AppDetailFragment : Fragment() {
     ): View? {
         val binding = FragmentAppDetailBinding.inflate(inflater,container,false)
 
+        val adapter = AppDetailAdapter()
+        val themeList = mutableListOf<Theme>(Theme.DEFAULT,Theme.BLACK,Theme.HIGH_LIGHT,Theme.KANAHEI)
 
         viewModel.app.observe(viewLifecycleOwner, Observer { app ->
             // set Text
@@ -57,6 +59,11 @@ class AppDetailFragment : Fragment() {
                 val intent = Intent(Intent.ACTION_DELETE,appUri)
                 startActivity(intent)
             }
+
+
+            binding.backgroundRecyclerview.adapter = adapter
+            adapter.submitList(themeList)
+            binding.backgroundRecyclerview.scrollToPosition(app.theme+1)
         })
 
         viewModel.dataPerHourList.observe(viewLifecycleOwner, Observer {
@@ -66,7 +73,7 @@ class AppDetailFragment : Fragment() {
 
         viewModel.barSet.observe(viewLifecycleOwner, Observer {  barSet ->
             binding.barChart.apply {
-                 Log.d("detail","$barSet")
+
                 //setting
                 spacing = 20F
                 labelsSize = dpToFloat(12)
@@ -82,10 +89,8 @@ class AppDetailFragment : Fragment() {
 
 
 
-        val adapter = AppDetailAdapter()
-        val themeList = mutableListOf<Theme>(Theme.DEFAULT,Theme.BLACK,Theme.HIGH_LIGHT,Theme.KANAHEI)
-        binding.backgroundRecyclerview.adapter = adapter
-        adapter.submitList(themeList)
+
+
 
         // LinearSnapHelper
         val snapHelper = LinearSnapHelper()

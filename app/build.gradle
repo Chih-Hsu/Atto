@@ -13,8 +13,8 @@ android {
         applicationId "com.chihwhsu.atto"
         minSdk 26
         targetSdk 32
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.0.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -59,23 +59,20 @@ dependencies {
     implementation "com.squareup.moshi:moshi:$version_moshi"
     implementation "com.squareup.moshi:moshi-kotlin:$version_moshi"
 
-
     // Charts
     implementation 'com.diogobernardino:williamchart:3.10.1'
 
-// Tooltips
-//    implementation 'com.diogobernardino.williamchart:tooltip-slider:3.10.1'
-//    implementation 'com.diogobernardino.williamchart:tooltip-points:3.10.1'
+    // BlurView
+    implementation 'com.github.Dimezis:BlurView:version-2.0.2'
 
+    // Calendar
+    implementation 'com.applandeo:material-calendar-view:1.7.0'
 
-//    implementation 'com.github.User:Repo:Tag'
-//    implementation 'com.github.Dimezis:BlurView:version-2.0.2'
+    // WorkManager (Kotlin + coroutines)
+    implementation("androidx.work:work-runtime-ktx:$version_work")
 
-
-
-
-
-
+    // Lottie
+    implementation "com.airbnb.android:lottie:$version_lottie"
 
 
 }
