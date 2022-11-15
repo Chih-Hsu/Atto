@@ -4,6 +4,7 @@ import android.appwidget.AppWidgetHost
 import android.appwidget.AppWidgetManager
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,28 +29,29 @@ class WidgetBottomSheetFragment : BottomSheetDialogFragment() {
         val appWidgetManager = AppWidgetManager.getInstance(requireActivity().applicationContext)
         val dataList = mutableListOf<Widget>()
 
-        appWidgetManager.installedProviders.forEach {
-            val name = it.label
-            val icon = it.loadIcon(
-                requireActivity().applicationContext,
-                resources.displayMetrics.density.toInt()
-            )
 
-            val image: Drawable? = it.loadPreviewImage(
-                requireActivity().applicationContext,
-                resources.displayMetrics.density.toInt()
-            )
-
-            val newWidget = Widget(name, icon, image, it, it.minWidth, it.minHeight)
-            dataList.add(newWidget)
-        }
+//        appWidgetManager.installedProviders.forEach {
+//            val name = it.label
+//            val icon = it.loadIcon(
+//                requireActivity().applicationContext,
+//                resources.displayMetrics.density.toInt()
+//            )
+//
+//            val image: Drawable? = it.loadPreviewImage(
+//                requireActivity().applicationContext,
+//                resources.displayMetrics.density.toInt()
+//            )
+//
+//            val newWidget = Widget(name, icon, image, it.minWidth, it.minHeight)
+//            dataList.add(newWidget)
+//        }
 
         val adapter = WidgetAdapter(WidgetAdapter.WidgetOnClickListener {
             findNavController().navigate(NavigationDirections.actionGlobalMainFragment(it))
         })
 
         binding.recyclerviewWidget.adapter = adapter
-        adapter.submitList(dataList)
+        adapter.submitList(appWidgetManager.installedProviders)
 
         return binding.root
     }

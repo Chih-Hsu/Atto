@@ -117,5 +117,12 @@ interface AttoDatabaseDao {
 
     @Query("SELECT * FROM usage_tracker_table ")
     fun getAllTimer(): LiveData<List<AppLockTimer>>
+
+    // Widget
+
+//    @Query("SELECT * FROM widget_table ORDER BY id")
+//    fun getAllWidget()
+
+
 }
 

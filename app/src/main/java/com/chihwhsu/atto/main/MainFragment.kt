@@ -14,7 +14,7 @@ import com.chihwhsu.atto.ext.getVmFactory
 class MainFragment : Fragment() {
 
     private val viewModel by viewModels<MainViewModel> { getVmFactory() }
-    private var widgetInfo : AppWidgetProviderInfo? = null
+    private var widgetInfo : String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -23,7 +23,7 @@ class MainFragment : Fragment() {
     ): View? {
         val binding = FragmentMainBinding.inflate(inflater,container,false)
 
-        widgetInfo = MainFragmentArgs.fromBundle(requireArguments()).info
+        widgetInfo = MainFragmentArgs.fromBundle(requireArguments()).widgetLabel
 
         // set ViewPager2
         val adapter = MainViewPagerAdapter(this)
@@ -64,7 +64,7 @@ class MainFragment : Fragment() {
         viewModel.updateApp()
     }
 
-    fun getWidgetInfo(): AppWidgetProviderInfo? {
+    fun getWidgetInfo(): String? {
         return widgetInfo
     }
 

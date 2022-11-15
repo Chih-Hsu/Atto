@@ -37,26 +37,30 @@ class WidgetFragment : Fragment() {
             true
         }
 
-        val widgetInfo = (requireParentFragment() as MainFragment).getWidgetInfo()
+
 
         val appWidgetHost = AppWidgetHost(requireActivity().applicationContext, HOST_ID)
         val appWidgetManager = AppWidgetManager.getInstance(requireActivity().applicationContext)
 
-        widgetInfo?.let {
+        val widgetLabel = (requireParentFragment() as MainFragment).getWidgetInfo()
+
+
+        widgetLabel?.let {
+            val widgetInfo = appWidgetManager.installedProviders.filter { it.label == widgetLabel }.first()
             val appWidgetId = appWidgetHost.allocateAppWidgetId()
-            val canBind = appWidgetManager.bindAppWidgetIdIfAllowed(appWidgetId, it.provider)
+            val canBind = appWidgetManager.bindAppWidgetIdIfAllowed(appWidgetId, widgetInfo.provider)
 
             if (canBind) {
                 val widgetView = appWidgetHost.createView(
                     requireActivity().applicationContext,
                     appWidgetId,
-                    it
+                    widgetInfo
                 ).apply {
-                    setAppWidget(appWidgetId, it)
+                    setAppWidget(appWidgetId, widgetInfo)
                 }
                 binding.containerWidget.addView(widgetView)
             } else {
-                getWidgetPermission(appWidgetId, it)
+                getWidgetPermission(appWidgetId, widgetInfo)
             }
 
         }

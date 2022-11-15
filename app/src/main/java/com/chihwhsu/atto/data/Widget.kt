@@ -1,16 +1,16 @@
 package com.chihwhsu.atto.data
 
-import android.appwidget.AppWidgetProviderInfo
 import android.graphics.drawable.Drawable
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
 
-
+@Entity(tableName = "widget_table")
 data class Widget(
-    val name: String,
-    val icon: Drawable?,
-    val previewImage: Drawable?,
-    val info: AppWidgetProviderInfo,
-    val width: Int,
-    val height: Int
+    @PrimaryKey(autoGenerate = true)
+    val id : Long = 0L,
+    @ColumnInfo(name = "label")
+    val label: String,
 ) {
 }
