@@ -15,6 +15,9 @@
             app:argType="android.appwidget.AppWidgetProviderInfo"
             app:nullable="true"
             android:defaultValue="@null" />
+        <action
+            android:id="@+id/action_mainFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <dialog
         android:id="@+id/appInfoDialog"
@@ -87,4 +90,8 @@
         tools:layout="@layout/dialog_widget_bottom_sheet"/>
     <action android:id="@+id/action_global_widgetBottomSheetFragment" app:destination="@id/widgetBottomSheetFragment" />
     <action android:id="@+id/action_global_mainFragment" app:destination="@id/mainFragment" />
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.chihwhsu.atto.login.LoginFragment"
+        android:label="LoginFragment" />
 </navigation>

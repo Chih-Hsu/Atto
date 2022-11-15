@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.chihwhsu.atto.data.Widget
 import com.chihwhsu.atto.databinding.ItemWidgetBinding
 
+
 class WidgetAdapter(val onClickListener: WidgetOnClickListener) :
     ListAdapter<Widget, WidgetAdapter.WidgetViewHolder>(object :
         DiffUtil.ItemCallback<Widget>() {

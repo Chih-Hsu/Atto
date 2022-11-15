@@ -1,11 +1,19 @@
 package com.chihwhsu.atto.data.database
 
 
+import android.content.Context
+import android.content.Context.MODE_PRIVATE
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.os.Environment
+import android.util.Log
 import androidx.lifecycle.LiveData
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.data.AppLockTimer
 import com.chihwhsu.atto.data.Event
 import kotlinx.coroutines.*
+import java.io.*
+
 
 class DefaultAttoRepository(
     private val attoRemoteDataSource: AttoDataSource,
@@ -176,7 +184,11 @@ class DefaultAttoRepository(
 //                            if (!roomApps.contains(app)) {
                             if (roomApps.none { it.appLabel == app.appLabel }) {
                                 // room沒有的就insert
-                                insert(app)
+                                try {
+                                    insert(app)
+                                } catch (e: Exception) {
+                                    e.printStackTrace()
+                                }
                             }
                         }
 
@@ -205,4 +217,7 @@ class DefaultAttoRepository(
     override fun deleteSpecificLabel(label: String) {
         attoLocalDataSource.deleteSpecificLabel(label)
     }
+
+
+
 }

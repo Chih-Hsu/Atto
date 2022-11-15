@@ -25,7 +25,6 @@ class MainFragment : Fragment() {
 
         widgetInfo = MainFragmentArgs.fromBundle(requireArguments()).info
 
-
         // set ViewPager2
         val adapter = MainViewPagerAdapter(this)
         binding.viewPager.adapter = adapter
@@ -39,6 +38,7 @@ class MainFragment : Fragment() {
             val launchAppIntent = requireContext().packageManager.getLaunchIntentForPackage(it)
             startActivity(launchAppIntent)
         })
+
         binding.dockRecyclerview.adapter = dockAdapter
         viewModel.dockList.observe(viewLifecycleOwner, Observer { list ->
             if (list.isNotEmpty()){
@@ -48,8 +48,8 @@ class MainFragment : Fragment() {
             } else {
                 binding.constraintLayout.visibility = View.GONE
             }
-
         })
+
 
         viewModel.timerList.observe(viewLifecycleOwner, Observer {
             viewModel.checkUsageTimer(requireContext())

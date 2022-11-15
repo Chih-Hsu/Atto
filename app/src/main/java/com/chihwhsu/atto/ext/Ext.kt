@@ -4,14 +4,12 @@ import android.content.res.Resources
 import android.graphics.*
 import android.graphics.drawable.Drawable
 import androidx.core.graphics.drawable.toBitmap
-import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.ZoneId
-import java.util.*
 
 
 // check icon is drawable or AdaptiveIconDrawable
-fun Drawable.convertToBitmap(): Bitmap = this.toBitmap(this.minimumWidth, this.minimumHeight, null)
+fun Drawable.convertToBitmap(): Bitmap = this.toBitmap(this.minimumWidth, this.minimumHeight, Bitmap.Config.ARGB_8888)
 
 fun Bitmap.createGrayscale(): Bitmap? {
     val width: Int = this.width

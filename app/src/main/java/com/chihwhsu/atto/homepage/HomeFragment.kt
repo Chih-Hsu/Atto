@@ -18,6 +18,7 @@ import com.chihwhsu.atto.data.Event.Companion.POMODORO_WORK_TYPE
 import com.chihwhsu.atto.data.Event.Companion.TODO_TYPE
 import com.chihwhsu.atto.databinding.FragmentHomeBinding
 import com.chihwhsu.atto.ext.*
+import com.chihwhsu.atto.main.MainFragmentDirections
 
 class HomeFragment : Fragment() {
 
@@ -62,7 +63,6 @@ class HomeFragment : Fragment() {
 
         binding.gestureArea.setOnTouchListener(object : View.OnTouchListener {
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-
                 return gestureDetector.onTouchEvent(event)
             }
         })
@@ -93,6 +93,7 @@ class HomeFragment : Fragment() {
                 }
 
             }
+
             adapter.notifyDataSetChanged()
 
             binding.buttonDelete.setOnClickListener {
@@ -177,6 +178,11 @@ class HomeFragment : Fragment() {
         }
 
 
+        binding.button2.setOnClickListener {
+            findNavController().navigate(MainFragmentDirections.actionMainFragmentToLoginFragment())
+        }
+
+
 
 
 
@@ -204,6 +210,7 @@ class HomeFragment : Fragment() {
         animation.start()
         viewModel.initAnimation()
     }
+
 
 
 }
