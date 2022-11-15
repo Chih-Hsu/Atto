@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.chihwhsu.atto.databinding.DialogAppInfoBinding
 
 class AppInfoDialog : DialogFragment() {
@@ -23,8 +24,8 @@ class AppInfoDialog : DialogFragment() {
 
         val app = AppInfoDialogArgs.fromBundle(requireArguments()).app
 
-        binding.iconImage.setImageBitmap(app.icon)
-
+//        binding.iconImage.setImageBitmap(app.icon)
+        Glide.with(requireContext()).load(app.iconPath).into(binding.iconImage)
         binding.limitButton.setOnClickListener {
             findNavController().navigate(AppInfoDialogDirections.actionAppInfoDialogToUsageLimitDialog(app))
         }

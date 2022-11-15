@@ -1,10 +1,13 @@
 package com.chihwhsu.atto.tutorial2_dock
 
+import android.graphics.ColorMatrix
+import android.graphics.ColorMatrixColorFilter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.databinding.ItemAppListBinding
 import com.chihwhsu.atto.databinding.ItemDockBinding
@@ -26,9 +29,18 @@ class DockAppListAdapter () : ListAdapter<App, DockAppListAdapter.AppViewHolder>
 
         fun bind(item: App){
 
-            item.icon?.let {
-                binding.dockIconImage.setImageBitmap(it.createGrayscale())
-            }
+//            item.icon?.let {
+//                binding.dockIconImage.setImageBitmap(it.createGrayscale())
+//            }
+            Glide.with(itemView.context)
+                .load(item.iconPath)
+                .into(binding.dockIconImage)
+
+            val colorMatrix = ColorMatrix()
+            colorMatrix.setSaturation(0f)
+            val filter = ColorMatrixColorFilter(colorMatrix)
+
+            binding.dockIconImage.colorFilter = filter
         }
     }
 

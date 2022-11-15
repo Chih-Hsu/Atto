@@ -1,5 +1,7 @@
 package com.chihwhsu.atto.applistpage
 
+import android.graphics.ColorMatrix
+import android.graphics.ColorMatrixColorFilter
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +10,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.chihwhsu.atto.R
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.data.AppListItem
@@ -74,9 +77,18 @@ class AppListAdapter  (val appOnClickListener : AppOnClickListener,val longClick
 
             showAppOrNot(item.app)
             binding.appName.text = item.app.appLabel
-            item.app.icon?.let {
-                binding.iconImage.setImageBitmap(it.createGrayscale())
-            }
+//            item.app.icon?.let {
+//                binding.iconImage.setImageBitmap(it.createGrayscale())
+//            }
+            Glide.with(itemView.context)
+                .load(item.app.iconPath)
+                .into(binding.iconImage)
+
+            val colorMatrix = ColorMatrix()
+            colorMatrix.setSaturation(0f)
+            val filter = ColorMatrixColorFilter(colorMatrix)
+
+            binding.iconImage.colorFilter = filter
 
             when (item.app.theme) {
                 Theme.DEFAULT.index -> { binding.iconBackground.setBackgroundResource(R.drawable.icon_background) }

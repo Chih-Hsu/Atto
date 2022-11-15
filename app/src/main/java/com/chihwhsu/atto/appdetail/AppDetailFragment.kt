@@ -16,6 +16,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
+import com.bumptech.glide.Glide
 import com.chihwhsu.atto.R
 import com.chihwhsu.atto.data.Theme
 import com.chihwhsu.atto.databinding.FragmentAppDetailBinding
@@ -40,7 +41,7 @@ class AppDetailFragment : Fragment() {
             // set Text
             binding.apply {
                 appName.text = app.appLabel
-                iconImage.setImageBitmap(app.icon)
+                Glide.with(requireContext()).load(app.iconPath).into(iconImage)
                 totalUsageTime.text = app.getTotalUsage(requireContext()).toFormat()
 
             }

@@ -17,14 +17,14 @@ import java.io.File
 
 @Parcelize
 @Entity(tableName = "app_table")
-@TypeConverters(AttoConverter::class)
+//@TypeConverters(AttoConverter::class)
 data class App (
     @PrimaryKey(autoGenerate = false)
     val appLabel : String,
     @ColumnInfo(name = "package_name")
     val packageName : String,
-    @ColumnInfo(name = "icon")
-    val icon : Bitmap?,
+    @ColumnInfo(name = "icon_path")
+    val iconPath : String,
     @ColumnInfo(name = "label")
     val label : String? = null,
     @ColumnInfo(name = "is_enable")

@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ResolveInfo
 import android.graphics.Bitmap
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.chihwhsu.atto.AttoApplication
@@ -12,6 +13,7 @@ import com.chihwhsu.atto.data.AppLockTimer
 import com.chihwhsu.atto.data.Event
 import com.chihwhsu.atto.data.database.AttoDataSource
 import com.chihwhsu.atto.ext.convertToBitmap
+import com.chihwhsu.atto.ext.createGrayscale
 import java.io.IOException
 
 class AttoSystemDataSource(val context: Context) : AttoDataSource {
@@ -83,7 +85,9 @@ class AttoSystemDataSource(val context: Context) : AttoDataSource {
             val appName = app.activityInfo.loadLabel(manager).toString()
             val appPackageName = app.activityInfo.packageName
             val appImage = app.activityInfo.loadIcon(manager)
-            val newApp = App(appName, appPackageName, appImage.convertToBitmap())
+
+            saveFile(appName,appImage.convertToBitmap())
+            val newApp = App(appName, appPackageName, context.filesDir.absolutePath +"/"+"$appName.png")
             currentAppList.add(newApp)
         }
 

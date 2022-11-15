@@ -56,9 +56,9 @@ class SortAdapter(
     class AppViewHolder(val binding: ItemAppListBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: AppListItem.AppItem) {
 //            binding.iconImage.setImageDrawable(item.icon)
-            item.app.icon?.let {
-                binding.iconImage.setImageBitmap(it.createGrayscale())
-            }
+//            item.app.icon?.let {
+//                binding.iconImage.setImageBitmap(it.createGrayscale())
+//            }
             binding.appName.text = item.app.appLabel
         }
     }

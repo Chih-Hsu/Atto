@@ -31,9 +31,9 @@ class DockAdapter (val onClickListener : DockOnClickListener) : ListAdapter<App,
     inner class AppViewHolder(val binding: ItemDockBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(item: App){
 
-            item.icon?.let {
-                binding.dockIconImage.setImageBitmap(it.createGrayscale())
-            }
+//            item.icon?.let {
+//                binding.dockIconImage.setImageBitmap(it.createGrayscale())
+//            }
             itemView.setOnClickListener {
                 onClickListener.onClick(item.packageName)
             }
