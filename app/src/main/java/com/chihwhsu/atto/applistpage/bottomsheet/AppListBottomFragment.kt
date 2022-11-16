@@ -24,13 +24,14 @@ class AppListBottomFragment : Fragment() {
 
     private val viewModel by viewModels<AppListBottomViewModel> { getVmFactory() }
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        requireActivity().window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+
+
+        requireActivity().window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING or WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
 
         val binding = DialogAppListBinding.inflate(inflater, container, false)
 

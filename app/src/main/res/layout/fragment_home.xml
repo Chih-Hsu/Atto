@@ -178,19 +178,6 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/animation_no_event"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="-100dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"
-        app:lottie_url="https://assets6.lottiefiles.com/packages/lf20_gaqhg9zl.json" />
 
     <Button
         android:id="@+id/button2"

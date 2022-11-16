@@ -1,10 +1,13 @@
 package com.chihwhsu.atto.tutorial3_sort
 
+import android.graphics.ColorMatrix
+import android.graphics.ColorMatrixColorFilter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.chihwhsu.atto.data.AppListItem
 import com.chihwhsu.atto.databinding.ItemAppListBinding
 import com.chihwhsu.atto.databinding.ItemLabelSettingBinding
@@ -59,6 +62,15 @@ class SortAdapter(
 //            item.app.icon?.let {
 //                binding.iconImage.setImageBitmap(it.createGrayscale())
 //            }
+            Glide.with(itemView.context)
+                .load(item.app.iconPath)
+                .into(binding.iconImage)
+
+            val colorMatrix = ColorMatrix()
+            colorMatrix.setSaturation(0f)
+            val filter = ColorMatrixColorFilter(colorMatrix)
+
+            binding.iconImage.colorFilter = filter
             binding.appName.text = item.app.appLabel
         }
     }

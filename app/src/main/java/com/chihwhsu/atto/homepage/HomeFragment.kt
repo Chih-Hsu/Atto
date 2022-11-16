@@ -53,7 +53,6 @@ class HomeFragment : Fragment() {
                 list.filter { it.alarmTime < getEndOfToday() && it.alarmTime > getCurrentDay() }
             val expiredList = list.filter {  it.alarmTime < System.currentTimeMillis()+60000 } // Delete event after 1 minute
             viewModel.deleteEvent(expiredList)
-            binding.animationNoEvent.visibility = if (newList.isEmpty()) View.VISIBLE else View.GONE
             adapter.submitList(newList)
         })
 

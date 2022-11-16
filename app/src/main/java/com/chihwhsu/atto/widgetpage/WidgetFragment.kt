@@ -2,6 +2,7 @@ package com.chihwhsu.atto.widgetpage
 
 import android.app.ActionBar
 import android.appwidget.AppWidgetHost
+import android.appwidget.AppWidgetHostView
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProviderInfo
 import android.content.Intent
@@ -12,13 +13,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.LinearLayout
 import android.widget.RemoteViews
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.core.view.children
-import androidx.core.view.marginTop
-import androidx.core.view.setPadding
-import androidx.core.view.updateLayoutParams
+import androidx.core.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -90,7 +89,7 @@ class WidgetFragment : Fragment() {
                             widgetInfo
                         ).apply {
                             background = resources.getDrawable(R.drawable.widget_rounded_background)
-                            setAppWidget(appWidgetId, widgetInfo)
+//                            setAppWidget(appWidgetId, widgetInfo)
 //                        layoutParams.setMargins(0, 0, 0, 0)
 //                        val layoutParam = ViewGroup.LayoutParams.MATCH_PARENT
 //                        updateViewLayout(this,layoutParams)
@@ -99,11 +98,18 @@ class WidgetFragment : Fragment() {
 //                    binding.containerWidget.addView(widgetView)
 
 
+                        val layoutParam = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT)
+                        layoutParam.topMargin = 30
+//                        binding.containerWidget.addView(
+//                            widgetView,
+//                            WindowManager.LayoutParams.MATCH_PARENT,
+//                            WindowManager.LayoutParams.WRAP_CONTENT
+//                        )
                         binding.containerWidget.addView(
                             widgetView,
-                            WindowManager.LayoutParams.MATCH_PARENT,
-                            widgetInfo.minHeight
+                            layoutParam
                         )
+
 
                         widgetView.setOnLongClickListener {
                             viewModel.deleteWidget(widget.id)
