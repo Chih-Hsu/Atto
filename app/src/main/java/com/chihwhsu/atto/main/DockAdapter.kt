@@ -1,15 +1,16 @@
 package com.chihwhsu.atto.main
 
 
+import android.graphics.ColorMatrix
+import android.graphics.ColorMatrixColorFilter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.chihwhsu.atto.data.App
-import com.chihwhsu.atto.databinding.ItemAppListBinding
 import com.chihwhsu.atto.databinding.ItemDockBinding
-import com.chihwhsu.atto.ext.createGrayscale
 
 
 class DockAdapter (val onClickListener : DockOnClickListener) : ListAdapter<App, DockAdapter.AppViewHolder>(object :
@@ -34,9 +35,17 @@ class DockAdapter (val onClickListener : DockOnClickListener) : ListAdapter<App,
 //            item.icon?.let {
 //                binding.dockIconImage.setImageBitmap(it.createGrayscale())
 //            }
+
+            Glide.with(itemView.context).load(item.iconPath).into(binding.dockIconImage)
             itemView.setOnClickListener {
                 onClickListener.onClick(item.packageName)
             }
+
+            val colorMatrix = ColorMatrix()
+            colorMatrix.setSaturation(0f)
+            val filter = ColorMatrixColorFilter(colorMatrix)
+
+            binding.dockIconImage.colorFilter = filter
         }
     }
 

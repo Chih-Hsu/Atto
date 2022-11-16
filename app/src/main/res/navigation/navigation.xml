@@ -10,11 +10,6 @@
         android:name="com.chihwhsu.atto.main.MainFragment"
         android:label="MainFragment"
         tools:layout="@layout/fragment_main">
-        <argument
-            android:name="widgetLabel"
-            app:argType="string"
-            app:nullable="true"
-            android:defaultValue="@null" />
         <action
             android:id="@+id/action_mainFragment_to_loginFragment"
             app:destination="@id/loginFragment" />

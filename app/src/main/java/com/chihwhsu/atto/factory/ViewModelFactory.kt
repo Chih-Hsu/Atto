@@ -15,6 +15,8 @@ import com.chihwhsu.atto.main.MainViewModel
 import com.chihwhsu.atto.tutorial3_sort.SortViewModel
 import com.chihwhsu.atto.tutorial3_sort.addlabel.AddLabelViewModel
 import com.chihwhsu.atto.usagelimit.UsageLimitViewModel
+import com.chihwhsu.atto.widgetpage.WidgetViewModel
+import com.chihwhsu.atto.widgetpage.widget_bottom_sheet.WidgetBottomViewModel
 
 class ViewModelFactory constructor(
     private val repository: AttoRepository
@@ -56,6 +58,12 @@ class ViewModelFactory constructor(
 
                 isAssignableFrom(AlarmListViewModel::class.java) ->
                     AlarmListViewModel(repository)
+
+                isAssignableFrom(WidgetBottomViewModel::class.java) ->
+                    WidgetBottomViewModel(repository)
+
+                isAssignableFrom(WidgetViewModel::class.java) ->
+                    WidgetViewModel(repository)
 
                 else ->
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")

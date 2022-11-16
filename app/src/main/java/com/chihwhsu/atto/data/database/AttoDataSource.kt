@@ -6,6 +6,7 @@ import androidx.room.Query
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.data.AppLockTimer
 import com.chihwhsu.atto.data.Event
+import com.chihwhsu.atto.data.Widget
 
 interface AttoDataSource {
 
@@ -113,5 +114,14 @@ interface AttoDataSource {
 
 
     fun getAllTimer(): LiveData<List<AppLockTimer>>
+
+
+    // Widget
+
+    fun getAllWidget():LiveData<List<Widget>>
+
+    fun insert(widget: Widget)
+
+    fun deleteWidget(id : Long)
 
 }

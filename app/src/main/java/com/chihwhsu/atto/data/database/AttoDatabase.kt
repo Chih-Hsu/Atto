@@ -11,7 +11,7 @@ import com.chihwhsu.atto.data.Widget
 
 @Database(
     entities = [App::class, Event::class, AppLockTimer::class, Widget::class],
-    version = 12,
+    version = 13,
     exportSchema = false
 )
 abstract class AttoDatabase : RoomDatabase() {

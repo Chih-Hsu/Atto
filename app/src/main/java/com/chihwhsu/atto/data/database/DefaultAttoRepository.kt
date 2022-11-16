@@ -1,19 +1,14 @@
 package com.chihwhsu.atto.data.database
 
 
-import android.content.Context
-import android.content.Context.MODE_PRIVATE
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.os.Environment
-import android.util.Log
 import androidx.lifecycle.LiveData
-import com.chihwhsu.atto.AttoApplication
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.data.AppLockTimer
 import com.chihwhsu.atto.data.Event
-import kotlinx.coroutines.*
-import java.io.*
+import com.chihwhsu.atto.data.Widget
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 
 class DefaultAttoRepository(
@@ -35,6 +30,10 @@ class DefaultAttoRepository(
 
     override suspend fun insert(appLockTimer: AppLockTimer) {
         attoLocalDataSource.insert(appLockTimer)
+    }
+
+    override fun insert(widget: Widget) {
+        attoLocalDataSource.insert(widget)
     }
 
     override suspend fun update(app: App) {
@@ -156,6 +155,14 @@ class DefaultAttoRepository(
         return attoLocalDataSource.getAllTimer()
     }
 
+    override fun getAllWidget():LiveData<List<Widget>> {
+        return attoLocalDataSource.getAllWidget()
+    }
+
+    override fun deleteWidget(id: Long) {
+        return attoLocalDataSource.deleteWidget(id)
+    }
+
     override suspend fun updateAppData() {
 
         withContext(Dispatchers.Main) {
@@ -217,45 +224,21 @@ class DefaultAttoRepository(
         attoLocalDataSource.deleteSpecificLabel(label)
     }
 
-    private fun saveFile(filename: String, icon: Bitmap): Boolean {
 
-        return try {
-            AttoApplication.instance.applicationContext.openFileOutput(
-                "$filename.png",
-                MODE_PRIVATE
-            ).use { stream ->
-                if (!icon.compress(Bitmap.CompressFormat.PNG, 95, stream)) {
-                    throw IOException("Couldn't save bitmap.")
-                }
-            }
-            true
-        } catch (e: IOException) {
-            e.printStackTrace()
-            false
-        }
-    }
-
-//    private fun loadPhotosFromInternalStorage(context: Context) : Bitmap?{
-//        val file = context.filesDir
-//        val bytes = file.readBytes()
-//        val bitmap = BitmapFactory.decodeByteArray(bytes,0, bytes.size)
-//        return bitmap
+//    suspend fun loadFilesFromInternalStorage(label: String): List<Bitmap> {
+//        return withContext(Dispatchers.IO) {
+//            val files = AttoApplication.instance.applicationContext.filesDir.listFiles()
+//            //to make function look bigger :). We will try to load only the images from internal storage that we have saved in save example.
+//            files?.filter { file ->
+//                file.canRead() && file.isFile && file.name.endsWith(".png") && file.name.splitToSequence(
+//                    "/"
+//                ).last().splitToSequence(".").first() == label
+//            }?.map {
+//                val imageBytes = it.readBytes()
+//                BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+//            } ?: listOf()
+//        }
 //    }
-
-    suspend fun loadFilesFromInternalStorage(label: String): List<Bitmap> {
-        return withContext(Dispatchers.IO) {
-            val files = AttoApplication.instance.applicationContext.filesDir.listFiles()
-            //to make function look bigger :). We will try to load only the images from internal storage that we have saved in save example.
-            files?.filter { file ->
-                file.canRead() && file.isFile && file.name.endsWith(".png") && file.name.splitToSequence(
-                    "/"
-                ).last().splitToSequence(".").first() == label
-            }?.map {
-                val imageBytes = it.readBytes()
-                BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-            } ?: listOf()
-        }
-    }
 
 
 }

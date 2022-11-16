@@ -1,6 +1,6 @@
 package com.chihwhsu.atto.main
 
-import android.appwidget.AppWidgetProviderInfo
+
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +14,6 @@ import com.chihwhsu.atto.ext.getVmFactory
 class MainFragment : Fragment() {
 
     private val viewModel by viewModels<MainViewModel> { getVmFactory() }
-    private var widgetInfo : String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -23,15 +22,12 @@ class MainFragment : Fragment() {
     ): View? {
         val binding = FragmentMainBinding.inflate(inflater,container,false)
 
-        widgetInfo = MainFragmentArgs.fromBundle(requireArguments()).widgetLabel
 
         // set ViewPager2
         val adapter = MainViewPagerAdapter(this)
         binding.viewPager.adapter = adapter
         binding.viewPager.post {
-            if (widgetInfo == null){
                 binding.viewPager.setCurrentItem(1, true)
-            }
         }
 
         val dockAdapter = DockAdapter(DockAdapter.DockOnClickListener {
@@ -64,8 +60,5 @@ class MainFragment : Fragment() {
         viewModel.updateApp()
     }
 
-    fun getWidgetInfo(): String? {
-        return widgetInfo
-    }
 
 }

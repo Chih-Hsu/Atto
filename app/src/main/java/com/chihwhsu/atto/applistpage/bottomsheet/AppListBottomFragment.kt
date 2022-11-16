@@ -79,8 +79,8 @@ class AppListBottomFragment : Fragment() {
             }
         }
 
-        val itemHelper = ItemTouchHelper(simpleCallback)
-        itemHelper.attachToRecyclerView(binding.appRecyclerView)
+//        val itemHelper = ItemTouchHelper(simpleCallback)
+//        itemHelper.attachToRecyclerView(binding.appRecyclerView)
 
 
 

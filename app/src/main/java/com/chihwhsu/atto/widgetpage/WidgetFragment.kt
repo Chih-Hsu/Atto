@@ -1,18 +1,35 @@
 package com.chihwhsu.atto.widgetpage
 
+import android.app.ActionBar
 import android.appwidget.AppWidgetHost
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProviderInfo
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import android.widget.RemoteViews
+import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.core.view.children
+import androidx.core.view.marginTop
+import androidx.core.view.setPadding
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.chihwhsu.atto.NavigationDirections
+import com.chihwhsu.atto.R
 import com.chihwhsu.atto.component.UsageTimerService
 import com.chihwhsu.atto.databinding.FragmentWidgetBinding
+import com.chihwhsu.atto.ext.getVmFactory
+import com.chihwhsu.atto.homepage.HomeViewModel
 import com.chihwhsu.atto.main.MainFragment
 
 
@@ -22,6 +39,11 @@ class WidgetFragment : Fragment() {
         const val HOST_ID = 1
         const val REQUEST_BIND_APPWIDGET = 99
     }
+
+    private lateinit var appWidgetHost: AppWidgetHost
+
+
+    private val viewModel by viewModels<WidgetViewModel> { getVmFactory() }
 
 
     override fun onCreateView(
@@ -38,32 +60,97 @@ class WidgetFragment : Fragment() {
         }
 
 
-
-        val appWidgetHost = AppWidgetHost(requireActivity().applicationContext, HOST_ID)
+        appWidgetHost = AppWidgetHost(requireActivity().applicationContext, HOST_ID)
         val appWidgetManager = AppWidgetManager.getInstance(requireActivity().applicationContext)
+        appWidgetHost.startListening()
 
-        val widgetLabel = (requireParentFragment() as MainFragment).getWidgetInfo()
+
+        viewModel.widgets.observe(viewLifecycleOwner, Observer { widgets ->
 
 
-        widgetLabel?.let {
-            val widgetInfo = appWidgetManager.installedProviders.filter { it.label == widgetLabel }.first()
-            val appWidgetId = appWidgetHost.allocateAppWidgetId()
-            val canBind = appWidgetManager.bindAppWidgetIdIfAllowed(appWidgetId, widgetInfo.provider)
 
-            if (canBind) {
-                val widgetView = appWidgetHost.createView(
-                    requireActivity().applicationContext,
-                    appWidgetId,
-                    widgetInfo
-                ).apply {
-                    setAppWidget(appWidgetId, widgetInfo)
+            for (widget in widgets) {
+
+                Log.d("widget","widget = ${widget.label}  boolean = ${viewModel.checkWidgetVisible(widget.label)}")
+                if (viewModel.checkWidgetVisible(widget.label)) {
+                    viewModel.setCatchWidget(widget)
+
+                    val widgetInfo =
+                        appWidgetManager.installedProviders.filter { it.label == widget.label }
+                            .first()
+                    val appWidgetId = appWidgetHost.allocateAppWidgetId()
+                    val canBind =
+                        appWidgetManager.bindAppWidgetIdIfAllowed(appWidgetId, widgetInfo.provider)
+
+//                val viewR = RemoteViews(widgetInfo.provider.packageName,widgetInfo.initialLayout)
+                    if (canBind) {
+                        val widgetView = appWidgetHost.createView(
+                            requireActivity().applicationContext,
+                            appWidgetId,
+                            widgetInfo
+                        ).apply {
+                            background = resources.getDrawable(R.drawable.widget_rounded_background)
+                            setAppWidget(appWidgetId, widgetInfo)
+//                        layoutParams.setMargins(0, 0, 0, 0)
+//                        val layoutParam = ViewGroup.LayoutParams.MATCH_PARENT
+//                        updateViewLayout(this,layoutParams)
+//                        updateAppWidget(viewR)
+                        }
+//                    binding.containerWidget.addView(widgetView)
+
+
+                        binding.containerWidget.addView(
+                            widgetView,
+                            WindowManager.LayoutParams.MATCH_PARENT,
+                            widgetInfo.minHeight
+                        )
+
+                        widgetView.setOnLongClickListener {
+                            viewModel.deleteWidget(widget.id)
+                            appWidgetHost.deleteHost()
+                            true
+                        }
+//                        val layoutParam = ViewGroup.LayoutParams(
+//                            WindowManager.LayoutParams.MATCH_PARENT,
+//                            widgetInfo.minHeight
+//                        )
+
+//                    layoutParam.width = WindowManager.LayoutParams.MATCH_PARENT
+//                    layoutParam.height = widgetInfo.minHeight
+
+//                        binding.containerWidget.addView(widgetView, layoutParam)
+                    } else {
+                        getWidgetPermission(appWidgetId, widgetInfo)
+
+                    }
+
+
                 }
-                binding.containerWidget.addView(widgetView)
-            } else {
-                getWidgetPermission(appWidgetId, widgetInfo)
+
+
             }
 
-        }
+        })
+
+
+//        widgetLabel?.let {
+//            val widgetInfo = appWidgetManager.installedProviders.filter { it.label == widgetLabel }.first()
+//            val appWidgetId = appWidgetHost.allocateAppWidgetId()
+//            val canBind = appWidgetManager.bindAppWidgetIdIfAllowed(appWidgetId, widgetInfo.provider)
+//
+//            if (canBind) {
+//                val widgetView = appWidgetHost.createView(
+//                    requireActivity().applicationContext,
+//                    appWidgetId,
+//                    widgetInfo
+//                ).apply {
+//                    setAppWidget(appWidgetId, widgetInfo)
+//                }
+//                binding.containerWidget.addView(widgetView)
+//            } else {
+//                getWidgetPermission(appWidgetId, widgetInfo)
+//            }
+//        }
 
         return binding.root
     }
@@ -81,6 +168,11 @@ class WidgetFragment : Fragment() {
             putExtra(AppWidgetManager.EXTRA_APPWIDGET_PROVIDER, info.provider)
         }
         startActivityForResult(intent, REQUEST_BIND_APPWIDGET)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        appWidgetHost.stopListening()
     }
 
 }

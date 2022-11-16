@@ -5,6 +5,7 @@ import androidx.room.*
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.data.AppLockTimer
 import com.chihwhsu.atto.data.Event
+import com.chihwhsu.atto.data.Widget
 
 @Dao
 interface AttoDatabaseDao {
@@ -120,8 +121,15 @@ interface AttoDatabaseDao {
 
     // Widget
 
-//    @Query("SELECT * FROM widget_table ORDER BY id")
-//    fun getAllWidget()
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insert(widget: Widget)
+
+    @Query("DELETE FROM widget_table WHERE id = :id")
+    fun deleteWidget(id : Long)
+
+
+    @Query("SELECT * FROM widget_table")
+    fun getAllWidget():LiveData<List<Widget>>
 
 
 }

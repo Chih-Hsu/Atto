@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.data.AppLockTimer
 import com.chihwhsu.atto.data.Event
+import com.chihwhsu.atto.data.Widget
 import com.chihwhsu.atto.data.database.AttoDataSource
 import com.chihwhsu.atto.data.database.AttoDatabase
 
@@ -20,6 +21,10 @@ class AttoLocalDataSource(private val context: Context) : AttoDataSource {
 
     override suspend  fun insert(appLockTimer: AppLockTimer) {
         AttoDatabase.getInstance(context).attoDatabaseDao.insert(appLockTimer)
+    }
+
+    override fun insert(widget: Widget) {
+        AttoDatabase.getInstance(context).attoDatabaseDao.insert(widget)
     }
 
     override suspend  fun update(app: App) {
@@ -149,6 +154,14 @@ class AttoLocalDataSource(private val context: Context) : AttoDataSource {
 
     override fun getAllTimer(): LiveData<List<AppLockTimer>> {
         return AttoDatabase.getInstance(context).attoDatabaseDao.getAllTimer()
+    }
+
+    override fun getAllWidget():LiveData<List<Widget>> {
+        return AttoDatabase.getInstance(context).attoDatabaseDao.getAllWidget()
+    }
+
+    override fun deleteWidget(id: Long) {
+        return AttoDatabase.getInstance(context).attoDatabaseDao.deleteWidget(id)
     }
 
 

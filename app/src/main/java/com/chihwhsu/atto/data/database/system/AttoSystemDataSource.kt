@@ -11,9 +11,9 @@ import com.chihwhsu.atto.AttoApplication
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.data.AppLockTimer
 import com.chihwhsu.atto.data.Event
+import com.chihwhsu.atto.data.Widget
 import com.chihwhsu.atto.data.database.AttoDataSource
 import com.chihwhsu.atto.ext.convertToBitmap
-import com.chihwhsu.atto.ext.createGrayscale
 import java.io.IOException
 
 class AttoSystemDataSource(val context: Context) : AttoDataSource {
@@ -27,6 +27,10 @@ class AttoSystemDataSource(val context: Context) : AttoDataSource {
     }
 
     override suspend fun insert(appLockTimer: AppLockTimer) {
+        TODO("Not yet implemented")
+    }
+
+    override fun insert(widget: Widget) {
         TODO("Not yet implemented")
     }
 
@@ -86,6 +90,7 @@ class AttoSystemDataSource(val context: Context) : AttoDataSource {
             val appPackageName = app.activityInfo.packageName
             val appImage = app.activityInfo.loadIcon(manager)
 
+            Log.d("internal","context.filesDir.absolutePath +\"/\"+\"$appName.png\"")
             saveFile(appName,appImage.convertToBitmap())
             val newApp = App(appName, appPackageName, context.filesDir.absolutePath +"/"+"$appName.png")
             currentAppList.add(newApp)
@@ -176,6 +181,14 @@ class AttoSystemDataSource(val context: Context) : AttoDataSource {
         TODO("Not yet implemented")
     }
 
+    override fun getAllWidget():LiveData<List<Widget>> {
+        TODO("Not yet implemented")
+    }
+
+    override fun deleteWidget(id: Long) {
+        TODO("Not yet implemented")
+    }
+
     private fun saveFile(filename: String, icon: Bitmap): Boolean {
 
         return try {
@@ -186,6 +199,7 @@ class AttoSystemDataSource(val context: Context) : AttoDataSource {
                 if (!icon.compress(Bitmap.CompressFormat.PNG, 95, stream)) {
                     throw IOException("Couldn't save bitmap.")
                 }
+                stream.close()
             }
             true
         } catch (e: IOException) {
