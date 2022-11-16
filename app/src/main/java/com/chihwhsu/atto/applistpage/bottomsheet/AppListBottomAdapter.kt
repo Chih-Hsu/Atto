@@ -80,18 +80,22 @@ class AppListBottomAdapter(
             when (item.app.theme) {
                 Theme.DEFAULT.index -> {
                     binding.iconBackground.setBackgroundResource(R.drawable.icon_background)
+                    binding.kanaImage.visibility = View.INVISIBLE
                 }
                 Theme.BLACK.index -> {
                     binding.iconBackground.setBackgroundResource(R.drawable.icon_background_black)
+                    binding.kanaImage.visibility = View.INVISIBLE
                 }
                 Theme.HIGH_LIGHT.index -> {
                     binding.iconBackground.setBackgroundResource(R.drawable.icon_backgroung_hightlight)
+                    binding.kanaImage.visibility = View.INVISIBLE
                 }
                 Theme.KANAHEI.index -> {
                     binding.kanaImage.visibility = View.VISIBLE
                 }
                 else -> {
                     binding.iconBackground.setBackgroundResource(R.drawable.icon_background)
+                    binding.kanaImage.visibility = View.INVISIBLE
                 }
             }
 
@@ -116,12 +120,10 @@ class AppListBottomAdapter(
 
             }
 
-            itemView.setOnLongClickListener(object : View.OnLongClickListener {
-                override fun onLongClick(v: View?): Boolean {
-                    longClickListener.onClick(item.app)
-                    return true
-                }
-            })
+            itemView.setOnLongClickListener {
+                longClickListener.onClick(item.app)
+                true
+            }
         }
     }
 

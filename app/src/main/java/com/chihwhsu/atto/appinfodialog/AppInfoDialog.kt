@@ -1,6 +1,6 @@
 package com.chihwhsu.atto.appinfodialog
 
-import android.app.Dialog
+
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle

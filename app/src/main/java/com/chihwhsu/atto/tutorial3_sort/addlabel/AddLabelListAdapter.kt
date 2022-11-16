@@ -62,8 +62,6 @@ class AddLabelListAdapter (val viewModel: AddLabelViewModel, val onClickListener
         }
 
         private fun checkItemInRemain(item:App){
-//            Log.d("AddLabel","item == $item   boolean  = ${!viewModel.remainList.filter { it.appLabel == item.appLabel }.isEmpty()}")
-            Log.d("AddLabel","item == $item   boolean  = ${viewModel.remainList}")
 
                 if (!viewModel.remainList.filter { it.appLabel == item.appLabel }.isEmpty()){
                     binding.iconBackground.setBackgroundResource(R.drawable.icon_background_selected)
