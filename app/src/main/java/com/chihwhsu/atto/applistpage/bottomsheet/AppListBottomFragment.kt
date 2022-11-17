@@ -2,6 +2,7 @@ package com.chihwhsu.atto.applistpage.bottomsheet
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,6 +31,7 @@ class AppListBottomFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
+        Log.d("LaunchTest","AppListBottomFragment Work")
 
         requireActivity().window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING or WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
 

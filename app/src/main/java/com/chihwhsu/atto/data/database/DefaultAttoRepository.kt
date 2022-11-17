@@ -81,7 +81,6 @@ class DefaultAttoRepository(
     }
 
     override fun getAllApps(): LiveData<List<App>> {
-
         return attoLocalDataSource.getAllApps()
 
     }

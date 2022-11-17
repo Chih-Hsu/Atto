@@ -2,6 +2,7 @@ package com.chihwhsu.atto.homepage
 
 import android.animation.ObjectAnimator
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
@@ -33,6 +34,8 @@ class HomeFragment : Fragment() {
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
+        Log.d("LaunchTest", "HomeFragment Work")
+
 
         val adapter = HomeAdapter(HomeAdapter.EventClickListener { event ->
             viewModel.setEvent(event)
@@ -49,10 +52,15 @@ class HomeFragment : Fragment() {
         )
 
         viewModel.eventList.observe(viewLifecycleOwner, Observer { list ->
+
             val newList =
                 list.filter { it.alarmTime < getEndOfToday() && it.alarmTime > getCurrentDay() }
-            val expiredList = list.filter {  it.alarmTime < System.currentTimeMillis()+60000 } // Delete event after 1 minute
+
+            val expiredList =
+                list.filter { it.alarmTime < System.currentTimeMillis() + 60000 } // Delete event after 1 minute
+
             viewModel.deleteEvent(expiredList)
+
             adapter.submitList(newList)
         })
 
@@ -73,7 +81,7 @@ class HomeFragment : Fragment() {
             binding.eventTitle.text = when (event.type) {
                 ALARM_TYPE -> "Wake Up"
                 TODO_TYPE -> "NEXT TODO"
-                POMODORO_WORK_TYPE  -> "IT'S POMODORO"
+                POMODORO_WORK_TYPE -> "IT'S POMODORO"
                 POMODORO_BREAK_TYPE -> "IT'S POMODORO"
                 else -> "No Event"
             }
@@ -177,12 +185,9 @@ class HomeFragment : Fragment() {
         }
 
 
-        binding.button2.setOnClickListener {
-            findNavController().navigate(MainFragmentDirections.actionMainFragmentToLoginFragment())
-        }
-
-
-
+//        binding.button2.setOnClickListener {
+//            findNavController().navigate(MainFragmentDirections.actionMainFragmentToLoginFragment())
+//        }
 
 
         return binding.root
@@ -209,7 +214,6 @@ class HomeFragment : Fragment() {
         animation.start()
         viewModel.initAnimation()
     }
-
 
 
 }

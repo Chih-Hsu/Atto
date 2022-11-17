@@ -39,7 +39,9 @@ class DockViewModel(
     private var originalList = listOf<App>()
 
     init {
-//          getAppList()
+        coroutineScope.launch(Dispatchers.IO) {
+            repository.updateAppData()
+        }
     }
 
 
@@ -53,43 +55,38 @@ class DockViewModel(
             }
         }
 
+        allAppList?.let { apps ->
+            dockAppList.let { dockApps ->
 
 
-        allAppList?.let {  apps ->
-        dockAppList.let {  dockApps ->
-
-
-            val currentApp =  apps.filter { it.appLabel == appLabel }.first()
-                if ( dockApps.size < 5 && dockApps.filter { it.appLabel == appLabel }.isEmpty()) {
+                val currentApp = apps.filter { it.appLabel == appLabel }.first()
+                if (dockApps.size < 5 && dockApps.filter { it.appLabel == appLabel }.isEmpty()) {
 
                     dockApps.add(currentApp)
-                        _dockAppList.value = dockApps
+                    _dockAppList.value = dockApps
 
-                        coroutineScope.launch(Dispatchers.IO) {
-                            repository.updateLabel(appLabel,"dock")
-                            repository.updateSort(appLabel,dockApps.indexOf(currentApp))
-                        }
-                    } else if ( !dockApps.filter { it.appLabel == appLabel }.isEmpty()) {
-
-                        dockApps.remove(currentApp)
-                        _dockAppList.value = dockApps
-                    Log.d("dock","$dockApps")
-
-                        coroutineScope.launch(Dispatchers.IO) {
-                            repository.updateLabel(appLabel,null)
-                            repository.updateSort(appLabel,-1)
-                        }
-                    } else {
-
-                    Log.d("dock","Hiii")
-
+                    coroutineScope.launch(Dispatchers.IO) {
+                        repository.updateLabel(appLabel, "dock")
+                        repository.updateSort(appLabel, dockApps.indexOf(currentApp))
                     }
+                } else if (!dockApps.filter { it.appLabel == appLabel }.isEmpty()) {
+
+                    dockApps.remove(currentApp)
+                    _dockAppList.value = dockApps
+                    Log.d("dock", "$dockApps")
+
+                    coroutineScope.launch(Dispatchers.IO) {
+                        repository.updateLabel(appLabel, null)
+                        repository.updateSort(appLabel, -1)
+                    }
+                } else {
+
+                    Log.d("dock", "Hiii")
+
                 }
             }
         }
-
-
-
+    }
 
 
 //    fun selectApp(appLabel: String) {
@@ -136,7 +133,7 @@ class DockViewModel(
         }
     }
 
-    fun setDockList( list:List<App>){
+    fun setDockList(list: List<App>) {
         if (dockAppList.value.isNullOrEmpty()) {
             _dockAppList.value = list
         }

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/tutorial_navigation"
-    app:startDestination="@id/wallpaperFragment">
+    app:startDestination="@id/loginFragment">
 
     <fragment
         android:id="@+id/wallpaperFragment"
@@ -91,4 +91,12 @@
         android:name="com.chihwhsu.atto.tutorial5_set_default.SetDefaultFragment"
         android:label="SetDefaultFragment"
         tools:layout="@layout/fragment_set_default"/>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.chihwhsu.atto.login.LoginFragment"
+        android:label="LoginFragment" >
+        <action
+            android:id="@+id/action_loginFragment_to_wallpaperFragment2"
+            app:destination="@id/wallpaperFragment" />
+    </fragment><action android:id="@+id/action_global_wallpaperFragment" app:destination="@id/wallpaperFragment"/>
 </navigation>

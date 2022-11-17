@@ -21,30 +21,38 @@ class MainViewModel(private val repository: AttoRepository) : ViewModel() {
 
 
     fun checkUsageTimer(context: Context) {
+
         timerList.value?.let { timers ->
 
-            for (timer in timers) {
+            coroutineScope.launch(Dispatchers.Default) {
 
-                coroutineScope.launch(Dispatchers.IO) {
+                for (timer in timers) {
 
-                val app = repository.getApp(timer.packageName)
-                app?.let {
-                    val usageTime = it.getUsageTimeFromStart(context, timer.startTime)
-                    if ( usageTime >= timer.targetTime) {
-                        repository.lockApp(it.packageName)
-                        repository.deleteTimer(timer.id)
-                    }else{
-                        repository.updateTimer(timer.targetTime - usageTime)
+                    val app = repository.getApp(timer.packageName)
+
+                    app?.let {
+
+                        val usageTime = it.getUsageTimeFromStart(context, timer.startTime)
+                        if (usageTime >= timer.targetTime) {
+
+                            repository.lockApp(it.packageName)
+                            repository.deleteTimer(timer.id)
+
+                        } else {
+
+                            repository.updateTimer(timer.targetTime - usageTime)
+
+                        }
                     }
                 }
-                }
+            }
         }
     }
-    }
 
-    fun updateApp(){
-        coroutineScope.launch {
-                AttoApplication.instance.attoRepository.updateAppData()
-            }
+    fun updateApp() {
+
+        coroutineScope.launch(Dispatchers.IO) {
+            AttoApplication.instance.attoRepository.updateAppData()
+        }
     }
 }

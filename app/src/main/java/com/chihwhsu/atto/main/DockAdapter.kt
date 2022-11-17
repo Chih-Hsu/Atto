@@ -40,11 +40,9 @@ class DockAdapter (val onClickListener : DockOnClickListener) : ListAdapter<App,
             itemView.setOnClickListener {
                 onClickListener.onClick(item.packageName)
             }
-
             val colorMatrix = ColorMatrix()
             colorMatrix.setSaturation(0f)
             val filter = ColorMatrixColorFilter(colorMatrix)
-
             binding.dockIconImage.colorFilter = filter
         }
     }

@@ -15,9 +15,9 @@ class MainViewPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) 
 
         return when (position) {
 
-            0 -> WidgetFragment()
-            1 -> HomeFragment()
-            2 -> AppListContainerFragment()
+            0 -> HomeFragment()
+            1 -> AppListContainerFragment()
+            2 -> WidgetFragment()
             else -> throw IllegalArgumentException("Unknown Fragment")
         }
     }

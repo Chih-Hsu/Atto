@@ -2,6 +2,7 @@ package com.chihwhsu.atto.applistpage
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,6 +32,8 @@ class AppListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val binding = FragmentAppListBinding.inflate(inflater, container, false)
+        Log.d("LaunchTest","AppListFragment Work")
+
 
         val adapter = AppListAdapter(
             AppListAdapter.AppOnClickListener {
@@ -100,7 +103,12 @@ class AppListFragment : Fragment() {
         }
 
         viewModel.appList.observe(viewLifecycleOwner, Observer {
-            adapter.submitList(viewModel.resetList(it.filter { it.appLabel != "Atto"}, requireContext()))
+            viewModel.resetList(it.filter { it.appLabel != "Atto"}, requireContext())
+
+        })
+
+        viewModel.appGroupList.observe(viewLifecycleOwner, Observer {
+            adapter.submitList(it)
         })
 
         return binding.root

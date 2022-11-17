@@ -53,6 +53,8 @@ class WidgetFragment : Fragment() {
 
         val binding = FragmentWidgetBinding.inflate(inflater, container, false)
 
+        Log.d("LaunchTest","WidgetFragment Work")
+
         binding.root.setOnLongClickListener {
             findNavController().navigate(NavigationDirections.actionGlobalWidgetBottomSheetFragment())
             true
@@ -66,11 +68,8 @@ class WidgetFragment : Fragment() {
 
         viewModel.widgets.observe(viewLifecycleOwner, Observer { widgets ->
 
-
-
             for (widget in widgets) {
 
-                Log.d("widget","widget = ${widget.label}  boolean = ${viewModel.checkWidgetVisible(widget.label)}")
                 if (viewModel.checkWidgetVisible(widget.label)) {
                     viewModel.setCatchWidget(widget)
 

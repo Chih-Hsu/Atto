@@ -2,6 +2,7 @@ package com.chihwhsu.atto.main
 
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,13 +23,16 @@ class MainFragment : Fragment() {
     ): View? {
         val binding = FragmentMainBinding.inflate(inflater,container,false)
 
+        Log.d("LaunchTest","MainFragment Work")
+
 
         // set ViewPager2
         val adapter = MainViewPagerAdapter(this)
         binding.viewPager.adapter = adapter
-        binding.viewPager.post {
-                binding.viewPager.setCurrentItem(1, true)
-        }
+
+//        binding.viewPager.post {
+//                binding.viewPager.setCurrentItem(1, true)
+//        }
 
         val dockAdapter = DockAdapter(DockAdapter.DockOnClickListener {
             val launchAppIntent = requireContext().packageManager.getLaunchIntentForPackage(it)
@@ -37,13 +41,17 @@ class MainFragment : Fragment() {
 
         binding.dockRecyclerview.adapter = dockAdapter
         viewModel.dockList.observe(viewLifecycleOwner, Observer { list ->
+
             if (list.isNotEmpty()){
-                list.sortedBy { it.sort }
+                list.sortedBy {
+                    it.sort
+                }
                 dockAdapter.submitList(list)
                 binding.constraintLayout.visibility = View.VISIBLE
             } else {
                 binding.constraintLayout.visibility = View.GONE
             }
+
         })
 
 
