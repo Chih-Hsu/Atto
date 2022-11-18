@@ -12,10 +12,12 @@ import com.chihwhsu.atto.data.database.AttoDatabaseDao
 import com.chihwhsu.atto.data.database.AttoRepository
 import com.chihwhsu.atto.homepage.HomeViewModel
 import com.chihwhsu.atto.main.MainViewModel
+import com.chihwhsu.atto.sync_page.SyncViewModel
 import com.chihwhsu.atto.tutorial3_sort.SortViewModel
 import com.chihwhsu.atto.tutorial3_sort.addlabel.AddLabelViewModel
 import com.chihwhsu.atto.usagelimit.UsageLimitViewModel
 import com.chihwhsu.atto.widgetpage.WidgetViewModel
+import com.chihwhsu.atto.widgetpage.remove_dialog.WidgetRemoveViewModel
 import com.chihwhsu.atto.widgetpage.widget_bottom_sheet.WidgetBottomViewModel
 
 class ViewModelFactory constructor(
@@ -64,6 +66,12 @@ class ViewModelFactory constructor(
 
                 isAssignableFrom(WidgetViewModel::class.java) ->
                     WidgetViewModel(repository)
+
+                isAssignableFrom(WidgetRemoveViewModel::class.java) ->
+                    WidgetRemoveViewModel(repository)
+
+                isAssignableFrom(SyncViewModel::class.java) ->
+                    SyncViewModel(repository)
 
                 else ->
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")

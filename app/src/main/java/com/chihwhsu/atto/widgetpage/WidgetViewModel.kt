@@ -1,6 +1,6 @@
 package com.chihwhsu.atto.widgetpage
 
-import android.util.Log
+
 import androidx.lifecycle.ViewModel
 import com.chihwhsu.atto.data.Widget
 import com.chihwhsu.atto.data.database.AttoRepository
@@ -30,7 +30,6 @@ class WidgetViewModel(val repository: AttoRepository) : ViewModel() {
     }
 
     fun checkWidgetVisible(widgetLabel: String): Boolean {
-        Log.d("widget","$catchWidget")
         return !catchWidget.containsKey(widgetLabel)
     }
 

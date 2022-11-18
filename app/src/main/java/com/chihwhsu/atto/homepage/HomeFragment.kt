@@ -19,7 +19,6 @@ import com.chihwhsu.atto.data.Event.Companion.POMODORO_WORK_TYPE
 import com.chihwhsu.atto.data.Event.Companion.TODO_TYPE
 import com.chihwhsu.atto.databinding.FragmentHomeBinding
 import com.chihwhsu.atto.ext.*
-import com.chihwhsu.atto.main.MainFragmentDirections
 
 class HomeFragment : Fragment() {
 
@@ -185,9 +184,6 @@ class HomeFragment : Fragment() {
         }
 
 
-//        binding.button2.setOnClickListener {
-//            findNavController().navigate(MainFragmentDirections.actionMainFragmentToLoginFragment())
-//        }
 
 
         return binding.root

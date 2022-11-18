@@ -8,10 +8,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.chihwhsu.atto.NavigationDirections
 import com.chihwhsu.atto.R
 import com.chihwhsu.atto.TutorialNavigationDirections
+import com.chihwhsu.atto.data.User
 import com.chihwhsu.atto.databinding.FragmentLoginBinding
+import com.chihwhsu.atto.util.UserManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -29,6 +34,7 @@ import kotlinx.coroutines.withContext
 class LoginFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
+    private lateinit var viewModel: LoginViewModel
 
     companion object {
         const val REQUEST_CODE_SIGN_IN = 123
@@ -42,6 +48,7 @@ class LoginFragment : Fragment() {
     ): View? {
 
         val binding = FragmentLoginBinding.inflate(inflater, container, false)
+        viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
 
         auth = Firebase.auth
 
@@ -53,7 +60,6 @@ class LoginFragment : Fragment() {
         val signInClient = GoogleSignIn.getClient(requireActivity(), options)
 
         binding.buttonSignIn.setOnClickListener {
-
             signInClient.signInIntent.also {
                 startActivityForResult(it, REQUEST_CODE_SIGN_IN)
             }
@@ -63,9 +69,15 @@ class LoginFragment : Fragment() {
 //            signInClient.signOut()
 //        }
 
+
         binding.buttonGuestLogin.setOnClickListener {
-            this.findNavController().navigate(TutorialNavigationDirections.actionGlobalWallpaperFragment())
+            this.findNavController()
+                .navigate(TutorialNavigationDirections.actionGlobalWallpaperFragment())
         }
+
+        viewModel.user.observe(viewLifecycleOwner, Observer { user ->
+                findNavController().navigate(TutorialNavigationDirections.actionGlobalAfterLoginFragment(user))
+        })
 
 
 
@@ -99,9 +111,15 @@ class LoginFragment : Fragment() {
             val account = GoogleSignIn.getSignedInAccountFromIntent(data).result
             account?.let {
                 googleAuthForFirebase(it)
+                UserManager.userToken = account.idToken
+                val user = User(it.id,it.email,it.displayName,it.photoUrl)
+//                val user = User(it.id,it.email,it.displayName,it.photoUrl)
+                viewModel.uploadUser(user)
             }
         }
 
 
     }
+
+
 }

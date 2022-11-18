@@ -14,6 +14,7 @@ import com.chihwhsu.atto.R
 import com.chihwhsu.atto.databinding.DialogUsageLimitBinding
 import com.chihwhsu.atto.ext.getVmFactory
 import com.chihwhsu.atto.util.clickAnimation
+import com.google.android.material.animation.AnimationUtils
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
@@ -41,7 +42,6 @@ class UsageLimitDialog : BottomSheetDialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         val binding = DialogUsageLimitBinding.inflate(inflater,container,false)
-
         val app = UsageLimitDialogArgs.fromBundle(requireArguments()).app
 
         binding.hourArrowUp.setOnClickListener {
@@ -86,7 +86,7 @@ class UsageLimitDialog : BottomSheetDialogFragment() {
 
         binding.buttonSend.setOnClickListener {
             viewModel.lockApp(app)
-            findNavController().navigate(NavigationDirections.actionGlobalMainFragment())
+            findNavController().navigateUp()
         }
 
 

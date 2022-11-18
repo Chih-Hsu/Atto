@@ -111,8 +111,9 @@ class WidgetFragment : Fragment() {
 
 
                         widgetView.setOnLongClickListener {
-                            viewModel.deleteWidget(widget.id)
-                            appWidgetHost.deleteHost()
+//                            viewModel.deleteWidget(widget.id)
+//                            appWidgetHost.deleteHost()
+                            findNavController().navigate(NavigationDirections.actionGlobalWidgetRemoveDialog(widget))
                             true
                         }
 //                        val layoutParam = ViewGroup.LayoutParams(

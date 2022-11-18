@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/wallpaper_plant">
+
+
+    <TextView
+        android:id="@+id/text_hello"
+        style="@style/standard_text_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="250dp"
+        android:text="Hello"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_user_name"
+        style="@style/standard_text_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textSize="40sp"
+        android:layout_marginTop="@dimen/standard_margin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_hello" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_sync"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="48dp"
+        android:insetLeft="4dp"
+        android:insetTop="4dp"
+        android:insetRight="4dp"
+        android:insetBottom="4dp"
+        android:layout_marginStart="@dimen/standard_margin"
+        android:layout_marginEnd="4dp"
+        android:text="從雲端同步資料"
+        app:backgroundTint="@color/black"
+        android:textColor="@color/light_grey"
+        app:layout_constraintEnd_toStartOf="@+id/button_to_tutorial"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_user_name" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_to_tutorial"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:insetLeft="4dp"
+        android:insetTop="4dp"
+        android:insetRight="4dp"
+        android:insetBottom="4dp"
+        android:text="不同步資料"
+        android:layout_marginStart="4dp"
+        app:backgroundTint="@color/black"
+        android:textColor="@color/light_grey"
+        android:layout_marginEnd="@dimen/standard_margin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/button_sync"
+        app:layout_constraintTop_toTopOf="@+id/button_sync" />
+</androidx.constraintlayout.widget.ConstraintLayout>

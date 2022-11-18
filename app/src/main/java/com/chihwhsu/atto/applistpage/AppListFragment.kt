@@ -74,7 +74,7 @@ class AppListFragment : Fragment() {
 //                val fromPosition = viewHolder.adapterPosition
 //                val toPosition = target.adapterPosition
 //                val arrayList = java.util.ArrayList(adapter.currentList)
-////                Collections.swap(adapter.currentList,fromPosition,toPosition)
+//                Collections.swap(adapter.currentList,fromPosition,toPosition)
 //
 //
 //                adapter.notifyItemMoved(fromPosition,toPosition)

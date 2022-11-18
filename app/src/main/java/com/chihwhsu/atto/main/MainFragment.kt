@@ -51,7 +51,6 @@ class MainFragment : Fragment() {
             } else {
                 binding.constraintLayout.visibility = View.GONE
             }
-
         })
 
 

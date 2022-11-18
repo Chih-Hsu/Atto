@@ -1,20 +1,11 @@
 package com.chihwhsu.atto
 
 import android.os.Bundle
-import android.view.View
-import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.work.Constraints
 import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.chihwhsu.atto.background.ResetWorker
-import eightbitlab.com.blurview.BlurView
-import eightbitlab.com.blurview.RenderScriptBlur
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import java.time.Duration
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -27,7 +18,7 @@ class MainActivity : AppCompatActivity() {
         // set NavigationBar color transparent
         window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
 
-        setResetWorker()
+//        setResetWorker()
 
     }
 

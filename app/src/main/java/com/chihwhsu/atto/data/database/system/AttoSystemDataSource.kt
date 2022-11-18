@@ -2,6 +2,7 @@ package com.chihwhsu.atto.data.database.system
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ApplicationInfo
 import android.content.pm.ResolveInfo
 import android.graphics.Bitmap
 import android.util.Log
@@ -89,6 +90,9 @@ class AttoSystemDataSource(val context: Context) : AttoDataSource {
             val appName = app.activityInfo.loadLabel(manager).toString()
             val appPackageName = app.activityInfo.packageName
             val appImage = app.activityInfo.loadIcon(manager)
+
+//            val category = 
+//            ApplicationInfo.getCategoryTitle(context,app.activityInfo.applicationInfo.category)
 
             Log.d("internal","context.filesDir.absolutePath +\"/\"+\"$appName.png\"")
             saveFile(appName,appImage.convertToBitmap())

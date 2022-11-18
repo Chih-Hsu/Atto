@@ -94,9 +94,27 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.chihwhsu.atto.login.LoginFragment"
-        android:label="LoginFragment" >
+        android:label="LoginFragment"
+        tools:layout="@layout/fragment_login">
         <action
-            android:id="@+id/action_loginFragment_to_wallpaperFragment2"
+            android:id="@+id/action_loginFragment_to_wallpaperFragment"
             app:destination="@id/wallpaperFragment" />
-    </fragment><action android:id="@+id/action_global_wallpaperFragment" app:destination="@id/wallpaperFragment"/>
+        <action
+            android:id="@+id/action_loginFragment_to_afterLoginFragment"
+            app:destination="@id/syncFragment" />
+    </fragment>
+    <action android:id="@+id/action_global_wallpaperFragment" app:destination="@id/wallpaperFragment" />
+    <fragment
+        android:id="@+id/syncFragment"
+        android:name="com.chihwhsu.atto.sync_page.SyncFragment"
+        android:label="SyncFragment"
+        tools:layout="@layout/fragment_sync">
+        <argument
+            android:name="user"
+            app:argType="com.chihwhsu.atto.data.User" />
+        <action
+            android:id="@+id/action_syncFragment_to_wallpaperFragment"
+            app:destination="@id/wallpaperFragment" />
+    </fragment>
+    <action android:id="@+id/action_global_afterLoginFragment" app:destination="@id/syncFragment" />
 </navigation>

@@ -15,7 +15,6 @@
         android:fontFamily="@font/k2d"
         android:format12Hour="MMMM"
         android:letterSpacing="0.05"
-        android:textAllCaps="true"
         android:textColor="@color/light_grey"
         android:textSize="24dp"
         app:layout_constraintStart_toStartOf="parent"

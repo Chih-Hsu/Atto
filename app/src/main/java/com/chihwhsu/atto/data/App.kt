@@ -20,11 +20,11 @@ import java.io.File
 //@TypeConverters(AttoConverter::class)
 data class App (
     @PrimaryKey(autoGenerate = false)
-    val appLabel : String,
+    val appLabel : String ="",
     @ColumnInfo(name = "package_name")
-    val packageName : String,
+    val packageName : String ="",
     @ColumnInfo(name = "icon_path")
-    val iconPath : String,
+    val iconPath : String ="",
     @ColumnInfo(name = "label")
     val label : String? = null,
     @ColumnInfo(name = "is_enable")

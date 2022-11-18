@@ -10,7 +10,7 @@ import com.chihwhsu.atto.data.Widget
 @Dao
 interface AttoDatabaseDao {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(app: App)
 
     @Update

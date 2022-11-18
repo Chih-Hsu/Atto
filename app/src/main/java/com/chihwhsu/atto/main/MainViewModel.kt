@@ -16,9 +16,12 @@ class MainViewModel(private val repository: AttoRepository) : ViewModel() {
     // the Coroutine runs using the Main (UI) dispatcher
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-    val dockList = repository.getSpecificLabelApps("dock")
+    var dockList = repository.getSpecificLabelApps("dock")
     val timerList = repository.getAllTimer()
 
+    init {
+
+    }
 
     fun checkUsageTimer(context: Context) {
 
