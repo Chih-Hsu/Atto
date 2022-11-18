@@ -91,12 +91,18 @@ class AttoSystemDataSource(val context: Context) : AttoDataSource {
             val appPackageName = app.activityInfo.packageName
             val appImage = app.activityInfo.loadIcon(manager)
 
-//            val category = 
-//            ApplicationInfo.getCategoryTitle(context,app.activityInfo.applicationInfo.category)
+            val category =
+            ApplicationInfo.getCategoryTitle(AttoApplication.instance.applicationContext,app.activityInfo.applicationInfo.category) ?: null
 
-            Log.d("internal","context.filesDir.absolutePath +\"/\"+\"$appName.png\"")
+            val newCategory = if (category == null){
+                null
+            }else{
+                category.toString()
+            }
+
+
             saveFile(appName,appImage.convertToBitmap())
-            val newApp = App(appName, appPackageName, context.filesDir.absolutePath +"/"+"$appName.png")
+            val newApp = App(appName, appPackageName, context.filesDir.absolutePath +"/"+"$appName.png", label = newCategory)
             currentAppList.add(newApp)
         }
 

@@ -34,7 +34,7 @@ data class App (
     @ColumnInfo(name = "installed")
     val installed : Boolean = true,
     @ColumnInfo(name = "sort")
-    val sort : Int = -1
+    val sort : Int = -1,
         ) :Parcelable {
 
 

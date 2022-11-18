@@ -54,6 +54,7 @@ class AppListBottomAdapter(
         fun bind(item: AppListItem.LabelItem) {
             binding.textLabel.apply {
                 text = item.title
+//                textSize = 20F
                 setTextColor(ResourcesCompat.getColor(itemView.resources, R.color.light_grey, null))
             }
         }
