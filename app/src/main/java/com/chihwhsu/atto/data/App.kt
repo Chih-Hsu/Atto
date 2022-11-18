@@ -32,7 +32,7 @@ data class App (
     @ColumnInfo(name = "theme")
     val theme : Int = -1,
     @ColumnInfo(name = "installed")
-    val installed : Boolean = true,
+    var installed : Boolean = true,
     @ColumnInfo(name = "sort")
     val sort : Int = -1,
         ) :Parcelable {

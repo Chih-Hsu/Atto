@@ -11,15 +11,15 @@ import com.chihwhsu.atto.data.database.AttoDatabase
 
 class AttoLocalDataSource(private val context: Context) : AttoDataSource {
 
-    override suspend  fun insert(app: App) {
+    override suspend fun insert(app: App) {
         AttoDatabase.getInstance(context).attoDatabaseDao.insert(app)
     }
 
-    override suspend  fun insert(event: Event) {
+    override suspend fun insert(event: Event) {
         AttoDatabase.getInstance(context).attoDatabaseDao.insert(event)
     }
 
-    override suspend  fun insert(appLockTimer: AppLockTimer) {
+    override suspend fun insert(appLockTimer: AppLockTimer) {
         AttoDatabase.getInstance(context).attoDatabaseDao.insert(appLockTimer)
     }
 
@@ -27,20 +27,20 @@ class AttoLocalDataSource(private val context: Context) : AttoDataSource {
         AttoDatabase.getInstance(context).attoDatabaseDao.insert(widget)
     }
 
-    override suspend  fun update(app: App) {
+    override suspend fun update(app: App) {
         AttoDatabase.getInstance(context).attoDatabaseDao.update(app)
     }
 
     override fun updateLabel(appName: String, label: String?) {
-        AttoDatabase.getInstance(context).attoDatabaseDao.updateLabel(appName,label)
+        AttoDatabase.getInstance(context).attoDatabaseDao.updateLabel(appName, label)
     }
 
     override fun updateSort(appName: String, sort: Int) {
         AttoDatabase.getInstance(context).attoDatabaseDao.updateSort(appName, sort)
     }
 
-    override suspend  fun updateTheme(appName: String, theme: Int?) {
-        AttoDatabase.getInstance(context).attoDatabaseDao.updateTheme(appName,theme)
+    override suspend fun updateTheme(appName: String, theme: Int?) {
+        AttoDatabase.getInstance(context).attoDatabaseDao.updateTheme(appName, theme)
     }
 
     override suspend fun updateAppData() {
@@ -55,23 +55,27 @@ class AttoLocalDataSource(private val context: Context) : AttoDataSource {
         AttoDatabase.getInstance(context).attoDatabaseDao.deleteSpecificLabel(label)
     }
 
-    override suspend  fun lockApp(packageName: String) {
+    override fun updateIconPath(appName: String, path: String) {
+        AttoDatabase.getInstance(context).attoDatabaseDao.updateIconPath(appName, path)
+    }
+
+    override suspend fun lockApp(packageName: String) {
         AttoDatabase.getInstance(context).attoDatabaseDao.lockApp(packageName, false)
     }
 
-    override suspend  fun unLockAllApp() {
+    override suspend fun unLockAllApp() {
         AttoDatabase.getInstance(context).attoDatabaseDao.unLockAllApp(true, false)
     }
 
     override fun unLockSpecificLabelApp(label: String) {
-        AttoDatabase.getInstance(context).attoDatabaseDao.unLockSpecificLabelApp(label,true)
+        AttoDatabase.getInstance(context).attoDatabaseDao.unLockSpecificLabelApp(label, true)
     }
 
-    override suspend  fun delete(packageName: String) {
+    override suspend fun delete(packageName: String) {
         AttoDatabase.getInstance(context).attoDatabaseDao.delete(packageName)
     }
 
-    override suspend  fun clear() {
+    override suspend fun clear() {
         AttoDatabase.getInstance(context).attoDatabaseDao.clear()
     }
 
@@ -103,11 +107,11 @@ class AttoLocalDataSource(private val context: Context) : AttoDataSource {
         return AttoDatabase.getInstance(context).attoDatabaseDao.getAllEvents()
     }
 
-    override suspend  fun deleteEvent(id: Int) {
+    override suspend fun deleteEvent(id: Int) {
         AttoDatabase.getInstance(context).attoDatabaseDao.deleteEvent(id)
     }
 
-    override suspend  fun getEvent(id: Int): Event? {
+    override suspend fun getEvent(id: Int): Event? {
         return AttoDatabase.getInstance(context).attoDatabaseDao.getEvent(id)
     }
 
@@ -115,40 +119,43 @@ class AttoLocalDataSource(private val context: Context) : AttoDataSource {
         return AttoDatabase.getInstance(context).attoDatabaseDao.getTypeEvent(type)
     }
 
-    override suspend  fun delayEvent5Minutes(id: Int) {
+    override suspend fun delayEvent5Minutes(id: Int) {
         val currentEvent = getEvent(id)
         currentEvent?.let {
-            val newTime = currentEvent.alarmTime + 5*60*1000
-            AttoDatabase.getInstance(context).attoDatabaseDao.delayEvent5Minutes(id,newTime)
+            val newTime = currentEvent.alarmTime + 5 * 60 * 1000
+            AttoDatabase.getInstance(context).attoDatabaseDao.delayEvent5Minutes(id, newTime)
         }
     }
 
     override fun lockAllApp() {
-        AttoDatabase.getInstance(context).attoDatabaseDao.lockAllApp(false,true)
+        AttoDatabase.getInstance(context).attoDatabaseDao.lockAllApp(false, true)
     }
 
     override fun lockSpecificLabelApp(label: String) {
-        AttoDatabase.getInstance(context).attoDatabaseDao.lockSpecificLabelApp(label,false)
+        AttoDatabase.getInstance(context).attoDatabaseDao.lockSpecificLabelApp(label, false)
     }
 
     override fun isPomodoroIsExist(): Boolean {
-        return AttoDatabase.getInstance(context).attoDatabaseDao.isPomodoroIsExist(Event.POMODORO_WORK_TYPE,Event.POMODORO_BREAK_TYPE)
+        return AttoDatabase.getInstance(context).attoDatabaseDao.isPomodoroIsExist(
+            Event.POMODORO_WORK_TYPE,
+            Event.POMODORO_BREAK_TYPE
+        )
     }
 
-    override suspend  fun deleteTimer(id: Long) {
+    override suspend fun deleteTimer(id: Long) {
         AttoDatabase.getInstance(context).attoDatabaseDao.deleteTimer(id)
     }
 
-    override suspend  fun deleteAllTimer() {
+    override suspend fun deleteAllTimer() {
         AttoDatabase.getInstance(context).attoDatabaseDao.deleteAllTimer()
     }
 
-    override suspend  fun updateTimer(remainTime: Long) {
+    override suspend fun updateTimer(remainTime: Long) {
         AttoDatabase.getInstance(context).attoDatabaseDao.updateTimer(remainTime)
     }
 
 
-    override suspend  fun getTimer(packageName: String): AppLockTimer? {
+    override suspend fun getTimer(packageName: String): AppLockTimer? {
         return AttoDatabase.getInstance(context).attoDatabaseDao.getTimer(packageName)
     }
 
@@ -156,7 +163,7 @@ class AttoLocalDataSource(private val context: Context) : AttoDataSource {
         return AttoDatabase.getInstance(context).attoDatabaseDao.getAllTimer()
     }
 
-    override fun getAllWidget():LiveData<List<Widget>> {
+    override fun getAllWidget(): LiveData<List<Widget>> {
         return AttoDatabase.getInstance(context).attoDatabaseDao.getAllWidget()
     }
 

@@ -50,6 +50,10 @@ class DefaultAttoRepository(
         attoLocalDataSource.updateSort(appName, sort)
     }
 
+    override fun updateIconPath(appName: String, path: String) {
+        attoLocalDataSource.updateIconPath(appName, path)
+    }
+
     override suspend fun updateTheme(appName: String, theme: Int?) {
         attoLocalDataSource.updateTheme(appName, theme)
     }
@@ -154,7 +158,7 @@ class DefaultAttoRepository(
         return attoLocalDataSource.getAllTimer()
     }
 
-    override fun getAllWidget():LiveData<List<Widget>> {
+    override fun getAllWidget(): LiveData<List<Widget>> {
         return attoLocalDataSource.getAllWidget()
     }
 
@@ -196,13 +200,21 @@ class DefaultAttoRepository(
                                 } catch (e: Exception) {
                                     e.printStackTrace()
                                 }
+                            } else {
+                                // room有的就確認imageUrl是否一樣，若不是就更新
+                                if (app.iconPath != roomApps.filter { it.appLabel == app.appLabel }
+                                        .first().iconPath) {
+                                    updateIconPath(app.appLabel, app.iconPath)
+                                }
+
                             }
                         }
 
                         for (app in roomApps) {
                             // room有system沒有代表已刪除，就從room delete
 //                            if (!systemList.contains(app)) {
-                            if (systemList.none { it.appLabel == app.appLabel }) {
+                            // if user sync from firebase, installed will be false
+                            if (systemList.none { it.appLabel == app.appLabel } && app.installed) {
                                 delete(app.packageName)
                             }
                         }

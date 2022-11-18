@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.chihwhsu.atto.databinding.FragmentMainBinding
 import com.chihwhsu.atto.ext.getVmFactory
+import com.chihwhsu.atto.util.UserManager
 
 class MainFragment : Fragment() {
 
@@ -23,7 +24,6 @@ class MainFragment : Fragment() {
     ): View? {
         val binding = FragmentMainBinding.inflate(inflater,container,false)
 
-        Log.d("LaunchTest","MainFragment Work")
 
 
         // set ViewPager2
@@ -65,6 +65,16 @@ class MainFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         viewModel.updateApp()
+    }
+
+    override fun onDestroy() {
+        if (UserManager.isLogging()){
+            viewModel.uploadData()
+            Log.d("upload","OnDestroy work")
+        }
+        super.onDestroy()
+
+
     }
 
 

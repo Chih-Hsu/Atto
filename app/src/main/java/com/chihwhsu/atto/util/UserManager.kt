@@ -17,7 +17,7 @@ object UserManager {
             return userData.getString("token", null)
         }
 
-    fun isLoading(): Boolean {
+    fun isLogging(): Boolean {
         return userToken != null
     }
 

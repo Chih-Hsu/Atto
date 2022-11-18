@@ -112,7 +112,7 @@ class LoginFragment : Fragment() {
             account?.let {
                 googleAuthForFirebase(it)
                 UserManager.userToken = account.idToken
-                val user = User(it.id,it.email,it.displayName,it.photoUrl)
+                val user = User(account.idToken!!,it.id,it.email,it.displayName,it.photoUrl.toString())
 //                val user = User(it.id,it.email,it.displayName,it.photoUrl)
                 viewModel.uploadUser(user)
             }

@@ -65,6 +65,8 @@ interface AttoDataSource {
 
     fun deleteSpecificLabel(label: String)
 
+    fun updateIconPath(appName: String, path: String)
+
 
 
 

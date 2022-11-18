@@ -22,6 +22,9 @@ interface AttoRepository {
     fun updateSort(appName: String, sort: Int)
 
 
+    fun updateIconPath(appName: String, path: String)
+
+
     suspend fun updateTheme(appName: String, theme: Int?)
 
 

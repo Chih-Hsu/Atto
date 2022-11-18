@@ -102,7 +102,7 @@ class AttoSystemDataSource(val context: Context) : AttoDataSource {
 
 
             saveFile(appName,appImage.convertToBitmap())
-            val newApp = App(appName, appPackageName, context.filesDir.absolutePath +"/"+"$appName.png", label = newCategory)
+            val newApp = App(appName, appPackageName, context.filesDir.absolutePath +"/"+"$appName.png", label = newCategory?.split(" ")?.first())
             currentAppList.add(newApp)
         }
 
@@ -136,6 +136,10 @@ class AttoSystemDataSource(val context: Context) : AttoDataSource {
     }
 
     override fun deleteSpecificLabel(label: String) {
+        TODO("Not yet implemented")
+    }
+
+    override fun updateIconPath(appName: String, path: String) {
         TODO("Not yet implemented")
     }
 

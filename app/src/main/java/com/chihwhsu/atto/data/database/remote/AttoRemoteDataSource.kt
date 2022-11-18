@@ -1,6 +1,5 @@
 package com.chihwhsu.atto.data.database.remote
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.data.AppLockTimer
@@ -95,6 +94,10 @@ object AttoRemoteDataSource : AttoDataSource {
     }
 
     override fun deleteSpecificLabel(label: String) {
+        TODO("Not yet implemented")
+    }
+
+    override fun updateIconPath(appName: String, path: String) {
         TODO("Not yet implemented")
     }
 
