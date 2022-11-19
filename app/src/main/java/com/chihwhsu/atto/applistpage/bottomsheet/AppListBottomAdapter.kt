@@ -39,8 +39,8 @@ class AppListBottomAdapter(
     }
 
 
-    class AppOnClickListener(val onClickListener: (packageName: String) -> Unit) {
-        fun onClick(packageName: String) = onClickListener(packageName)
+    class AppOnClickListener(val onClickListener: (app: App) -> Unit) {
+        fun onClick(app: App) = onClickListener(app)
     }
 
     class LongClickListener(val onClickListener: (app: App) -> Unit) {
@@ -104,7 +104,7 @@ class AppListBottomAdapter(
             if (item.app.isEnable) {
 
                 itemView.setOnClickListener {
-                    appOnClickListener.onClick(item.app.packageName)
+                    appOnClickListener.onClick(item.app)
                 }
 
                 binding.iconBackground.foreground = null
@@ -118,6 +118,15 @@ class AppListBottomAdapter(
                     null
                 )
                 binding.lockImage.visibility = View.VISIBLE
+
+            }
+
+            if (item.app.installed){
+
+                itemView.alpha = 1F
+            }else{
+                // if app is not installed , show half transparency
+                itemView.alpha = 0.3F
 
             }
 

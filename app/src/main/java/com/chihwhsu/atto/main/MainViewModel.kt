@@ -23,7 +23,6 @@ class MainViewModel(private val repository: AttoRepository) : ViewModel() {
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
 
-
     var dockList = repository.getSpecificLabelApps("dock")
     val timerList = repository.getAllTimer()
 
@@ -82,71 +81,53 @@ class MainViewModel(private val repository: AttoRepository) : ViewModel() {
                 .get()
                 .addOnSuccessListener {
 
-                       user = it.documents.first().toObject(User::class.java)
+                    user = it.documents.first().toObject(User::class.java)
+
 
 
 
                     user?.email?.let { email ->
 
+                        // if remote have data but local not, then delete remote data
                         dataBase.collection("user")
                             .document(email)
                             .collection("App")
                             .get()
                             .addOnSuccessListener { apps ->
 
-                                remoteAppList.addAll(apps.toObjects(App::class.java))
+                                if (!apps.isEmpty) {
+                                    remoteAppList.addAll(apps.toObjects(App::class.java))
 
-                                for (app in remoteAppList) {
-                                    if (localAppList?.filter { it.appLabel == app.appLabel }.isNullOrEmpty()) {
-                                        dataBase.collection("user")
-                                            .document(email)
-                                            .collection("App")
-                                            .document(app.appLabel)
-                                            .delete()
-                                    }
-
-
-
-                                    localAppList?.let {
-                                        for (app in it) {
+                                    for (app in remoteAppList) {
+                                        Log.d("getUser", "$app")
+                                        if (localAppList?.filter { it.appLabel == app.appLabel }
+                                                .isNullOrEmpty()) {
                                             dataBase.collection("user")
                                                 .document(email)
                                                 .collection("App")
                                                 .document(app.appLabel)
-                                                .set(app)
+                                                .delete()
                                         }
                                     }
-
-
                                 }
-
                             }
 
+                        localAppList?.let {
+                            for (app in it) {
+                                dataBase.collection("user")
+                                    .document(email)
+                                    .collection("App")
+                                    .document(app.appLabel)
+                                    .set(app)
+                            }
+                        }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                   }
+                    }
 //                    user = it.toObjects(User::class.java).first()
 
 
-
-            }
+                }
         }
     }
 }
