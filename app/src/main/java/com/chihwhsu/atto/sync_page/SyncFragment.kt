@@ -27,8 +27,11 @@ class SyncFragment : Fragment() {
         val user = SyncFragmentArgs.fromBundle(requireArguments()).user
 
 
+
+
+
         binding.buttonSync.setOnClickListener {
-            viewModel.getData(user)
+            viewModel.getData(user,requireContext())
         }
 
 

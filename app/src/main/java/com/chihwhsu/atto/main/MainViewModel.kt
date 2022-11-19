@@ -1,6 +1,8 @@
 package com.chihwhsu.atto.main
 
 import android.content.Context
+import android.net.Uri
+import android.provider.Settings
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.chihwhsu.atto.AttoApplication
@@ -9,10 +11,10 @@ import com.chihwhsu.atto.data.User
 import com.chihwhsu.atto.data.database.AttoRepository
 import com.chihwhsu.atto.util.UserManager
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.*
+import java.io.File
 
 class MainViewModel(private val repository: AttoRepository) : ViewModel() {
 
@@ -66,31 +68,38 @@ class MainViewModel(private val repository: AttoRepository) : ViewModel() {
         }
     }
 
-    fun uploadData() {
+    fun uploadData(context: Context) {
         coroutineScope.launch(Dispatchers.Default) {
 
             val dataBase = FirebaseFirestore.getInstance()
 
-            var user: User? = null
             val remoteAppList = mutableListOf<App>()
             val localAppList = repository.getAllAppNotLiveData()
 
 
             dataBase.collection("user")
-                .whereEqualTo("idToken", UserManager.userToken)
+                .whereEqualTo("email", UserManager.userEmail)
                 .get()
                 .addOnSuccessListener {
 
-                    user = it.documents.first().toObject(User::class.java)
+                    val user = if (!it.isEmpty) {
+                        it.documents.first().toObject(User::class.java)
+                    } else {
+                        null
+                    }
 
 
 
 
-                    user?.email?.let { email ->
+                    user?.let { currentUser ->
+
+                        // To Avoid newPhone data overlay remote data,
+                        // when user click sync button, the deviceId will update
+                        if (currentUser.deviceId == Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)){
 
                         // if remote have data but local not, then delete remote data
                         dataBase.collection("user")
-                            .document(email)
+                            .document(currentUser.email!!)
                             .collection("App")
                             .get()
                             .addOnSuccessListener { apps ->
@@ -99,11 +108,11 @@ class MainViewModel(private val repository: AttoRepository) : ViewModel() {
                                     remoteAppList.addAll(apps.toObjects(App::class.java))
 
                                     for (app in remoteAppList) {
-                                        Log.d("getUser", "$app")
+
                                         if (localAppList?.filter { it.appLabel == app.appLabel }
                                                 .isNullOrEmpty()) {
                                             dataBase.collection("user")
-                                                .document(email)
+                                                .document(currentUser.email)
                                                 .collection("App")
                                                 .document(app.appLabel)
                                                 .delete()
@@ -112,22 +121,48 @@ class MainViewModel(private val repository: AttoRepository) : ViewModel() {
                                 }
                             }
 
-                        localAppList?.let {
-                            for (app in it) {
+                        localAppList?.let { list ->
+
+                            for (app in list) {
+                                // Upload App Data
+                                val newApp = App(
+                                    app.appLabel,
+                                    app.packageName,
+                                    "gs://atto-eaae3.appspot.com/${currentUser.email}/${app.appLabel}.png",
+                                    app.label,
+                                    app.isEnable,
+                                    app.theme,
+                                    app.installed,
+                                    app.sort
+                                )
                                 dataBase.collection("user")
-                                    .document(email)
+                                    .document(currentUser.email)
                                     .collection("App")
                                     .document(app.appLabel)
-                                    .set(app)
+                                    .set(newApp)
+
+                                // Upload AppIconImage
+                                uploadImage(user, app)
+
                             }
                         }
 
 
                     }
-//                    user = it.toObjects(User::class.java).first()
-
-
+                    }
                 }
         }
     }
+
+    private fun uploadImage(user: User, app: App) {
+        coroutineScope.launch(Dispatchers.IO) {
+            val storage = FirebaseStorage.getInstance().reference
+            val imageRef = storage.child("${user.email}/${app.appLabel}.png")
+            val file = Uri.fromFile(File(app.iconPath))
+            imageRef.putFile(file)
+        }
+
+    }
+
+
 }

@@ -24,7 +24,7 @@ data class App (
     @ColumnInfo(name = "package_name")
     val packageName : String ="",
     @ColumnInfo(name = "icon_path")
-    val iconPath : String ="",
+    var iconPath : String ="",
     @ColumnInfo(name = "label")
     val label : String? = null,
     @ColumnInfo(name = "is_enable")

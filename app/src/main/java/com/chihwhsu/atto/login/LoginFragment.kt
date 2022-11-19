@@ -3,6 +3,7 @@ package com.chihwhsu.atto.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -110,9 +111,11 @@ class LoginFragment : Fragment() {
         if (requestCode == REQUEST_CODE_SIGN_IN) {
             val account = GoogleSignIn.getSignedInAccountFromIntent(data).result
             account?.let {
+
                 googleAuthForFirebase(it)
-                UserManager.userToken = account.idToken
-                val user = User(account.idToken!!,it.id,it.email,it.displayName,it.photoUrl.toString())
+                UserManager.userEmail = it.email
+                val deviceId = Settings.Secure.getString(requireContext().contentResolver, Settings.Secure.ANDROID_ID)
+                val user = User(it.id,it.email,it.displayName,it.photoUrl.toString(),deviceId)
 //                val user = User(it.id,it.email,it.displayName,it.photoUrl)
                 viewModel.uploadUser(user)
             }

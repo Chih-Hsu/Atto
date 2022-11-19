@@ -9,20 +9,20 @@ object UserManager {
     private val userData =
         AttoApplication.instance.getSharedPreferences("userData", Context.MODE_PRIVATE)
 
-    var userToken: String?
+    var userEmail: String?
         set(value) {
-            userData.edit().putString("token", value).apply()
+            userData.edit().putString("email", value).apply()
         }
         get() {
-            return userData.getString("token", null)
+            return userData.getString("email", null)
         }
 
     fun isLogging(): Boolean {
-        return userToken != null
+        return userEmail != null
     }
 
     fun logOut() {
-        userData.edit().remove("token").apply()
+        userData.edit().remove("email").apply()
 //        LoginManager.getInstance().logOut()
     }
 }

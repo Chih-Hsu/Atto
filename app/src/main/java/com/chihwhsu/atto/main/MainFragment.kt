@@ -1,7 +1,9 @@
 package com.chihwhsu.atto.main
 
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -17,13 +19,13 @@ class MainFragment : Fragment() {
 
     private val viewModel by viewModels<MainViewModel> { getVmFactory() }
 
+    @SuppressLint("HardwareIds")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val binding = FragmentMainBinding.inflate(inflater,container,false)
-
 
 
         // set ViewPager2
@@ -69,8 +71,7 @@ class MainFragment : Fragment() {
 
     override fun onDestroy() {
         if (UserManager.isLogging()){
-            viewModel.uploadData()
-            Log.d("upload","OnDestroy work")
+            viewModel.uploadData(requireContext())
         }
         super.onDestroy()
 
