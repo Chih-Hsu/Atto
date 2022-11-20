@@ -1,4 +1,4 @@
-package com.chihwhsu.atto.tutorial3_sort
+package com.chihwhsu.atto.tutorial.sort
 
 import android.content.Context
 import androidx.lifecycle.ViewModel

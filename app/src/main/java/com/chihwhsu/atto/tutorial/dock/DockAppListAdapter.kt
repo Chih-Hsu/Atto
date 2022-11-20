@@ -1,4 +1,4 @@
-package com.chihwhsu.atto.tutorial2_dock
+package com.chihwhsu.atto.tutorial.dock
 
 import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
@@ -9,12 +9,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.chihwhsu.atto.data.App
-import com.chihwhsu.atto.databinding.ItemAppListBinding
 import com.chihwhsu.atto.databinding.ItemDockBinding
-import com.chihwhsu.atto.ext.createGrayscale
 
 
-class DockAppListAdapter () : ListAdapter<App, DockAppListAdapter.AppViewHolder>(object :
+class DockAppListAdapter : ListAdapter<App, DockAppListAdapter.AppViewHolder>(object :
     DiffUtil.ItemCallback<App>(){
     override fun areItemsTheSame(oldItem: App, newItem: App): Boolean {
         return oldItem.packageName == newItem.packageName
@@ -29,9 +27,6 @@ class DockAppListAdapter () : ListAdapter<App, DockAppListAdapter.AppViewHolder>
 
         fun bind(item: App){
 
-//            item.icon?.let {
-//                binding.dockIconImage.setImageBitmap(it.createGrayscale())
-//            }
             Glide.with(itemView.context)
                 .load(item.iconPath)
                 .into(binding.dockIconImage)

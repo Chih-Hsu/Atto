@@ -1,7 +1,6 @@
-package com.chihwhsu.atto.tutorial4_usage_permission
+package com.chihwhsu.atto.tutorial.usagepermission
 
 import android.app.AppOpsManager
-import android.app.usage.UsageStats
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager

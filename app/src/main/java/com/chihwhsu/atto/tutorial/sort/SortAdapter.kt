@@ -1,4 +1,4 @@
-package com.chihwhsu.atto.tutorial3_sort
+package com.chihwhsu.atto.tutorial.sort
 
 import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
@@ -11,7 +11,6 @@ import com.bumptech.glide.Glide
 import com.chihwhsu.atto.data.AppListItem
 import com.chihwhsu.atto.databinding.ItemAppListBinding
 import com.chihwhsu.atto.databinding.ItemLabelSettingBinding
-import com.chihwhsu.atto.ext.createGrayscale
 
 
 class SortAdapter(

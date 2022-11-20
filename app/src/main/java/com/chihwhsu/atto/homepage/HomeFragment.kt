@@ -19,6 +19,10 @@ import com.chihwhsu.atto.data.Event.Companion.POMODORO_WORK_TYPE
 import com.chihwhsu.atto.data.Event.Companion.TODO_TYPE
 import com.chihwhsu.atto.databinding.FragmentHomeBinding
 import com.chihwhsu.atto.ext.*
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.util.*
 
 class HomeFragment : Fragment() {
 
@@ -34,6 +38,8 @@ class HomeFragment : Fragment() {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
         Log.d("LaunchTest", "HomeFragment Work")
+
+        setGestureListener()
 
 
         val adapter = HomeAdapter(HomeAdapter.EventClickListener { event ->
@@ -63,15 +69,7 @@ class HomeFragment : Fragment() {
             adapter.submitList(newList)
         })
 
-        // set Gesture Listener
-        val gestureListener = GestureListener(viewModel)
-        gestureDetector = GestureDetector(requireContext(), gestureListener)
 
-        binding.gestureArea.setOnTouchListener(object : View.OnTouchListener {
-            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-                return gestureDetector.onTouchEvent(event)
-            }
-        })
 
 
         // set event detail on card
@@ -189,6 +187,18 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
+    private fun setGestureListener() {
+        // set Gesture Listener
+        val gestureListener = GestureListener(viewModel)
+        gestureDetector = GestureDetector(requireContext(), gestureListener)
+
+        binding.gestureArea.setOnTouchListener(object : View.OnTouchListener {
+            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+                return gestureDetector.onTouchEvent(event)
+            }
+        })
+    }
+
 
     override fun onPause() {
         super.onPause()
@@ -210,6 +220,7 @@ class HomeFragment : Fragment() {
         animation.start()
         viewModel.initAnimation()
     }
+
 
 
 }

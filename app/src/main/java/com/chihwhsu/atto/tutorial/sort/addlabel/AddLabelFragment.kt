@@ -1,4 +1,4 @@
-package com.chihwhsu.atto.tutorial3_sort.addlabel
+package com.chihwhsu.atto.tutorial.sort.addlabel
 
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -9,13 +9,12 @@ import com.chihwhsu.atto.clock.alarm.AlarmListViewModel
 import com.chihwhsu.atto.clock.alarm.AlarmViewModel
 import com.chihwhsu.atto.clock.pomodoro.PomodoroViewModel
 import com.chihwhsu.atto.clock.todo.TodoViewModel
-import com.chihwhsu.atto.data.database.AttoDatabaseDao
 import com.chihwhsu.atto.data.database.AttoRepository
 import com.chihwhsu.atto.homepage.HomeViewModel
 import com.chihwhsu.atto.main.MainViewModel
-import com.chihwhsu.atto.sync_page.SyncViewModel
-import com.chihwhsu.atto.tutorial3_sort.SortViewModel
-import com.chihwhsu.atto.tutorial3_sort.addlabel.AddLabelViewModel
+import com.chihwhsu.atto.syncpage.SyncViewModel
+import com.chihwhsu.atto.tutorial.sort.SortViewModel
+import com.chihwhsu.atto.tutorial.sort.addlabel.AddLabelViewModel
 import com.chihwhsu.atto.usagelimit.UsageLimitViewModel
 import com.chihwhsu.atto.widgetpage.WidgetViewModel
 import com.chihwhsu.atto.widgetpage.remove_dialog.WidgetRemoveViewModel

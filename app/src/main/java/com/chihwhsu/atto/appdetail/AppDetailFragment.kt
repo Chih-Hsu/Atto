@@ -43,7 +43,7 @@ class AppDetailFragment : Fragment() {
         val themeList = mutableListOf<Theme>(Theme.DEFAULT,Theme.BLACK,Theme.HIGH_LIGHT,Theme.KANAHEI)
 
         viewModel.app.observe(viewLifecycleOwner, Observer { app ->
-            viewModel.getNetUsage(requireContext(),app)
+//            viewModel.getNetUsage(requireContext(),app)
             // set Text
             binding.apply {
                 appName.text = app.appLabel

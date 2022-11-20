@@ -1,8 +1,7 @@
-package com.chihwhsu.atto.tutorial3_sort.addlabel
+package com.chihwhsu.atto.tutorial.dock
 
 import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -12,34 +11,31 @@ import com.bumptech.glide.Glide
 import com.chihwhsu.atto.R
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.databinding.ItemAppListBinding
-import com.chihwhsu.atto.ext.createGrayscale
 
-class AddLabelListAdapter (val viewModel: AddLabelViewModel, val onClickListener: AppOnClickListener) : ListAdapter<App, AddLabelListAdapter.AppViewHolder>(object :
-    DiffUtil.ItemCallback<App>(){
-    override fun areItemsTheSame(oldItem: App, newItem: App): Boolean {
-        return oldItem.packageName == newItem.packageName
+class AppListAdapter(val viewModel: DockViewModel, val onClickListener: AppOnClickListener) :
+    ListAdapter<App, AppListAdapter.AppViewHolder>(object :
+        DiffUtil.ItemCallback<App>() {
+        override fun areItemsTheSame(oldItem: App, newItem: App): Boolean {
+            return oldItem.packageName == newItem.packageName
+        }
+
+        override fun areContentsTheSame(oldItem: App, newItem: App): Boolean {
+            return oldItem == newItem
+        }
+    }) {
+
+    class AppOnClickListener(val onClickListener: (appLabel: String) -> Unit) {
+        fun onClick(appLabel: String) = onClickListener(appLabel)
+
     }
 
-    override fun areContentsTheSame(oldItem: App, newItem: App): Boolean {
-        return oldItem == newItem
-    }
-}) {
+    inner class AppViewHolder(val binding: ItemAppListBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
-    class AppOnClickListener(val onClickListener:(app:App)->Unit){
-        fun onClick(app: App) = onClickListener(app)
+        fun bind(item: App) {
 
-    }
+            checkItemInDock(item)
 
-    inner class AppViewHolder(val binding:ItemAppListBinding): RecyclerView.ViewHolder(binding.root){
-
-
-        fun bind(item:App){
-
-            checkItemInRemain(item)
-
-//            item.icon?.let {
-//                binding.iconImage.setImageBitmap(it.createGrayscale())
-//            }
             Glide.with(itemView.context)
                 .load(item.iconPath)
                 .into(binding.iconImage)
@@ -52,31 +48,28 @@ class AddLabelListAdapter (val viewModel: AddLabelViewModel, val onClickListener
 
             binding.appName.text = item.appLabel
 
-            // Default background
-//            binding.iconBackground.setBackgroundResource(R.drawable.icon_background)
-
             itemView.setOnClickListener {
-                onClickListener.onClick(item)
-                checkItemInRemain(item)
+                onClickListener.onClick(item.appLabel)
+                checkItemInDock(item)
             }
         }
 
-        private fun checkItemInRemain(item:App){
-
-                if (!viewModel.remainList.filter { it.appLabel == item.appLabel }.isEmpty()){
+        private fun checkItemInDock(item: App) {
+            viewModel.dockAppList.value?.let { list ->
+                if (!list.none { it.appLabel == item.appLabel }) {
                     binding.iconBackground.setBackgroundResource(R.drawable.icon_background_selected)
-                }else{
+                } else {
                     binding.iconBackground.setBackgroundResource(R.drawable.icon_background)
                 }
-
-
+            }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AppViewHolder {
         val view = ItemAppListBinding.inflate(
             LayoutInflater.from(parent.context),
-            parent,false)
+            parent, false
+        )
         return AppViewHolder(view)
     }
 

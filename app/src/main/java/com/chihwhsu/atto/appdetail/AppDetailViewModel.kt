@@ -102,42 +102,42 @@ class AppDetailViewModel(private val databaseDao: AttoDatabaseDao, private val a
         _navigateUp.value = false
     }
 
-    fun getNetUsage(context: Context, currentApp: App) {
-
-        val packageManager = context.packageManager
-
-        val info = packageManager.getApplicationInfo(currentApp.packageName, 0)
-
-        val uid = info.uid
-
-        val networkStatsManager =
-            context.getSystemService(Context.NETWORK_STATS_SERVICE) as NetworkStatsManager
-        val telephoneManager =
-            context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-
-//        val subscribeId = telephoneManager.
-
-
-        val summaryBucket = NetworkStats.Bucket()
-        val state = networkStatsManager.queryDetailsForUid(
-            ConnectivityManager.TYPE_MOBILE,
-            null,
-            0,
-            System.currentTimeMillis(),
-            uid
-        )
-
-        var rxTraffic = 0L
-        var txTraffic = 0L
-
-        state.getNextBucket(summaryBucket)
-
-
-            rxTraffic += summaryBucket.getRxBytes()
-            txTraffic += summaryBucket.getTxBytes()
-
-
-        Log.d("static", "rx = $rxTraffic  tx = $txTraffic")
-
-    }
+//    fun getNetUsage(context: Context, currentApp: App) {
+//
+//        val packageManager = context.packageManager
+//
+//        val info = packageManager.getApplicationInfo(currentApp.packageName, 0)
+//
+//        val uid = info.uid
+//
+//        val networkStatsManager =
+//            context.getSystemService(Context.NETWORK_STATS_SERVICE) as NetworkStatsManager
+//        val telephoneManager =
+//            context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+//
+////        val subscribeId = telephoneManager.
+//
+//
+//        val summaryBucket = NetworkStats.Bucket()
+//        val state = networkStatsManager.queryDetailsForUid(
+//            ConnectivityManager.TYPE_MOBILE,
+//            null,
+//            0,
+//            System.currentTimeMillis(),
+//            uid
+//        )
+//
+//        var rxTraffic = 0L
+//        var txTraffic = 0L
+//
+//        state.getNextBucket(summaryBucket)
+//
+//
+//            rxTraffic += summaryBucket.getRxBytes()
+//            txTraffic += summaryBucket.getTxBytes()
+//
+//
+//        Log.d("static", "rx = $rxTraffic  tx = $txTraffic")
+//
+//    }
 }

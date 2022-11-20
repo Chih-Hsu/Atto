@@ -1,8 +1,6 @@
-package com.chihwhsu.atto.tutorial5_set_default
+package com.chihwhsu.atto.tutorial.setdefault
 
-import android.content.ComponentName
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.provider.Settings
 import android.view.LayoutInflater

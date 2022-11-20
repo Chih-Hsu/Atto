@@ -1,4 +1,4 @@
-package com.chihwhsu.atto.tutorial1_wallpaper
+package com.chihwhsu.atto.tutorial.wallpaper
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,27 +8,27 @@ import androidx.recyclerview.widget.RecyclerView
 import com.chihwhsu.atto.data.Wallpaper
 import com.chihwhsu.atto.databinding.ItemWallpaperBinding
 
-class WallpaperAdapter : ListAdapter<Wallpaper, WallpaperAdapter.WallpaperViewHolder>(object :DiffUtil.ItemCallback<Wallpaper>(){
+class WallpaperAdapter : ListAdapter<Wallpaper, WallpaperAdapter.WallpaperViewHolder>(object :
+    DiffUtil.ItemCallback<Wallpaper>() {
     override fun areContentsTheSame(oldItem: Wallpaper, newItem: Wallpaper): Boolean {
         return oldItem == newItem
     }
 
     override fun areItemsTheSame(oldItem: Wallpaper, newItem: Wallpaper): Boolean {
-       return oldItem.id == newItem.id
+        return oldItem.id == newItem.id
     }
 }) {
 
+    class WallpaperViewHolder(val binding: ItemWallpaperBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
-    class WallpaperViewHolder(val binding: ItemWallpaperBinding):RecyclerView.ViewHolder(binding.root){
-
-        fun bind(item : Wallpaper){
+        fun bind(item: Wallpaper) {
             binding.wallpaperContainer.setImageDrawable(item.image)
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WallpaperViewHolder {
-        val view = ItemWallpaperBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        val view = ItemWallpaperBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return WallpaperViewHolder(view)
     }
 

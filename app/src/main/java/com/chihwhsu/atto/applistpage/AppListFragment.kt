@@ -16,12 +16,9 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.chihwhsu.atto.NavigationDirections
 import com.chihwhsu.atto.SettingActivity
-import com.chihwhsu.atto.data.AppListItem
 import com.chihwhsu.atto.databinding.FragmentAppListBinding
 import com.chihwhsu.atto.ext.getVmFactory
-import com.chihwhsu.atto.tutorial3_sort.SortAdapter
-import java.util.*
-import kotlin.collections.ArrayList
+import com.chihwhsu.atto.tutorial.sort.SortAdapter
 
 class AppListFragment : Fragment() {
 

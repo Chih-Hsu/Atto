@@ -1,11 +1,9 @@
-package com.chihwhsu.atto.tutorial3_sort.addlabel
+package com.chihwhsu.atto.tutorial.sort.addlabel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.chihwhsu.atto.data.App
-import com.chihwhsu.atto.data.database.AttoDatabaseDao
 import com.chihwhsu.atto.data.database.AttoRepository
 import kotlinx.coroutines.*
 import java.util.*

@@ -1,12 +1,10 @@
-package com.chihwhsu.atto.sync_page
+package com.chihwhsu.atto.syncpage
 
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.Settings
 import androidx.lifecycle.ViewModel
-import com.chihwhsu.atto.AttoApplication
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.data.User
 import com.chihwhsu.atto.data.database.AttoRepository
@@ -17,8 +15,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import java.io.File
-import java.io.IOException
 
 class SyncViewModel(private val repository: AttoRepository) : ViewModel() {
 
@@ -38,7 +34,7 @@ class SyncViewModel(private val repository: AttoRepository) : ViewModel() {
     }
 
 
-    fun getData(user: User,context:Context) {
+    fun getData(user: User, context: Context) {
 
         coroutineScope.launch(Dispatchers.Default) {
 
@@ -55,7 +51,6 @@ class SyncViewModel(private val repository: AttoRepository) : ViewModel() {
                         coroutineScope.launch(Dispatchers.IO) {
                             val newApp = item.toObject(App::class.java)
 
-                            storeRemoteIconInLocal(context,user,newApp)
 
                             // Check which app is not installed
                             if (appList?.filter { it.appLabel == newApp.appLabel }
@@ -63,9 +58,10 @@ class SyncViewModel(private val repository: AttoRepository) : ViewModel() {
                                 newApp.installed = false
                             }
 
-                            newApp.iconPath = context.filesDir.absolutePath +"/"+"${newApp.appLabel}.png"
+                            newApp.iconPath =
+                                context.filesDir.absolutePath + "/" + "${newApp.appLabel}.png"
 
-                            repository.insert(newApp)
+                            runDataSync(context, user, newApp)
 
                         }
                     }
@@ -73,20 +69,30 @@ class SyncViewModel(private val repository: AttoRepository) : ViewModel() {
         }
     }
 
-   private suspend fun storeRemoteIconInLocal(context: Context,user: User,app: App){
+    private suspend fun runDataSync(context: Context, user: User, app: App){
+        syncLocalAppLabelWithRemote(context, user, app)
+        syncLocalAppPicWithRemote(app)
+    }
+
+    private suspend fun syncLocalAppLabelWithRemote(context: Context, user: User, app: App) {
         val storage = FirebaseStorage.getInstance().reference
         val imageRef = storage.child("${user.email}/${app.appLabel}.png")
 
-        imageRef.getFile(Uri.parse(context.filesDir.absolutePath +"/"+app.appLabel+ ".png")).await()
+        imageRef.getFile(Uri.parse(context.filesDir.absolutePath + "/" + app.appLabel + ".png"))
+            .await()
+    }
+    private suspend fun syncLocalAppPicWithRemote(newApp: App){
+        repository.insert(newApp)
     }
 
-    private fun updateDeviceId(user: User,context: Context){
+    private fun updateDeviceId(user: User, context: Context) {
         dataBase.collection("user")
             .document(user.email!!)
-            .update("deviceId", Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID))
+            .update(
+                "deviceId",
+                Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
+            )
     }
-
-
 
 
 }

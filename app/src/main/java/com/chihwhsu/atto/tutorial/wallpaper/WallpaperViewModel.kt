@@ -1,4 +1,4 @@
-package com.chihwhsu.atto.tutorial1_wallpaper
+package com.chihwhsu.atto.tutorial.wallpaper
 
 import android.app.WallpaperManager
 import android.content.Context
@@ -16,7 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-class WallpaperViewModel(val resource: Resources) : ViewModel() {
+class WallpaperViewModel(private val resource: Resources) : ViewModel() {
 
     private var _wallpapers = MutableLiveData<List<Wallpaper>>()
     val wallpapers: LiveData<List<Wallpaper>> get() = _wallpapers
@@ -24,14 +24,16 @@ class WallpaperViewModel(val resource: Resources) : ViewModel() {
     private var _navigationToNext = MutableLiveData<Boolean>()
     val navigationToNext: LiveData<Boolean> get() = _navigationToNext
 
-    // Create a Coroutine scope using a job to be able to cancel when needed
     private var viewModelJob = Job()
 
-    // the Coroutine runs using the Main (UI) dispatcher
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     init {
-        val wallpaperList = mutableListOf<Wallpaper>(
+        initWallpaperResource()
+    }
+
+    private fun initWallpaperResource() {
+        val wallpaperList = mutableListOf(
             Wallpaper(
                 1, ResourcesCompat.getDrawable(
                     resource,
@@ -69,9 +71,9 @@ class WallpaperViewModel(val resource: Resources) : ViewModel() {
         _navigationToNext.value = false
     }
 
-    fun setWallPaper(context: Context, image : Drawable ,){
-        coroutineScope.launch(Dispatchers.IO){
-            val bitmap = image.toBitmap(image.minimumWidth,image.minimumHeight)
+    fun setWallPaper(context: Context, image: Drawable) {
+        coroutineScope.launch(Dispatchers.IO) {
+            val bitmap = image.toBitmap(image.minimumWidth, image.minimumHeight)
             WallpaperManager.getInstance(context).setBitmap(bitmap)
         }
         navigateToNext()

@@ -1,4 +1,4 @@
-package com.chihwhsu.atto.tutorial2_dock
+package com.chihwhsu.atto.tutorial.sort.addlabel
 
 import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
@@ -11,9 +11,8 @@ import com.bumptech.glide.Glide
 import com.chihwhsu.atto.R
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.databinding.ItemAppListBinding
-import com.chihwhsu.atto.ext.createGrayscale
 
-class AppListAdapter (val viewModel: DockViewModel, val onClickListener:AppOnClickListener) : ListAdapter<App, AppListAdapter.AppViewHolder>(object :
+class AddLabelListAdapter (val viewModel: AddLabelViewModel, val onClickListener: AppOnClickListener) : ListAdapter<App, AddLabelListAdapter.AppViewHolder>(object :
     DiffUtil.ItemCallback<App>(){
     override fun areItemsTheSame(oldItem: App, newItem: App): Boolean {
         return oldItem.packageName == newItem.packageName
@@ -24,16 +23,17 @@ class AppListAdapter (val viewModel: DockViewModel, val onClickListener:AppOnCli
     }
 }) {
 
-    class AppOnClickListener(val onClickListener:(appLabel:String)->Unit){
-        fun onClick(appLabel: String) = onClickListener(appLabel)
+    class AppOnClickListener(val onClickListener:(app:App)->Unit){
+        fun onClick(app: App) = onClickListener(app)
 
     }
 
     inner class AppViewHolder(val binding:ItemAppListBinding): RecyclerView.ViewHolder(binding.root){
 
+
         fun bind(item:App){
 
-            checkItemInDock(item)
+            checkItemInRemain(item)
 
 //            item.icon?.let {
 //                binding.iconImage.setImageBitmap(it.createGrayscale())
@@ -50,23 +50,24 @@ class AppListAdapter (val viewModel: DockViewModel, val onClickListener:AppOnCli
 
             binding.appName.text = item.appLabel
 
+            // Default background
+//            binding.iconBackground.setBackgroundResource(R.drawable.icon_background)
+
             itemView.setOnClickListener {
-                onClickListener.onClick(item.appLabel)
-                checkItemInDock(item)
+                onClickListener.onClick(item)
+                checkItemInRemain(item)
             }
         }
 
-        private fun checkItemInDock(item:App){
-            viewModel.dockAppList.value?.let { list ->
-                if (!list.filter { it.appLabel == item.appLabel }.isEmpty()){
+        private fun checkItemInRemain(item:App){
+
+                if (!viewModel.remainList.filter { it.appLabel == item.appLabel }.isEmpty()){
                     binding.iconBackground.setBackgroundResource(R.drawable.icon_background_selected)
-//                   notifyItemChanged(adapterPosition)
                 }else{
                     binding.iconBackground.setBackgroundResource(R.drawable.icon_background)
-//                    notifyItemChanged(adapterPosition)
-
                 }
-            }
+
+
         }
     }
 
