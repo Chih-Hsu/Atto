@@ -24,8 +24,8 @@ class DockAdapter (val onClickListener : DockOnClickListener) : ListAdapter<App,
     }
 }) {
 
-    class DockOnClickListener(val onClickListener:(packageName:String)->Unit){
-        fun onClick(packageName: String)=onClickListener(packageName)
+    class DockOnClickListener(val onClickListener:(app:App)->Unit){
+        fun onClick(app:App)=onClickListener(app)
 
     }
 
@@ -38,7 +38,7 @@ class DockAdapter (val onClickListener : DockOnClickListener) : ListAdapter<App,
 
             Glide.with(itemView.context).load(item.iconPath).into(binding.dockIconImage)
             itemView.setOnClickListener {
-                onClickListener.onClick(item.packageName)
+                onClickListener.onClick(item)
             }
             val colorMatrix = ColorMatrix()
             colorMatrix.setSaturation(0f)

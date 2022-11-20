@@ -49,7 +49,13 @@ class WallpaperViewModel(val resource: Resources) : ViewModel() {
                     resource,
                     R.drawable.wood_floor, null
                 )!!
-            )
+            ),
+            Wallpaper(
+                1, ResourcesCompat.getDrawable(
+                    resource,
+                    R.drawable.blank_tradingcard, null
+                )!!
+            ),
         )
 
         _wallpapers.value = wallpaperList

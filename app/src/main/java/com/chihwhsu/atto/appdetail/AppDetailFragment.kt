@@ -1,6 +1,8 @@
 package com.chihwhsu.atto.appdetail
 
 
+import android.app.usage.NetworkStatsManager
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -34,10 +36,14 @@ class AppDetailFragment : Fragment() {
     ): View? {
         val binding = FragmentAppDetailBinding.inflate(inflater,container,false)
 
+
+
+
         val adapter = AppDetailAdapter()
         val themeList = mutableListOf<Theme>(Theme.DEFAULT,Theme.BLACK,Theme.HIGH_LIGHT,Theme.KANAHEI)
 
         viewModel.app.observe(viewLifecycleOwner, Observer { app ->
+            viewModel.getNetUsage(requireContext(),app)
             // set Text
             binding.apply {
                 appName.text = app.appLabel

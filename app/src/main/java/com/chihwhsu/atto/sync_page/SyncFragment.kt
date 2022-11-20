@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
+import com.chihwhsu.atto.R
 import com.chihwhsu.atto.databinding.FragmentSyncBinding
 import com.chihwhsu.atto.ext.getVmFactory
 
@@ -24,11 +26,12 @@ class SyncFragment : Fragment() {
     ): View? {
 
         val binding = FragmentSyncBinding.inflate(inflater,container,false)
+
+
         val user = SyncFragmentArgs.fromBundle(requireArguments()).user
 
 
-
-
+        binding.textHello.text = getString(R.string.hello_user,user.name)
 
         binding.buttonSync.setOnClickListener {
             viewModel.getData(user,requireContext())
