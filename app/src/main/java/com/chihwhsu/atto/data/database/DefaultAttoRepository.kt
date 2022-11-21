@@ -5,7 +5,11 @@ import androidx.lifecycle.LiveData
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.data.AppLockTimer
 import com.chihwhsu.atto.data.Event
-import kotlinx.coroutines.*
+import com.chihwhsu.atto.data.Widget
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+
 
 class DefaultAttoRepository(
     private val attoRemoteDataSource: AttoDataSource,
@@ -28,6 +32,10 @@ class DefaultAttoRepository(
         attoLocalDataSource.insert(appLockTimer)
     }
 
+    override fun insert(widget: Widget) {
+        attoLocalDataSource.insert(widget)
+    }
+
     override suspend fun update(app: App) {
         withContext(ioDispatcher) {
             attoLocalDataSource.update(app)
@@ -40,6 +48,10 @@ class DefaultAttoRepository(
 
     override fun updateSort(appName: String, sort: Int) {
         attoLocalDataSource.updateSort(appName, sort)
+    }
+
+    override fun updateIconPath(appName: String, path: String) {
+        attoLocalDataSource.updateIconPath(appName, path)
     }
 
     override suspend fun updateTheme(appName: String, theme: Int?) {
@@ -73,7 +85,6 @@ class DefaultAttoRepository(
     }
 
     override fun getAllApps(): LiveData<List<App>> {
-
         return attoLocalDataSource.getAllApps()
 
     }
@@ -147,6 +158,14 @@ class DefaultAttoRepository(
         return attoLocalDataSource.getAllTimer()
     }
 
+    override fun getAllWidget(): LiveData<List<Widget>> {
+        return attoLocalDataSource.getAllWidget()
+    }
+
+    override fun deleteWidget(id: Long) {
+        return attoLocalDataSource.deleteWidget(id)
+    }
+
     override suspend fun updateAppData() {
 
         withContext(Dispatchers.Main) {
@@ -176,22 +195,32 @@ class DefaultAttoRepository(
 //                            if (!roomApps.contains(app)) {
                             if (roomApps.none { it.appLabel == app.appLabel }) {
                                 // room沒有的就insert
-                                insert(app)
+                                try {
+                                    insert(app)
+                                } catch (e: Exception) {
+                                    e.printStackTrace()
+                                }
+                            } else {
+                                // room有的就確認imageUrl是否一樣，若不是就更新
+                                if (app.iconPath != roomApps.filter { it.appLabel == app.appLabel }
+                                        .first().iconPath) {
+                                    updateIconPath(app.appLabel, app.iconPath)
+                                }
+
                             }
                         }
 
                         for (app in roomApps) {
                             // room有system沒有代表已刪除，就從room delete
 //                            if (!systemList.contains(app)) {
-                            if (systemList.none { it.appLabel == app.appLabel }) {
+                            // if user sync from firebase, installed will be false
+                            if (systemList.none { it.appLabel == app.appLabel } && app.installed) {
                                 delete(app.packageName)
                             }
                         }
                     }
 
                 }
-
-
             }
         }
 
@@ -205,4 +234,22 @@ class DefaultAttoRepository(
     override fun deleteSpecificLabel(label: String) {
         attoLocalDataSource.deleteSpecificLabel(label)
     }
+
+
+//    suspend fun loadFilesFromInternalStorage(label: String): List<Bitmap> {
+//        return withContext(Dispatchers.IO) {
+//            val files = AttoApplication.instance.applicationContext.filesDir.listFiles()
+//            //to make function look bigger :). We will try to load only the images from internal storage that we have saved in save example.
+//            files?.filter { file ->
+//                file.canRead() && file.isFile && file.name.endsWith(".png") && file.name.splitToSequence(
+//                    "/"
+//                ).last().splitToSequence(".").first() == label
+//            }?.map {
+//                val imageBytes = it.readBytes()
+//                BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+//            } ?: listOf()
+//        }
+//    }
+
+
 }

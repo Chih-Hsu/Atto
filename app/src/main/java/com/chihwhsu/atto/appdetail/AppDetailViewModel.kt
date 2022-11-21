@@ -1,5 +1,12 @@
 package com.chihwhsu.atto.appdetail
 
+import android.app.usage.NetworkStats
+import android.app.usage.NetworkStatsManager
+import android.content.Context
+import android.net.ConnectivityManager
+import android.telephony.SubscriptionManager
+import android.telephony.TelephonyManager
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,6 +14,7 @@ import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.data.Theme
 import com.chihwhsu.atto.data.database.AttoDatabaseDao
 import kotlinx.coroutines.*
+
 
 class AppDetailViewModel(private val databaseDao: AttoDatabaseDao, private val argument: App) :
     ViewModel() {
@@ -34,7 +42,6 @@ class AppDetailViewModel(private val databaseDao: AttoDatabaseDao, private val a
     val navigateUp: LiveData<Boolean> get() = _navigateUp
 
     init {
-
     }
 
     fun setPerHourList(list: List<Float>) {
@@ -94,4 +101,43 @@ class AppDetailViewModel(private val databaseDao: AttoDatabaseDao, private val a
     fun doneNavigation() {
         _navigateUp.value = false
     }
+
+//    fun getNetUsage(context: Context, currentApp: App) {
+//
+//        val packageManager = context.packageManager
+//
+//        val info = packageManager.getApplicationInfo(currentApp.packageName, 0)
+//
+//        val uid = info.uid
+//
+//        val networkStatsManager =
+//            context.getSystemService(Context.NETWORK_STATS_SERVICE) as NetworkStatsManager
+//        val telephoneManager =
+//            context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+//
+////        val subscribeId = telephoneManager.
+//
+//
+//        val summaryBucket = NetworkStats.Bucket()
+//        val state = networkStatsManager.queryDetailsForUid(
+//            ConnectivityManager.TYPE_MOBILE,
+//            null,
+//            0,
+//            System.currentTimeMillis(),
+//            uid
+//        )
+//
+//        var rxTraffic = 0L
+//        var txTraffic = 0L
+//
+//        state.getNextBucket(summaryBucket)
+//
+//
+//            rxTraffic += summaryBucket.getRxBytes()
+//            txTraffic += summaryBucket.getTxBytes()
+//
+//
+//        Log.d("static", "rx = $rxTraffic  tx = $txTraffic")
+//
+//    }
 }

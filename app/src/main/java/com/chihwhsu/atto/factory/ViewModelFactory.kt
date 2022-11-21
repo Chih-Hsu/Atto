@@ -2,19 +2,23 @@ package com.chihwhsu.atto.factory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.chihwhsu.atto.appinfodialog.AppInfoViewModel
 import com.chihwhsu.atto.applistpage.AppListViewModel
 import com.chihwhsu.atto.applistpage.bottomsheet.AppListBottomViewModel
 import com.chihwhsu.atto.clock.alarm.AlarmListViewModel
 import com.chihwhsu.atto.clock.alarm.AlarmViewModel
 import com.chihwhsu.atto.clock.pomodoro.PomodoroViewModel
 import com.chihwhsu.atto.clock.todo.TodoViewModel
-import com.chihwhsu.atto.data.database.AttoDatabaseDao
 import com.chihwhsu.atto.data.database.AttoRepository
 import com.chihwhsu.atto.homepage.HomeViewModel
 import com.chihwhsu.atto.main.MainViewModel
-import com.chihwhsu.atto.tutorial3_sort.SortViewModel
-import com.chihwhsu.atto.tutorial3_sort.addlabel.AddLabelViewModel
+import com.chihwhsu.atto.syncpage.SyncViewModel
+import com.chihwhsu.atto.tutorial.sort.SortViewModel
+import com.chihwhsu.atto.tutorial.sort.addlabel.AddLabelViewModel
 import com.chihwhsu.atto.usagelimit.UsageLimitViewModel
+import com.chihwhsu.atto.widgetpage.WidgetViewModel
+import com.chihwhsu.atto.widgetpage.remove_dialog.WidgetRemoveViewModel
+import com.chihwhsu.atto.widgetpage.widget_bottom_sheet.WidgetBottomViewModel
 
 class ViewModelFactory constructor(
     private val repository: AttoRepository
@@ -56,6 +60,21 @@ class ViewModelFactory constructor(
 
                 isAssignableFrom(AlarmListViewModel::class.java) ->
                     AlarmListViewModel(repository)
+
+                isAssignableFrom(WidgetBottomViewModel::class.java) ->
+                    WidgetBottomViewModel(repository)
+
+                isAssignableFrom(WidgetViewModel::class.java) ->
+                    WidgetViewModel(repository)
+
+                isAssignableFrom(WidgetRemoveViewModel::class.java) ->
+                    WidgetRemoveViewModel(repository)
+
+                isAssignableFrom(SyncViewModel::class.java) ->
+                    SyncViewModel(repository)
+
+                isAssignableFrom(AppInfoViewModel::class.java) ->
+                    AppInfoViewModel(repository)
 
                 else ->
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")

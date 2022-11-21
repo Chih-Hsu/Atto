@@ -2,4 +2,6 @@
     <string name="app_name">Atto</string>
     <string name="a_hh_mm">%1s %2s:%3s</string>
     <string name="MM_DD">%1s %2s</string>
+    <string name="remove_widget">你要移除%1s嗎？</string>
+    <string name="hello_user">Hello \n%1s</string>
 </resources>

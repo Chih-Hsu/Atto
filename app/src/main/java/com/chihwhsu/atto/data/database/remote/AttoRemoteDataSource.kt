@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.data.AppLockTimer
 import com.chihwhsu.atto.data.Event
+import com.chihwhsu.atto.data.Widget
 import com.chihwhsu.atto.data.database.AttoDataSource
 
 object AttoRemoteDataSource : AttoDataSource {
@@ -17,6 +18,10 @@ object AttoRemoteDataSource : AttoDataSource {
     }
 
     override suspend  fun insert(appLockTimer: AppLockTimer) {
+        TODO("Not yet implemented")
+    }
+
+    override fun insert(widget: Widget) {
         TODO("Not yet implemented")
     }
 
@@ -92,6 +97,10 @@ object AttoRemoteDataSource : AttoDataSource {
         TODO("Not yet implemented")
     }
 
+    override fun updateIconPath(appName: String, path: String) {
+        TODO("Not yet implemented")
+    }
+
     override fun getAllEvents(): LiveData<List<Event>> {
         TODO("Not yet implemented")
     }
@@ -142,6 +151,14 @@ object AttoRemoteDataSource : AttoDataSource {
     }
 
     override fun getAllTimer(): LiveData<List<AppLockTimer>> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getAllWidget():LiveData<List<Widget>> {
+        TODO("Not yet implemented")
+    }
+
+    override fun deleteWidget(id: Long) {
         TODO("Not yet implemented")
     }
 }

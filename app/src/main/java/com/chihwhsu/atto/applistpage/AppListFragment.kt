@@ -1,7 +1,9 @@
 package com.chihwhsu.atto.applistpage
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,12 +16,9 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.chihwhsu.atto.NavigationDirections
 import com.chihwhsu.atto.SettingActivity
-import com.chihwhsu.atto.data.AppListItem
 import com.chihwhsu.atto.databinding.FragmentAppListBinding
 import com.chihwhsu.atto.ext.getVmFactory
-import com.chihwhsu.atto.tutorial3_sort.SortAdapter
-import java.util.*
-import kotlin.collections.ArrayList
+import com.chihwhsu.atto.tutorial.sort.SortAdapter
 
 class AppListFragment : Fragment() {
 
@@ -31,16 +30,29 @@ class AppListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val binding = FragmentAppListBinding.inflate(inflater, container, false)
+        Log.d("LaunchTest","AppListFragment Work")
+
 
         val adapter = AppListAdapter(
-            AppListAdapter.AppOnClickListener {
-                if (it == "com.chihwhsu.atto") {
+            AppListAdapter.AppOnClickListener { app ->
+
+
+                if (app.packageName == "com.chihwhsu.atto") {
                     val intent = Intent(requireContext(), SettingActivity::class.java)
                     startActivity(intent)
                 } else {
-                    val launchAppIntent =
-                        requireContext().packageManager.getLaunchIntentForPackage(it)
-                    startActivity(launchAppIntent)
+
+                    if (app.installed){
+                        val launchAppIntent =
+                            requireContext().packageManager.getLaunchIntentForPackage(app.packageName)
+                        startActivity(launchAppIntent)
+
+                    }else{
+                        // if app is not installed , then navigate to GooglePlay
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=${app.packageName}"));
+                        startActivity(intent)
+                    }
+
                 }
             }, AppListAdapter.LongClickListener { app ->
                 findNavController().navigate(NavigationDirections.actionGlobalAppInfoDialog(app))
@@ -71,7 +83,7 @@ class AppListFragment : Fragment() {
 //                val fromPosition = viewHolder.adapterPosition
 //                val toPosition = target.adapterPosition
 //                val arrayList = java.util.ArrayList(adapter.currentList)
-////                Collections.swap(adapter.currentList,fromPosition,toPosition)
+//                Collections.swap(adapter.currentList,fromPosition,toPosition)
 //
 //
 //                adapter.notifyItemMoved(fromPosition,toPosition)
@@ -100,7 +112,12 @@ class AppListFragment : Fragment() {
         }
 
         viewModel.appList.observe(viewLifecycleOwner, Observer {
-            adapter.submitList(viewModel.resetList(it.filter { it.appLabel != "Atto"}, requireContext()))
+            viewModel.resetList(it.filter { it.appLabel != "Atto"}, requireContext())
+
+        })
+
+        viewModel.appGroupList.observe(viewLifecycleOwner, Observer {
+            adapter.submitList(it)
         })
 
         return binding.root

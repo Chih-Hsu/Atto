@@ -116,9 +116,6 @@ class PomodoroFragment : Fragment() {
         })
 
 
-
-
-
         return binding.root
     }
 

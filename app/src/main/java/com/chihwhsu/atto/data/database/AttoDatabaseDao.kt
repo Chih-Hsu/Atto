@@ -5,11 +5,12 @@ import androidx.room.*
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.data.AppLockTimer
 import com.chihwhsu.atto.data.Event
+import com.chihwhsu.atto.data.Widget
 
 @Dao
 interface AttoDatabaseDao {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(app: App)
 
     @Update
@@ -23,6 +24,9 @@ interface AttoDatabaseDao {
 
     @Query("Update app_table set theme = :theme where appLabel = :appName")
     fun updateTheme(appName: String, theme: Int?)
+
+    @Query("UPDATE app_table set icon_path = :path WHERE appLabel = :appName")
+    fun updateIconPath(appName: String, path: String)
 
     @Query("UPDATE app_table set is_enable = :doLock where package_name = :packageName")
     fun lockApp(packageName : String, doLock : Boolean)
@@ -117,5 +121,19 @@ interface AttoDatabaseDao {
 
     @Query("SELECT * FROM usage_tracker_table ")
     fun getAllTimer(): LiveData<List<AppLockTimer>>
+
+    // Widget
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insert(widget: Widget)
+
+    @Query("DELETE FROM widget_table WHERE id = :id")
+    fun deleteWidget(id : Long)
+
+
+    @Query("SELECT * FROM widget_table")
+    fun getAllWidget():LiveData<List<Widget>>
+
+
 }
 

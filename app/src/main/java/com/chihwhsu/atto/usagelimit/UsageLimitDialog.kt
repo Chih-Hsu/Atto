@@ -6,18 +6,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
-import android.widget.TextView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.chihwhsu.atto.NavigationDirections
 import com.chihwhsu.atto.R
-import com.chihwhsu.atto.applistpage.bottomsheet.AppListBottomViewModel
-import com.chihwhsu.atto.data.AppLockTimer
 import com.chihwhsu.atto.databinding.DialogUsageLimitBinding
 import com.chihwhsu.atto.ext.getVmFactory
 import com.chihwhsu.atto.util.clickAnimation
+import com.google.android.material.animation.AnimationUtils
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
@@ -45,7 +42,6 @@ class UsageLimitDialog : BottomSheetDialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         val binding = DialogUsageLimitBinding.inflate(inflater,container,false)
-
         val app = UsageLimitDialogArgs.fromBundle(requireArguments()).app
 
         binding.hourArrowUp.setOnClickListener {
@@ -90,6 +86,7 @@ class UsageLimitDialog : BottomSheetDialogFragment() {
 
         binding.buttonSend.setOnClickListener {
             viewModel.lockApp(app)
+            findNavController().navigateUp()
         }
 
 

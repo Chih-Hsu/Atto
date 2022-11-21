@@ -7,10 +7,11 @@ import androidx.room.RoomDatabase
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.data.AppLockTimer
 import com.chihwhsu.atto.data.Event
+import com.chihwhsu.atto.data.Widget
 
 @Database(
-    entities = [App::class, Event::class, AppLockTimer::class],
-    version = 10,
+    entities = [App::class, Event::class, AppLockTimer::class, Widget::class],
+    version = 13,
     exportSchema = false
 )
 abstract class AttoDatabase : RoomDatabase() {

@@ -31,7 +31,7 @@
             android:id="@+id/lock_image"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/money_lock"
+            android:src="@drawable/padlock"
             app:layout_constraintBottom_toBottomOf="@+id/icon_image"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"

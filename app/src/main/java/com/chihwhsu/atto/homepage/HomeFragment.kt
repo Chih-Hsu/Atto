@@ -1,13 +1,20 @@
 package com.chihwhsu.atto.homepage
 
 import android.animation.ObjectAnimator
+import android.app.usage.StorageStatsManager
+import android.content.Context
 import android.os.Bundle
+import android.os.StatFs
+import android.os.storage.StorageManager
+import android.os.storage.StorageVolume
+import android.util.Log
 import android.view.*
 import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.chihwhsu.atto.AttoApplication
 import com.chihwhsu.atto.NavigationDirections
 import com.chihwhsu.atto.R
 import com.chihwhsu.atto.component.GestureListener
@@ -18,6 +25,12 @@ import com.chihwhsu.atto.data.Event.Companion.POMODORO_WORK_TYPE
 import com.chihwhsu.atto.data.Event.Companion.TODO_TYPE
 import com.chihwhsu.atto.databinding.FragmentHomeBinding
 import com.chihwhsu.atto.ext.*
+import java.io.File
+import java.text.NumberFormat
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.util.*
 
 class HomeFragment : Fragment() {
 
@@ -25,12 +38,20 @@ class HomeFragment : Fragment() {
     private val viewModel by viewModels<HomeViewModel> { getVmFactory() }
     private lateinit var gestureDetector: GestureDetector
 
+
+    private var totalInternalStorage: Long = 0
+    private var freeInternalStorage: Long = 0
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
+
+        Log.d("LaunchTest", "HomeFragment Work")
+
+        setGestureListener()
 
 
         val adapter = HomeAdapter(HomeAdapter.EventClickListener { event ->
@@ -48,24 +69,19 @@ class HomeFragment : Fragment() {
         )
 
         viewModel.eventList.observe(viewLifecycleOwner, Observer { list ->
+
             val newList =
                 list.filter { it.alarmTime < getEndOfToday() && it.alarmTime > getCurrentDay() }
-            val expiredList = list.filter {  it.alarmTime < System.currentTimeMillis()+60000 } // Delete event after 1 minute
+
+            val expiredList =
+                list.filter { it.alarmTime < System.currentTimeMillis() + 60000 } // Delete event after 1 minute
+
             viewModel.deleteEvent(expiredList)
-            binding.animationNoEvent.visibility = if (newList.isEmpty()) View.VISIBLE else View.GONE
+
             adapter.submitList(newList)
         })
 
-        // set Gesture Listener
-        val gestureListener = GestureListener(viewModel)
-        gestureDetector = GestureDetector(requireContext(), gestureListener)
 
-        binding.gestureArea.setOnTouchListener(object : View.OnTouchListener {
-            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-
-                return gestureDetector.onTouchEvent(event)
-            }
-        })
 
 
         // set event detail on card
@@ -74,7 +90,7 @@ class HomeFragment : Fragment() {
             binding.eventTitle.text = when (event.type) {
                 ALARM_TYPE -> "Wake Up"
                 TODO_TYPE -> "NEXT TODO"
-                POMODORO_WORK_TYPE  -> "IT'S POMODORO"
+                POMODORO_WORK_TYPE -> "IT'S POMODORO"
                 POMODORO_BREAK_TYPE -> "IT'S POMODORO"
                 else -> "No Event"
             }
@@ -93,6 +109,7 @@ class HomeFragment : Fragment() {
                 }
 
             }
+
             adapter.notifyDataSetChanged()
 
             binding.buttonDelete.setOnClickListener {
@@ -177,10 +194,26 @@ class HomeFragment : Fragment() {
         }
 
 
+//        analyseStorage(requireContext())
+
+        Log.d("storage","${getTotalInternalStorage()}")
+
 
 
 
         return binding.root
+    }
+
+    private fun setGestureListener() {
+        // set Gesture Listener
+        val gestureListener = GestureListener(viewModel)
+        gestureDetector = GestureDetector(requireContext(), gestureListener)
+
+        binding.gestureArea.setOnTouchListener(object : View.OnTouchListener {
+            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+                return gestureDetector.onTouchEvent(event)
+            }
+        })
     }
 
 
@@ -204,6 +237,57 @@ class HomeFragment : Fragment() {
         animation.start()
         viewModel.initAnimation()
     }
+
+//    fun analyseStorage(context: Context) {
+//        val internalStorageFile: File = context.filesDir.absoluteFile
+//        val availableSizeInBytes = StatFs(internalStorageFile.getPath())
+//        val number = NumberFormat.getInstance().format(availableSizeInBytes)
+//        val formattedResult=android.text.format.Formatter.formatShortFileSize(context,availableSizeInBytes)
+//        Log.d("storage","number = $number  forma - $formattedResult")
+//    }
+
+    fun getTotalInternalStorage(): Pair<String?, Boolean> {
+        if (showStorageVolumes()) {
+            return Pair(formatSize(totalInternalStorage), true)
+        } else {
+            return Pair("error", false)
+        }
+
+    }
+
+    private fun showStorageVolumes(): Boolean {
+
+        val storageManager = AttoApplication.instance.applicationContext.getSystemService(Context.STORAGE_SERVICE) as StorageManager
+        val storageStatsManager = AttoApplication.instance.applicationContext.getSystemService(Context.STORAGE_STATS_SERVICE) as StorageStatsManager
+        if (storageManager == null || storageStatsManager == null) {
+            return false
+        }
+
+        val appUUID = requireActivity().packageManager.getPackageUid(AttoApplication.instance.packageName,0)
+        val storageVolumes: List<StorageVolume> = storageManager.storageVolumes
+        for (storageVolume in storageVolumes) {
+            var uuidStr: String? = null
+            storageVolume.uuid?.let {
+                uuidStr = it
+            }
+            val uuid: UUID = if (uuidStr == null) StorageManager.UUID_DEFAULT else UUID.fromString(uuidStr)
+            return try {
+                freeInternalStorage = storageStatsManager.getFreeBytes(UUID.fromString(appUUID.toString()))
+                totalInternalStorage = storageStatsManager.getTotalBytes(UUID.fromString(appUUID.toString()))
+                true
+            } catch (e: Exception) {
+                // IGNORED
+                false
+            }
+        }
+        return false
+    }
+
+    fun formatSize(size: Long): String? {
+        return android.text.format.Formatter.formatFileSize(AttoApplication.instance, size)
+    }
+
+
 
 
 }

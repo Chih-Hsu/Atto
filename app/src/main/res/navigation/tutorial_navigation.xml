@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/tutorial_navigation"
-    app:startDestination="@id/wallpaperFragment">
+    app:startDestination="@id/loginFragment">
 
     <fragment
         android:id="@+id/wallpaperFragment"
-        android:name="com.chihwhsu.atto.tutorial1_wallpaper.WallpaperFragment"
+        android:name="com.chihwhsu.atto.tutorial.wallpaper.WallpaperFragment"
         android:label="WallpaperFragment"
         tools:layout="@layout/fragment_wallpaper">
         <action
@@ -18,7 +18,7 @@
     </fragment>
     <fragment
         android:id="@+id/dockSelectFragment"
-        android:name="com.chihwhsu.atto.tutorial2_dock.DockSelectFragment"
+        android:name="com.chihwhsu.atto.tutorial.dock.DockSelectFragment"
         android:label="DockSelectFragment"
         tools:layout="@layout/fragment_dock_select">
         <action
@@ -34,7 +34,7 @@
     </fragment>
     <fragment
         android:id="@+id/sortFragment"
-        android:name="com.chihwhsu.atto.tutorial3_sort.SortFragment"
+        android:name="com.chihwhsu.atto.tutorial.sort.SortFragment"
         android:label="SortFragment"
         tools:layout="@layout/fragment_app_sortting">
         <action
@@ -56,7 +56,7 @@
     </fragment>
     <fragment
         android:id="@+id/addLabelFragment"
-        android:name="com.chihwhsu.atto.tutorial3_sort.addlabel.AddLabelFragment"
+        android:name="com.chihwhsu.atto.tutorial.sort.addlabel.AddLabelFragment"
         android:label="AddLabelFragment"
         tools:layout="@layout/fragment_add_label">
         <action
@@ -72,7 +72,7 @@
     </fragment>
     <fragment
         android:id="@+id/getUsageFragment"
-        android:name="com.chihwhsu.atto.tutorial4_usage_permission.GetUsageFragment"
+        android:name="com.chihwhsu.atto.tutorial.usagepermission.GetUsageFragment"
         android:label="GetUsageFragment"
         tools:layout="@layout/fragment_get_usage">
         <action
@@ -88,7 +88,30 @@
     </fragment>
     <fragment
         android:id="@+id/setDefaultFragment"
-        android:name="com.chihwhsu.atto.tutorial5_set_default.SetDefaultFragment"
+        android:name="com.chihwhsu.atto.tutorial.setdefault.SetDefaultFragment"
         android:label="SetDefaultFragment"
         tools:layout="@layout/fragment_set_default"/>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.chihwhsu.atto.login.LoginFragment"
+        android:label="LoginFragment"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_loginFragment_to_wallpaperFragment"
+            app:destination="@id/wallpaperFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_afterLoginFragment"
+            app:destination="@id/syncFragment" />
+    </fragment>
+    <action android:id="@+id/action_global_wallpaperFragment" app:destination="@id/wallpaperFragment" />
+    <fragment
+        android:id="@+id/syncFragment"
+        android:name="com.chihwhsu.atto.syncpage.SyncFragment"
+        android:label="SyncFragment"
+        tools:layout="@layout/fragment_sync">
+        <action
+            android:id="@+id/action_syncFragment_to_wallpaperFragment"
+            app:destination="@id/wallpaperFragment" />
+    </fragment>
+    <action android:id="@+id/action_global_afterLoginFragment" app:destination="@id/syncFragment" />
 </navigation>

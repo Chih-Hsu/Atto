@@ -1,6 +1,6 @@
 package com.chihwhsu.atto.homepage
 
-import android.graphics.Color
+
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
@@ -49,9 +49,6 @@ class HomeAdapter(val onClickListener: EventClickListener,val viewModel :HomeVie
             }
 
             binding.eventImage.setColorFilter(color)
-
-
-
 
 
 

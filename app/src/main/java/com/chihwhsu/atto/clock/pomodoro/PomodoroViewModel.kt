@@ -22,7 +22,7 @@ class PomodoroViewModel(private val repository: AttoRepository) : ViewModel() {
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     private var _navigateToHome = MutableLiveData<Boolean>()
-    val navigateToHome : LiveData<Boolean> get() = _navigateToHome
+    val navigateToHome: LiveData<Boolean> get() = _navigateToHome
 
     val labelList = repository.getLabelList()
 
@@ -66,7 +66,7 @@ class PomodoroViewModel(private val repository: AttoRepository) : ViewModel() {
         lockAppLabel = label
     }
 
-    fun checkCanCreate():Boolean{
+    fun checkCanCreate(): Boolean {
         checkPomodoroInRoom()
         return isOtherPomodoroInRoom
     }
@@ -95,8 +95,15 @@ class PomodoroViewModel(private val repository: AttoRepository) : ViewModel() {
                 lockAppLabel = lockAppLabel
             )
 
-            workEvent.setPomodoroAlarmTime(context, POMODORO_WORK_TYPE, workEvent.id.toInt())
-            breakEvent.setPomodoroAlarmTime(context, POMODORO_BREAK_TYPE, breakEvent.id.toInt())
+            val workDuration = workEvent.alarmTime - workEvent.startTime!!
+            val breakDuration = breakEvent.alarmTime - breakEvent.startTime!!
+
+            workEvent.setPomodoroAlarmTime(context, workEvent.id, workDuration)
+            breakEvent.setPomodoroAlarmTime(
+                context,
+                breakEvent.id,
+                breakDuration
+            )
 
             coroutineScope.launch(Dispatchers.IO) {
                 repository.insert(workEvent)
@@ -109,13 +116,13 @@ class PomodoroViewModel(private val repository: AttoRepository) : ViewModel() {
 
     }
 
-    private fun checkPomodoroInRoom(){
-       coroutineScope.launch(Dispatchers.Default) {
-           isOtherPomodoroInRoom = repository.isPomodoroIsExist()
-       }
+    private fun checkPomodoroInRoom() {
+        coroutineScope.launch(Dispatchers.Default) {
+            isOtherPomodoroInRoom = repository.isPomodoroIsExist()
+        }
     }
 
-    fun doneNavigation(){
+    fun doneNavigation() {
         _navigateToHome.value = false
     }
 }

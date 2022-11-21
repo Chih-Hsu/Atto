@@ -2,14 +2,20 @@ package com.chihwhsu.atto.data.database.system
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ApplicationInfo
 import android.content.pm.ResolveInfo
+import android.graphics.Bitmap
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.chihwhsu.atto.AttoApplication
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.data.AppLockTimer
 import com.chihwhsu.atto.data.Event
+import com.chihwhsu.atto.data.Widget
 import com.chihwhsu.atto.data.database.AttoDataSource
 import com.chihwhsu.atto.ext.convertToBitmap
+import java.io.IOException
 
 class AttoSystemDataSource(val context: Context) : AttoDataSource {
 
@@ -22,6 +28,10 @@ class AttoSystemDataSource(val context: Context) : AttoDataSource {
     }
 
     override suspend fun insert(appLockTimer: AppLockTimer) {
+        TODO("Not yet implemented")
+    }
+
+    override fun insert(widget: Widget) {
         TODO("Not yet implemented")
     }
 
@@ -80,7 +90,19 @@ class AttoSystemDataSource(val context: Context) : AttoDataSource {
             val appName = app.activityInfo.loadLabel(manager).toString()
             val appPackageName = app.activityInfo.packageName
             val appImage = app.activityInfo.loadIcon(manager)
-            val newApp = App(appName, appPackageName, appImage.convertToBitmap())
+
+            val category =
+            ApplicationInfo.getCategoryTitle(AttoApplication.instance.applicationContext,app.activityInfo.applicationInfo.category) ?: null
+
+            val newCategory = if (category == null){
+                null
+            }else{
+                category.toString()
+            }
+
+
+            saveFile(appName,appImage.convertToBitmap())
+            val newApp = App(appName, appPackageName, context.filesDir.absolutePath +"/"+"$appName.png", label = newCategory?.split(" ")?.first())
             currentAppList.add(newApp)
         }
 
@@ -114,6 +136,10 @@ class AttoSystemDataSource(val context: Context) : AttoDataSource {
     }
 
     override fun deleteSpecificLabel(label: String) {
+        TODO("Not yet implemented")
+    }
+
+    override fun updateIconPath(appName: String, path: String) {
         TODO("Not yet implemented")
     }
 
@@ -169,5 +195,31 @@ class AttoSystemDataSource(val context: Context) : AttoDataSource {
         TODO("Not yet implemented")
     }
 
+    override fun getAllWidget():LiveData<List<Widget>> {
+        TODO("Not yet implemented")
+    }
+
+    override fun deleteWidget(id: Long) {
+        TODO("Not yet implemented")
+    }
+
+    private fun saveFile(filename: String, icon: Bitmap): Boolean {
+
+        return try {
+            AttoApplication.instance.applicationContext.openFileOutput(
+                "$filename.png",
+                Context.MODE_PRIVATE
+            ).use { stream ->
+                if (!icon.compress(Bitmap.CompressFormat.PNG, 95, stream)) {
+                    throw IOException("Couldn't save bitmap.")
+                }
+                stream.close()
+            }
+            true
+        } catch (e: IOException) {
+            e.printStackTrace()
+            false
+        }
+    }
 
 }

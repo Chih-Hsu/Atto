@@ -37,12 +37,7 @@ class HomeViewModel(private val repository: AttoRepository) : ViewModel() {
     val eventList = repository.getAllEvents()
 
     init {
-
-
-
     }
-
-
 
     fun setEvent(clickEvent: Event){
         _event.value = clickEvent

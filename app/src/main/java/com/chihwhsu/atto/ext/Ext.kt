@@ -4,14 +4,12 @@ import android.content.res.Resources
 import android.graphics.*
 import android.graphics.drawable.Drawable
 import androidx.core.graphics.drawable.toBitmap
-import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.ZoneId
-import java.util.*
 
 
 // check icon is drawable or AdaptiveIconDrawable
-fun Drawable.convertToBitmap(): Bitmap = this.toBitmap(this.minimumWidth, this.minimumHeight, null)
+fun Drawable.convertToBitmap(): Bitmap = this.toBitmap(this.minimumWidth, this.minimumHeight, Bitmap.Config.ARGB_8888)
 
 fun Bitmap.createGrayscale(): Bitmap? {
     val width: Int = this.width
@@ -36,7 +34,10 @@ fun Long.toFormat(): String? {
 fun Long.toMinuteSecondFormat():String{
     val minutes = this / (1000 * 60)
     val second = this / (1000) - minutes*60
-    return "${minutes}:${second}"
+    val displaySecond :String = if (second >= 10) second.toString() else "0$second"
+
+
+    return "${minutes}:${displaySecond}"
 }
 
 fun Int.formatHour(): String {

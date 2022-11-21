@@ -1,30 +1,28 @@
 package com.chihwhsu.atto.data
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.os.Parcelable
+import android.os.StatFs
 import android.util.Log
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.TypeConverters
-import com.chihwhsu.atto.data.database.AttoConverter
-import com.chihwhsu.atto.data.database.AttoDatabaseDao
 import com.chihwhsu.atto.util.UsageStatesManager
 import kotlinx.parcelize.Parcelize
 import java.io.File
+import java.text.NumberFormat
 
 
 @Parcelize
 @Entity(tableName = "app_table")
-@TypeConverters(AttoConverter::class)
+//@TypeConverters(AttoConverter::class)
 data class App (
     @PrimaryKey(autoGenerate = false)
-    val appLabel : String,
+    val appLabel : String ="",
     @ColumnInfo(name = "package_name")
-    val packageName : String,
-    @ColumnInfo(name = "icon")
-    val icon : Bitmap?,
+    val packageName : String ="",
+    @ColumnInfo(name = "icon_path")
+    var iconPath : String ="",
     @ColumnInfo(name = "label")
     val label : String? = null,
     @ColumnInfo(name = "is_enable")
@@ -32,9 +30,9 @@ data class App (
     @ColumnInfo(name = "theme")
     val theme : Int = -1,
     @ColumnInfo(name = "installed")
-    val installed : Boolean = true,
+    var installed : Boolean = true,
     @ColumnInfo(name = "sort")
-    val sort : Int = -1
+    val sort : Int = -1,
         ) :Parcelable {
 
 
@@ -52,20 +50,12 @@ data class App (
         return UsageStatesManager.getUsageFromStartTime(context,packageName,startTime)
     }
 
-    fun analyseStorage(context: Context) : Long {
-        val appBaseFolder = context.filesDir.parentFile
-        val totalSize = browseFiles(appBaseFolder)
-        return totalSize
+    fun analyseStorage(context: Context) {
+        val internalStorageFile: File = context.getFilesDir()
+        val availableSizeInBytes = StatFs(internalStorageFile.getPath()).availableBytes
+        val number = NumberFormat.getInstance().format(availableSizeInBytes);
+        Log.d("storage","$number")
     }
 
-    private fun browseFiles(dir: File): Long {
-        var dirSize: Long = 0
-        for (f in dir.listFiles()) {
-            dirSize += f.length()
-            if (f.isDirectory) {
-                dirSize += browseFiles(f)
-            }
-        }
-        return dirSize
-    }
+
 }

@@ -1,7 +1,9 @@
 package com.chihwhsu.atto.applistpage.bottomsheet
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,26 +26,38 @@ class AppListBottomFragment : Fragment() {
 
     private val viewModel by viewModels<AppListBottomViewModel> { getVmFactory() }
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        requireActivity().window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+
+        Log.d("LaunchTest","AppListBottomFragment Work")
+
+        requireActivity().window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING or WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
 
         val binding = DialogAppListBinding.inflate(inflater, container, false)
 
         val adapter = AppListBottomAdapter(
             // ClickListener
-            AppListBottomAdapter.AppOnClickListener {
-                if (it == "com.chihwhsu.atto") {
+            AppListBottomAdapter.AppOnClickListener { app ->
+
+                if (app.packageName == "com.chihwhsu.atto") {
                     val intent = Intent(requireContext(), SettingActivity::class.java)
                     startActivity(intent)
                 } else {
-                    val launchAppIntent =
-                        requireContext().packageManager.getLaunchIntentForPackage(it)
-                    startActivity(launchAppIntent)
+
+                    if (app.installed){
+                        val launchAppIntent =
+                            requireContext().packageManager.getLaunchIntentForPackage(app.packageName)
+                        startActivity(launchAppIntent)
+
+                    }else{
+                        // if app is not installed , then navigate to GooglePlay
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=${app.packageName}"));
+                        startActivity(intent)
+                    }
+
                 }
             }   // LongClickListener
             , AppListAdapter.LongClickListener { app ->
@@ -79,8 +93,8 @@ class AppListBottomFragment : Fragment() {
             }
         }
 
-        val itemHelper = ItemTouchHelper(simpleCallback)
-        itemHelper.attachToRecyclerView(binding.appRecyclerView)
+//        val itemHelper = ItemTouchHelper(simpleCallback)
+//        itemHelper.attachToRecyclerView(binding.appRecyclerView)
 
 
 

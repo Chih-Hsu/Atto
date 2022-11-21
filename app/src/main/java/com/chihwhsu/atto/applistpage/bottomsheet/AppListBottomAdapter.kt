@@ -1,5 +1,7 @@
 package com.chihwhsu.atto.applistpage.bottomsheet
 
+import android.graphics.ColorMatrix
+import android.graphics.ColorMatrixColorFilter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,6 +9,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.chihwhsu.atto.R
 import com.chihwhsu.atto.applistpage.AppListAdapter
 import com.chihwhsu.atto.data.App
@@ -14,7 +17,6 @@ import com.chihwhsu.atto.data.AppListItem
 import com.chihwhsu.atto.data.Theme
 import com.chihwhsu.atto.databinding.ItemAppListBinding
 import com.chihwhsu.atto.databinding.ItemLabelBinding
-import com.chihwhsu.atto.ext.createGrayscale
 
 
 class AppListBottomAdapter(
@@ -37,8 +39,8 @@ class AppListBottomAdapter(
     }
 
 
-    class AppOnClickListener(val onClickListener: (packageName: String) -> Unit) {
-        fun onClick(packageName: String) = onClickListener(packageName)
+    class AppOnClickListener(val onClickListener: (app: App) -> Unit) {
+        fun onClick(app: App) = onClickListener(app)
     }
 
     class LongClickListener(val onClickListener: (app: App) -> Unit) {
@@ -52,6 +54,7 @@ class AppListBottomAdapter(
         fun bind(item: AppListItem.LabelItem) {
             binding.textLabel.apply {
                 text = item.title
+//                textSize = 20F
                 setTextColor(ResourcesCompat.getColor(itemView.resources, R.color.light_grey, null))
             }
         }
@@ -62,25 +65,38 @@ class AppListBottomAdapter(
         fun bind(item: AppListItem.AppItem) {
 
             binding.appName.text = item.app.appLabel
-            item.app.icon?.let {
-                binding.iconImage.setImageBitmap(it.createGrayscale())
-            }
+//            item.app.icon?.let {
+//                binding.iconImage.setImageBitmap(it.createGrayscale())
+//            }
+            Glide.with(itemView.context)
+                .load(item.app.iconPath)
+                .into(binding.iconImage)
+
+            val colorMatrix = ColorMatrix()
+            colorMatrix.setSaturation(0f)
+            val filter = ColorMatrixColorFilter(colorMatrix)
+
+            binding.iconImage.colorFilter = filter
 
             when (item.app.theme) {
                 Theme.DEFAULT.index -> {
                     binding.iconBackground.setBackgroundResource(R.drawable.icon_background)
+                    binding.kanaImage.visibility = View.INVISIBLE
                 }
                 Theme.BLACK.index -> {
                     binding.iconBackground.setBackgroundResource(R.drawable.icon_background_black)
+                    binding.kanaImage.visibility = View.INVISIBLE
                 }
                 Theme.HIGH_LIGHT.index -> {
                     binding.iconBackground.setBackgroundResource(R.drawable.icon_backgroung_hightlight)
+                    binding.kanaImage.visibility = View.INVISIBLE
                 }
                 Theme.KANAHEI.index -> {
                     binding.kanaImage.visibility = View.VISIBLE
                 }
                 else -> {
                     binding.iconBackground.setBackgroundResource(R.drawable.icon_background)
+                    binding.kanaImage.visibility = View.INVISIBLE
                 }
             }
 
@@ -88,7 +104,7 @@ class AppListBottomAdapter(
             if (item.app.isEnable) {
 
                 itemView.setOnClickListener {
-                    appOnClickListener.onClick(item.app.packageName)
+                    appOnClickListener.onClick(item.app)
                 }
 
                 binding.iconBackground.foreground = null
@@ -105,12 +121,19 @@ class AppListBottomAdapter(
 
             }
 
-            itemView.setOnLongClickListener(object : View.OnLongClickListener {
-                override fun onLongClick(v: View?): Boolean {
-                    longClickListener.onClick(item.app)
-                    return true
-                }
-            })
+            if (item.app.installed){
+
+                itemView.alpha = 1F
+            }else{
+                // if app is not installed , show half transparency
+                itemView.alpha = 0.3F
+
+            }
+
+            itemView.setOnLongClickListener {
+                longClickListener.onClick(item.app)
+                true
+            }
         }
     }
 

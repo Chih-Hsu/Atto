@@ -13,29 +13,29 @@ class AppListBottomViewModel(private val repository: AttoRepository) : ViewModel
     var appList = repository.getAllApps()
 
     private var _filterList = MutableLiveData<List<App>>()
-    val filterList : LiveData<List<App>> get() = _filterList
-
+    val filterList: LiveData<List<App>> get() = _filterList
 
     private var originalList = mutableListOf<App>()
 
-
-    fun getData(){
+    fun getData() {
         appList.value?.let {
             _filterList.value = it
             originalList.addAll(it)
         }
     }
 
-    fun toAppListItem(appList : List<App>):List<AppListItem>{
+    fun toAppListItem(appList: List<App>): List<AppListItem> {
         return appList.filter { it.appLabel != "Atto" }
             .map { AppListItem.AppItem(it) }
-            .sortedBy { it.app.appLabel.first()}
+            .sortedBy { it.app.appLabel.first() }
     }
 
 
     fun filterList(text: String?) {
         if (!text.isNullOrEmpty()) {
-            val list = mutableListOf<App>()
+            val list = mutableListOf<App>().also {
+                it.clear()
+            }
             originalList.let {
                 for (item in it) {
                     if (item.appLabel.lowercase(Locale.ROOT)

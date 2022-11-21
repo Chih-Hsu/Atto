@@ -1,6 +1,8 @@
 package com.chihwhsu.atto.appdetail
 
 
+import android.app.usage.NetworkStatsManager
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -16,6 +18,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
+import com.bumptech.glide.Glide
 import com.chihwhsu.atto.R
 import com.chihwhsu.atto.data.Theme
 import com.chihwhsu.atto.databinding.FragmentAppDetailBinding
@@ -33,14 +36,18 @@ class AppDetailFragment : Fragment() {
     ): View? {
         val binding = FragmentAppDetailBinding.inflate(inflater,container,false)
 
+
+
+
         val adapter = AppDetailAdapter()
         val themeList = mutableListOf<Theme>(Theme.DEFAULT,Theme.BLACK,Theme.HIGH_LIGHT,Theme.KANAHEI)
 
         viewModel.app.observe(viewLifecycleOwner, Observer { app ->
+//            viewModel.getNetUsage(requireContext(),app)
             // set Text
             binding.apply {
                 appName.text = app.appLabel
-                iconImage.setImageBitmap(app.icon)
+                Glide.with(requireContext()).load(app.iconPath).into(iconImage)
                 totalUsageTime.text = app.getTotalUsage(requireContext()).toFormat()
 
             }
