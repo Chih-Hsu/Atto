@@ -39,7 +39,7 @@
             android:name=".SettingActivity"
             android:exported="true"
             android:label="Atto Setting"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustNothing">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

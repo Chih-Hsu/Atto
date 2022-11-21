@@ -34,7 +34,10 @@ fun Long.toFormat(): String? {
 fun Long.toMinuteSecondFormat():String{
     val minutes = this / (1000 * 60)
     val second = this / (1000) - minutes*60
-    return "${minutes}:${second}"
+    val displaySecond :String = if (second >= 10) second.toString() else "0$second"
+
+
+    return "${minutes}:${displaySecond}"
 }
 
 fun Int.formatHour(): String {

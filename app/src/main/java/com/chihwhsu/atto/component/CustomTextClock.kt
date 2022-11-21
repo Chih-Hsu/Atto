@@ -46,7 +46,7 @@ class CustomTextClock : TextClock {
             }
 
             R.id.clock_minutes -> {
-                this.format12Hour = "'${amPm.lowercase()}' hh:mm"
+                this.format12Hour = "'${amPm.uppercase()}' hh:mm"
                 this.format24Hour = null
             }
         }

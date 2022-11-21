@@ -4,10 +4,13 @@ package com.chihwhsu.atto.syncpage
 import android.content.Context
 import android.net.Uri
 import android.provider.Settings
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.data.User
 import com.chihwhsu.atto.data.database.AttoRepository
+import com.chihwhsu.atto.util.UserManager
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.CoroutineScope
@@ -19,18 +22,42 @@ import kotlinx.coroutines.tasks.await
 class SyncViewModel(private val repository: AttoRepository) : ViewModel() {
 
 
-    // Create a Coroutine scope using a job to be able to cancel when needed
     private var viewModelJob = Job()
 
-    // the Coroutine runs using the Main (UI) dispatcher
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-
     private val dataBase = FirebaseFirestore.getInstance()
+
+    private var _user = MutableLiveData<User>()
+    val user: LiveData<User> get() = _user
+
+    init {
+        getUser()
+    }
 
 
     private suspend fun getAppList(): List<App>? {
         return repository.getAllAppNotLiveData()
+    }
+
+    private fun getUser() {
+
+        UserManager.userEmail?.let {
+
+            dataBase.collection("user")
+                .document(it)
+                .get()
+                .addOnSuccessListener {
+                    val currentUser =  it.toObject(User::class.java)
+                    currentUser?.let {
+                        _user.value = currentUser
+                    }
+
+                }
+
+
+        }
+
     }
 
 
@@ -69,7 +96,7 @@ class SyncViewModel(private val repository: AttoRepository) : ViewModel() {
         }
     }
 
-    private suspend fun runDataSync(context: Context, user: User, app: App){
+    private suspend fun runDataSync(context: Context, user: User, app: App) {
         syncLocalAppLabelWithRemote(context, user, app)
         syncLocalAppPicWithRemote(app)
     }
@@ -81,7 +108,8 @@ class SyncViewModel(private val repository: AttoRepository) : ViewModel() {
         imageRef.getFile(Uri.parse(context.filesDir.absolutePath + "/" + app.appLabel + ".png"))
             .await()
     }
-    private suspend fun syncLocalAppPicWithRemote(newApp: App){
+
+    private suspend fun syncLocalAppPicWithRemote(newApp: App) {
         repository.insert(newApp)
     }
 

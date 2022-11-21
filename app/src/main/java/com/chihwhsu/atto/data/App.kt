@@ -1,18 +1,16 @@
 package com.chihwhsu.atto.data
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.os.Parcelable
+import android.os.StatFs
 import android.util.Log
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.TypeConverters
-import com.chihwhsu.atto.data.database.AttoConverter
-import com.chihwhsu.atto.data.database.AttoDatabaseDao
 import com.chihwhsu.atto.util.UsageStatesManager
 import kotlinx.parcelize.Parcelize
 import java.io.File
+import java.text.NumberFormat
 
 
 @Parcelize
@@ -52,20 +50,12 @@ data class App (
         return UsageStatesManager.getUsageFromStartTime(context,packageName,startTime)
     }
 
-    fun analyseStorage(context: Context) : Long {
-        val appBaseFolder = context.filesDir.parentFile
-        val totalSize = browseFiles(appBaseFolder)
-        return totalSize
+    fun analyseStorage(context: Context) {
+        val internalStorageFile: File = context.getFilesDir()
+        val availableSizeInBytes = StatFs(internalStorageFile.getPath()).availableBytes
+        val number = NumberFormat.getInstance().format(availableSizeInBytes);
+        Log.d("storage","$number")
     }
 
-    private fun browseFiles(dir: File): Long {
-        var dirSize: Long = 0
-        for (f in dir.listFiles()) {
-            dirSize += f.length()
-            if (f.isDirectory) {
-                dirSize += browseFiles(f)
-            }
-        }
-        return dirSize
-    }
+
 }

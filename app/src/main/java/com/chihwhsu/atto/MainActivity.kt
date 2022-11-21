@@ -5,7 +5,7 @@ import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
-import com.chihwhsu.atto.background.ResetWorker
+import com.chihwhsu.atto.workmanager.ResetWorker
 import java.util.*
 import java.util.concurrent.TimeUnit
 

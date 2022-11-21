@@ -45,15 +45,12 @@ class AlarmActivity : AppCompatActivity() {
         val viewModel =
             ViewModelProvider(this, viewModelFactory).get(AlarmActivityViewModel::class.java)
 
-        //////
         val intent = this.intent
         viewModel.setIntent(intent)
         viewModel.currentIntent.observe(this, Observer {
             val id = intent.getIntExtra("id", 0)
             viewModel.getEvent(id)
         })
-
-
 
 
         viewModel.event.observe(this, Observer { event ->

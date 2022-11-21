@@ -51,7 +51,7 @@ data class Event(
 
     }
 
-    fun setAlarmTime(applicationContext: Context,newId:Int) {
+    fun setAlarmTime(applicationContext: Context, newId: Int) {
 
         val remindWay = if (vibration == true) {
             2
@@ -88,6 +88,7 @@ data class Event(
                 0,
                 alarmSoundUri.toString(),
                 remindWay,
+
             )
         } else {
             for (day in routineDays) {
@@ -113,24 +114,25 @@ data class Event(
     }
 
 
-    fun setPomodoroAlarmTime(applicationContext: Context,type: Int,newId: Int) {
+    fun setPomodoroAlarmTime(applicationContext: Context, newId: Int, duration: Long) {
 
         val time = getTimeFrom00am(startTime!!)
         val hours = time / (1000 * 60 * 60)
         val minutes = time / (1000 * 60) - hours * 60
 
 
-            AlarmManagerUtil.setAlarm(
-                // applicationContext only
-                applicationContext,
-                0,
-                hours.toInt(),
-                minutes.toInt(),
-                newId,
-                0,
-                "content://media/internal/audio/media/203?title=Crayon%20Rock&canonical=1",
-                1,
-            )
+        AlarmManagerUtil.setAlarm(
+            // applicationContext only
+            applicationContext,
+            0,
+            hours.toInt(),
+            minutes.toInt(),
+            newId,
+            0,
+            "content://media/internal/audio/media/203?title=Crayon%20Rock&canonical=1",
+            1,
+            duration
+        )
 
     }
 

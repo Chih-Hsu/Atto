@@ -11,28 +11,17 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class LoginViewModel : ViewModel() {
 
-    private var _user = MutableLiveData<User>()
-    val user: LiveData<User> get() = _user
+
+
+    private var _navigateToSync = MutableLiveData<Boolean>()
+    val navigateToSync: LiveData<Boolean> get() = _navigateToSync
 
     private val dataBase = FirebaseFirestore.getInstance()
-
-//    fun uploadUser(currentUser: User) {
-//
-//        _user.value = currentUser
-//
-//        // upload to firebase
-//        currentUser.email?.let {
-//            dataBase.collection("user")
-//                .document(it)
-//                .set(currentUser)
-//        }
-//
-//    }
 
 
     fun uploadUser(user: User) {
 
-        _user.value = user
+        _navigateToSync.value = true
 
         // Check user data before upload
         dataBase.collection("user")
@@ -46,7 +35,7 @@ class LoginViewModel : ViewModel() {
                 if (remoteUser != null) {
 
                     if (remoteUser.deviceId != user.deviceId) {
-                        Log.d("test","remoteUser.deviceId != user.deviceId")
+                        Log.d("test", "remoteUser.deviceId != user.deviceId")
 
                         // Do not update deviceId , if device is different
                         val newUser = User(
@@ -67,12 +56,12 @@ class LoginViewModel : ViewModel() {
                             .document(user.email!!)
                             .set(user)
 
-                        Log.d("test","remoteUser.deviceId == user.deviceId")
+                        Log.d("test", "remoteUser.deviceId == user.deviceId")
                     }
 
                     // if remoteData not exist, just upload data
                 } else {
-                    Log.d("test","no remoteUser")
+                    Log.d("test", "no remoteUser")
                     dataBase.collection("user")
                         .document(user.email!!)
                         .set(user)

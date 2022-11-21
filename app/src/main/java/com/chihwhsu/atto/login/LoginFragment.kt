@@ -1,6 +1,7 @@
 package com.chihwhsu.atto.login
 
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
@@ -46,12 +47,16 @@ class LoginFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         val binding = FragmentLoginBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
 
         auth = Firebase.auth
+
+        if (auth.currentUser != null) {
+            findNavController().navigate(TutorialNavigationDirections.actionGlobalAfterLoginFragment())
+        }
 
         val options = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
@@ -66,21 +71,16 @@ class LoginFragment : Fragment() {
             }
         }
 
-//        binding.buttonLogOut.setOnClickListener {
-//            signInClient.signOut()
-//        }
-
-
         binding.buttonGuestLogin.setOnClickListener {
             this.findNavController()
                 .navigate(TutorialNavigationDirections.actionGlobalWallpaperFragment())
         }
 
-        viewModel.user.observe(viewLifecycleOwner, Observer { user ->
-                findNavController().navigate(TutorialNavigationDirections.actionGlobalAfterLoginFragment(user))
+        viewModel.navigateToSync.observe(viewLifecycleOwner, Observer { userSignIn ->
+            if (userSignIn) {
+                findNavController().navigate(TutorialNavigationDirections.actionGlobalAfterLoginFragment())
+            }
         })
-
-
 
         return binding.root
     }
@@ -105,6 +105,7 @@ class LoginFragment : Fragment() {
         }
     }
 
+    @SuppressLint("HardwareIds")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -114,9 +115,11 @@ class LoginFragment : Fragment() {
 
                 googleAuthForFirebase(it)
                 UserManager.userEmail = it.email
-                val deviceId = Settings.Secure.getString(requireContext().contentResolver, Settings.Secure.ANDROID_ID)
-                val user = User(it.id,it.email,it.displayName,it.photoUrl.toString(),deviceId)
-//                val user = User(it.id,it.email,it.displayName,it.photoUrl)
+                val deviceId = Settings.Secure.getString(
+                    requireContext().contentResolver,
+                    Settings.Secure.ANDROID_ID
+                )
+                val user = User(it.id, it.email, it.displayName, it.photoUrl.toString(), deviceId)
                 viewModel.uploadUser(user)
             }
         }

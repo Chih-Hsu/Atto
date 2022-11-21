@@ -109,9 +109,6 @@
         android:name="com.chihwhsu.atto.syncpage.SyncFragment"
         android:label="SyncFragment"
         tools:layout="@layout/fragment_sync">
-        <argument
-            android:name="user"
-            app:argType="com.chihwhsu.atto.data.User" />
         <action
             android:id="@+id/action_syncFragment_to_wallpaperFragment"
             app:destination="@id/wallpaperFragment" />

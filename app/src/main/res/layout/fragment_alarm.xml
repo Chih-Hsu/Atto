@@ -23,21 +23,14 @@
         android:id="@+id/hour_minute"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="150dp"
         android:fontFamily="@font/k2d"
         android:text="am  07:55"
         android:textColor="@color/black"
         android:textSize="50sp"
-        android:layout_marginTop="150dp"
-        app:layout_constraintEnd_toStartOf="@+id/guideline7"
-        app:layout_constraintStart_toStartOf="@+id/guideline7"
+        android:layout_marginStart="@dimen/large_margin"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="180dp" />
 
     <TextView
         android:id="@+id/monday"
@@ -150,7 +143,7 @@
         android:gravity="center"
         android:text="震 動"
         android:textColor="@color/black"
-        android:textSize="20sp"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/monday"
         app:layout_constraintTop_toBottomOf="@+id/monday" />
 
@@ -170,7 +163,7 @@
         android:gravity="center"
         android:text="重 複"
         android:textColor="@color/black"
-        android:textSize="20sp"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/text_vibration"
         app:layout_constraintTop_toBottomOf="@+id/text_vibration" />
 
@@ -199,9 +192,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:fontFamily="@font/k2d"
-        android:text="Alarm Sound"
+        android:text="鈴 聲"
         android:textColor="@color/black"
-        android:textSize="24sp"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/text_routine"
         app:layout_constraintTop_toBottomOf="@+id/text_routine" />
 
@@ -222,7 +215,9 @@
         android:layout_marginBottom="120dp"
         android:insetTop="0dp"
         android:insetBottom="0dp"
-        android:text="確  認"
+        android:text="確      認"
+        style="@style/standard_text_style"
+        android:textSize="16sp"
         app:backgroundTint="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/snooze_switch"

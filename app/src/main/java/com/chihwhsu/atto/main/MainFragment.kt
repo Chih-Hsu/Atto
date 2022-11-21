@@ -24,9 +24,8 @@ class MainFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val binding = FragmentMainBinding.inflate(inflater,container,false)
-
 
         // set ViewPager2
         val adapter = MainViewPagerAdapter(this)

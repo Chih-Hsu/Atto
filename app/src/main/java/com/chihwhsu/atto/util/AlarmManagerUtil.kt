@@ -19,17 +19,19 @@ object AlarmManagerUtil {
         val sender = PendingIntent
             .getBroadcast(
                 context,
-                intent.getIntExtra("id", 0), intent, PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                intent.getIntExtra("id", 0),
+                intent,
+                PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
 
-        val interval = intent.getLongExtra("intervalMills",0)
-        alarmManager.setWindow(AlarmManager.RTC_WAKEUP,time,interval,sender)
+        val interval = intent.getLongExtra("intervalMills", 0)
+        alarmManager.setWindow(AlarmManager.RTC_WAKEUP, time, interval, sender)
     }
 
-    fun cancelAlarm(context: Context,id:Int){
+    fun cancelAlarm(context: Context, id: Int) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 //        val intent = Intent(action)
-        val intent = Intent(context,AlarmReceiver::class.java)
+        val intent = Intent(context, AlarmReceiver::class.java)
         val sender = PendingIntent.getBroadcast(
             context,
             id,
@@ -48,6 +50,7 @@ object AlarmManagerUtil {
         week: Int,
         ringTone: String?,
         soundOrVibrator: Int,
+        duration: Long? = null
     ) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val calendar = Calendar.getInstance()
@@ -56,12 +59,16 @@ object AlarmManagerUtil {
             10
 
 //        calendar.set(calendar[Calendar.SECOND],0)
-        if (flag == 0) {
-            intervalMillis = 0
-        } else if (flag == 1) {
-            intervalMillis = (24 * 3600 * 1000).toLong()
-        } else if (flag == 2) {
-            intervalMillis = (24 * 3600 * 1000 * 7).toLong()
+        when (flag) {
+            0 -> {
+                intervalMillis = 0
+            }
+            1 -> {
+                intervalMillis = (24 * 3600 * 1000).toLong()
+            }
+            2 -> {
+                intervalMillis = (24 * 3600 * 1000 * 7).toLong()
+            }
         }
         val intent = Intent(context, AlarmReceiver::class.java)
 //        val intent = Intent(ALARM_ACTION)
@@ -69,13 +76,19 @@ object AlarmManagerUtil {
         intent.putExtra("ringTone", ringTone)
         intent.putExtra("id", id)
         intent.putExtra("soundOrVibrator", soundOrVibrator)
+        intent.putExtra("duration", duration)
         val sender =
-            PendingIntent.getBroadcast(context, id, intent, PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-            alarmManager.setWindow(
-                AlarmManager.RTC_WAKEUP, AlarmManagerUtil.calMethod(week, calendar.timeInMillis),
-                intervalMillis, sender
+            PendingIntent.getBroadcast(
+                context,
+                id,
+                intent,
+                PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
-        Log.d("clockS","${AlarmManagerUtil.calMethod(week, calendar.timeInMillis)}")
+        alarmManager.setWindow(
+            AlarmManager.RTC_WAKEUP, calMethod(week, calendar.timeInMillis),
+            intervalMillis, sender
+        )
+        Log.d("clockS", "${calMethod(week, calendar.timeInMillis)}")
 
     }
 
@@ -127,7 +140,6 @@ object AlarmManagerUtil {
 
         return time
     }
-
 
 
 }
