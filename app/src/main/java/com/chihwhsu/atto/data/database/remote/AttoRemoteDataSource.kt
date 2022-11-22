@@ -1,23 +1,25 @@
 package com.chihwhsu.atto.data.database.remote
 
 import androidx.lifecycle.LiveData
-import com.chihwhsu.atto.data.App
-import com.chihwhsu.atto.data.AppLockTimer
-import com.chihwhsu.atto.data.Event
-import com.chihwhsu.atto.data.Widget
+import com.chihwhsu.atto.data.*
 import com.chihwhsu.atto.data.database.AttoDataSource
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 object AttoRemoteDataSource : AttoDataSource {
 
-    override suspend  fun insert(app: App) {
+
+    override suspend fun insert(app: App) {
         TODO("Not yet implemented")
     }
 
-    override suspend  fun insert(event: Event) {
+    override suspend fun insert(event: Event) {
         TODO("Not yet implemented")
     }
 
-    override suspend  fun insert(appLockTimer: AppLockTimer) {
+    override suspend fun insert(appLockTimer: AppLockTimer) {
         TODO("Not yet implemented")
     }
 
@@ -25,7 +27,7 @@ object AttoRemoteDataSource : AttoDataSource {
         TODO("Not yet implemented")
     }
 
-    override suspend  fun update(app: App) {
+    override suspend fun update(app: App) {
         TODO("Not yet implemented")
     }
 
@@ -37,15 +39,15 @@ object AttoRemoteDataSource : AttoDataSource {
         TODO("Not yet implemented")
     }
 
-    override suspend  fun updateTheme(appName: String, theme: Int?) {
+    override suspend fun updateTheme(appName: String, theme: Int?) {
         TODO("Not yet implemented")
     }
 
-    override suspend  fun lockApp(packageName: String) {
+    override suspend fun lockApp(packageName: String) {
         TODO("Not yet implemented")
     }
 
-    override suspend  fun unLockAllApp() {
+    override suspend fun unLockAllApp() {
         TODO("Not yet implemented")
     }
 
@@ -53,11 +55,11 @@ object AttoRemoteDataSource : AttoDataSource {
         TODO("Not yet implemented")
     }
 
-    override suspend  fun delete(packageName: String) {
+    override suspend fun delete(packageName: String) {
         TODO("Not yet implemented")
     }
 
-    override suspend  fun clear() {
+    override suspend fun clear() {
         TODO("Not yet implemented")
     }
 
@@ -105,11 +107,11 @@ object AttoRemoteDataSource : AttoDataSource {
         TODO("Not yet implemented")
     }
 
-    override suspend  fun deleteEvent(id: Int) {
+    override suspend fun deleteEvent(id: Int) {
         TODO("Not yet implemented")
     }
 
-    override suspend  fun getEvent(id: Int): Event {
+    override suspend fun getEvent(id: Int): Event {
         TODO("Not yet implemented")
     }
 
@@ -117,7 +119,7 @@ object AttoRemoteDataSource : AttoDataSource {
         TODO("Not yet implemented")
     }
 
-    override suspend  fun delayEvent5Minutes(id: Int) {
+    override suspend fun delayEvent5Minutes(id: Int) {
         TODO("Not yet implemented")
     }
 
@@ -134,19 +136,19 @@ object AttoRemoteDataSource : AttoDataSource {
     }
 
 
-    override suspend  fun deleteTimer(id: Long) {
+    override suspend fun deleteTimer(id: Long) {
         TODO("Not yet implemented")
     }
 
-    override suspend  fun deleteAllTimer() {
+    override suspend fun deleteAllTimer() {
         TODO("Not yet implemented")
     }
 
-    override suspend  fun updateTimer(remainTime: Long) {
+    override suspend fun updateTimer(remainTime: Long) {
         TODO("Not yet implemented")
     }
 
-    override suspend  fun getTimer(packageName: String): AppLockTimer? {
+    override suspend fun getTimer(packageName: String): AppLockTimer? {
         TODO("Not yet implemented")
     }
 
@@ -154,11 +156,46 @@ object AttoRemoteDataSource : AttoDataSource {
         TODO("Not yet implemented")
     }
 
-    override fun getAllWidget():LiveData<List<Widget>> {
+    override fun getAllWidget(): LiveData<List<Widget>> {
         TODO("Not yet implemented")
     }
 
     override fun deleteWidget(id: Long) {
         TODO("Not yet implemented")
+    }
+
+    override suspend fun getUser(): Result<User> = suspendCoroutine { continuation ->
+
+        val auth = FirebaseAuth.getInstance()
+        val dataBase = FirebaseFirestore.getInstance()
+        var currentUser: User?
+
+        auth.currentUser?.email?.let {
+            dataBase.collection("user")
+                .document(it)
+                .get()
+                .addOnCompleteListener { task ->
+
+                    if (task.isSuccessful) {
+
+                        currentUser = task.result.toObject(User::class.java)
+
+                        if (currentUser != null) {
+                            continuation.resume(Result.Success(currentUser!!))
+                        } else {
+                            continuation.resume(Result.Fail("No User"))
+                        }
+
+                    } else {
+
+                        task.exception?.let { e ->
+
+                            continuation.resume(Result.Error(e))
+                            return@addOnCompleteListener
+                        }
+                        continuation.resume(Result.Fail("Get User Fail"))
+                    }
+                }
+        }
     }
 }

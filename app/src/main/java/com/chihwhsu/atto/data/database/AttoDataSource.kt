@@ -3,10 +3,7 @@ package com.chihwhsu.atto.data.database
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.Query
-import com.chihwhsu.atto.data.App
-import com.chihwhsu.atto.data.AppLockTimer
-import com.chihwhsu.atto.data.Event
-import com.chihwhsu.atto.data.Widget
+import com.chihwhsu.atto.data.*
 
 interface AttoDataSource {
 
@@ -28,7 +25,7 @@ interface AttoDataSource {
     suspend fun updateTheme(appName: String, theme: Int?)
 
 
-    suspend fun lockApp(packageName : String)
+    suspend fun lockApp(packageName: String)
 
 
     suspend fun unLockAllApp()
@@ -61,13 +58,11 @@ interface AttoDataSource {
 
     suspend fun updateAppData()
 
-    fun getAllAppNotLiveData():List<App>?
+    fun getAllAppNotLiveData(): List<App>?
 
     fun deleteSpecificLabel(label: String)
 
     fun updateIconPath(appName: String, path: String)
-
-
 
 
     // Event
@@ -93,8 +88,7 @@ interface AttoDataSource {
 
     fun lockSpecificLabelApp(label: String)
 
-    fun isPomodoroIsExist() : Boolean
-
+    fun isPomodoroIsExist(): Boolean
 
 
     // AppLockTimer
@@ -103,13 +97,13 @@ interface AttoDataSource {
     suspend fun insert(appLockTimer: AppLockTimer)
 
 
-    suspend fun deleteTimer(id : Long)
+    suspend fun deleteTimer(id: Long)
 
 
     suspend fun deleteAllTimer()
 
 
-    suspend fun updateTimer(remainTime : Long)
+    suspend fun updateTimer(remainTime: Long)
 
 
     suspend fun getTimer(packageName: String): AppLockTimer?
@@ -120,10 +114,15 @@ interface AttoDataSource {
 
     // Widget
 
-    fun getAllWidget():LiveData<List<Widget>>
+    fun getAllWidget(): LiveData<List<Widget>>
 
     fun insert(widget: Widget)
 
-    fun deleteWidget(id : Long)
+    fun deleteWidget(id: Long)
+
+
+    // Remote
+
+    suspend fun getUser(): Result<User>
 
 }

@@ -1,4 +1,4 @@
-package com.chihwhsu.atto.data.database
+package com.chihwhsu.atto.data.database.local
 
 import android.content.Context
 import androidx.room.Database

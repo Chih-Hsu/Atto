@@ -2,12 +2,8 @@ package com.chihwhsu.atto.data.database.local
 
 import android.content.Context
 import androidx.lifecycle.LiveData
-import com.chihwhsu.atto.data.App
-import com.chihwhsu.atto.data.AppLockTimer
-import com.chihwhsu.atto.data.Event
-import com.chihwhsu.atto.data.Widget
+import com.chihwhsu.atto.data.*
 import com.chihwhsu.atto.data.database.AttoDataSource
-import com.chihwhsu.atto.data.database.AttoDatabase
 
 class AttoLocalDataSource(private val context: Context) : AttoDataSource {
 
@@ -169,6 +165,10 @@ class AttoLocalDataSource(private val context: Context) : AttoDataSource {
 
     override fun deleteWidget(id: Long) {
         return AttoDatabase.getInstance(context).attoDatabaseDao.deleteWidget(id)
+    }
+
+    override suspend fun getUser(): Result<User> {
+        TODO("Not yet implemented")
     }
 
 

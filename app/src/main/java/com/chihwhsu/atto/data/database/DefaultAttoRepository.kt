@@ -2,10 +2,7 @@ package com.chihwhsu.atto.data.database
 
 
 import androidx.lifecycle.LiveData
-import com.chihwhsu.atto.data.App
-import com.chihwhsu.atto.data.AppLockTimer
-import com.chihwhsu.atto.data.Event
-import com.chihwhsu.atto.data.Widget
+import com.chihwhsu.atto.data.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -166,6 +163,10 @@ class DefaultAttoRepository(
         return attoLocalDataSource.deleteWidget(id)
     }
 
+    override suspend fun getUser(): Result<User> {
+        return attoRemoteDataSource.getUser()
+    }
+
     override suspend fun updateAppData() {
 
         withContext(Dispatchers.Main) {
@@ -235,21 +236,6 @@ class DefaultAttoRepository(
         attoLocalDataSource.deleteSpecificLabel(label)
     }
 
-
-//    suspend fun loadFilesFromInternalStorage(label: String): List<Bitmap> {
-//        return withContext(Dispatchers.IO) {
-//            val files = AttoApplication.instance.applicationContext.filesDir.listFiles()
-//            //to make function look bigger :). We will try to load only the images from internal storage that we have saved in save example.
-//            files?.filter { file ->
-//                file.canRead() && file.isFile && file.name.endsWith(".png") && file.name.splitToSequence(
-//                    "/"
-//                ).last().splitToSequence(".").first() == label
-//            }?.map {
-//                val imageBytes = it.readBytes()
-//                BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-//            } ?: listOf()
-//        }
-//    }
 
 
 }

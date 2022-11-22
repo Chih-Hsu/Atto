@@ -3,7 +3,6 @@ package com.chihwhsu.atto.clock.todo
 import androidx.lifecycle.ViewModel
 import com.chihwhsu.atto.data.Event
 import com.chihwhsu.atto.data.Event.Companion.TODO_TYPE
-import com.chihwhsu.atto.data.database.AttoDatabaseDao
 import com.chihwhsu.atto.data.database.AttoRepository
 import com.chihwhsu.atto.ext.getTimeFrom00am
 import kotlinx.coroutines.CoroutineScope

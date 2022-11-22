@@ -1,10 +1,7 @@
 package com.chihwhsu.atto.data.database
 
 import androidx.lifecycle.LiveData
-import com.chihwhsu.atto.data.App
-import com.chihwhsu.atto.data.AppLockTimer
-import com.chihwhsu.atto.data.Event
-import com.chihwhsu.atto.data.Widget
+import com.chihwhsu.atto.data.*
 
 interface AttoRepository {
 
@@ -122,5 +119,11 @@ interface AttoRepository {
     fun insert(widget: Widget)
 
     fun deleteWidget(id : Long)
+
+
+
+    // Remote
+
+    suspend fun getUser(): Result<User>
 
 }

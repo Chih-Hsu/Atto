@@ -5,14 +5,10 @@ import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.ResolveInfo
 import android.graphics.Bitmap
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.chihwhsu.atto.AttoApplication
-import com.chihwhsu.atto.data.App
-import com.chihwhsu.atto.data.AppLockTimer
-import com.chihwhsu.atto.data.Event
-import com.chihwhsu.atto.data.Widget
+import com.chihwhsu.atto.data.*
 import com.chihwhsu.atto.data.database.AttoDataSource
 import com.chihwhsu.atto.ext.convertToBitmap
 import java.io.IOException
@@ -200,6 +196,10 @@ class AttoSystemDataSource(val context: Context) : AttoDataSource {
     }
 
     override fun deleteWidget(id: Long) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getUser(): Result<User> {
         TODO("Not yet implemented")
     }
 

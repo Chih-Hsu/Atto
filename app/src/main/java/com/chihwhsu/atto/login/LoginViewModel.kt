@@ -16,6 +16,9 @@ class LoginViewModel : ViewModel() {
     private var _navigateToSync = MutableLiveData<Boolean>()
     val navigateToSync: LiveData<Boolean> get() = _navigateToSync
 
+    private var _user = MutableLiveData<User>()
+    val user : LiveData<User> get() = _user
+
     private val dataBase = FirebaseFirestore.getInstance()
 
 
@@ -23,7 +26,8 @@ class LoginViewModel : ViewModel() {
 
         val auth = FirebaseAuth.getInstance()
 
-        _navigateToSync.value = true
+        _user.value = user
+//        _navigateToSync.value = true
 
         // Check user data before upload
         dataBase.collection("user")

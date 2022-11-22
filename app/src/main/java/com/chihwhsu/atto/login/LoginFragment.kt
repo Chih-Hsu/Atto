@@ -51,8 +51,12 @@ class LoginFragment : Fragment() {
 
         auth = Firebase.auth
 
-        if (auth.currentUser != null) {
-            findNavController().navigate(TutorialNavigationDirections.actionGlobalAfterLoginFragment())
+        auth.currentUser?.displayName?.let { name ->
+            findNavController().navigate(
+                TutorialNavigationDirections.actionGlobalAfterLoginFragment(
+                    name
+                )
+            )
         }
 
         val options = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -73,11 +77,23 @@ class LoginFragment : Fragment() {
                 .navigate(TutorialNavigationDirections.actionGlobalWallpaperFragment())
         }
 
-        viewModel.navigateToSync.observe(viewLifecycleOwner, Observer { userSignIn ->
-            if (userSignIn) {
-                findNavController().navigate(TutorialNavigationDirections.actionGlobalAfterLoginFragment())
+        viewModel.user.observe(viewLifecycleOwner, Observer { user ->
+
+            user.name?.let { name ->
+                findNavController().navigate(
+                    TutorialNavigationDirections.actionGlobalAfterLoginFragment(
+                        name
+                    )
+                )
             }
+
         })
+
+//        viewModel.navigateToSync.observe(viewLifecycleOwner, Observer { userSignIn ->
+//            if (userSignIn) {
+//
+//            }
+//        })
 
         return binding.root
     }

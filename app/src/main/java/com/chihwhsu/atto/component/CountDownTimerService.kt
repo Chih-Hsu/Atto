@@ -40,26 +40,9 @@ class CountDownTimerService : Service() {
     }
 
 
-    private fun notificationToCountDown(time : Long) : Notification {
-        createNotificationChannel()
-        val notificationIntent = Intent(this, MainActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(
-            this,
-            0, notificationIntent, PendingIntent.FLAG_IMMUTABLE
-        )
-        val notification: Notification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("Simple Foreground Service")
-            .setContentText("Explain about the service")
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentIntent(pendingIntent)
-            .build()
-
-        return notification
-    }
-
     private fun createNotificationChannel(){
         val channel = NotificationChannel(CHANNEL_ID,CHANNEL_NAME,
-            NotificationManager.IMPORTANCE_DEFAULT)
+            NotificationManager.IMPORTANCE_HIGH)
         val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         manager.createNotificationChannel(channel)
     }

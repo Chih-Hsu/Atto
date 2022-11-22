@@ -19,12 +19,14 @@ class SyncFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
+
         val binding = FragmentSyncBinding.inflate(inflater,container,false)
-//        val user = SyncFragmentArgs.fromBundle(requireArguments()).user
+        val userName = SyncFragmentArgs.fromBundle(requireArguments()).userName
+
+        binding.textHello.text = getString(R.string.hello_user,userName)
 
         viewModel.user.observe(viewLifecycleOwner, Observer { user ->
-            binding.textHello.text = getString(R.string.hello_user,user.name)
             binding.buttonSync.setOnClickListener {
                 viewModel.getData(user,requireContext())
             }

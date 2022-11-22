@@ -1,14 +1,12 @@
 package com.chihwhsu.atto.clock.pomodoro
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.chihwhsu.atto.data.Event
 import com.chihwhsu.atto.data.Event.Companion.POMODORO_BREAK_TYPE
 import com.chihwhsu.atto.data.Event.Companion.POMODORO_WORK_TYPE
-import com.chihwhsu.atto.data.database.AttoDatabaseDao
 import com.chihwhsu.atto.data.database.AttoRepository
 import kotlinx.coroutines.*
 

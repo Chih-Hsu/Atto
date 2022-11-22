@@ -1,4 +1,4 @@
-package com.chihwhsu.atto.data.database
+package com.chihwhsu.atto.data.database.local
 
 import androidx.lifecycle.LiveData
 import androidx.room.*

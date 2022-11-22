@@ -1,12 +1,11 @@
 package com.chihwhsu.atto.appdetail
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.data.Theme
-import com.chihwhsu.atto.data.database.AttoDatabaseDao
+import com.chihwhsu.atto.data.database.local.AttoDatabaseDao
 import kotlinx.coroutines.*
 import java.time.LocalDate
 

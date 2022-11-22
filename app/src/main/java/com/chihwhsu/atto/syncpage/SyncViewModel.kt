@@ -1,15 +1,20 @@
 package com.chihwhsu.atto.syncpage
 
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
 import android.provider.Settings
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.chihwhsu.atto.data.App
+import com.chihwhsu.atto.data.Result
 import com.chihwhsu.atto.data.User
 import com.chihwhsu.atto.data.database.AttoRepository
+import com.chihwhsu.atto.data.database.remote.LoadStatus
+import com.chihwhsu.atto.data.succeeded
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -21,13 +26,24 @@ import kotlinx.coroutines.tasks.await
 
 class SyncViewModel(private val repository: AttoRepository) : ViewModel() {
 
+    // status: The internal MutableLiveData that stores the status of the most recent request
+    private val _status = MutableLiveData<LoadStatus>()
+
+    val status: LiveData<LoadStatus>
+        get() = _status
+
+    // error: The internal MutableLiveData that stores the error of the most recent request
+    private val _error = MutableLiveData<String?>()
+
+    val error: LiveData<String?>
+        get() = _error
 
     private var viewModelJob = Job()
 
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
+    // Firebase
     private val dataBase = FirebaseFirestore.getInstance()
-
     private val auth = FirebaseAuth.getInstance()
 
     private var _user = MutableLiveData<User>()
@@ -42,27 +58,59 @@ class SyncViewModel(private val repository: AttoRepository) : ViewModel() {
         return repository.getAllAppNotLiveData()
     }
 
-    private fun getUser() {
+    @SuppressLint("NullSafeMutableLiveData")
+    private fun getUser(){
 
-        auth.currentUser?.email?.let {
-//            Log.d("user"," user = ${auth.currentUser!!.email}  ")
-            dataBase.collection("user")
-                .document(it)
-                .get()
-                .addOnSuccessListener { document ->
+        coroutineScope.launch {
 
-                    val currentUser =  document.toObject(User::class.java)
+            _status.value = LoadStatus.LOADING
 
-                    currentUser?.let { newUser ->
-                        _user.value = newUser
-                    }
+            when(val result = repository.getUser()){
+
+                is Result.Success -> {
+                    _error.value = null
+                    _status.value = LoadStatus.DONE
+                    _user.value = result.data
+                }
+
+                is Result.Fail -> {
+                    _error.value = result.error
+                    _status.value = LoadStatus.ERROR
 
                 }
 
+                is Result.Error -> {
+                    _error.value = result.exception.toString()
+                    _status.value = LoadStatus.ERROR
 
+                }
+
+                else -> {
+                    _error.value = "Error"
+                    _status.value = LoadStatus.ERROR
+                }
+            }
         }
 
     }
+
+//    private fun getUser() {
+//
+//        auth.currentUser?.email?.let {
+//            dataBase.collection("user")
+//                .document(it)
+//                .get()
+//                .addOnSuccessListener { document ->
+//
+//                    val currentUser = document.toObject(User::class.java)
+//
+//                    currentUser?.let { newUser ->
+//                        _user.value = newUser
+//                    }
+//
+//                }
+//        }
+//    }
 
 
     fun getData(user: User, context: Context) {
@@ -117,6 +165,7 @@ class SyncViewModel(private val repository: AttoRepository) : ViewModel() {
         repository.insert(newApp)
     }
 
+    @SuppressLint("HardwareIds")
     private fun updateDeviceId(user: User, context: Context) {
         dataBase.collection("user")
             .document(user.email!!)
