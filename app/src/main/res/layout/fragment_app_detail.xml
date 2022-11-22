@@ -57,16 +57,17 @@
         app:layout_constraintTop_toTopOf="@+id/text_total_usage" />
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardView2"
+        android:id="@+id/card_usage"
         android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_height="0dp"
         android:layout_marginStart="@dimen/standard_margin"
-        android:layout_marginTop="@dimen/large_margin"
-        android:layout_marginEnd="4dp"
+        android:layout_marginEnd="@dimen/standard_margin"
+        android:layout_marginBottom="8dp"
         app:cardBackgroundColor="@color/black"
         app:cardCornerRadius="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/cardView"
-        app:layout_constraintHorizontal_bias="0.5"
+        android:layout_marginTop="@dimen/large_margin"
+        app:layout_constraintBottom_toTopOf="@+id/background_color"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/icon_image">
 
@@ -74,85 +75,79 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/text_data_usage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_medium"
-                android:gravity="center"
-                android:textColor="@color/light_grey"
-                android:textSize="14sp"
-                android:layout_marginStart="@dimen/standard_margin"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:text="儲存空間用量" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            <!--            <com.google.android.material.button.MaterialButton-->
+            <!--                android:id="@+id/button_week"-->
+            <!--                android:layout_width="60dp"-->
+            <!--                android:layout_height="40dp"-->
+            <!--                style="@style/standard_text_style"-->
+            <!--                android:padding="0dp"-->
+            <!--                android:insetTop="0dp"-->
+            <!--                android:insetBottom="0dp"-->
+            <!--                android:textSize="12sp"-->
+            <!--                android:text="Week"-->
+            <!--                android:layout_marginEnd="@dimen/standard_margin"-->
+            <!--                android:layout_marginTop="@dimen/standard_margin"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintTop_toTopOf="parent" />-->
 
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="@dimen/standard_margin"
-        app:cardBackgroundColor="@color/black"
-        app:cardCornerRadius="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/cardView2"
-        app:layout_constraintTop_toTopOf="@+id/cardView2">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <TextView
-                android:id="@+id/text_internet_usage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_medium"
-                android:gravity="center"
-                android:textColor="@color/light_grey"
-                android:textSize="14sp"
-                android:layout_marginStart="@dimen/standard_margin"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:text="網路使用量" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/card_usage"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        app:cardBackgroundColor="@color/black"
-        app:cardCornerRadius="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/background_color"
-        app:layout_constraintEnd_toEndOf="@+id/cardView"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="@+id/cardView2"
-        app:layout_constraintTop_toBottomOf="@+id/cardView2">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            <!--            <com.google.android.material.button.MaterialButton-->
+            <!--                android:id="@+id/button_day"-->
+            <!--                style="@style/ThemeOverlay.Material3.Button.TextButton"-->
+            <!--                android:layout_width="60dp"-->
+            <!--                android:layout_height="40dp"-->
+            <!--                android:insetTop="0dp"-->
+            <!--                android:insetBottom="0dp"-->
+            <!--                android:padding="0dp"-->
+            <!--                android:text="Day"-->
+            <!--                android:textSize="12sp"-->
+            <!--                app:layout_constraintEnd_toStartOf="@+id/button_week"-->
+            <!--                app:layout_constraintTop_toTopOf="@+id/button_week" />-->
 
             <com.db.williamchart.view.BarChartView
                 android:id="@+id/bar_chart"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:chart_barsColor="@color/light_grey"
-                app:chart_barsRadius="10dp"
                 android:layout_marginStart="@dimen/standard_margin"
-                android:layout_marginEnd="@dimen/standard_margin"
-                android:layout_marginBottom="@dimen/standard_margin"
                 android:layout_marginTop="@dimen/large_margin"
-                />
+                android:layout_marginEnd="@dimen/standard_margin"
+                android:layout_marginBottom="56dp"
+                android:visibility="visible"
+                app:chart_barsColor="@color/light_grey"
+                app:chart_barsRadius="10dp" />
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/dark_grey"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/bar_chart" />
+
+            <TextView
+                android:id="@+id/textView5"
+                style="@style/standard_text_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="每日使用統計   (分鐘)"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/view" />
+
+            <!--            <com.db.williamchart.view.BarChartView-->
+            <!--                android:id="@+id/week_bar_chart"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="match_parent"-->
+            <!--                android:layout_marginStart="@dimen/standard_margin"-->
+            <!--                android:layout_marginTop="48dp"-->
+            <!--                android:layout_marginEnd="@dimen/standard_margin"-->
+            <!--                android:layout_marginBottom="@dimen/standard_margin"-->
+            <!--                android:visibility="visible"-->
+            <!--                app:chart_barsColor="@color/light_grey"-->
+            app:chart_barsRadius="10dp" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 

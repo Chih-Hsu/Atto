@@ -13,12 +13,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.chihwhsu.atto.NavigationDirections
 import com.chihwhsu.atto.R
 import com.chihwhsu.atto.TutorialNavigationDirections
 import com.chihwhsu.atto.data.User
 import com.chihwhsu.atto.databinding.FragmentLoginBinding
-import com.chihwhsu.atto.util.UserManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -41,7 +39,6 @@ class LoginFragment : Fragment() {
     companion object {
         const val REQUEST_CODE_SIGN_IN = 123
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -89,6 +86,7 @@ class LoginFragment : Fragment() {
     private fun googleAuthForFirebase(account: GoogleSignInAccount) {
         val credentials = GoogleAuthProvider.getCredential(account.idToken, null)
         CoroutineScope(Dispatchers.Default).launch {
+
             try {
                 auth.signInWithCredential(credentials).await()
                 withContext(Dispatchers.Main) {
@@ -99,9 +97,7 @@ class LoginFragment : Fragment() {
                 withContext(Dispatchers.Main) {
                     Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
                 }
-
             }
-
         }
     }
 
@@ -114,7 +110,7 @@ class LoginFragment : Fragment() {
             account?.let {
 
                 googleAuthForFirebase(it)
-                UserManager.userEmail = it.email
+//                UserManager.userEmail = it.email
                 val deviceId = Settings.Secure.getString(
                     requireContext().contentResolver,
                     Settings.Secure.ANDROID_ID

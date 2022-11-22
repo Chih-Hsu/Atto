@@ -88,7 +88,6 @@ class AlarmActivity : AppCompatActivity() {
                             finish()
                         }
                     }
-
                     countDownTimer.start()
                 }
 
@@ -105,7 +104,6 @@ class AlarmActivity : AppCompatActivity() {
                     event.lockAppLabel?.let {
                         viewModel.unLockApp(it)
                     }
-
 
                     val countDownTimer =
                         object : CountDownTimer(event.alarmTime - event.startTime!! - 1000, 1000L) {
@@ -155,12 +153,14 @@ class AlarmActivity : AppCompatActivity() {
 
     private fun setVibratorAndRingTone(flag: Int, ringTone: String) {
         if (flag == 1 || flag == 2) {
+
             currentRingtone = RingtoneManager
                 .getRingtone(
                     this,
                     Uri.parse(ringTone)
                 )
             currentRingtone?.play()
+
         }
 
         if (flag == 0 || flag == 2) {
@@ -174,5 +174,4 @@ class AlarmActivity : AppCompatActivity() {
         super.onNewIntent(intent)
 
     }
-
 }

@@ -31,9 +31,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Atto"
         tools:targetApi="31">
+
         <activity
             android:name=".AlarmActivity"
             android:exported="false"
+            android:launchMode="singleTask"
             />
         <activity
             android:name=".SettingActivity"
@@ -63,7 +65,7 @@
 
         <receiver android:name=".component.AlarmReceiver" />
 
-        <service android:name=".component.UsageTimerService" />
+        <service android:name=".component.CountDownTimerService" />
 
         <meta-data
             android:name="preloaded_fonts"

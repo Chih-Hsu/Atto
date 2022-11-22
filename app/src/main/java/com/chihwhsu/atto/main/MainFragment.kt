@@ -13,7 +13,7 @@ import androidx.lifecycle.Observer
 import com.chihwhsu.atto.SettingActivity
 import com.chihwhsu.atto.databinding.FragmentMainBinding
 import com.chihwhsu.atto.ext.getVmFactory
-import com.chihwhsu.atto.util.UserManager
+import com.google.firebase.auth.FirebaseAuth
 
 class MainFragment : Fragment() {
 
@@ -30,10 +30,6 @@ class MainFragment : Fragment() {
         // set ViewPager2
         val adapter = MainViewPagerAdapter(this)
         binding.viewPager.adapter = adapter
-
-//        binding.viewPager.post {
-//                binding.viewPager.setCurrentItem(1, true)
-//        }
 
         val dockAdapter = DockAdapter(DockAdapter.DockOnClickListener { app ->
 
@@ -52,7 +48,7 @@ class MainFragment : Fragment() {
                     val intent = Intent(
                         Intent.ACTION_VIEW,
                         Uri.parse("market://details?id=${app.packageName}")
-                    );
+                    )
                     startActivity(intent)
                 }
             }
@@ -88,7 +84,10 @@ class MainFragment : Fragment() {
     }
 
     override fun onDestroy() {
-        if (UserManager.isLogging()){
+
+        val auth = FirebaseAuth.getInstance()
+
+        if (auth.currentUser != null){
             viewModel.uploadData(requireContext())
         }
         super.onDestroy()

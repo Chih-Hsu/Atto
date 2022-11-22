@@ -39,6 +39,10 @@ class WallpaperFragment : Fragment() {
             }
         }
 
+        binding.textKeepWallpaper.setOnClickListener {
+            findNavController().navigate(WallpaperFragmentDirections.actionWallpaperFragmentToDockSelectFragment())
+        }
+
         return binding.root
     }
 

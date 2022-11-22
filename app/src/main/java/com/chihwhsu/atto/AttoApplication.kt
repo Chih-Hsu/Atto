@@ -7,7 +7,6 @@ import kotlin.properties.Delegates
 
 class AttoApplication : Application() {
 
-
     val attoRepository: AttoRepository
         get() = ServiceLocator.provideTasksRepository(this)
 

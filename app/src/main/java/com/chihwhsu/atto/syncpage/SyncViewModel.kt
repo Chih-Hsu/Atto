@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModel
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.data.User
 import com.chihwhsu.atto.data.database.AttoRepository
-import com.chihwhsu.atto.util.UserManager
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.CoroutineScope
@@ -28,6 +28,8 @@ class SyncViewModel(private val repository: AttoRepository) : ViewModel() {
 
     private val dataBase = FirebaseFirestore.getInstance()
 
+    private val auth = FirebaseAuth.getInstance()
+
     private var _user = MutableLiveData<User>()
     val user: LiveData<User> get() = _user
 
@@ -42,15 +44,17 @@ class SyncViewModel(private val repository: AttoRepository) : ViewModel() {
 
     private fun getUser() {
 
-        UserManager.userEmail?.let {
-
+        auth.currentUser?.email?.let {
+//            Log.d("user"," user = ${auth.currentUser!!.email}  ")
             dataBase.collection("user")
                 .document(it)
                 .get()
-                .addOnSuccessListener {
-                    val currentUser =  it.toObject(User::class.java)
-                    currentUser?.let {
-                        _user.value = currentUser
+                .addOnSuccessListener { document ->
+
+                    val currentUser =  document.toObject(User::class.java)
+
+                    currentUser?.let { newUser ->
+                        _user.value = newUser
                     }
 
                 }

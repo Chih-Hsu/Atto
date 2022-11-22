@@ -1,17 +1,13 @@
 package com.chihwhsu.atto.appdetail
 
 
-import android.app.usage.NetworkStatsManager
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -33,14 +29,11 @@ class AppDetailFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val binding = FragmentAppDetailBinding.inflate(inflater,container,false)
 
-
-
-
         val adapter = AppDetailAdapter()
-        val themeList = mutableListOf<Theme>(Theme.DEFAULT,Theme.BLACK,Theme.HIGH_LIGHT,Theme.KANAHEI)
+        val themeList = mutableListOf(Theme.DEFAULT,Theme.BLACK,Theme.HIGH_LIGHT,Theme.KANAHEI)
 
         viewModel.app.observe(viewLifecycleOwner, Observer { app ->
 //            viewModel.getNetUsage(requireContext(),app)
@@ -53,6 +46,7 @@ class AppDetailFragment : Fragment() {
             }
             // get List
             viewModel.setPerHourList(app.get24HourUsageList(requireContext()))
+            viewModel.setWeekList(app.getWeekUsageList(requireContext()))
 
             //
             val appUri = Uri.fromParts("package" , app.packageName , null)
@@ -74,9 +68,12 @@ class AppDetailFragment : Fragment() {
         })
 
         viewModel.dataPerHourList.observe(viewLifecycleOwner, Observer {
-            viewModel.createBarSet()
+            viewModel.create24HBarSet(it)
         })
 
+        viewModel.weekUsageList.observe(viewLifecycleOwner, Observer {
+            viewModel.createWeekChartSet(it)
+        })
 
         viewModel.barSet.observe(viewLifecycleOwner, Observer {  barSet ->
             binding.barChart.apply {
@@ -94,10 +91,37 @@ class AppDetailFragment : Fragment() {
             }
         })
 
+        viewModel.weekBarSet.observe(viewLifecycleOwner, Observer { weekBarSet ->
 
-
-
-
+//            binding.weekBarChart.apply {
+//
+//                //setting
+//                spacing = 20F
+//                labelsSize = dpToFloat(12)
+//                labelsFormatter = { it.toInt().toString() }
+//                labelsColor = resources.getColor(R.color.brown)
+//
+//                //show data
+//                animation.duration = 1000L
+//                animate(weekBarSet)
+//                show(weekBarSet)
+//            }
+//
+//        })
+//
+//        binding.buttonWeek.setOnClickListener {
+//            binding.apply {
+//                barChart.visibility = View.INVISIBLE
+//                weekBarChart.visibility = View.VISIBLE
+//            }
+//        }
+//
+//        binding.buttonDay.setOnClickListener {
+//            binding.apply {
+//                barChart.visibility = View.VISIBLE
+//                weekBarChart.visibility = View.INVISIBLE
+//            }
+        })
 
         // LinearSnapHelper
         val snapHelper = LinearSnapHelper()
@@ -115,7 +139,6 @@ class AppDetailFragment : Fragment() {
                 viewModel.doneNavigation()
                 findNavController().navigateUp()
             }
-
         })
 
 

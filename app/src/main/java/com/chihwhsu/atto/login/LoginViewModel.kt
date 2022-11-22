@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.chihwhsu.atto.data.User
-import com.chihwhsu.atto.util.UserManager
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class LoginViewModel : ViewModel() {
@@ -21,11 +21,13 @@ class LoginViewModel : ViewModel() {
 
     fun uploadUser(user: User) {
 
+        val auth = FirebaseAuth.getInstance()
+
         _navigateToSync.value = true
 
         // Check user data before upload
         dataBase.collection("user")
-            .whereEqualTo("email", UserManager.userEmail)
+            .whereEqualTo("email", auth.currentUser?.email)
             .get()
             .addOnSuccessListener {
 

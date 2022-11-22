@@ -30,22 +30,11 @@ class AppListBottomViewModel(private val repository: AttoRepository) : ViewModel
             .sortedBy { it.app.appLabel.first() }
     }
 
-
     fun filterList(text: String?) {
+
         if (!text.isNullOrEmpty()) {
-            val list = mutableListOf<App>().also {
-                it.clear()
-            }
-            originalList.let {
-                for (item in it) {
-                    if (item.appLabel.lowercase(Locale.ROOT)
-                            .contains(text.lowercase(Locale.ROOT))
-                    ) {
-                        list.add(item)
-                    }
-                }
-            }
-            _filterList.value = list
+
+            _filterList.value = originalList.filter { it.appLabel.lowercase().contains(text.lowercase()) }
         } else {
             _filterList.value = originalList
         }
