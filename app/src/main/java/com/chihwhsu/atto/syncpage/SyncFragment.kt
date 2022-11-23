@@ -1,5 +1,7 @@
 package com.chihwhsu.atto.syncpage
 
+
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +10,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.chihwhsu.atto.MainActivity
 import com.chihwhsu.atto.R
+import com.chihwhsu.atto.data.database.remote.LoadStatus
 import com.chihwhsu.atto.databinding.FragmentSyncBinding
 import com.chihwhsu.atto.ext.getVmFactory
 
@@ -21,14 +25,33 @@ class SyncFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        val binding = FragmentSyncBinding.inflate(inflater,container,false)
+        val binding = FragmentSyncBinding.inflate(inflater, container, false)
         val userName = SyncFragmentArgs.fromBundle(requireArguments()).userName
+        val userEmail = SyncFragmentArgs.fromBundle(requireArguments()).email
 
-        binding.textHello.text = getString(R.string.hello_user,userName)
+        viewModel.getUser(userEmail)
 
-        viewModel.user.observe(viewLifecycleOwner, Observer { user ->
+        binding.textHello.text = getString(R.string.hello_user, userName)
+
+        viewModel.user.observe(viewLifecycleOwner) { user ->
             binding.buttonSync.setOnClickListener {
-                viewModel.getData(user,requireContext())
+                viewModel.syncData(requireContext(), user)
+            }
+        }
+
+        viewModel.status.observe(viewLifecycleOwner, Observer {
+            if (it == LoadStatus.LOADING) {
+                binding.lottieLoading.visibility = View.VISIBLE
+
+            } else {
+                binding.lottieLoading.visibility = View.GONE
+            }
+        })
+
+        viewModel.navigateToMain.observe(viewLifecycleOwner, Observer {
+            if (it == true) {
+                val intent = Intent(this.requireActivity(), MainActivity::class.java)
+                startActivity(intent)
             }
         })
 

@@ -24,6 +24,7 @@ interface AttoDataSource {
 
     suspend fun updateTheme(appName: String, theme: Int?)
 
+    fun updateAppInstalled(appName: String)
 
     suspend fun lockApp(packageName: String)
 
@@ -123,6 +124,16 @@ interface AttoDataSource {
 
     // Remote
 
-    suspend fun getUser(): Result<User>
+    suspend fun getUser(email : String): Result<User>
+
+    suspend fun syncRemoteData(
+        context: Context,
+        user: User,
+        appList: List<App>
+    ): Result<List<App>>
+
+    fun uploadData(context: Context,localAppList : List<App>)
+
+    suspend fun uploadUser(user: User): Result<Boolean>
 
 }

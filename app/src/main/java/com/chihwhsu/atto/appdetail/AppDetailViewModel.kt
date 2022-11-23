@@ -5,12 +5,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.data.Theme
-import com.chihwhsu.atto.data.database.local.AttoDatabaseDao
+import com.chihwhsu.atto.data.database.AttoRepository
 import kotlinx.coroutines.*
 import java.time.LocalDate
 
 
-class AppDetailViewModel(private val databaseDao: AttoDatabaseDao, private val argument: App) :
+class AppDetailViewModel(private val repository: AttoRepository, private val argument: App) :
     ViewModel() {
 
     // Create a Coroutine scope using a job to be able to cancel when needed
@@ -42,9 +42,6 @@ class AppDetailViewModel(private val databaseDao: AttoDatabaseDao, private val a
 
     val navigateUp: LiveData<Boolean> get() = _navigateUp
 
-    init {
-
-    }
 
     fun setPerHourList(list: List<Float>) {
         _dataPerHourList.value = list
@@ -101,7 +98,7 @@ class AppDetailViewModel(private val databaseDao: AttoDatabaseDao, private val a
             localDate.minusDays(5).dayOfWeek.name.substring(0..2),
             localDate.minusDays(6).dayOfWeek.name.substring(0..2),
 
-        )
+            )
 
         val weekBarList = listOf(
             dayList[6] to list[0],
@@ -121,7 +118,7 @@ class AppDetailViewModel(private val databaseDao: AttoDatabaseDao, private val a
         coroutineScope.launch(Dispatchers.IO) {
             app.value?.let {
                 if (theme.index != it.theme) {
-                    databaseDao.updateTheme(it.appLabel, theme.index)
+                    repository.updateTheme(it.appLabel, theme.index)
                 }
                 withContext(Dispatchers.Main) {
                     _navigateUp.value = true

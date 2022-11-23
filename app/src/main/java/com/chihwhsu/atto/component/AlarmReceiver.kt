@@ -17,7 +17,6 @@ class AlarmReceiver : BroadcastReceiver() {
 
         val ringTone = intent!!.getStringExtra("ringTone")
         val intervalMillis = intent.getLongExtra("intervalMillis", 0)
-        val duration = intent.getLongExtra("duration",0L)
         if (intervalMillis != 0L) {
             AlarmManagerUtil.setAlarmTime(
                 context!!, System.currentTimeMillis() + intervalMillis,
@@ -34,11 +33,6 @@ class AlarmReceiver : BroadcastReceiver() {
         clockIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
         context?.let { thisContext ->
-            scope.launch {
-                val serviceIntent = Intent(thisContext,CountDownTimerService::class.java)
-                serviceIntent.putExtra("duration",duration)
-                thisContext.startService(serviceIntent)
-            }
             thisContext.startActivity(clockIntent)
         }
 

@@ -18,10 +18,7 @@ import com.chihwhsu.atto.data.succeeded
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 
 class SyncViewModel(private val repository: AttoRepository) : ViewModel() {
@@ -42,30 +39,28 @@ class SyncViewModel(private val repository: AttoRepository) : ViewModel() {
 
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-    // Firebase
-    private val dataBase = FirebaseFirestore.getInstance()
-    private val auth = FirebaseAuth.getInstance()
+    private var _navigateToMain = MutableLiveData<Boolean>()
+    val navigateToMain : LiveData<Boolean> get() = _navigateToMain
 
     private var _user = MutableLiveData<User>()
     val user: LiveData<User> get() = _user
 
     init {
-        getUser()
+//        getUser()
     }
 
-
-    private suspend fun getAppList(): List<App>? {
+    private fun getAppList(): List<App>? {
         return repository.getAllAppNotLiveData()
     }
 
     @SuppressLint("NullSafeMutableLiveData")
-    private fun getUser(){
+    fun getUser(email : String){
+
+        _status.value = LoadStatus.LOADING
 
         coroutineScope.launch {
 
-            _status.value = LoadStatus.LOADING
-
-            when(val result = repository.getUser()){
+            when(val result = repository.getUser(email)){
 
                 is Result.Success -> {
                     _error.value = null
@@ -91,7 +86,6 @@ class SyncViewModel(private val repository: AttoRepository) : ViewModel() {
                 }
             }
         }
-
     }
 
 //    private fun getUser() {
@@ -113,38 +107,89 @@ class SyncViewModel(private val repository: AttoRepository) : ViewModel() {
 //    }
 
 
-    fun getData(user: User, context: Context) {
+//    fun getData(user: User, context: Context) {
+//
+//        coroutineScope.launch(Dispatchers.Default) {
+//
+//            updateDeviceId(user, context)
+//
+//            val appList = getAppList()
+//
+//            dataBase.collection("user")
+//                .document(user.email!!)
+//                .collection("App")
+//                .get()
+//                .addOnSuccessListener { list ->
+//                    for (item in list) {
+//                        coroutineScope.launch(Dispatchers.IO) {
+//                            val newApp = item.toObject(App::class.java)
+//
+//                            // Check which app is not installed
+//                            if (appList?.filter { it.appLabel == newApp.appLabel }
+//                                    .isNullOrEmpty()) {
+//                                newApp.installed = false
+//                            }
+//
+//                            newApp.iconPath =
+//                                context.filesDir.absolutePath + "/" + "${newApp.appLabel}.png"
+//
+//                            runDataSync(context, user, newApp)
+//
+//                        }
+//                    }
+//                }
+//        }
+//
+//
+//    }
 
-        coroutineScope.launch(Dispatchers.Default) {
+    fun syncData(context: Context,user: User){
 
-            updateDeviceId(user, context)
+        _status.value = LoadStatus.LOADING
+
+        coroutineScope.launch(Dispatchers.IO) {
 
             val appList = getAppList()
+            appList?.let {
 
-            dataBase.collection("user")
-                .document(user.email!!)
-                .collection("App")
-                .get()
-                .addOnSuccessListener { list ->
-                    for (item in list) {
-                        coroutineScope.launch(Dispatchers.IO) {
-                            val newApp = item.toObject(App::class.java)
+                when(val result = repository.syncRemoteData(context,user,it)){
 
+                    is Result.Success -> {
 
-                            // Check which app is not installed
-                            if (appList?.filter { it.appLabel == newApp.appLabel }
-                                    .isNullOrEmpty()) {
-                                newApp.installed = false
-                            }
+                        for (app in result.data){
+                            runDataSync(context,user,app)
+                        }
 
-                            newApp.iconPath =
-                                context.filesDir.absolutePath + "/" + "${newApp.appLabel}.png"
-
-                            runDataSync(context, user, newApp)
-
+                        withContext(Dispatchers.Main){
+                            _error.value = null
+                            _status.value = LoadStatus.DONE
+                            _navigateToMain.value = true
                         }
                     }
+
+                    is Result.Fail -> {
+                        withContext(Dispatchers.Main) {
+                            _error.value = result.error
+                            _status.value = LoadStatus.ERROR
+                        }
+                    }
+
+                    is Result.Error -> {
+                        withContext(Dispatchers.Main) {
+                            _error.value = "Error"
+                            _status.value = LoadStatus.ERROR
+                        }
+                    }
+
+                    else -> {
+                        withContext(Dispatchers.Main) {
+                            _error.value = "Error"
+                            _status.value = LoadStatus.ERROR
+                        }
+                    }
+
                 }
+            }
         }
     }
 
@@ -165,15 +210,8 @@ class SyncViewModel(private val repository: AttoRepository) : ViewModel() {
         repository.insert(newApp)
     }
 
-    @SuppressLint("HardwareIds")
-    private fun updateDeviceId(user: User, context: Context) {
-        dataBase.collection("user")
-            .document(user.email!!)
-            .update(
-                "deviceId",
-                Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
-            )
+    fun doneNavigation(){
+        _navigateToMain.value = false
     }
-
 
 }

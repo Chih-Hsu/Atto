@@ -27,7 +27,7 @@ fun Fragment.getVmFactory(packageManager: PackageManager): DockViewModelFactory 
 }
 
 fun Fragment.getVmFactory(argument : App): AppDetailViewModelFactory {
-    val databaseDao = AttoDatabase.getInstance(requireContext()).attoDatabaseDao
-    return AppDetailViewModelFactory(databaseDao,argument)
+    val repository = (requireContext().applicationContext as AttoApplication).attoRepository
+    return AppDetailViewModelFactory(repository,argument)
 }
 

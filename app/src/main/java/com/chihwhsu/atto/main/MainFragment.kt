@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth
 class MainFragment : Fragment() {
 
     private val viewModel by viewModels<MainViewModel> { getVmFactory() }
+    private lateinit var binding: FragmentMainBinding
 
 
     override fun onCreateView(
@@ -25,7 +26,9 @@ class MainFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentMainBinding.inflate(inflater,container,false)
+
+        binding = FragmentMainBinding.inflate(inflater,container,false)
+        binding.lottieLoading.visibility = View.VISIBLE
 
         // set ViewPager2
         val adapter = MainViewPagerAdapter(this)
@@ -80,6 +83,8 @@ class MainFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+
+        binding.lottieLoading.visibility = View.GONE
         viewModel.updateApp()
     }
 

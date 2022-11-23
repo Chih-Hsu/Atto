@@ -47,6 +47,10 @@ class AttoSystemDataSource(val context: Context) : AttoDataSource {
         TODO("Not yet implemented")
     }
 
+    override fun updateAppInstalled(appName: String) {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun lockApp(packageName: String) {
         TODO("Not yet implemented")
     }
@@ -199,7 +203,23 @@ class AttoSystemDataSource(val context: Context) : AttoDataSource {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getUser(): Result<User> {
+    override suspend fun getUser(email : String): Result<User> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun syncRemoteData(
+        context: Context,
+        user: User,
+        appList: List<App>
+    ): Result<List<App>> {
+        TODO()
+    }
+
+    override fun uploadData(context: Context,localAppList : List<App>) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun uploadUser(user: User): Result<Boolean> {
         TODO("Not yet implemented")
     }
 

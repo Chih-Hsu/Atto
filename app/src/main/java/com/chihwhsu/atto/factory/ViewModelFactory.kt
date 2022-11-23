@@ -11,6 +11,7 @@ import com.chihwhsu.atto.clock.pomodoro.PomodoroViewModel
 import com.chihwhsu.atto.clock.todo.TodoViewModel
 import com.chihwhsu.atto.data.database.AttoRepository
 import com.chihwhsu.atto.homepage.HomeViewModel
+import com.chihwhsu.atto.login.LoginViewModel
 import com.chihwhsu.atto.main.MainViewModel
 import com.chihwhsu.atto.syncpage.SyncViewModel
 import com.chihwhsu.atto.tutorial.sort.SortViewModel
@@ -75,6 +76,9 @@ class ViewModelFactory constructor(
 
                 isAssignableFrom(AppInfoViewModel::class.java) ->
                     AppInfoViewModel(repository)
+
+                isAssignableFrom(LoginViewModel::class.java) ->
+                    LoginViewModel(repository)
 
                 else ->
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")

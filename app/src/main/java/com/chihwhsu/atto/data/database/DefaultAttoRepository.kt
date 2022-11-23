@@ -1,11 +1,13 @@
 package com.chihwhsu.atto.data.database
 
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import com.chihwhsu.atto.data.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.util.Locale.filter
 
 
 class DefaultAttoRepository(
@@ -49,6 +51,10 @@ class DefaultAttoRepository(
 
     override fun updateIconPath(appName: String, path: String) {
         attoLocalDataSource.updateIconPath(appName, path)
+    }
+
+    override fun updateAppInstalled(appName: String) {
+        attoLocalDataSource.updateAppInstalled(appName)
     }
 
     override suspend fun updateTheme(appName: String, theme: Int?) {
@@ -163,8 +169,24 @@ class DefaultAttoRepository(
         return attoLocalDataSource.deleteWidget(id)
     }
 
-    override suspend fun getUser(): Result<User> {
-        return attoRemoteDataSource.getUser()
+    override suspend fun getUser(email:String): Result<User> {
+        return attoRemoteDataSource.getUser(email)
+    }
+
+    override suspend fun syncRemoteData(
+        context: Context,
+        user: User,
+        appList: List<App>
+    ): Result<List<App>>{
+        return attoRemoteDataSource.syncRemoteData(context, user, appList)
+    }
+
+    override fun uploadData(context: Context,localAppList : List<App>) {
+        attoRemoteDataSource.uploadData(context, localAppList)
+    }
+
+    override suspend fun uploadUser(user: User): Result<Boolean> {
+        return attoRemoteDataSource.uploadUser(user)
     }
 
     override suspend fun updateAppData() {
@@ -196,11 +218,7 @@ class DefaultAttoRepository(
 //                            if (!roomApps.contains(app)) {
                             if (roomApps.none { it.appLabel == app.appLabel }) {
                                 // room沒有的就insert
-                                try {
                                     insert(app)
-                                } catch (e: Exception) {
-                                    e.printStackTrace()
-                                }
                             } else {
                                 // room有的就確認imageUrl是否一樣，若不是就更新
                                 if (app.iconPath != roomApps.filter { it.appLabel == app.appLabel }
@@ -208,6 +226,13 @@ class DefaultAttoRepository(
                                     updateIconPath(app.appLabel, app.iconPath)
                                 }
 
+                                if (roomApps.filter { it.appLabel == app.appLabel }.isNotEmpty()){
+                                    for (item in roomApps.filter { it.appLabel == app.appLabel }){
+                                        if (item.installed == false){
+                                            updateAppInstalled(app.appLabel)
+                                        }
+                                    }
+                                }
                             }
                         }
 

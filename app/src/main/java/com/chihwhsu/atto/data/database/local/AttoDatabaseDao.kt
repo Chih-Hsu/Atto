@@ -28,6 +28,9 @@ interface AttoDatabaseDao {
     @Query("UPDATE app_table set icon_path = :path WHERE appLabel = :appName")
     fun updateIconPath(appName: String, path: String)
 
+    @Query("UPDATE app_table set installed = :installed WHERE appLabel = :appName")
+    fun updateAppInstalled(appName: String,installed:Boolean)
+
     @Query("UPDATE app_table set is_enable = :doLock where package_name = :packageName")
     fun lockApp(packageName : String, doLock : Boolean)
 

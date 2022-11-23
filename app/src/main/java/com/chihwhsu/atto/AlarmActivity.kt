@@ -1,6 +1,7 @@
 package com.chihwhsu.atto
 
-import android.app.Service
+import android.app.*
+import android.content.Context
 import android.content.Intent
 import android.media.Ringtone
 import android.media.RingtoneManager
@@ -11,6 +12,8 @@ import android.os.Vibrator
 import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.chihwhsu.atto.data.Event
@@ -24,9 +27,13 @@ class AlarmActivity : AppCompatActivity() {
 
     private var currentRingtone: Ringtone? = null
     private var vibrator: Vibrator? = null
+    private var ringTone: String? = null
+    private var flag: Int? = null
 
-    private var ringTone : String? = null
-    private var flag : Int? = null
+    val CHANNEL_ID = "channelId"
+    val CHANNEL_NAME = "foreground_service"
+    val NOTIFICATION_ID = 1
+    val BREAK_NOTIFICATION_ID = 2
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,13 +79,39 @@ class AlarmActivity : AppCompatActivity() {
                         viewModel.lockApp(it)
                     }
 
+                    createNotificationChannel()
+
                     // when this countdown close , break countdown will start,
                     // so the startActivity will close break countdown in the same time
                     // the purpose of minus 1000 is to stagger two timer
                     val countDownTimer = object :
                         CountDownTimer(event.alarmTime - event.startTime!! - 1000L, 1000L) {
+
+
+
                         override fun onTick(millisUntilFinished: Long) {
                             binding.textCountDown.text = millisUntilFinished.toMinuteSecondFormat()
+
+                            val notificationIntent =
+                                Intent(this@AlarmActivity, AlarmActivity::class.java)
+                            val pendingIntent = PendingIntent.getActivity(
+                                this@AlarmActivity,
+                                0, notificationIntent, PendingIntent.FLAG_IMMUTABLE
+                            )
+
+                            val notification: Notification =
+                                NotificationCompat.Builder(this@AlarmActivity, CHANNEL_ID)
+                                    .setContentTitle("該 工 作 囉 ~")
+                                    .setContentText("剩餘時間 : ${millisUntilFinished.toMinuteSecondFormat()} ")
+                                    .setSmallIcon(R.drawable.ic_launcher_foreground)
+                                    .setContentIntent(pendingIntent)
+                                    .build()
+
+                            val notificationManager =
+                                NotificationManagerCompat.from(this@AlarmActivity)
+
+                            notificationManager.notify(NOTIFICATION_ID, notification)
+
                         }
 
                         override fun onFinish() {
@@ -108,8 +141,30 @@ class AlarmActivity : AppCompatActivity() {
                     val countDownTimer =
                         object : CountDownTimer(event.alarmTime - event.startTime!! - 1000, 1000L) {
                             override fun onTick(millisUntilFinished: Long) {
+
                                 binding.textCountDown.text =
                                     millisUntilFinished.toMinuteSecondFormat()
+
+                                val notificationIntent =
+                                    Intent(this@AlarmActivity, AlarmActivity::class.java)
+                                val pendingIntent = PendingIntent.getActivity(
+                                    this@AlarmActivity,
+                                    1, notificationIntent, PendingIntent.FLAG_IMMUTABLE
+                                )
+
+                                val notification: Notification =
+                                    NotificationCompat.Builder(this@AlarmActivity, CHANNEL_ID)
+                                        .setContentTitle("該 休 息 囉 ~")
+                                        .setContentText("剩餘時間 : ${millisUntilFinished.toMinuteSecondFormat()} ")
+                                        .setSmallIcon(R.drawable.ic_launcher_foreground)
+                                        .setContentIntent(pendingIntent)
+                                        .build()
+
+                                val notificationManager =
+                                    NotificationManagerCompat.from(this@AlarmActivity)
+
+                                notificationManager.notify(BREAK_NOTIFICATION_ID, notification)
+
                             }
 
                             override fun onFinish() {
@@ -174,4 +229,16 @@ class AlarmActivity : AppCompatActivity() {
         super.onNewIntent(intent)
 
     }
+
+
+    private fun createNotificationChannel() {
+        val channel = NotificationChannel(
+            CHANNEL_ID, CHANNEL_NAME,
+            NotificationManager.IMPORTANCE_HIGH
+        )
+        val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        manager.createNotificationChannel(channel)
+    }
+
+
 }
