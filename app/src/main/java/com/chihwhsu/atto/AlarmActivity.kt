@@ -18,7 +18,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.chihwhsu.atto.data.Event
 import com.chihwhsu.atto.databinding.ActivityAlarmBinding
-import com.chihwhsu.atto.ext.getTimeFrom00am
+import com.chihwhsu.atto.ext.getTimeFromStartOfDay
 import com.chihwhsu.atto.ext.toFormat
 import com.chihwhsu.atto.ext.toMinuteSecondFormat
 import com.chihwhsu.atto.factory.AlarmActivityViewModelFactory
@@ -130,7 +130,7 @@ class AlarmActivity : AppCompatActivity() {
                     binding.animationAlarm.visibility = View.GONE
                     binding.animationBreak.visibility = View.VISIBLE
                     binding.textCountDown.text =
-                        getTimeFrom00am(System.currentTimeMillis()).toFormat()
+                        getTimeFromStartOfDay(System.currentTimeMillis()).toFormat()
                     binding.textTimeToWork.text = "Time To \nTake a Break !"
                     binding.materialButton.text = "Close"
 
@@ -183,7 +183,7 @@ class AlarmActivity : AppCompatActivity() {
                     binding.animationAlarm.visibility = View.VISIBLE
                     binding.animationBreak.visibility = View.GONE
                     binding.textCountDown.text =
-                        getTimeFrom00am(System.currentTimeMillis()).toFormat()
+                        getTimeFromStartOfDay(System.currentTimeMillis()).toFormat()
                     binding.textTimeToWork.text = "Time To \nWake Up !"
                     binding.materialButton.text = "Close"
                     setVibratorAndRingTone(flag!!, ringTone!!)

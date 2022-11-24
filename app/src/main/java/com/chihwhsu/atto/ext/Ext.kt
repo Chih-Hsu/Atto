@@ -68,8 +68,11 @@ fun Float.toDp(): Int {
     return (this / Resources.getSystem().displayMetrics.density).toInt()
 }
 
+fun dpToFloat(dp:Int,resources:Resources):Float{
+    return resources.displayMetrics.density * dp.toFloat()
+}
 
-fun getTimeFrom00am(time: Long): Long {
+fun getTimeFromStartOfDay(time: Long): Long {
     val todayStart = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
 
     return time - todayStart

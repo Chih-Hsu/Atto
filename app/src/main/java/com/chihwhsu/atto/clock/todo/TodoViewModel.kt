@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.chihwhsu.atto.data.Event
 import com.chihwhsu.atto.data.Event.Companion.TODO_TYPE
 import com.chihwhsu.atto.data.database.AttoRepository
-import com.chihwhsu.atto.ext.getTimeFrom00am
+import com.chihwhsu.atto.ext.getTimeFromStartOfDay
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -19,9 +19,9 @@ class TodoViewModel(private val repository: AttoRepository) : ViewModel() {
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     // for create Event
-    private var alarmTime = getTimeFrom00am(System.currentTimeMillis())+600000
+    private var alarmTime = getTimeFromStartOfDay(System.currentTimeMillis())+600000
 
-    private var eventDay = System.currentTimeMillis() - getTimeFrom00am(System.currentTimeMillis())
+    private var eventDay = System.currentTimeMillis() - getTimeFromStartOfDay(System.currentTimeMillis())
 
     private var eventTitle = ""
 

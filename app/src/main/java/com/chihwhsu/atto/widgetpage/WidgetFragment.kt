@@ -19,6 +19,7 @@ import com.chihwhsu.atto.R
 import com.chihwhsu.atto.component.CountDownTimerService
 import com.chihwhsu.atto.databinding.FragmentWidgetBinding
 import com.chihwhsu.atto.ext.getVmFactory
+import java.util.*
 
 
 class WidgetFragment : Fragment() {
@@ -146,6 +147,10 @@ class WidgetFragment : Fragment() {
 //                getWidgetPermission(appWidgetId, widgetInfo)
 //            }
 //        }
+
+        val cal1 = GregorianCalendar(2022,11,15)
+        binding.dsdsd.selectedDates = listOf(cal1)
+//        binding.dsdsd.add
 
         return binding.root
     }

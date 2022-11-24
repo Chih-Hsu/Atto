@@ -2,7 +2,6 @@ package com.chihwhsu.atto.applistpage
 
 import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,11 +16,14 @@ import com.chihwhsu.atto.data.AppListItem
 import com.chihwhsu.atto.data.Theme
 import com.chihwhsu.atto.databinding.ItemAppListBinding
 import com.chihwhsu.atto.databinding.ItemLabelBinding
-import com.chihwhsu.atto.ext.createGrayscale
 import com.chihwhsu.atto.ext.toFormat
 
-class AppListAdapter  (val appOnClickListener : AppOnClickListener,val longClickListener: LongClickListener,val viewModel: AppListViewModel) : ListAdapter<AppListItem, RecyclerView.ViewHolder>(object :
-    DiffUtil.ItemCallback<AppListItem>(){
+class AppListAdapter(
+    val appOnClickListener: AppOnClickListener,
+    val longClickListener: LongClickListener,
+    val viewModel: AppListViewModel
+) : ListAdapter<AppListItem, RecyclerView.ViewHolder>(object :
+    DiffUtil.ItemCallback<AppListItem>() {
     override fun areItemsTheSame(oldItem: AppListItem, newItem: AppListItem): Boolean {
         return oldItem.id == newItem.id
     }
@@ -31,55 +33,110 @@ class AppListAdapter  (val appOnClickListener : AppOnClickListener,val longClick
     }
 }) {
 
-    companion object{
+    companion object {
         const val APP_ITEM_VIEW_TYPE_LABEL = 0x00
         const val APP_ITEM_VIEW_TYPE_APP = 0x01
     }
 
 
-
-    class AppOnClickListener(val onClickListener:(app:App)->Unit){
-        fun onClick(app:App) = onClickListener(app)
+    class AppOnClickListener(val onClickListener: (app: App) -> Unit) {
+        fun onClick(app: App) = onClickListener(app)
     }
 
-    class LongClickListener(val onClickListener:(app:App)->Unit){
-        fun onClick(app : App) = onClickListener(app)
+    class LongClickListener(val onClickListener: (app: App) -> Unit) {
+        fun onClick(app: App) = onClickListener(app)
     }
 
+    inner class LabelViewHolder(val binding: ItemLabelBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
-    inner class LabelViewHolder(val binding: ItemLabelBinding): RecyclerView.ViewHolder(binding.root){
-
-        fun bind( item : AppListItem.LabelItem){
+        fun bind(item: AppListItem.LabelItem) {
             binding.textLabel.apply {
                 text = item.title
-                setTextColor(ResourcesCompat.getColor(itemView.resources,R.color.light_grey,null))
+                setTextColor(ResourcesCompat.getColor(itemView.resources, R.color.light_grey, null))
             }
-            Log.w("list","item.time: ${item.time}")
-            Log.w("list","item.time: ${item.time.toFormat()}")
+
             binding.textUsageTime.text = item.time.toFormat()
 
-
             itemView.setOnClickListener {
-                if (viewModel.isHide.containsKey(item.title)){
-                    val value = viewModel.isHide.get(item.title) as Boolean
-                    viewModel.isHide.put(item.title,!value)
+                if (viewModel.isHide.containsKey(item.title)) {
+                    val value = viewModel.isHide[item.title] as Boolean
+                    viewModel.isHide[item.title] = !value
 
-                }else{
-                    viewModel.isHide.put(item.title,true)
+                } else {
+                    viewModel.isHide[item.title] = true
                 }
                 notifyDataSetChanged()
             }
         }
     }
 
-    inner class AppViewHolder(val binding: ItemAppListBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(item: AppListItem.AppItem){
+    inner class AppViewHolder(val binding: ItemAppListBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: AppListItem.AppItem) {
+
+            binding.appName.text = item.app.appLabel
 
             showAppOrNot(item.app)
-            binding.appName.text = item.app.appLabel
-//            item.app.icon?.let {
-//                binding.iconImage.setImageBitmap(it.createGrayscale())
-//            }
+            setIcon(item)
+            setBackground(item)
+            setAppClickableStateByEnable(item)  // App is not locked
+            setAlphaByInstallState(item)
+
+            itemView.setOnLongClickListener {
+                longClickListener.onClick(item.app)
+                true
+            }
+        }
+
+        private fun setAlphaByInstallState(item: AppListItem.AppItem) {
+            if (item.app.installed) {
+
+                itemView.alpha = 1F
+            } else {
+                // if app is not installed , show half transparency
+                itemView.alpha = 0.3F
+
+            }
+        }
+
+        private fun setAppClickableStateByEnable(item: AppListItem.AppItem) {
+            if (item.app.isEnable) {
+
+                itemView.setOnClickListener {
+                    appOnClickListener.onClick(item.app)
+                }
+                binding.iconBackground.foreground = null
+                binding.lockImage.visibility = View.GONE
+
+            } else {
+                binding.iconBackground.foreground = ResourcesCompat.getDrawable(
+                    itemView.resources,
+                    R.drawable.icon_background_lock,
+                    null
+                )
+                binding.lockImage.visibility = View.VISIBLE
+            }
+        }
+
+        private fun setBackground(item: AppListItem.AppItem) {
+            when (item.app.theme) {
+                Theme.DEFAULT.index -> {
+                    binding.iconBackground.setBackgroundResource(R.drawable.icon_background)
+                }
+                Theme.BLACK.index -> {
+                    binding.iconBackground.setBackgroundResource(R.drawable.icon_background_black)
+                }
+                Theme.HIGH_LIGHT.index -> {
+                    binding.iconBackground.setBackgroundResource(R.drawable.icon_backgroung_hightlight)
+                }
+                Theme.KANAHEI.index -> {
+                    binding.kanaImage.visibility = View.VISIBLE
+                }
+            }
+        }
+
+        private fun setIcon(item: AppListItem.AppItem) {
             Glide.with(itemView.context)
                 .load(item.app.iconPath)
                 .into(binding.iconImage)
@@ -89,85 +146,40 @@ class AppListAdapter  (val appOnClickListener : AppOnClickListener,val longClick
             val filter = ColorMatrixColorFilter(colorMatrix)
 
             binding.iconImage.colorFilter = filter
-
-            when (item.app.theme) {
-                Theme.DEFAULT.index -> { binding.iconBackground.setBackgroundResource(R.drawable.icon_background) }
-                Theme.BLACK.index -> {
-                    binding.iconBackground.setBackgroundResource(R.drawable.icon_background_black)
-                }
-                Theme.HIGH_LIGHT.index -> {
-                    binding.iconBackground.setBackgroundResource(R.drawable.icon_backgroung_hightlight)
-                }
-                Theme.KANAHEI.index -> { binding.kanaImage.visibility = View.VISIBLE
-                }
-            }
-
-//            itemView.setOnClickListener {
-//                appOnClickListener.onClick(item.app.packageName)
-//
-//            }
-            itemView.setOnLongClickListener(object :View.OnLongClickListener{
-                override fun onLongClick(v: View?): Boolean {
-                    longClickListener.onClick(item.app)
-                    return true
-                }
-            })
-
-            // App is not locked
-            if (item.app.isEnable){
-
-                itemView.setOnClickListener {
-                    appOnClickListener.onClick(item.app)
-                }
-
-                binding.iconBackground.foreground = null
-                binding.lockImage.visibility = View.GONE
-
-            } else {
-
-                binding.iconBackground.foreground = ResourcesCompat.getDrawable(itemView.resources,R.drawable.icon_background_lock,null)
-                binding.lockImage.visibility = View.VISIBLE
-
-            }
-
-
-            if (item.app.installed){
-
-                itemView.alpha = 1F
-            }else{
-            // if app is not installed , show half transparency
-                itemView.alpha = 0.3F
-
-            }
-
         }
 
-        private fun showAppOrNot(app : App){
-            if (viewModel.isHide.containsKey(app.label) && viewModel.isHide.get(app.label) == true){
+        private fun showAppOrNot(app: App) {
+            if (viewModel.isHide.containsKey(app.label) && viewModel.isHide[app.label] == true) {
                 // Show ItemView
                 itemView.visibility = View.VISIBLE
-                itemView.layoutParams = RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT)
-            }else{
+                itemView.layoutParams = RecyclerView.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+            } else {
                 // Hide ItemView and set width/height to 0
                 itemView.visibility = View.GONE
-                itemView.layoutParams = RecyclerView.LayoutParams(0,0)
+                itemView.layoutParams = RecyclerView.LayoutParams(0, 0)
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when(viewType){
+        return when (viewType) {
             APP_ITEM_VIEW_TYPE_LABEL -> {
                 LabelViewHolder(
                     ItemLabelBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,false))
+                        LayoutInflater.from(parent.context),
+                        parent, false
+                    )
+                )
             }
 
             APP_ITEM_VIEW_TYPE_APP -> {
                 val view = ItemAppListBinding.inflate(
                     LayoutInflater.from(parent.context),
-                    parent,false)
+                    parent, false
+                )
                 return AppViewHolder(view)
             }
             else -> throw ClassCastException("Unknown viewType $viewType")
@@ -177,7 +189,7 @@ class AppListAdapter  (val appOnClickListener : AppOnClickListener,val longClick
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
-        when(holder){
+        when (holder) {
             is LabelViewHolder -> {
                 holder.bind((getItem(position) as AppListItem.LabelItem))
             }

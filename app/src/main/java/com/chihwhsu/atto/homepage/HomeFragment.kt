@@ -2,11 +2,9 @@ package com.chihwhsu.atto.homepage
 
 import android.animation.ObjectAnimator
 import android.os.Bundle
-import android.os.storage.StorageManager
 import android.util.Log
 import android.view.*
 import android.view.animation.AnimationUtils
-import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -21,9 +19,6 @@ import com.chihwhsu.atto.data.Event.Companion.POMODORO_WORK_TYPE
 import com.chihwhsu.atto.data.Event.Companion.TODO_TYPE
 import com.chihwhsu.atto.databinding.FragmentHomeBinding
 import com.chihwhsu.atto.ext.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import java.util.*
 
 
 class HomeFragment : Fragment() {
@@ -93,10 +88,10 @@ class HomeFragment : Fragment() {
 
             binding.eventAlarmTime.text = if (event.type == ALARM_TYPE || event.type == TODO_TYPE
             ) {
-                getTimeFrom00am(event.alarmTime).toFormat()
+                getTimeFromStartOfDay(event.alarmTime).toFormat()
             } else {
                 event.startTime?.let {
-                    getTimeFrom00am(it).toFormat()
+                    getTimeFromStartOfDay(it).toFormat()
                 }
             }
 

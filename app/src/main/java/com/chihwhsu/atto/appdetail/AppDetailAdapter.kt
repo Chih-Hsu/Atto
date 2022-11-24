@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.chihwhsu.atto.R
 import com.chihwhsu.atto.data.Theme
-import com.chihwhsu.atto.databinding.ItemAppListBinding
 import com.chihwhsu.atto.databinding.ItemBackgroundListBinding
 
 class AppDetailAdapter :
@@ -29,6 +28,7 @@ class AppDetailAdapter :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Theme) {
+
             when (item) {
                 Theme.DEFAULT -> {}
                 Theme.BLACK -> {
@@ -55,8 +55,6 @@ class AppDetailAdapter :
             }
 
         }
-
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ThemeViewHolder {

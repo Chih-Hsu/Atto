@@ -13,10 +13,8 @@ import java.time.LocalDate
 class AppDetailViewModel(private val repository: AttoRepository, private val argument: App) :
     ViewModel() {
 
-    // Create a Coroutine scope using a job to be able to cancel when needed
     private var viewModelJob = Job()
 
-    // the Coroutine runs using the Main (UI) dispatcher
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     private var _app = MutableLiveData<App>().apply {
@@ -24,6 +22,13 @@ class AppDetailViewModel(private val repository: AttoRepository, private val arg
     }
     val app: LiveData<App> get() = _app
 
+    private var _navigateUp = MutableLiveData<Boolean>().also {
+        it.value = false
+    }
+
+    val navigateUp: LiveData<Boolean> get() = _navigateUp
+
+    // Chart
     private var _dataPerHourList = MutableLiveData<List<Float>>()
     val dataPerHourList: LiveData<List<Float>> get() = _dataPerHourList
 
@@ -35,13 +40,6 @@ class AppDetailViewModel(private val repository: AttoRepository, private val arg
 
     private var _weekBarSet = MutableLiveData<List<Pair<String, Float>>>()
     val weekBarSet: LiveData<List<Pair<String, Float>>> get() = _weekBarSet
-
-    private var _navigateUp = MutableLiveData<Boolean>().also {
-        it.value = false
-    }
-
-    val navigateUp: LiveData<Boolean> get() = _navigateUp
-
 
     fun setPerHourList(list: List<Float>) {
         _dataPerHourList.value = list
@@ -88,7 +86,6 @@ class AppDetailViewModel(private val repository: AttoRepository, private val arg
 
         val localDate = LocalDate.now()
 
-
         val dayList = listOf(
             localDate.dayOfWeek.name.substring(0..2),
             localDate.minusDays(1).dayOfWeek.name.substring(0..2),
@@ -97,8 +94,7 @@ class AppDetailViewModel(private val repository: AttoRepository, private val arg
             localDate.minusDays(4).dayOfWeek.name.substring(0..2),
             localDate.minusDays(5).dayOfWeek.name.substring(0..2),
             localDate.minusDays(6).dayOfWeek.name.substring(0..2),
-
-            )
+        )
 
         val weekBarList = listOf(
             dayList[6] to list[0],
@@ -109,7 +105,6 @@ class AppDetailViewModel(private val repository: AttoRepository, private val arg
             dayList[1] to list[5],
             dayList[0] to list[6]
         )
-
         _weekBarSet.value = weekBarList
     }
 

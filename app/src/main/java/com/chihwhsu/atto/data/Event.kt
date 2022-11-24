@@ -7,7 +7,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.chihwhsu.atto.data.database.EventConverter
-import com.chihwhsu.atto.ext.getTimeFrom00am
+import com.chihwhsu.atto.ext.getTimeFromStartOfDay
 import com.chihwhsu.atto.util.AlarmManagerUtil
 import java.util.*
 
@@ -61,7 +61,7 @@ data class Event(
             0
         }
 
-        val time = getTimeFrom00am(alarmTime)
+        val time = getTimeFromStartOfDay(alarmTime)
         val hours = time / (1000 * 60 * 60)
         val minutes = time / (1000 * 60) - hours * 60
 
@@ -116,7 +116,7 @@ data class Event(
 
     fun setPomodoroAlarmTime(applicationContext: Context, newId: Int, duration: Long) {
 
-        val time = getTimeFrom00am(startTime!!)
+        val time = getTimeFromStartOfDay(startTime!!)
         val hours = time / (1000 * 60 * 60)
         val minutes = time / (1000 * 60) - hours * 60
 
