@@ -21,10 +21,6 @@ class MainActivity : AppCompatActivity() {
 
         setResetWorker()
 
-
-
-
-
     }
 
 

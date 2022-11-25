@@ -11,8 +11,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
+import com.chihwhsu.atto.NavigationDirections
 import com.chihwhsu.atto.R
 import com.chihwhsu.atto.SettingActivity
+import com.chihwhsu.atto.applistpage.bottomsheet.AppListBottomFragment
+import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.databinding.FragmentMainBinding
 import com.chihwhsu.atto.ext.dpToFloat
 import com.chihwhsu.atto.ext.getVmFactory
@@ -36,44 +40,17 @@ class MainFragment : Fragment() {
 
         setSlideDrawer()
 
+
         // set ViewPager2
         val adapter = MainViewPagerAdapter(this)
         binding.viewPager.adapter = adapter
 
         val dockAdapter = DockAdapter(DockAdapter.DockOnClickListener { app ->
 
-            if (app.packageName == "com.chihwhsu.atto") {
-                val intent = Intent(requireContext(), SettingActivity::class.java)
-                startActivity(intent)
-            } else {
-
-                if (app.installed) {
-                    val launchAppIntent =
-                        requireContext().packageManager.getLaunchIntentForPackage(app.packageName)
-                    startActivity(launchAppIntent)
-
-                } else {
-                    // if app is not installed , then navigate to GooglePlay
-                    val intent = Intent(
-                        Intent.ACTION_VIEW,
-                        Uri.parse("market://details?id=${app.packageName}")
-                    )
-                    startActivity(intent)
-                }
-            }
+            navigateByPackageName(app)
 
         })
-        binding.testButton.setOnClickListener {
-            ObjectAnimator.ofFloat(
-                binding.customDrawer,
-                "translationX",
-                0F,
-                dpToFloat(200, resources),
-            ).apply {
-                duration = 600
-                start()
-            }
-        }
+
         binding.dockRecyclerview.adapter = dockAdapter
         viewModel.dockList.observe(viewLifecycleOwner, Observer { list ->
 
@@ -94,20 +71,30 @@ class MainFragment : Fragment() {
         })
 
 
+
+
+
         return binding.root
     }
 
     private fun setSlideDrawer() {
+        val drawerBinding = binding.drawer
+        drawerBinding.apply {
 
-        val builder = SlidingRootNavBuilder(requireActivity())
-            .withMenuLayout(R.layout.drawer)
-            .inject()
+            textUser.text = FirebaseAuth.getInstance().currentUser?.displayName ?: ""
+            linearAlarm.setOnClickListener {
+                findNavController().navigate(NavigationDirections.actionGlobalClockFragment())
+            }
+            linearSetting.setOnClickListener {
+                val intent = Intent(requireContext(),SettingActivity::class.java)
+                startActivity(intent)
+            }
 
 
-        builder.closeMenu()
-
+        }
 
     }
+
 
     override fun onResume() {
         super.onResume()
@@ -126,6 +113,27 @@ class MainFragment : Fragment() {
         super.onDestroy()
 
 
+    }
+
+    private fun navigateByPackageName(app: App) {
+        if (app.packageName == AppListBottomFragment.MY_PACKAGE_NAME) {
+            val intent = Intent(requireContext(), SettingActivity::class.java)
+            startActivity(intent)
+        } else {
+            if (app.installed) {
+                val launchAppIntent =
+                    requireContext().packageManager.getLaunchIntentForPackage(app.packageName)
+                startActivity(launchAppIntent)
+
+            } else {
+                // if app is not installed ,  navigate to GooglePlay
+                val intent = Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("${AppListBottomFragment.GOOGLE_PLAY_LINK}id=${app.packageName}")
+                )
+                startActivity(intent)
+            }
+        }
     }
 
 
