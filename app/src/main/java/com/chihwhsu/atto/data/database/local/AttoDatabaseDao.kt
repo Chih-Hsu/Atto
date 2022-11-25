@@ -2,10 +2,7 @@ package com.chihwhsu.atto.data.database.local
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.chihwhsu.atto.data.App
-import com.chihwhsu.atto.data.AppLockTimer
-import com.chihwhsu.atto.data.Event
-import com.chihwhsu.atto.data.Widget
+import com.chihwhsu.atto.data.*
 
 @Dao
 interface AttoDatabaseDao {
@@ -133,9 +130,20 @@ interface AttoDatabaseDao {
     @Query("DELETE FROM widget_table WHERE id = :id")
     fun deleteWidget(id : Long)
 
-
     @Query("SELECT * FROM widget_table")
     fun getAllWidget():LiveData<List<Widget>>
+
+
+    // TimeZone
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insert(timeZone : AttoTimeZone)
+
+    @Query("SELECT * FROM timezone_table order by sort")
+    fun getAllTimeZone():LiveData<List<AttoTimeZone>>
+
+    @Query("DELETE FROM timezone_table WHERE id = :id")
+    fun deleteTimeZone(id : Long)
 
 
 }

@@ -23,6 +23,10 @@ class AttoLocalDataSource(private val context: Context) : AttoDataSource {
         AttoDatabase.getInstance(context).attoDatabaseDao.insert(widget)
     }
 
+    override fun insert(timeZone: AttoTimeZone) {
+        AttoDatabase.getInstance(context).attoDatabaseDao.insert(timeZone)
+    }
+
     override suspend fun update(app: App) {
         AttoDatabase.getInstance(context).attoDatabaseDao.update(app)
     }
@@ -188,6 +192,14 @@ class AttoLocalDataSource(private val context: Context) : AttoDataSource {
 
     override suspend fun uploadUser(user: User): Result<Boolean> {
         TODO("Not yet implemented")
+    }
+
+    override fun getAllTimeZone():LiveData<List<AttoTimeZone>>{
+        return AttoDatabase.getInstance(context).attoDatabaseDao.getAllTimeZone()
+    }
+
+    override fun deleteTimeZone(id: Long) {
+        AttoDatabase.getInstance(context).attoDatabaseDao.deleteTimeZone(id)
     }
 
 }

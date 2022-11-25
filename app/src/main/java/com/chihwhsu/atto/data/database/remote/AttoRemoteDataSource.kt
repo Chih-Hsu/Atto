@@ -35,6 +35,10 @@ object AttoRemoteDataSource : AttoDataSource {
         TODO("Not yet implemented")
     }
 
+    override fun insert(timeZone: AttoTimeZone) {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun update(app: App) {
         TODO("Not yet implemented")
     }
@@ -412,6 +416,14 @@ object AttoRemoteDataSource : AttoDataSource {
                     }
                 }
         }
+
+    override fun getAllTimeZone():LiveData<List<AttoTimeZone>> {
+        TODO("Not yet implemented")
+    }
+
+    override fun deleteTimeZone(id: Long) {
+        TODO("Not yet implemented")
+    }
 
     private fun uploadImage(user: User, app: App) {
 

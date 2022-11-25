@@ -112,4 +112,13 @@ interface AttoRepository {
 
     suspend fun uploadUser(user: User): Result<Boolean>
 
+
+    // TimeZone
+
+    fun insert(timeZone : AttoTimeZone)
+
+    fun getAllTimeZone():LiveData<List<AttoTimeZone>>
+
+    fun deleteTimeZone(id : Long)
+
 }

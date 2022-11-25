@@ -90,6 +90,10 @@ class MainFragment : Fragment() {
                 startActivity(intent)
             }
 
+            linearClock.setOnClickListener {
+                findNavController().navigate(NavigationDirections.actionGlobalTimeZoneFragment())
+            }
+
 
         }
 

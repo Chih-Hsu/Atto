@@ -34,6 +34,10 @@ class DefaultAttoRepository(
         attoLocalDataSource.insert(widget)
     }
 
+    override fun insert(timeZone: AttoTimeZone) {
+        attoLocalDataSource.insert(timeZone)
+    }
+
     override suspend fun update(app: App) {
         withContext(ioDispatcher) {
             attoLocalDataSource.update(app)
@@ -188,6 +192,14 @@ class DefaultAttoRepository(
         return attoRemoteDataSource.uploadUser(user)
     }
 
+    override fun getAllTimeZone():LiveData<List<AttoTimeZone>> {
+        return attoLocalDataSource.getAllTimeZone()
+    }
+
+    override fun deleteTimeZone(id: Long) {
+        attoLocalDataSource.deleteTimeZone(id)
+    }
+
     override suspend fun updateAppData() {
 
         withContext(Dispatchers.Main) {
@@ -246,8 +258,6 @@ class DefaultAttoRepository(
                 }
             }
         }
-
-
     }
 
     override fun getAllAppNotLiveData(): List<App>? {

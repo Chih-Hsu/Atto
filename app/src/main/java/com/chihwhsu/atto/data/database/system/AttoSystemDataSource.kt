@@ -31,6 +31,10 @@ class AttoSystemDataSource(val context: Context) : AttoDataSource {
         TODO("Not yet implemented")
     }
 
+    override fun insert(timeZone: AttoTimeZone) {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun update(app: App) {
         TODO("Not yet implemented")
     }
@@ -220,6 +224,14 @@ class AttoSystemDataSource(val context: Context) : AttoDataSource {
     }
 
     override suspend fun uploadUser(user: User): Result<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getAllTimeZone():LiveData<List<AttoTimeZone>> {
+        TODO("Not yet implemented")
+    }
+
+    override fun deleteTimeZone(id: Long) {
         TODO("Not yet implemented")
     }
 

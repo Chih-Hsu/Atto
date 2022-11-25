@@ -2,6 +2,8 @@ package com.chihwhsu.atto.data.database
 
 import android.content.Context
 import androidx.lifecycle.LiveData
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.chihwhsu.atto.data.*
 
@@ -135,5 +137,14 @@ interface AttoDataSource {
     suspend fun uploadData(context: Context, localAppList : List<App>):Result<Boolean>
 
     suspend fun uploadUser(user: User): Result<Boolean>
+
+
+    // TimeZone
+
+    fun insert(timeZone : AttoTimeZone)
+
+    fun getAllTimeZone():LiveData<List<AttoTimeZone>>
+
+    fun deleteTimeZone(id : Long)
 
 }

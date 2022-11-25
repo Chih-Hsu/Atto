@@ -14,6 +14,8 @@ import com.chihwhsu.atto.homepage.HomeViewModel
 import com.chihwhsu.atto.login.LoginViewModel
 import com.chihwhsu.atto.main.MainViewModel
 import com.chihwhsu.atto.syncpage.SyncViewModel
+import com.chihwhsu.atto.timezonepage.TimeZoneViewModel
+import com.chihwhsu.atto.timezonepage.dialog.TimeZoneDialogViewModel
 import com.chihwhsu.atto.tutorial.sort.SortViewModel
 import com.chihwhsu.atto.tutorial.sort.addlabel.AddLabelViewModel
 import com.chihwhsu.atto.usagelimit.UsageLimitViewModel
@@ -79,6 +81,12 @@ class ViewModelFactory constructor(
 
                 isAssignableFrom(LoginViewModel::class.java) ->
                     LoginViewModel(repository)
+
+                isAssignableFrom(TimeZoneViewModel::class.java) ->
+                    TimeZoneViewModel(repository)
+
+                isAssignableFrom(TimeZoneDialogViewModel::class.java) ->
+                    TimeZoneDialogViewModel(repository)
 
                 else ->
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
