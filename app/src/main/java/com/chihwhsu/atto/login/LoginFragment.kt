@@ -59,7 +59,6 @@ class LoginFragment : Fragment() {
                     user.displayName ?: "", user.email ?: ""
                 )
             )
-
         }
 
         val options = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)

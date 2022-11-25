@@ -40,7 +40,7 @@ class AttoLocalDataSource(private val context: Context) : AttoDataSource {
     }
 
     override fun updateAppInstalled(appName: String) {
-        AttoDatabase.getInstance(context).attoDatabaseDao.updateAppInstalled(appName,true)
+        AttoDatabase.getInstance(context).attoDatabaseDao.updateAppInstalled(appName, true)
     }
 
     override suspend fun updateAppData() {
@@ -154,7 +154,6 @@ class AttoLocalDataSource(private val context: Context) : AttoDataSource {
         AttoDatabase.getInstance(context).attoDatabaseDao.updateTimer(remainTime)
     }
 
-
     override suspend fun getTimer(packageName: String): AppLockTimer? {
         return AttoDatabase.getInstance(context).attoDatabaseDao.getTimer(packageName)
     }
@@ -171,7 +170,7 @@ class AttoLocalDataSource(private val context: Context) : AttoDataSource {
         return AttoDatabase.getInstance(context).attoDatabaseDao.deleteWidget(id)
     }
 
-    override suspend fun getUser(email : String): Result<User> {
+    override suspend fun getUser(email: String): Result<User> {
         TODO("Not yet implemented")
     }
 
@@ -179,11 +178,11 @@ class AttoLocalDataSource(private val context: Context) : AttoDataSource {
         context: Context,
         user: User,
         appList: List<App>
-    ): Result<List<App>>{
+    ): Result<List<App>> {
         TODO()
     }
 
-    override fun uploadData(context: Context,localAppList : List<App>) {
+    override suspend fun uploadData(context: Context, localAppList: List<App>): Result<Boolean> {
         TODO("Not yet implemented")
     }
 

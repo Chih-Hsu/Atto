@@ -3,7 +3,11 @@ package com.chihwhsu.atto.ext
 import android.content.res.Resources
 import android.graphics.*
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.ShapeDrawable
 import androidx.core.graphics.drawable.toBitmap
+import com.google.android.material.imageview.ShapeableImageView
+import com.google.android.material.shape.CornerFamily
+import com.google.android.material.shape.CornerTreatment
 import java.time.LocalDate
 import java.time.ZoneId
 
@@ -63,6 +67,9 @@ fun Int.formatMinutes(): String {
 
 }
 
+fun ShapeableImageView.circle(){
+    this.shapeAppearanceModel.toBuilder().setAllCorners(CornerFamily.ROUNDED,50f)
+}
 
 fun Float.toDp(): Int {
     return (this / Resources.getSystem().displayMetrics.density).toInt()

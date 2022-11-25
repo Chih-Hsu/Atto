@@ -1,6 +1,7 @@
 package com.chihwhsu.atto.main
 
 
+import android.animation.ObjectAnimator
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -10,10 +11,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import com.chihwhsu.atto.R
 import com.chihwhsu.atto.SettingActivity
 import com.chihwhsu.atto.databinding.FragmentMainBinding
+import com.chihwhsu.atto.ext.dpToFloat
 import com.chihwhsu.atto.ext.getVmFactory
 import com.google.firebase.auth.FirebaseAuth
+import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder
 
 class MainFragment : Fragment() {
 
@@ -27,8 +31,10 @@ class MainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        binding = FragmentMainBinding.inflate(inflater,container,false)
+        binding = FragmentMainBinding.inflate(inflater, container, false)
         binding.lottieLoading.visibility = View.VISIBLE
+
+        setSlideDrawer()
 
         // set ViewPager2
         val adapter = MainViewPagerAdapter(this)
@@ -57,11 +63,21 @@ class MainFragment : Fragment() {
             }
 
         })
-
+        binding.testButton.setOnClickListener {
+            ObjectAnimator.ofFloat(
+                binding.customDrawer,
+                "translationX",
+                0F,
+                dpToFloat(200, resources),
+            ).apply {
+                duration = 600
+                start()
+            }
+        }
         binding.dockRecyclerview.adapter = dockAdapter
         viewModel.dockList.observe(viewLifecycleOwner, Observer { list ->
 
-            if (list.isNotEmpty()){
+            if (list.isNotEmpty()) {
                 list.sortedBy {
                     it.sort
                 }
@@ -81,6 +97,18 @@ class MainFragment : Fragment() {
         return binding.root
     }
 
+    private fun setSlideDrawer() {
+
+        val builder = SlidingRootNavBuilder(requireActivity())
+            .withMenuLayout(R.layout.drawer)
+            .inject()
+
+
+        builder.closeMenu()
+
+
+    }
+
     override fun onResume() {
         super.onResume()
 
@@ -92,7 +120,7 @@ class MainFragment : Fragment() {
 
         val auth = FirebaseAuth.getInstance()
 
-        if (auth.currentUser != null){
+        if (auth.currentUser != null) {
             viewModel.uploadData(requireContext())
         }
         super.onDestroy()

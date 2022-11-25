@@ -1,33 +1,36 @@
 package com.chihwhsu.atto.main
 
 import android.content.Context
-import android.net.Uri
-import android.provider.Settings
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.chihwhsu.atto.AttoApplication
-import com.chihwhsu.atto.data.App
-import com.chihwhsu.atto.data.User
+import com.chihwhsu.atto.data.Result
 import com.chihwhsu.atto.data.database.AttoRepository
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
-import kotlinx.coroutines.*
-import java.io.File
+import com.chihwhsu.atto.data.database.remote.LoadStatus
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 class MainViewModel(private val repository: AttoRepository) : ViewModel() {
 
-    // Create a Coroutine scope using a job to be able to cancel when needed
     private var viewModelJob = Job()
 
-    // the Coroutine runs using the Main (UI) dispatcher
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-    var dockList = repository.getSpecificLabelApps("dock")
+    private val _status = MutableLiveData<LoadStatus>()
+
+    val status: LiveData<LoadStatus>
+        get() = _status
+
+    private val _error = MutableLiveData<String?>()
+
+    val error: LiveData<String?>
+        get() = _error
+
+    var dockList = repository.getSpecificLabelApps(DOCK)
+
     val timerList = repository.getAllTimer()
-
-    init {
-
-    }
 
     fun checkUsageTimer(context: Context) {
 
@@ -61,10 +64,35 @@ class MainViewModel(private val repository: AttoRepository) : ViewModel() {
 
     fun uploadData(context: Context){
 
+        _status.value = LoadStatus.LOADING
+
         coroutineScope.launch(Dispatchers.Default) {
+
             val localAppList = repository.getAllAppNotLiveData()
-            localAppList?.let {
-                repository.uploadData(context,localAppList)
+
+            localAppList?.let { appList ->
+                when(val result = repository.uploadData(context,appList) ){
+
+                    is Result.Success -> {
+                        _status.value = LoadStatus.DONE
+                        _error.value = null
+                    }
+
+                    is Result.Fail -> {
+                        _status.value = LoadStatus.ERROR
+                        _error.value = result.error
+                    }
+
+                    is Result.Error -> {
+                        _status.value = LoadStatus.ERROR
+                        _error.value = result.exception.toString()
+                    }
+
+                    else -> {
+                        _status.value = LoadStatus.ERROR
+
+                    }
+                }
             }
         }
     }
@@ -163,4 +191,8 @@ class MainViewModel(private val repository: AttoRepository) : ViewModel() {
 //            imageRef.putFile(file)
 //        }
 //    }
+
+    companion object{
+        private const val DOCK = "dock"
+    }
 }

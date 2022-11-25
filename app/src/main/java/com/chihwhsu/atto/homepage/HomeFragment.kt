@@ -19,6 +19,7 @@ import com.chihwhsu.atto.data.Event.Companion.POMODORO_WORK_TYPE
 import com.chihwhsu.atto.data.Event.Companion.TODO_TYPE
 import com.chihwhsu.atto.databinding.FragmentHomeBinding
 import com.chihwhsu.atto.ext.*
+import java.util.*
 
 
 class HomeFragment : Fragment() {
@@ -26,9 +27,6 @@ class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private val viewModel by viewModels<HomeViewModel> { getVmFactory() }
     private lateinit var gestureDetector: GestureDetector
-
-    private var totalInternalStorage: Long = 0
-    private var freeInternalStorage: Long = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,6 +36,10 @@ class HomeFragment : Fragment() {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
+//        for (id in TimeZone.getAvailableIDs()) {
+//            Log.d("timezone", "${id}")
+//        }
+//        binding.clockMinutes.timeZone = "Europe/Rome"
         Log.d("LaunchTest", "HomeFragment Work")
 
         setGestureListener()

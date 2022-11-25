@@ -108,7 +108,7 @@ interface AttoRepository {
         appList: List<App>
     ): Result<List<App>>
 
-    fun uploadData(context: Context, localAppList: List<App>)
+    suspend fun uploadData(context: Context, localAppList: List<App>):Result<Boolean>
 
     suspend fun uploadUser(user: User): Result<Boolean>
 

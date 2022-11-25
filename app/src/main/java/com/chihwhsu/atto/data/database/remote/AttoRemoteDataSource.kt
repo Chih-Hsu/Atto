@@ -16,7 +16,7 @@ import kotlin.coroutines.suspendCoroutine
 
 object AttoRemoteDataSource : AttoDataSource {
 
-    const val STORAGE_PATH = "gs://atto-eaae3.appspot.com"
+    private const val STORAGE_PATH = "gs://atto-eaae3.appspot.com"
 
 
     override suspend fun insert(app: App) {
@@ -216,7 +216,6 @@ object AttoRemoteDataSource : AttoDataSource {
         appList: List<App>
     ): Result<List<App>> = suspendCoroutine { continuation ->
 
-//        val auth = FirebaseAuth.getInstance()
         val dataBase = FirebaseFirestore.getInstance()
 
         updateDeviceId(user, context)
@@ -227,7 +226,6 @@ object AttoRemoteDataSource : AttoDataSource {
             .get()
             .addOnCompleteListener { task ->
 
-
                 val newAppList = mutableListOf<App>()
 
                 for (item in task.result) {
@@ -235,8 +233,7 @@ object AttoRemoteDataSource : AttoDataSource {
                     val newApp = item.toObject(App::class.java)
 
                     // Check which app is not installed
-                    if (appList.filter { it.appLabel == newApp.appLabel }
-                            .isEmpty()) {
+                    if (appList.none { it.appLabel == newApp.appLabel }) {
                         newApp.installed = false
                     }
 
@@ -256,102 +253,137 @@ object AttoRemoteDataSource : AttoDataSource {
     }
 
     @SuppressLint("HardwareIds")
-    override fun uploadData(context: Context, localAppList: List<App>) {
+    override suspend fun uploadData(context: Context, localAppList: List<App>): Result<Boolean> =
+        suspendCoroutine { continuation ->
 
-        val auth = FirebaseAuth.getInstance()
-        val dataBase = FirebaseFirestore.getInstance()
+            val auth = FirebaseAuth.getInstance()
+            val dataBase = FirebaseFirestore.getInstance()
+            val remoteAppList = mutableListOf<App>()
 
-        val remoteAppList = mutableListOf<App>()
-//        val localAppList = repository.getAllAppNotLiveData()
+            dataBase.collection("user")
+                .whereEqualTo("email", auth.currentUser?.email)
+                .get()
+                .addOnCompleteListener { task ->
 
-        dataBase.collection("user")
-            .whereEqualTo("email", auth.currentUser?.email)
-            .get()
-            .addOnSuccessListener {
+                    if (task.isSuccessful) {
 
-                val user = if (!it.isEmpty) {
-                    it.documents.first().toObject(User::class.java)
-                } else {
-                    null
-                }
-
-                user?.let { currentUser ->
-
-                    // To Avoid newPhone data overlay remote data,
-                    // when user click sync button, the deviceId will update
-                    if (currentUser.deviceId == Settings.Secure.getString(
-                            context.contentResolver,
-                            Settings.Secure.ANDROID_ID
-                        )
-                    ) {
-
-                        // if remote have data but local not, then delete remote data
-                        dataBase.collection("user")
-                            .document(currentUser.email!!)
-                            .collection("App")
-                            .get()
-                            .addOnSuccessListener { apps ->
-
-                                if (!apps.isEmpty) {
-                                    remoteAppList.addAll(apps.toObjects(App::class.java))
-
-                                    for (app in remoteAppList) {
-
-                                        if (localAppList.filter { it.appLabel == app.appLabel }
-                                                .isEmpty()) {
-                                            dataBase.collection("user")
-                                                .document(currentUser.email)
-                                                .collection("App")
-                                                .document(app.appLabel)
-                                                .delete()
-                                        }
-                                    }
-                                }
-                            }
-
-                        for (app in localAppList) {
-                            // Upload App Data
-                            val newApp = App(
-                                app.appLabel,
-                                app.packageName,
-                                "$STORAGE_PATH/${currentUser.email}/${app.appLabel}.png",
-                                app.label,
-                                app.isEnable,
-                                app.theme,
-                                app.installed,
-                                app.sort
-                            )
-                            dataBase.collection("user")
-                                .document(currentUser.email)
-                                .collection("App")
-                                .document(app.appLabel)
-                                .set(newApp)
-
-                            // Upload AppIconImage
-                            uploadImage(user, app)
+                        val user = if (!task.result.isEmpty) {
+                            task.result.documents.first().toObject(User::class.java)
+                        } else {
+                            null
                         }
-                    }
 
+                        user?.let { currentUser ->
+
+                            // To Avoid newPhone data overlay remote data,
+                            // when user click sync button, the deviceId will update
+                            if (currentUser.deviceId == Settings.Secure.getString(
+                                    context.contentResolver,
+                                    Settings.Secure.ANDROID_ID
+                                )
+                            ) {
+                                // if remote have data but local not, then delete remote data
+                                syncRemoteAndLocalData(
+                                    dataBase,
+                                    currentUser,
+                                    remoteAppList,
+                                    localAppList
+                                )
+                                uploadLocalToRemote(localAppList, currentUser, dataBase)
+                            }
+                        }
+                    } else {
+                        task.exception?.let { e ->
+                            continuation.resume(Result.Error(e))
+                            return@addOnCompleteListener
+                        }
+                        continuation.resume(Result.Fail("Upload Data Fail"))
+                    }
                 }
+        }
+
+    private fun uploadLocalToRemote(
+        localAppList: List<App>,
+        currentUser: User,
+        dataBase: FirebaseFirestore
+    ) {
+
+        for (app in localAppList) {
+            // Upload App Data
+            val newApp = App(
+                app.appLabel,
+                app.packageName,
+                "$STORAGE_PATH/${currentUser.email}/${app.appLabel}.png",
+                app.label,
+                app.isEnable,
+                app.theme,
+                app.installed,
+                app.sort
+            )
+
+            currentUser.email?.let {
+                dataBase.collection("user")
+                    .document()
+                    .collection("App")
+                    .document(app.appLabel)
+                    .set(newApp)
+
+                // Upload AppIconImage
+                uploadImage(currentUser, app)
             }
+
+        }
     }
 
-    override suspend fun uploadUser(user: User): Result<Boolean> = suspendCoroutine { continuation ->
+    private fun syncRemoteAndLocalData(
+        dataBase: FirebaseFirestore,
+        currentUser: User,
+        remoteAppList: MutableList<App>,
+        localAppList: List<App>
+    ) {
+        currentUser.email?.let { email ->
+            dataBase.collection("user")
+                .document(email)
+                .collection("App")
+                .get()
+                .addOnSuccessListener { apps ->
 
-        val dataBase = FirebaseFirestore.getInstance()
+                    if (!apps.isEmpty) {
+                        remoteAppList.addAll(apps.toObjects(App::class.java))
 
-        // Check user data before upload
-        dataBase.collection("user")
-            .whereEqualTo("email", user.email)
-            .get()
-            .addOnSuccessListener {
+                        for (app in remoteAppList) {
 
-                val remoteUser =
-                    if (!it.isEmpty) it.documents.first().toObject(User::class.java) else null
+                            if (localAppList.none { it.appLabel == app.appLabel }) {
+                                dataBase.collection("user")
+                                    .document(email)
+                                    .collection("App")
+                                    .document(app.appLabel)
+                                    .delete()
+                            }
+                        }
+                    }
+                }
+        }
+    }
 
-                if (remoteUser != null) {
+    override suspend fun uploadUser(user: User): Result<Boolean> =
+        suspendCoroutine { continuation ->
 
-                    if (remoteUser.deviceId != user.deviceId) {
+            val dataBase = FirebaseFirestore.getInstance()
+
+            // Check user data before upload
+            dataBase.collection("user")
+                .whereEqualTo("email", user.email)
+                .get()
+                .addOnCompleteListener { task ->
+
+                    if (task.isSuccessful) {
+
+                        val remoteUser =
+                            if (!task.result.isEmpty) {
+                                task.result.documents.first()
+                                    .toObject(User::class.java)
+                            } else null
 
                         // Do not update deviceId , if device is different
                         val newUser = User(
@@ -359,54 +391,27 @@ object AttoRemoteDataSource : AttoDataSource {
                             user.email,
                             user.name,
                             user.image,
-                            remoteUser.deviceId
+                            if (remoteUser != null || remoteUser?.deviceId == user.deviceId) user.deviceId else remoteUser?.deviceId
                         )
 
-                        user.email?.let {
-
+                        user.email?.let { email ->
                             dataBase.collection("user")
-                                .document(user.email)
+                                .document(email)
                                 .set(newUser)
 
                             continuation.resume(Result.Success(true))
                         }
 
-
                     } else {
-                        // if device is the same ,
-                        user.email?.let {
 
-                            dataBase.collection("user")
-                                .document(user.email)
-                                .set(user)
-
-                            continuation.resume(Result.Success(true))
+                        task.exception?.let { e ->
+                            continuation.resume(Result.Error(e))
+                            return@addOnCompleteListener
                         }
-
-
-                    }
-                    // if remoteData not exist, just upload data
-                } else {
-                    user.email?.let {
-                        dataBase.collection("user")
-                            .document(user.email)
-                            .set(user)
-
-                        continuation.resume(Result.Success(true))
+                        continuation.resume(Result.Fail("Upload User Fail"))
                     }
                 }
-                // if remoteData not exist, just upload data
-            }.addOnFailureListener {
-                user.email?.let {
-                    dataBase.collection("user")
-                        .document(user.email)
-                        .set(user)
-
-                    continuation.resume(Result.Success(true))
-                }
-            }
-
-    }
+        }
 
     private fun uploadImage(user: User, app: App) {
 
@@ -428,5 +433,4 @@ object AttoRemoteDataSource : AttoDataSource {
                 Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
             )
     }
-
 }

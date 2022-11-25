@@ -36,7 +36,6 @@ class LoginViewModel(val repository: AttoRepository) : ViewModel() {
     val user: LiveData<User> get() = _user
 
 
-
     fun uploadUser(user: User) {
 
         _status.value = LoadStatus.LOADING

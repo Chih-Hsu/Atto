@@ -215,7 +215,7 @@ class AttoSystemDataSource(val context: Context) : AttoDataSource {
         TODO()
     }
 
-    override fun uploadData(context: Context,localAppList : List<App>) {
+    override suspend fun uploadData(context: Context, localAppList : List<App>) :Result<Boolean> {
         TODO("Not yet implemented")
     }
 

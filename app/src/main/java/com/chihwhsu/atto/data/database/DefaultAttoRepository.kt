@@ -7,7 +7,6 @@ import com.chihwhsu.atto.data.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.util.Locale.filter
 
 
 class DefaultAttoRepository(
@@ -181,8 +180,8 @@ class DefaultAttoRepository(
         return attoRemoteDataSource.syncRemoteData(context, user, appList)
     }
 
-    override fun uploadData(context: Context,localAppList : List<App>) {
-        attoRemoteDataSource.uploadData(context, localAppList)
+    override suspend fun uploadData(context: Context,localAppList : List<App>) : Result<Boolean> {
+        return attoRemoteDataSource.uploadData(context, localAppList)
     }
 
     override suspend fun uploadUser(user: User): Result<Boolean> {
@@ -203,6 +202,7 @@ class DefaultAttoRepository(
 
                 if (roomApps.isNullOrEmpty()) {
                     systemApps.value?.let {
+
                         for (app in it) {
                             insert(app)
                         }
@@ -221,14 +221,13 @@ class DefaultAttoRepository(
                                     insert(app)
                             } else {
                                 // room有的就確認imageUrl是否一樣，若不是就更新
-                                if (app.iconPath != roomApps.filter { it.appLabel == app.appLabel }
-                                        .first().iconPath) {
+                                if (app.iconPath != roomApps.first { it.appLabel == app.appLabel }.iconPath) {
                                     updateIconPath(app.appLabel, app.iconPath)
                                 }
 
-                                if (roomApps.filter { it.appLabel == app.appLabel }.isNotEmpty()){
+                                if (roomApps.any { it.appLabel == app.appLabel }){
                                     for (item in roomApps.filter { it.appLabel == app.appLabel }){
-                                        if (item.installed == false){
+                                        if (!item.installed){
                                             updateAppInstalled(app.appLabel)
                                         }
                                     }
@@ -238,8 +237,6 @@ class DefaultAttoRepository(
 
                         for (app in roomApps) {
                             // room有system沒有代表已刪除，就從room delete
-//                            if (!systemList.contains(app)) {
-                            // if user sync from firebase, installed will be false
                             if (systemList.none { it.appLabel == app.appLabel } && app.installed) {
                                 delete(app.packageName)
                             }
