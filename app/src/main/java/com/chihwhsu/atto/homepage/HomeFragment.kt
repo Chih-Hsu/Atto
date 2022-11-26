@@ -109,7 +109,17 @@ class HomeFragment : Fragment() {
             binding.recyclerviewMultiClock.adapter = timeAdapter
 
             viewModel.timeZoneList.observe(viewLifecycleOwner, Observer {
-                timeAdapter.submitList(it.take(3))
+                if (it.isNotEmpty()){
+                    timeAdapter.submitList(it.take(3))
+                }else{
+                    binding.apply {
+                        clockMinutes.visibility = View.VISIBLE
+                        clockMonth.visibility = View.VISIBLE
+                        recyclerviewMultiClock.visibility = View.GONE
+                    }
+
+                }
+
             })
 
 

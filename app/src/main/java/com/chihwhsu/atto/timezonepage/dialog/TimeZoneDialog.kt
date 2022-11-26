@@ -33,8 +33,8 @@ class TimeZoneDialog : DialogFragment() {
         )
         binding.recyclerviewTimezoneName.adapter = adapter
 
-        viewModel.timeZoneIds.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-            adapter.submitList(it)
+        viewModel.timeZoneIds.observe(viewLifecycleOwner, androidx.lifecycle.Observer { list ->
+            adapter.submitList(list)
         })
 
         viewModel.navigateUp.observe(viewLifecycleOwner, androidx.lifecycle.Observer {

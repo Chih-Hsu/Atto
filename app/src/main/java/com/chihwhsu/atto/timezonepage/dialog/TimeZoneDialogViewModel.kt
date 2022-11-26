@@ -13,8 +13,8 @@ import java.util.*
 
 class TimeZoneDialogViewModel(val repository: AttoRepository) : ViewModel() {
 
-    private var _timeZoneIds = MutableLiveData<List<String>>()
-    val timeZoneIds : LiveData<List<String>> get() = _timeZoneIds
+    private var _timeZoneIds = MutableLiveData<List<AttoTimeZone>>()
+    val timeZoneIds : LiveData<List<AttoTimeZone>> get() = _timeZoneIds
 
     private var _navigateUp = MutableLiveData<Boolean>()
     val navigateUp : LiveData<Boolean> get() = _navigateUp
@@ -30,20 +30,21 @@ class TimeZoneDialogViewModel(val repository: AttoRepository) : ViewModel() {
     }
 
     private fun getTimeZoneIds(){
-        val timeZoneList = mutableListOf<String>()
+        val timeZoneList = mutableListOf<AttoTimeZone>()
         for (id in TimeZone.getAvailableIDs()) {
 
-            timeZoneList.add(id)
+            val timeZone = AttoTimeZone(locale = id , name =  id.split("/").last())
+            timeZoneList.add(timeZone)
         }
 
-        _timeZoneIds.value = timeZoneList.sorted()
+        _timeZoneIds.value = timeZoneList.sortedBy { it.name }
 
     }
 
-    fun insert(timeZone: String) {
-        val newTimeZone = AttoTimeZone(locale = timeZone, name = timeZone.split("/").last())
+    fun insert(timeZone: AttoTimeZone) {
+
         coroutineScope.launch(Dispatchers.IO) {
-            repository.insert(newTimeZone)
+            repository.insert(timeZone)
         }
         _navigateUp.value = true
     }

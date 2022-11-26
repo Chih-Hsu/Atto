@@ -34,8 +34,8 @@ class TimeZoneFragment : Fragment() {
         binding.recyclerviewTimezone.adapter = adapter
         setItemTouchHelper(adapter)
 
-        viewModel.timeZoneList.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-            adapter.submitList(it)
+        viewModel.timeZoneList.observe(viewLifecycleOwner, androidx.lifecycle.Observer { list ->
+            adapter.submitList(list.sortedBy { it.sort })
         })
 
 
