@@ -44,28 +44,28 @@
 
     <androidx.appcompat.widget.SearchView
         android:id="@+id/app_search_view"
+        style="@style/standard_text_style"
         android:layout_width="match_parent"
         android:layout_height="35dp"
-        android:layout_marginBottom="100dp"
         android:layout_marginStart="100dp"
         android:layout_marginEnd="100dp"
         android:background="@drawable/searchview_outline"
-        style="@style/standard_text_style"
         android:gravity="center"
         android:maxLength="15"
-        app:queryHint="SEARCH APP"
         app:iconifiedByDefault="false"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/button_check"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="@dimen/standard_margin"
+        app:queryHint="SEARCH APP" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/button_check"
         style="@style/Widget.Material3.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="48dp"
+        android:layout_marginBottom="70dp"
         android:fontFamily="@font/roboto_medium"
         android:letterSpacing="0.2"
         android:minWidth="0dp"

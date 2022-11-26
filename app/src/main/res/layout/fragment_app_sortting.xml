@@ -67,6 +67,7 @@
         style="@style/Widget.Material3.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="36dp"
         android:fontFamily="@font/roboto_medium"
         android:letterSpacing="0.2"
         android:minWidth="0dp"
@@ -76,9 +77,7 @@
         android:text="下一步"
         android:textColor="@color/light_grey"
         android:textSize="12sp"
-        android:layout_marginBottom="48dp"
-        android:layout_marginEnd="36dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/button_previous"
         app:layout_constraintEnd_toEndOf="parent"
         app:strokeColor="@color/dark_grey" />
 
@@ -96,7 +95,7 @@
         android:text="上一步"
         android:textColor="@color/light_grey"
         android:textSize="12sp"
-        android:layout_marginBottom="48dp"
+        android:layout_marginBottom="70dp"
         android:layout_marginStart="36dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

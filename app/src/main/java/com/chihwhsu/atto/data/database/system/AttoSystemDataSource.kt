@@ -5,12 +5,15 @@ import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.ResolveInfo
 import android.graphics.Bitmap
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.chihwhsu.atto.AttoApplication
 import com.chihwhsu.atto.data.*
 import com.chihwhsu.atto.data.database.AttoDataSource
 import com.chihwhsu.atto.ext.convertToBitmap
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.IOException
 
 class AttoSystemDataSource(val context: Context) : AttoDataSource {
@@ -80,6 +83,7 @@ class AttoSystemDataSource(val context: Context) : AttoDataSource {
     }
 
     override fun getAllApps(): LiveData<List<App>> {
+
 
         val intent = Intent(Intent.ACTION_MAIN, null)
         val currentAppList = mutableListOf<App>()

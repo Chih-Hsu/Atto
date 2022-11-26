@@ -49,16 +49,17 @@
         tools:listitem="@layout/item_wallpaper"
         android:layout_marginTop="24dp"/>
 
-    <TextView
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/text_keep_wallpaper"
-        style="@style/standard_text_style"
-        android:fontFamily="@font/roboto_medium"
+        style="@style/Widget.Material3.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:fontFamily="@font/roboto_medium"
         android:text="維持現有螢幕背景"
         android:textColor="@color/dark_grey"
         android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/check_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -82,7 +83,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_keep_wallpaper"
+        android:layout_marginBottom="70dp"
         app:strokeColor="@color/dark_grey" />
 
 

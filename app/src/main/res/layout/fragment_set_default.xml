@@ -32,16 +32,17 @@
         app:srcCompat="@drawable/tutorial5"
         android:layout_marginTop="48dp"/>
 
-    <TextView
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/text_set_default"
-        style="@style/standard_text_style"
-        android:fontFamily="@font/roboto_medium"
+        style="@style/Widget.Material3.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:fontFamily="@font/roboto_medium"
         android:text="設為預設程式"
         android:textColor="@color/dark_grey"
         android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/check_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -61,7 +62,7 @@
         android:text="開始使用"
         android:textColor="@color/light_grey"
         android:textSize="12sp"
-        android:layout_marginBottom="48dp"
+        android:layout_marginBottom="70dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

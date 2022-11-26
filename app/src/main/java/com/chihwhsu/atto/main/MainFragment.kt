@@ -81,7 +81,14 @@ class MainFragment : Fragment() {
         val drawerBinding = binding.drawer
         drawerBinding.apply {
 
-            textUser.text = FirebaseAuth.getInstance().currentUser?.displayName ?: ""
+            val user = FirebaseAuth.getInstance().currentUser
+            textUser.text = user?.displayName ?: "Please Login"
+            if (user == null){
+                textLoggin.text = "LOG IN"
+                linearLoggin.setOnClickListener {
+                    findNavController().navigate(MainFragmentDirections.actionMainFragmentToLoginFragment())
+                }
+            }
             linearAlarm.setOnClickListener {
                 findNavController().navigate(NavigationDirections.actionGlobalClockFragment())
             }
