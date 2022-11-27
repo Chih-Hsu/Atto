@@ -186,7 +186,11 @@ class AttoLocalDataSource(private val context: Context) : AttoDataSource {
         TODO()
     }
 
-    override suspend fun uploadData(context: Context, localAppList: List<App>): Result<Boolean> {
+    override suspend fun uploadData(
+        context: Context,
+        localAppList: List<App>,
+        email: String
+    ): Result<Boolean> {
         TODO("Not yet implemented")
     }
 
@@ -194,7 +198,7 @@ class AttoLocalDataSource(private val context: Context) : AttoDataSource {
         TODO("Not yet implemented")
     }
 
-    override fun getAllTimeZone():LiveData<List<AttoTimeZone>>{
+    override fun getAllTimeZone(): LiveData<List<AttoTimeZone>> {
         return AttoDatabase.getInstance(context).attoDatabaseDao.getAllTimeZone()
     }
 

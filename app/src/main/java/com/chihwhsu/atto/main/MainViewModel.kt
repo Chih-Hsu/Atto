@@ -62,7 +62,7 @@ class MainViewModel(private val repository: AttoRepository) : ViewModel() {
         }
     }
 
-    fun uploadData(context: Context){
+    fun uploadData(context: Context, email: String){
 
         _status.value = LoadStatus.LOADING
 
@@ -71,7 +71,7 @@ class MainViewModel(private val repository: AttoRepository) : ViewModel() {
             val localAppList = repository.getAllAppNotLiveData()
 
             localAppList?.let { appList ->
-                when(val result = repository.uploadData(context,appList) ){
+                when(val result = repository.uploadData(context,appList, email) ){
 
                     is Result.Success -> {
                         _status.value = LoadStatus.DONE

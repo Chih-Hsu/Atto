@@ -108,17 +108,21 @@ interface AttoRepository {
         appList: List<App>
     ): Result<List<App>>
 
-    suspend fun uploadData(context: Context, localAppList: List<App>):Result<Boolean>
+    suspend fun uploadData(
+        context: Context,
+        localAppList: List<App>,
+        email: String
+    ): Result<Boolean>
 
     suspend fun uploadUser(user: User): Result<Boolean>
 
 
     // TimeZone
 
-    fun insert(timeZone : AttoTimeZone)
+    fun insert(timeZone: AttoTimeZone)
 
-    fun getAllTimeZone():LiveData<List<AttoTimeZone>>
+    fun getAllTimeZone(): LiveData<List<AttoTimeZone>>
 
-    fun deleteTimeZone(id : Long)
+    fun deleteTimeZone(id: Long)
 
 }

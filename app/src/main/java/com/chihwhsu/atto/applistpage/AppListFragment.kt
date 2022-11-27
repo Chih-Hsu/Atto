@@ -38,6 +38,10 @@ class AppListFragment : Fragment() {
         setRecyclerview()
 
         viewModel.appList.observe(viewLifecycleOwner) { list ->
+            if (list.isNotEmpty()){
+                binding.lottieLoading.visibility = View.GONE
+            }
+
             viewModel.resetList(list.filter { it.appLabel != MY_APP_LABEL }, requireContext())
 
         }
@@ -62,7 +66,7 @@ class AppListFragment : Fragment() {
 
         binding.appRecyclerView.adapter = adapter
 
-        setItemTouchHelper()
+//        setItemTouchHelper()
         setLabelSpanSize()
     }
 

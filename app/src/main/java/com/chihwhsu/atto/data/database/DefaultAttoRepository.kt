@@ -92,7 +92,6 @@ class DefaultAttoRepository(
 
     override fun getAllApps(): LiveData<List<App>> {
         return attoLocalDataSource.getAllApps()
-
     }
 
 
@@ -184,8 +183,8 @@ class DefaultAttoRepository(
         return attoRemoteDataSource.syncRemoteData(context, user, appList)
     }
 
-    override suspend fun uploadData(context: Context,localAppList : List<App>) : Result<Boolean> {
-        return attoRemoteDataSource.uploadData(context, localAppList)
+    override suspend fun uploadData(context: Context,localAppList : List<App>,email: String) : Result<Boolean> {
+        return attoRemoteDataSource.uploadData(context, localAppList, email)
     }
 
     override suspend fun uploadUser(user: User): Result<Boolean> {
@@ -202,21 +201,25 @@ class DefaultAttoRepository(
 
     override suspend fun updateAppData() {
 
-        withContext(Dispatchers.Main) {
+        withContext(Dispatchers.Default) {
 
             val roomApps = withContext(Dispatchers.Default) {
                 getAllAppNotLiveData()
             }
 
-            val systemApps = attoSystemDataSource.getAllApps()
+            val systemApps = withContext(Dispatchers.Default) {
+                attoSystemDataSource.getAllAppNotLiveData()
+            }
 
             withContext(ioDispatcher) {
 
                 if (roomApps.isNullOrEmpty()) {
-                    systemApps.value?.let {
+                    systemApps?.let {
 
                         for (app in it) {
-                            insert(app)
+                            withContext(ioDispatcher){
+                                insert(app)
+                            }
                         }
                     }
 
@@ -224,33 +227,35 @@ class DefaultAttoRepository(
                     // 判斷system與room的差異
                     // room有的app就不更新
                     // room沒有的就insert
-                    systemApps.value?.let { systemList ->
+                    systemApps?.let { systemList ->
 
                         for (app in systemList) {
+                            withContext(Dispatchers.IO) {
 //                            if (!roomApps.contains(app)) {
-                            if (roomApps.none { it.appLabel == app.appLabel }) {
-                                // room沒有的就insert
+                                if (roomApps.none { it.appLabel == app.appLabel }) {
+                                    // room沒有的就insert
                                     insert(app)
-                            } else {
-                                // room有的就確認imageUrl是否一樣，若不是就更新
-                                if (app.iconPath != roomApps.first { it.appLabel == app.appLabel }.iconPath) {
-                                    updateIconPath(app.appLabel, app.iconPath)
-                                }
+                                } else {
+                                    // room有的就確認imageUrl是否一樣，若不是就更新
+                                    if (app.iconPath != roomApps.first { it.appLabel == app.appLabel }.iconPath) {
+                                        updateIconPath(app.appLabel, app.iconPath)
+                                    }
 
-                                if (roomApps.any { it.appLabel == app.appLabel }){
-                                    for (item in roomApps.filter { it.appLabel == app.appLabel }){
-                                        if (!item.installed){
-                                            updateAppInstalled(app.appLabel)
+                                    if (roomApps.any { it.appLabel == app.appLabel }) {
+                                        for (item in roomApps.filter { it.appLabel == app.appLabel }) {
+                                            if (!item.installed) {
+                                                updateAppInstalled(app.appLabel)
+                                            }
                                         }
                                     }
                                 }
                             }
-                        }
 
-                        for (app in roomApps) {
-                            // room有system沒有代表已刪除，就從room delete
-                            if (systemList.none { it.appLabel == app.appLabel } && app.installed) {
-                                delete(app.packageName)
+                            for (currentApp in roomApps) {
+                                // room有system沒有代表已刪除，就從room delete
+                                if (systemList.none { it.appLabel == currentApp.appLabel } && currentApp.installed) {
+                                    delete(currentApp.packageName)
+                                }
                             }
                         }
                     }

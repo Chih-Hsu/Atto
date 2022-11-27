@@ -92,9 +92,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/large_margin"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="150dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="150dp">
+        app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
             android:id="@+id/image_user"
@@ -140,7 +140,171 @@
             android:textSize="20sp" />
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/text_recommend"
+        style="@style/standard_text_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="RECOMMEND"
+        android:textSize="20sp"
+        android:textColor="@color/light_grey"
+        app:layout_constraintStart_toStartOf="@+id/linear_alarm"
+        app:layout_constraintTop_toBottomOf="@+id/linear_alarm" />
 
+    <LinearLayout
+        android:id="@+id/linear_myha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/large_margin"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_recommend">
+
+    <ImageView
+        android:id="@+id/image_myha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/ic_baseline_star_24" />
+    <TextView
+        android:id="@+id/text_MyHa"
+        style="@style/standard_text_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MY HA"
+        android:textSize="20sp"
+        android:layout_marginStart="@dimen/standard_margin"
+        app:layout_constraintStart_toStartOf="@+id/guideline9"
+        app:layout_constraintTop_toBottomOf="@+id/text_recommend" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_Miru"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/large_margin"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linear_myha">
+
+    <ImageView
+        android:id="@+id/image_Miru"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/ic_baseline_star_24" />
+
+    <TextView
+        android:id="@+id/text_Miru"
+        style="@style/standard_text_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MIRU HIRU"
+        android:textSize="20sp"
+        android:layout_marginStart="@dimen/standard_margin"
+        app:layout_constraintStart_toStartOf="@+id/guideline9"
+        app:layout_constraintTop_toBottomOf="@+id/text_MyHa" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_BornMeme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/large_margin"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linear_Miru">
+
+    <ImageView
+        android:id="@+id/image_BornMeme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/ic_baseline_star_24" />
+
+    <TextView
+        android:id="@+id/text_BornMeme"
+        style="@style/standard_text_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="BORN MEME"
+        android:textSize="20sp"
+        android:layout_marginStart="@dimen/standard_margin"
+        app:layout_constraintStart_toStartOf="@+id/guideline9"
+        app:layout_constraintTop_toBottomOf="@+id/text_Miru" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_MinMap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/large_margin"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linear_BornMeme">
+
+    <ImageView
+        android:id="@+id/image_MinMap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/ic_baseline_star_24" />
+    <TextView
+        android:id="@+id/text_MinMap"
+        style="@style/standard_text_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MIN MAP"
+        android:textSize="20sp"
+        android:layout_marginStart="@dimen/standard_margin"
+        app:layout_constraintStart_toStartOf="@+id/guideline9"
+        app:layout_constraintTop_toBottomOf="@+id/text_BornMeme" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_Pinpisode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/large_margin"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linear_MinMap">
+
+    <ImageView
+        android:id="@+id/image_Pinpisode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/ic_baseline_star_24" />
+
+    <TextView
+        android:id="@+id/text_Pinpisode"
+        style="@style/standard_text_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PINPISODE"
+        android:textSize="20sp"
+        android:layout_marginStart="@dimen/standard_margin"
+        app:layout_constraintStart_toStartOf="@+id/guideline9"
+        app:layout_constraintTop_toBottomOf="@+id/text_MinMap" />
+
+    </LinearLayout>
+
+
+
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="50dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

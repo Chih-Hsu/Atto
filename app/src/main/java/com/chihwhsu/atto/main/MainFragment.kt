@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -71,9 +72,6 @@ class MainFragment : Fragment() {
         })
 
 
-
-
-
         return binding.root
     }
 
@@ -101,6 +99,18 @@ class MainFragment : Fragment() {
                 findNavController().navigate(NavigationDirections.actionGlobalTimeZoneFragment())
             }
 
+            textMyHa.setOnClickListener {
+                val launchAppIntent =
+                    requireContext().packageManager.getLaunchIntentForPackage("com.cleo.myha")
+                startActivity(launchAppIntent)
+            }
+
+            textMiru.setOnClickListener {
+                val launchAppIntent =
+                    requireContext().packageManager.getLaunchIntentForPackage("com.neil.miruhiru")
+                startActivity(launchAppIntent)
+            }
+
 
         }
 
@@ -117,10 +127,12 @@ class MainFragment : Fragment() {
     override fun onDestroy() {
 
         val auth = FirebaseAuth.getInstance()
+        val user = auth.currentUser
 
-        if (auth.currentUser != null) {
-            viewModel.uploadData(requireContext())
-        }
+            user?.email?.let {
+                Log.d("TEST","$it")
+                viewModel.uploadData(requireContext(),it)
+            }
         super.onDestroy()
 
 

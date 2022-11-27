@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
 import android.provider.Settings
+import android.util.Log
 import androidx.lifecycle.LiveData
 import com.chihwhsu.atto.data.*
 import com.chihwhsu.atto.data.database.AttoDataSource
@@ -257,15 +258,14 @@ object AttoRemoteDataSource : AttoDataSource {
     }
 
     @SuppressLint("HardwareIds")
-    override suspend fun uploadData(context: Context, localAppList: List<App>): Result<Boolean> =
+    override suspend fun uploadData(context: Context, localAppList: List<App>, email:String): Result<Boolean> =
         suspendCoroutine { continuation ->
 
-            val auth = FirebaseAuth.getInstance()
             val dataBase = FirebaseFirestore.getInstance()
             val remoteAppList = mutableListOf<App>()
 
             dataBase.collection("user")
-                .whereEqualTo("email", auth.currentUser?.email)
+                .whereEqualTo("email", email)
                 .get()
                 .addOnCompleteListener { task ->
 
@@ -289,17 +289,17 @@ object AttoRemoteDataSource : AttoDataSource {
                                 // if remote have data but local not, then delete remote data
                                 syncRemoteAndLocalData(
                                     dataBase,
-                                    currentUser,
+                                    email,
                                     remoteAppList,
                                     localAppList
                                 )
-                                uploadLocalToRemote(localAppList, currentUser, dataBase)
+                                uploadLocalToRemote(localAppList, email, dataBase)
                             }
                         }
                     } else {
                         task.exception?.let { e ->
                             continuation.resume(Result.Error(e))
-                            return@addOnCompleteListener
+//                            return@addOnCompleteListener
                         }
                         continuation.resume(Result.Fail("Upload Data Fail"))
                     }
@@ -308,7 +308,7 @@ object AttoRemoteDataSource : AttoDataSource {
 
     private fun uploadLocalToRemote(
         localAppList: List<App>,
-        currentUser: User,
+        email: String,
         dataBase: FirebaseFirestore
     ) {
 
@@ -317,7 +317,7 @@ object AttoRemoteDataSource : AttoDataSource {
             val newApp = App(
                 app.appLabel,
                 app.packageName,
-                "$STORAGE_PATH/${currentUser.email}/${app.appLabel}.png",
+                "$STORAGE_PATH/${email}/${app.appLabel}.png",
                 app.label,
                 app.isEnable,
                 app.theme,
@@ -325,27 +325,25 @@ object AttoRemoteDataSource : AttoDataSource {
                 app.sort
             )
 
-            currentUser.email?.let {
                 dataBase.collection("user")
-                    .document()
+                    .document(email)
                     .collection("App")
                     .document(app.appLabel)
                     .set(newApp)
 
                 // Upload AppIconImage
-                uploadImage(currentUser, app)
-            }
+                uploadImage(email, app)
+
 
         }
     }
 
     private fun syncRemoteAndLocalData(
         dataBase: FirebaseFirestore,
-        currentUser: User,
+        email: String,
         remoteAppList: MutableList<App>,
         localAppList: List<App>
     ) {
-        currentUser.email?.let { email ->
             dataBase.collection("user")
                 .document(email)
                 .collection("App")
@@ -366,7 +364,7 @@ object AttoRemoteDataSource : AttoDataSource {
                             }
                         }
                     }
-                }
+
         }
     }
 
@@ -389,13 +387,15 @@ object AttoRemoteDataSource : AttoDataSource {
                                     .toObject(User::class.java)
                             } else null
 
+                        Log.d("test","remote = ${remoteUser?.deviceId}  local = ${user.deviceId}")
+
                         // Do not update deviceId , if device is different
                         val newUser = User(
                             user.id,
                             user.email,
                             user.name,
                             user.image,
-                            if (remoteUser != null || remoteUser?.deviceId == user.deviceId) user.deviceId else remoteUser?.deviceId
+                            if (remoteUser == null || remoteUser.deviceId == user.deviceId) user.deviceId else remoteUser.deviceId
                         )
 
                         user.email?.let { email ->
@@ -425,10 +425,10 @@ object AttoRemoteDataSource : AttoDataSource {
         TODO("Not yet implemented")
     }
 
-    private fun uploadImage(user: User, app: App) {
+    private fun uploadImage(email: String, app: App) {
 
         val storage = FirebaseStorage.getInstance().reference
-        val imageRef = storage.child("${user.email}/${app.appLabel}.png")
+        val imageRef = storage.child("${email}/${app.appLabel}.png")
         val file = Uri.fromFile(File(app.iconPath))
         imageRef.putFile(file)
 
