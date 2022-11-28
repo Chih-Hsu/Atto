@@ -26,22 +26,22 @@ interface AttoDatabaseDao {
     fun updateIconPath(appName: String, path: String)
 
     @Query("UPDATE app_table set installed = :installed WHERE appLabel = :appName")
-    fun updateAppInstalled(appName: String,installed:Boolean)
+    fun updateAppInstalled(appName: String, installed: Boolean)
 
     @Query("UPDATE app_table set is_enable = :doLock where package_name = :packageName")
-    fun lockApp(packageName : String, doLock : Boolean)
+    fun lockApp(packageName: String, doLock: Boolean)
 
     @Query("UPDATE app_table set is_enable = :notEnable where is_enable = :isEnable")
-    fun lockAllApp(notEnable: Boolean,isEnable: Boolean)
+    fun lockAllApp(notEnable: Boolean, isEnable: Boolean)
 
     @Query("UPDATE app_table set is_enable =:notEnable where label = :label")
-    fun lockSpecificLabelApp(label: String,notEnable: Boolean)
+    fun lockSpecificLabelApp(label: String, notEnable: Boolean)
 
     @Query("UPDATE app_table set is_enable = :isEnable WHERE is_enable = :notEnable")
-    fun unLockAllApp(isEnable: Boolean,notEnable:Boolean)
+    fun unLockAllApp(isEnable: Boolean, notEnable: Boolean)
 
     @Query("UPDATE app_table set is_enable =:isEnable where label = :label")
-    fun unLockSpecificLabelApp(label: String,isEnable: Boolean)
+    fun unLockSpecificLabelApp(label: String, isEnable: Boolean)
 
     @Query("DELETE from app_table WHERE package_name = :packageName")
     fun delete(packageName: String)
@@ -50,7 +50,7 @@ interface AttoDatabaseDao {
     fun clear()
 
     @Query("SELECT * FROM app_table WHERE package_name = :packageName")
-    fun getApp(packageName: String):App?
+    fun getApp(packageName: String): App?
 
     @Query("SELECT * FROM app_table ORDER BY sort ASC")
     fun getAllApps(): LiveData<List<App>>
@@ -68,10 +68,13 @@ interface AttoDatabaseDao {
     fun getLabelList(): LiveData<List<String>>
 
     @Query("SELECT * FROM app_table")
-    fun getAllAppNotLiveData():List<App>?
+    fun getAllAppNotLiveData(): List<App>?
 
     @Query("UPDATE app_table SET label = null WHERE label = :label")
     fun deleteSpecificLabel(label: String)
+
+    @Query("SELECT count(appLabel) from app_table")
+    fun getAppDataCount(): Int
 
 
     // Event
@@ -98,8 +101,7 @@ interface AttoDatabaseDao {
     fun delayEvent5Minutes(id: Int, newAlarmTime: Long)
 
     @Query("SELECT EXISTS(SELECT * FROM event_table WHERE type = :type or :type2)")
-    fun isPomodoroIsExist(type: Int,type2:Int) : Boolean
-
+    fun isPomodoroIsExist(type: Int, type2: Int): Boolean
 
 
     // AppLockTimer
@@ -108,13 +110,13 @@ interface AttoDatabaseDao {
     fun insert(appLockTimer: AppLockTimer)
 
     @Query("DELETE FROM usage_tracker_table WHERE id = :id")
-    fun deleteTimer(id : Long)
+    fun deleteTimer(id: Long)
 
     @Query("DELETE FROM usage_tracker_table")
     fun deleteAllTimer()
 
     @Query("UPDATE usage_tracker_table SET target_time = :remainTime")
-    fun updateTimer(remainTime : Long)
+    fun updateTimer(remainTime: Long)
 
     @Query("SELECT * FROM usage_tracker_table WHERE package_name = :packageName")
     fun getTimer(packageName: String): AppLockTimer?
@@ -128,22 +130,22 @@ interface AttoDatabaseDao {
     fun insert(widget: Widget)
 
     @Query("DELETE FROM widget_table WHERE id = :id")
-    fun deleteWidget(id : Long)
+    fun deleteWidget(id: Long)
 
     @Query("SELECT * FROM widget_table")
-    fun getAllWidget():LiveData<List<Widget>>
+    fun getAllWidget(): LiveData<List<Widget>>
 
 
     // TimeZone
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(timeZone : AttoTimeZone)
+    fun insert(timeZone: AttoTimeZone)
 
     @Query("SELECT * FROM timezone_table order by sort")
-    fun getAllTimeZone():LiveData<List<AttoTimeZone>>
+    fun getAllTimeZone(): LiveData<List<AttoTimeZone>>
 
     @Query("DELETE FROM timezone_table WHERE id = :id")
-    fun deleteTimeZone(id : Long)
+    fun deleteTimeZone(id: Long)
 
 
 }

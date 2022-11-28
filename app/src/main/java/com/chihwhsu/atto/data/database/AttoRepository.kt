@@ -50,6 +50,8 @@ interface AttoRepository {
 
     fun deleteSpecificLabel(label: String)
 
+    fun getAppDataCount(): Int
+
 
     // Event
 

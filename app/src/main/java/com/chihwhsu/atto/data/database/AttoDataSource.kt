@@ -67,6 +67,8 @@ interface AttoDataSource {
 
     fun updateIconPath(appName: String, path: String)
 
+    fun getAppDataCount():Int
+
 
     // Event
 
@@ -92,6 +94,7 @@ interface AttoDataSource {
     fun lockSpecificLabelApp(label: String)
 
     fun isPomodoroIsExist(): Boolean
+
 
 
     // AppLockTimer

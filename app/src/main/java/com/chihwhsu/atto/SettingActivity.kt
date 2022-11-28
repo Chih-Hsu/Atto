@@ -4,10 +4,19 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import com.chihwhsu.atto.ext.getVmFactory
+import com.chihwhsu.atto.login.LoginViewModel
+import com.chihwhsu.atto.main.MainViewModel
+import com.chihwhsu.atto.tutorial.SettingViewModel
 
 
 class SettingActivity : AppCompatActivity() {
+
+    private val viewModel by viewModels<SettingViewModel> { getVmFactory() }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,6 +36,16 @@ class SettingActivity : AppCompatActivity() {
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
         )
+
+
+        // Only run this function in first start
+        viewModel.appNumber.observe(this, Observer {
+            if (it == 0) {
+                viewModel.updateApp()
+            }
+        })
+
     }
+
 
 }

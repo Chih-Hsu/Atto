@@ -63,6 +63,10 @@ class AttoLocalDataSource(private val context: Context) : AttoDataSource {
         AttoDatabase.getInstance(context).attoDatabaseDao.updateIconPath(appName, path)
     }
 
+    override fun getAppDataCount(): Int {
+        return AttoDatabase.getInstance(context).attoDatabaseDao.getAppDataCount()
+    }
+
     override suspend fun lockApp(packageName: String) {
         AttoDatabase.getInstance(context).attoDatabaseDao.lockApp(packageName, false)
     }

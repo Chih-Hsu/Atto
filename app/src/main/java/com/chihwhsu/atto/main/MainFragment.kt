@@ -71,9 +71,17 @@ class MainFragment : Fragment() {
             viewModel.checkUsageTimer(requireContext())
         })
 
+        // Only run this function in first start
+        viewModel.appNumber.observe(viewLifecycleOwner, Observer {
+            if (it == 0) {
+                viewModel.updateApp()
+            }
+        })
+
 
         return binding.root
     }
+
 
     private fun setSlideDrawer() {
         val drawerBinding = binding.drawer
@@ -81,7 +89,7 @@ class MainFragment : Fragment() {
 
             val user = FirebaseAuth.getInstance().currentUser
             textUser.text = user?.displayName ?: "Please Login"
-            if (user == null){
+            if (user == null) {
                 textLoggin.text = "LOG IN"
                 linearLoggin.setOnClickListener {
                     findNavController().navigate(MainFragmentDirections.actionMainFragmentToLoginFragment())
@@ -91,7 +99,7 @@ class MainFragment : Fragment() {
                 findNavController().navigate(NavigationDirections.actionGlobalClockFragment())
             }
             linearSetting.setOnClickListener {
-                val intent = Intent(requireContext(),SettingActivity::class.java)
+                val intent = Intent(requireContext(), SettingActivity::class.java)
                 startActivity(intent)
             }
 
@@ -129,10 +137,10 @@ class MainFragment : Fragment() {
         val auth = FirebaseAuth.getInstance()
         val user = auth.currentUser
 
-            user?.email?.let {
-                Log.d("TEST","$it")
-                viewModel.uploadData(requireContext(),it)
-            }
+        user?.email?.let {
+            Log.d("TEST", "$it")
+            viewModel.uploadData(requireContext(), it)
+        }
         super.onDestroy()
 
 

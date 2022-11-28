@@ -273,6 +273,9 @@ class DefaultAttoRepository(
         attoLocalDataSource.deleteSpecificLabel(label)
     }
 
+    override fun getAppDataCount(): Int {
+        return attoLocalDataSource.getAppDataCount()
+    }
 
 
 }

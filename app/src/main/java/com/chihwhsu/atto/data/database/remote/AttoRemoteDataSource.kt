@@ -120,6 +120,10 @@ object AttoRemoteDataSource : AttoDataSource {
         TODO("Not yet implemented")
     }
 
+    override fun getAppDataCount(): Int {
+        TODO("Not yet implemented")
+    }
+
     override fun getAllEvents(): LiveData<List<Event>> {
         TODO("Not yet implemented")
     }

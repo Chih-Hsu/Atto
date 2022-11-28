@@ -215,6 +215,10 @@ class AttoSystemDataSource(val context: Context, val currentCoroutine: Coroutine
         TODO("Not yet implemented")
     }
 
+    override fun getAppDataCount(): Int {
+        TODO("Not yet implemented")
+    }
+
     override fun getAllEvents(): LiveData<List<Event>> {
         TODO("Not yet implemented")
     }
