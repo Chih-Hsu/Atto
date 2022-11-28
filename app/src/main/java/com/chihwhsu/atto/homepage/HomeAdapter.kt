@@ -14,7 +14,7 @@ import com.chihwhsu.atto.data.Event.Companion.POMODORO_BREAK_TYPE
 import com.chihwhsu.atto.data.Event.Companion.POMODORO_WORK_TYPE
 import com.chihwhsu.atto.data.Event.Companion.TODO_TYPE
 import com.chihwhsu.atto.databinding.ItemEventBinding
-import com.chihwhsu.atto.ext.getTimeFrom00am
+import com.chihwhsu.atto.ext.getTimeFromStartOfDay
 
 class HomeAdapter(val onClickListener: EventClickListener,val viewModel :HomeViewModel) :
     ListAdapter<Event, HomeAdapter.EventViewHolder>(object : DiffUtil.ItemCallback<Event>() {
@@ -52,7 +52,7 @@ class HomeAdapter(val onClickListener: EventClickListener,val viewModel :HomeVie
 
 
 
-            if (getTimeFrom00am(System.currentTimeMillis()) > event.alarmTime) {
+            if (getTimeFromStartOfDay(System.currentTimeMillis()) > event.alarmTime) {
                 if (event == viewModel.event.value){
                     binding.eventImage.setImageResource(R.drawable.event_done_select)
 

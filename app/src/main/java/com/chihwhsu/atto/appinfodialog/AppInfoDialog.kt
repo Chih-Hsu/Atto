@@ -9,10 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.chihwhsu.atto.applistpage.bottomsheet.AppListBottomViewModel
+import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.databinding.DialogAppInfoBinding
 import com.chihwhsu.atto.ext.getVmFactory
 
@@ -24,14 +23,26 @@ class AppInfoDialog : DialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
+
         val binding = DialogAppInfoBinding.inflate(inflater,container,false)
-
         val app = AppInfoDialogArgs.fromBundle(requireArguments()).app
-
-
+        // Icon
         Glide.with(requireContext()).load(app.iconPath).into(binding.iconImage)
 
+        setButtonClickableStateByInstalled(app, binding)
+
+        viewModel.navigateUp.observe(viewLifecycleOwner) {
+            findNavController().navigateUp()
+        }
+
+        return binding.root
+    }
+
+    private fun setButtonClickableStateByInstalled(
+        app: App,
+        binding: DialogAppInfoBinding
+    ) {
         if (app.installed) {
 
             binding.limitButton.alpha = 1F
@@ -53,7 +64,7 @@ class AppInfoDialog : DialogFragment() {
                     )
                 )
             }
-        }else{
+        } else {
 
             binding.limitButton.alpha = 0.5F
             binding.dashboardButton.alpha = 0.5F
@@ -63,20 +74,6 @@ class AppInfoDialog : DialogFragment() {
                 viewModel.removeApp(app)
             }
         }
-
-        viewModel.navigateUp.observe(viewLifecycleOwner, Observer {
-            findNavController().navigateUp()
-        })
-
-
-
-
-
-
-
-
-
-        return binding.root
     }
 
     override fun onStart() {

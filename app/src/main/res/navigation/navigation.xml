@@ -98,4 +98,17 @@
             app:argType="com.chihwhsu.atto.data.Widget" />
     </dialog>
     <action android:id="@+id/action_global_widgetRemoveDialog" app:destination="@id/widgetRemoveDialog" />
+    <fragment
+        android:id="@+id/timeZoneFragment"
+        android:name="com.chihwhsu.atto.timezonepage.TimeZoneFragment"
+        android:label="TimeZoneFragment" >
+        <action
+            android:id="@+id/action_timeZoneFragment_to_timeZoneDialog"
+            app:destination="@id/timeZoneDialog" />
+    </fragment>
+    <action android:id="@+id/action_global_timeZoneFragment" app:destination="@id/timeZoneFragment" />
+    <dialog
+        android:id="@+id/timeZoneDialog"
+        android:name="com.chihwhsu.atto.timezonepage.dialog.TimeZoneDialog"
+        android:label="TimeZoneDialog" />
 </navigation>

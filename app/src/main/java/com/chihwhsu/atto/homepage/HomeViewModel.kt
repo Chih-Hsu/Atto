@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.chihwhsu.atto.data.Event
-import com.chihwhsu.atto.data.database.AttoDatabaseDao
 import com.chihwhsu.atto.data.database.AttoRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -14,14 +13,15 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel(private val repository: AttoRepository) : ViewModel() {
 
-    // Create a Coroutine scope using a job to be able to cancel when needed
+
     private var viewModelJob = Job()
 
-    // the Coroutine runs using the Main (UI) dispatcher
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     private var _event = MutableLiveData<Event>()
     val event : LiveData<Event> get() = _event
+
+    val timeZoneList = repository.getAllTimeZone()
 
     private var _showCard = MutableLiveData<Boolean>().also { it.value = false }
     val showCard : LiveData<Boolean> get() = _showCard

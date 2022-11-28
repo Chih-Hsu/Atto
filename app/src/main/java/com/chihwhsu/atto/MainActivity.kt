@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.chihwhsu.atto.workmanager.ResetWorker
+import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -18,7 +19,7 @@ class MainActivity : AppCompatActivity() {
         // set NavigationBar color transparent
         window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
 
-//        setResetWorker()
+        setResetWorker()
 
     }
 

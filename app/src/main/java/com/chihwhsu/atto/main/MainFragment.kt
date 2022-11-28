@@ -1,23 +1,33 @@
 package com.chihwhsu.atto.main
 
 
+import android.animation.ObjectAnimator
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
+import com.chihwhsu.atto.NavigationDirections
+import com.chihwhsu.atto.R
 import com.chihwhsu.atto.SettingActivity
+import com.chihwhsu.atto.applistpage.bottomsheet.AppListBottomFragment
+import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.databinding.FragmentMainBinding
+import com.chihwhsu.atto.ext.dpToFloat
 import com.chihwhsu.atto.ext.getVmFactory
-import com.chihwhsu.atto.util.UserManager
+import com.google.firebase.auth.FirebaseAuth
+import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder
 
 class MainFragment : Fragment() {
 
     private val viewModel by viewModels<MainViewModel> { getVmFactory() }
+    private lateinit var binding: FragmentMainBinding
 
 
     override fun onCreateView(
@@ -25,44 +35,27 @@ class MainFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentMainBinding.inflate(inflater,container,false)
+
+        binding = FragmentMainBinding.inflate(inflater, container, false)
+        binding.lottieLoading.visibility = View.VISIBLE
+
+        setSlideDrawer()
+
 
         // set ViewPager2
         val adapter = MainViewPagerAdapter(this)
         binding.viewPager.adapter = adapter
 
-//        binding.viewPager.post {
-//                binding.viewPager.setCurrentItem(1, true)
-//        }
-
         val dockAdapter = DockAdapter(DockAdapter.DockOnClickListener { app ->
 
-            if (app.packageName == "com.chihwhsu.atto") {
-                val intent = Intent(requireContext(), SettingActivity::class.java)
-                startActivity(intent)
-            } else {
-
-                if (app.installed) {
-                    val launchAppIntent =
-                        requireContext().packageManager.getLaunchIntentForPackage(app.packageName)
-                    startActivity(launchAppIntent)
-
-                } else {
-                    // if app is not installed , then navigate to GooglePlay
-                    val intent = Intent(
-                        Intent.ACTION_VIEW,
-                        Uri.parse("market://details?id=${app.packageName}")
-                    );
-                    startActivity(intent)
-                }
-            }
+            navigateByPackageName(app)
 
         })
 
         binding.dockRecyclerview.adapter = dockAdapter
         viewModel.dockList.observe(viewLifecycleOwner, Observer { list ->
 
-            if (list.isNotEmpty()){
+            if (list.isNotEmpty()) {
                 list.sortedBy {
                     it.sort
                 }
@@ -78,22 +71,100 @@ class MainFragment : Fragment() {
             viewModel.checkUsageTimer(requireContext())
         })
 
+        // Only run this function in first start
+        viewModel.appNumber.observe(viewLifecycleOwner, Observer {
+            if (it == 0) {
+                viewModel.updateApp()
+            }
+        })
+
 
         return binding.root
     }
 
+
+    private fun setSlideDrawer() {
+        val drawerBinding = binding.drawer
+        drawerBinding.apply {
+
+            val user = FirebaseAuth.getInstance().currentUser
+            textUser.text = user?.displayName ?: "Please Login"
+            if (user == null) {
+                textLoggin.text = "LOG IN"
+                linearLoggin.setOnClickListener {
+                    findNavController().navigate(MainFragmentDirections.actionMainFragmentToLoginFragment())
+                }
+            }
+            linearAlarm.setOnClickListener {
+                findNavController().navigate(NavigationDirections.actionGlobalClockFragment())
+            }
+            linearSetting.setOnClickListener {
+                val intent = Intent(requireContext(), SettingActivity::class.java)
+                startActivity(intent)
+            }
+
+            linearClock.setOnClickListener {
+                findNavController().navigate(NavigationDirections.actionGlobalTimeZoneFragment())
+            }
+
+            textMyHa.setOnClickListener {
+                val launchAppIntent =
+                    requireContext().packageManager.getLaunchIntentForPackage("com.cleo.myha")
+                startActivity(launchAppIntent)
+            }
+
+            textMiru.setOnClickListener {
+                val launchAppIntent =
+                    requireContext().packageManager.getLaunchIntentForPackage("com.neil.miruhiru")
+                startActivity(launchAppIntent)
+            }
+
+
+        }
+
+    }
+
+
     override fun onResume() {
         super.onResume()
+
+        binding.lottieLoading.visibility = View.GONE
         viewModel.updateApp()
     }
 
     override fun onDestroy() {
-        if (UserManager.isLogging()){
-            viewModel.uploadData(requireContext())
+
+        val auth = FirebaseAuth.getInstance()
+        val user = auth.currentUser
+
+        user?.email?.let {
+            Log.d("TEST", "$it")
+            viewModel.uploadData(requireContext(), it)
         }
         super.onDestroy()
 
 
+    }
+
+    private fun navigateByPackageName(app: App) {
+        if (app.packageName == AppListBottomFragment.MY_PACKAGE_NAME) {
+            val intent = Intent(requireContext(), SettingActivity::class.java)
+            startActivity(intent)
+        } else {
+            if (app.installed) {
+                val launchAppIntent =
+                    requireContext().packageManager.getLaunchIntentForPackage(app.packageName)
+                startActivity(launchAppIntent)
+
+            } else {
+                // if app is not installed ,  navigate to GooglePlay
+                val intent = Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("${AppListBottomFragment.GOOGLE_PLAY_LINK}id=${app.packageName}")
+                )
+                startActivity(intent)
+            }
+        }
     }
 
 

@@ -1,11 +1,9 @@
 package com.chihwhsu.atto.data.database
 
 
+import android.content.Context
 import androidx.lifecycle.LiveData
-import com.chihwhsu.atto.data.App
-import com.chihwhsu.atto.data.AppLockTimer
-import com.chihwhsu.atto.data.Event
-import com.chihwhsu.atto.data.Widget
+import com.chihwhsu.atto.data.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -36,6 +34,10 @@ class DefaultAttoRepository(
         attoLocalDataSource.insert(widget)
     }
 
+    override fun insert(timeZone: AttoTimeZone) {
+        attoLocalDataSource.insert(timeZone)
+    }
+
     override suspend fun update(app: App) {
         withContext(ioDispatcher) {
             attoLocalDataSource.update(app)
@@ -52,6 +54,10 @@ class DefaultAttoRepository(
 
     override fun updateIconPath(appName: String, path: String) {
         attoLocalDataSource.updateIconPath(appName, path)
+    }
+
+    override fun updateAppInstalled(appName: String) {
+        attoLocalDataSource.updateAppInstalled(appName)
     }
 
     override suspend fun updateTheme(appName: String, theme: Int?) {
@@ -86,7 +92,6 @@ class DefaultAttoRepository(
 
     override fun getAllApps(): LiveData<List<App>> {
         return attoLocalDataSource.getAllApps()
-
     }
 
 
@@ -166,22 +171,55 @@ class DefaultAttoRepository(
         return attoLocalDataSource.deleteWidget(id)
     }
 
+    override suspend fun getUser(email:String): Result<User> {
+        return attoRemoteDataSource.getUser(email)
+    }
+
+    override suspend fun syncRemoteData(
+        context: Context,
+        user: User,
+        appList: List<App>
+    ): Result<List<App>>{
+        return attoRemoteDataSource.syncRemoteData(context, user, appList)
+    }
+
+    override suspend fun uploadData(context: Context,localAppList : List<App>,email: String) : Result<Boolean> {
+        return attoRemoteDataSource.uploadData(context, localAppList, email)
+    }
+
+    override suspend fun uploadUser(user: User): Result<Boolean> {
+        return attoRemoteDataSource.uploadUser(user)
+    }
+
+    override fun getAllTimeZone():LiveData<List<AttoTimeZone>> {
+        return attoLocalDataSource.getAllTimeZone()
+    }
+
+    override fun deleteTimeZone(id: Long) {
+        attoLocalDataSource.deleteTimeZone(id)
+    }
+
     override suspend fun updateAppData() {
 
-        withContext(Dispatchers.Main) {
+        withContext(Dispatchers.Default) {
 
             val roomApps = withContext(Dispatchers.Default) {
                 getAllAppNotLiveData()
             }
 
-            val systemApps = attoSystemDataSource.getAllApps()
+            val systemApps = withContext(Dispatchers.Default) {
+                attoSystemDataSource.getAllAppNotLiveData()
+            }
 
             withContext(ioDispatcher) {
 
                 if (roomApps.isNullOrEmpty()) {
-                    systemApps.value?.let {
+                    systemApps?.let {
+
                         for (app in it) {
-                            insert(app)
+                            withContext(ioDispatcher){
+                                insert(app)
+                            }
                         }
                     }
 
@@ -189,33 +227,35 @@ class DefaultAttoRepository(
                     // 判斷system與room的差異
                     // room有的app就不更新
                     // room沒有的就insert
-                    systemApps.value?.let { systemList ->
+                    systemApps?.let { systemList ->
 
                         for (app in systemList) {
+                            withContext(Dispatchers.IO) {
 //                            if (!roomApps.contains(app)) {
-                            if (roomApps.none { it.appLabel == app.appLabel }) {
-                                // room沒有的就insert
-                                try {
+                                if (roomApps.none { it.appLabel == app.appLabel }) {
+                                    // room沒有的就insert
                                     insert(app)
-                                } catch (e: Exception) {
-                                    e.printStackTrace()
-                                }
-                            } else {
-                                // room有的就確認imageUrl是否一樣，若不是就更新
-                                if (app.iconPath != roomApps.filter { it.appLabel == app.appLabel }
-                                        .first().iconPath) {
-                                    updateIconPath(app.appLabel, app.iconPath)
-                                }
+                                } else {
+                                    // room有的就確認imageUrl是否一樣，若不是就更新
+                                    if (app.iconPath != roomApps.first { it.appLabel == app.appLabel }.iconPath) {
+                                        updateIconPath(app.appLabel, app.iconPath)
+                                    }
 
+                                    if (roomApps.any { it.appLabel == app.appLabel }) {
+                                        for (item in roomApps.filter { it.appLabel == app.appLabel }) {
+                                            if (!item.installed) {
+                                                updateAppInstalled(app.appLabel)
+                                            }
+                                        }
+                                    }
+                                }
                             }
-                        }
 
-                        for (app in roomApps) {
-                            // room有system沒有代表已刪除，就從room delete
-//                            if (!systemList.contains(app)) {
-                            // if user sync from firebase, installed will be false
-                            if (systemList.none { it.appLabel == app.appLabel } && app.installed) {
-                                delete(app.packageName)
+                            for (currentApp in roomApps) {
+                                // room有system沒有代表已刪除，就從room delete
+                                if (systemList.none { it.appLabel == currentApp.appLabel } && currentApp.installed) {
+                                    delete(currentApp.packageName)
+                                }
                             }
                         }
                     }
@@ -223,8 +263,6 @@ class DefaultAttoRepository(
                 }
             }
         }
-
-
     }
 
     override fun getAllAppNotLiveData(): List<App>? {
@@ -235,21 +273,9 @@ class DefaultAttoRepository(
         attoLocalDataSource.deleteSpecificLabel(label)
     }
 
-
-//    suspend fun loadFilesFromInternalStorage(label: String): List<Bitmap> {
-//        return withContext(Dispatchers.IO) {
-//            val files = AttoApplication.instance.applicationContext.filesDir.listFiles()
-//            //to make function look bigger :). We will try to load only the images from internal storage that we have saved in save example.
-//            files?.filter { file ->
-//                file.canRead() && file.isFile && file.name.endsWith(".png") && file.name.splitToSequence(
-//                    "/"
-//                ).last().splitToSequence(".").first() == label
-//            }?.map {
-//                val imageBytes = it.readBytes()
-//                BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-//            } ?: listOf()
-//        }
-//    }
+    override fun getAppDataCount(): Int {
+        return attoLocalDataSource.getAppDataCount()
+    }
 
 
 }

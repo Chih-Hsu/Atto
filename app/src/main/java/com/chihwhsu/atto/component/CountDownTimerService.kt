@@ -4,22 +4,17 @@ import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.net.Uri
 import android.os.CountDownTimer
 import android.os.IBinder
-import android.util.Log
 import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContentProviderCompat.requireContext
 import com.chihwhsu.atto.AlarmActivity
 import com.chihwhsu.atto.AttoApplication
 import com.chihwhsu.atto.MainActivity
 import com.chihwhsu.atto.R
 import com.chihwhsu.atto.ext.toMinuteSecondFormat
 import kotlinx.coroutines.*
-import java.util.*
 
-class UsageTimerService : Service() {
+class CountDownTimerService : Service() {
 
     val CHANNEL_ID = "channelId"
     val CHANNEL_NAME = "foreground_service"
@@ -45,57 +40,36 @@ class UsageTimerService : Service() {
     }
 
 
-    private fun notificationToCountDown(time : Long) : Notification {
-        createNotificationChannel()
-        val notificationIntent = Intent(this, MainActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(
-            this,
-            0, notificationIntent, PendingIntent.FLAG_IMMUTABLE
-        )
-        val notification: Notification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("Simple Foreground Service")
-            .setContentText("Explain about the service")
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentIntent(pendingIntent)
-            .build()
-
-        return notification
-    }
-
-    fun createNotificationChannel(){
+    private fun createNotificationChannel(){
         val channel = NotificationChannel(CHANNEL_ID,CHANNEL_NAME,
-            NotificationManager.IMPORTANCE_DEFAULT).apply {
-            lightColor = Color.GREEN
-            enableLights(true)
-        }
+            NotificationManager.IMPORTANCE_HIGH)
         val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         manager.createNotificationChannel(channel)
     }
 
-    fun createTimer(duration : Long){
+    private fun createTimer(duration : Long){
         val countDownTimer =
             object : CountDownTimer(duration, 1000L) {
                 override fun onTick(millisUntilFinished: Long) {
 
-                    val notificationIntent = Intent(this@UsageTimerService, AlarmActivity::class.java)
+                    val notificationIntent = Intent(this@CountDownTimerService, AlarmActivity::class.java)
                     val pendingIntent = PendingIntent.getActivity(
-                        this@UsageTimerService,
+                        this@CountDownTimerService,
                         0, notificationIntent, PendingIntent.FLAG_IMMUTABLE
                     )
 
-                    val notification: Notification = NotificationCompat.Builder(this@UsageTimerService, CHANNEL_ID)
+                    val notification: Notification = NotificationCompat.Builder(this@CountDownTimerService, CHANNEL_ID)
                         .setContentTitle("Atto Usage Limit Countdown")
-                        .setContentText("剩餘時間  ${duration.toMinuteSecondFormat()} ")
+                        .setContentText("剩餘時間  ${millisUntilFinished.toMinuteSecondFormat()} ")
                         .setSmallIcon(R.drawable.ic_launcher_foreground)
                         .setContentIntent(pendingIntent)
                         .build()
 
                     startForeground(NOTIFICATION_ID,notification)
-
                 }
 
                 override fun onFinish() {
-                    val intent = Intent(AttoApplication.instance.applicationContext, UsageTimerService::class.java)
+                    val intent = Intent(AttoApplication.instance.applicationContext, CountDownTimerService::class.java)
                     stopService(intent)
                 }
             }

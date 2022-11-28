@@ -8,6 +8,7 @@ import com.chihwhsu.atto.data.database.DefaultAttoRepository
 import com.chihwhsu.atto.data.database.local.AttoLocalDataSource
 import com.chihwhsu.atto.data.database.remote.AttoRemoteDataSource
 import com.chihwhsu.atto.data.database.system.AttoSystemDataSource
+import kotlinx.coroutines.CoroutineScope
 
 object ServiceLocator {
 
@@ -15,19 +16,19 @@ object ServiceLocator {
     var attoRepository: AttoRepository? = null
         @VisibleForTesting set
 
-    fun provideTasksRepository(context: Context): AttoRepository {
+    fun provideTasksRepository(context: Context,currentCoroutine: CoroutineScope): AttoRepository {
         synchronized(this) {
             return attoRepository
                 ?: attoRepository
-                ?: createStylishRepository(context)
+                ?: createStylishRepository(context,currentCoroutine)
         }
     }
 
-    private fun createStylishRepository(context: Context): AttoRepository {
+    private fun createStylishRepository(context: Context,currentCoroutine: CoroutineScope): AttoRepository {
         return DefaultAttoRepository(
             AttoRemoteDataSource,
             createLocalDataSource(context),
-            createSystemDataSource(context)
+            createSystemDataSource(context,currentCoroutine)
         )
     }
 
@@ -35,7 +36,7 @@ object ServiceLocator {
         return AttoLocalDataSource(context)
     }
 
-    private fun createSystemDataSource(context: Context): AttoDataSource {
-        return AttoSystemDataSource(context)
+    private fun createSystemDataSource(context: Context,currentCoroutine: CoroutineScope): AttoDataSource {
+        return AttoSystemDataSource(context,currentCoroutine)
     }
 }

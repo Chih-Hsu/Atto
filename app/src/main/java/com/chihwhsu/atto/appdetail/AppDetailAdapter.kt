@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.chihwhsu.atto.R
 import com.chihwhsu.atto.data.Theme
-import com.chihwhsu.atto.databinding.ItemAppListBinding
 import com.chihwhsu.atto.databinding.ItemBackgroundListBinding
 
 class AppDetailAdapter :
@@ -25,27 +24,42 @@ class AppDetailAdapter :
 
     }) {
 
-    class ThemeViewHolder(val binding: ItemBackgroundListBinding) : RecyclerView.ViewHolder(binding.root) {
+    class ThemeViewHolder(val binding: ItemBackgroundListBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Theme) {
+
             when (item) {
                 Theme.DEFAULT -> {}
                 Theme.BLACK -> {
-                    binding.iconBackground.setCardBackgroundColor(ResourcesCompat.getColor(itemView.resources,R.color.dark_grey,null))
+                    binding.iconBackground.setCardBackgroundColor(
+                        ResourcesCompat.getColor(
+                            itemView.resources,
+                            R.color.dark_grey,
+                            null
+                        )
+                    )
                 }
                 Theme.HIGH_LIGHT -> {
-                    binding.iconBackground.setCardBackgroundColor(ResourcesCompat.getColor(itemView.resources,R.color.yellow,null))
+                    binding.iconBackground.setCardBackgroundColor(
+                        ResourcesCompat.getColor(
+                            itemView.resources,
+                            R.color.yellow,
+                            null
+                        )
+                    )
                 }
-                Theme.KANAHEI -> { binding.kanaImage.visibility = View.VISIBLE }
+                Theme.KANAHEI -> {
+                    binding.kanaImage.visibility = View.VISIBLE
+                }
             }
 
         }
-
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ThemeViewHolder {
-        val view = ItemBackgroundListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val view =
+            ItemBackgroundListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ThemeViewHolder(view)
     }
 

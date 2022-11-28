@@ -10,6 +10,7 @@ import android.widget.DatePicker
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.chihwhsu.atto.R
 import com.chihwhsu.atto.clock.ClockFragment
 import com.chihwhsu.atto.clock.alarm.AlarmViewModel
@@ -52,10 +53,9 @@ class TodoFragment : Fragment() {
             viewModel.setContent(it.toString())
         }
 
-
-
         binding.button.setOnClickListener {
             viewModel.saveEvent()
+            findNavController().navigateUp()
         }
 
 

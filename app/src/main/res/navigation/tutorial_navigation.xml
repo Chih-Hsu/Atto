@@ -112,6 +112,12 @@
         <action
             android:id="@+id/action_syncFragment_to_wallpaperFragment"
             app:destination="@id/wallpaperFragment" />
+        <argument
+            android:name="userName"
+            app:argType="string" />
+        <argument
+            android:name="email"
+            app:argType="string" />
     </fragment>
     <action android:id="@+id/action_global_afterLoginFragment" app:destination="@id/syncFragment" />
 </navigation>

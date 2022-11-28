@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.chihwhsu.atto.R
-import com.chihwhsu.atto.applistpage.AppListAdapter
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.data.AppListItem
 import com.chihwhsu.atto.data.Theme
@@ -21,7 +20,7 @@ import com.chihwhsu.atto.databinding.ItemLabelBinding
 
 class AppListBottomAdapter(
     val appOnClickListener: AppOnClickListener,
-    val longClickListener: AppListAdapter.LongClickListener
+    val longClickListener: LongClickListener
 ) : ListAdapter<AppListItem, RecyclerView.ViewHolder>(object :
     DiffUtil.ItemCallback<AppListItem>() {
     override fun areItemsTheSame(oldItem: AppListItem, newItem: AppListItem): Boolean {
@@ -38,7 +37,6 @@ class AppListBottomAdapter(
         const val APP_ITEM_VIEW_TYPE_APP = 0x01
     }
 
-
     class AppOnClickListener(val onClickListener: (app: App) -> Unit) {
         fun onClick(app: App) = onClickListener(app)
     }
@@ -54,7 +52,6 @@ class AppListBottomAdapter(
         fun bind(item: AppListItem.LabelItem) {
             binding.textLabel.apply {
                 text = item.title
-//                textSize = 20F
                 setTextColor(ResourcesCompat.getColor(itemView.resources, R.color.light_grey, null))
             }
         }
@@ -65,19 +62,51 @@ class AppListBottomAdapter(
         fun bind(item: AppListItem.AppItem) {
 
             binding.appName.text = item.app.appLabel
-//            item.app.icon?.let {
-//                binding.iconImage.setImageBitmap(it.createGrayscale())
-//            }
-            Glide.with(itemView.context)
-                .load(item.app.iconPath)
-                .into(binding.iconImage)
 
-            val colorMatrix = ColorMatrix()
-            colorMatrix.setSaturation(0f)
-            val filter = ColorMatrixColorFilter(colorMatrix)
+            setIcon(item)
+            setBackground(item)   // set background color according to app theme
+            setAppClickableStateByEnable(item)  // App is locked or not
+            setAlphaByInstallState(item)  // App is installed or not
 
-            binding.iconImage.colorFilter = filter
+            itemView.setOnLongClickListener {
+                longClickListener.onClick(item.app)
+                true
+            }
+        }
 
+        private fun setAlphaByInstallState(item: AppListItem.AppItem) {
+            if (item.app.installed) {
+
+                itemView.alpha = 1F
+            } else {
+                // if app is not installed , show half transparency
+                itemView.alpha = 0.3F
+            }
+        }
+
+        private fun setAppClickableStateByEnable(item: AppListItem.AppItem) {
+            if (item.app.isEnable) {
+
+                itemView.setOnClickListener {
+                    appOnClickListener.onClick(item.app)
+                }
+
+                binding.iconBackground.foreground = null
+                binding.lockImage.visibility = View.GONE
+
+            } else {
+
+                binding.iconBackground.foreground = ResourcesCompat.getDrawable(
+                    itemView.resources,
+                    R.drawable.icon_background_lock,
+                    null
+                )
+                binding.lockImage.visibility = View.VISIBLE
+
+            }
+        }
+
+        private fun setBackground(item: AppListItem.AppItem) {
             when (item.app.theme) {
                 Theme.DEFAULT.index -> {
                     binding.iconBackground.setBackgroundResource(R.drawable.icon_background)
@@ -99,41 +128,18 @@ class AppListBottomAdapter(
                     binding.kanaImage.visibility = View.INVISIBLE
                 }
             }
+        }
 
-            // App is not locked
-            if (item.app.isEnable) {
+        private fun setIcon(item: AppListItem.AppItem) {
+            Glide.with(itemView.context)
+                .load(item.app.iconPath)
+                .into(binding.iconImage)
 
-                itemView.setOnClickListener {
-                    appOnClickListener.onClick(item.app)
-                }
+            val colorMatrix = ColorMatrix()
+            colorMatrix.setSaturation(0f)
+            val filter = ColorMatrixColorFilter(colorMatrix)
 
-                binding.iconBackground.foreground = null
-                binding.lockImage.visibility = View.GONE
-
-            } else {
-
-                binding.iconBackground.foreground = ResourcesCompat.getDrawable(
-                    itemView.resources,
-                    R.drawable.icon_background_lock,
-                    null
-                )
-                binding.lockImage.visibility = View.VISIBLE
-
-            }
-
-            if (item.app.installed){
-
-                itemView.alpha = 1F
-            }else{
-                // if app is not installed , show half transparency
-                itemView.alpha = 0.3F
-
-            }
-
-            itemView.setOnLongClickListener {
-                longClickListener.onClick(item.app)
-                true
-            }
+            binding.iconImage.colorFilter = filter
         }
     }
 

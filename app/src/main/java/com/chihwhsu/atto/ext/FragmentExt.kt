@@ -4,9 +4,8 @@ import android.content.pm.PackageManager
 import android.content.res.Resources
 import androidx.fragment.app.Fragment
 import com.chihwhsu.atto.AttoApplication
-import com.chihwhsu.atto.appdetail.AppDetailViewModel
 import com.chihwhsu.atto.data.App
-import com.chihwhsu.atto.data.database.AttoDatabase
+import com.chihwhsu.atto.data.database.local.AttoDatabase
 import com.chihwhsu.atto.factory.AppDetailViewModelFactory
 import com.chihwhsu.atto.factory.DockViewModelFactory
 import com.chihwhsu.atto.factory.ViewModelFactory
@@ -28,7 +27,7 @@ fun Fragment.getVmFactory(packageManager: PackageManager): DockViewModelFactory 
 }
 
 fun Fragment.getVmFactory(argument : App): AppDetailViewModelFactory {
-    val databaseDao = AttoDatabase.getInstance(requireContext()).attoDatabaseDao
-    return AppDetailViewModelFactory(databaseDao,argument)
+    val repository = (requireContext().applicationContext as AttoApplication).attoRepository
+    return AppDetailViewModelFactory(repository,argument)
 }
 

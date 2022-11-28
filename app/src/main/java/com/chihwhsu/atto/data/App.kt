@@ -16,46 +16,40 @@ import java.text.NumberFormat
 @Parcelize
 @Entity(tableName = "app_table")
 //@TypeConverters(AttoConverter::class)
-data class App (
+data class App(
     @PrimaryKey(autoGenerate = false)
-    val appLabel : String ="",
+    val appLabel: String = "",
     @ColumnInfo(name = "package_name")
-    val packageName : String ="",
+    val packageName: String = "",
     @ColumnInfo(name = "icon_path")
-    var iconPath : String ="",
+    var iconPath: String = "",
     @ColumnInfo(name = "label")
-    val label : String? = null,
+    val label: String? = null,
     @ColumnInfo(name = "is_enable")
-    val isEnable : Boolean = true,
+    val isEnable: Boolean = true,
     @ColumnInfo(name = "theme")
-    val theme : Int = -1,
+    val theme: Int = -1,
     @ColumnInfo(name = "installed")
-    var installed : Boolean = true,
+    var installed: Boolean = true,
     @ColumnInfo(name = "sort")
-    val sort : Int = -1,
-        ) :Parcelable {
+    val sort: Int = -1,
+) : Parcelable {
 
 
     fun getTodayUsage(context: Context) =
-        UsageStatesManager.getTodayUsage(context,packageName)
+        UsageStatesManager.getTodayUsage(context, packageName)
 
     fun getTotalUsage(context: Context) =
-        UsageStatesManager.getTotalUsage(context,packageName)
+        UsageStatesManager.getTotalUsage(context, packageName)
 
     fun get24HourUsageList(context: Context) =
-        UsageStatesManager.get24hrUsageList(context,packageName)
+        UsageStatesManager.get24hrUsageList(context, packageName)
 
+    fun getWeekUsageList(context: Context) =
+        UsageStatesManager.getWeekUsageList(context, packageName)
 
-    fun getUsageTimeFromStart(context: Context, startTime : Long):Long{
-        return UsageStatesManager.getUsageFromStartTime(context,packageName,startTime)
+    fun getUsageTimeFromStart(context: Context, startTime: Long): Long {
+        return UsageStatesManager.getUsageFromStartTime(context, packageName, startTime)
     }
-
-    fun analyseStorage(context: Context) {
-        val internalStorageFile: File = context.getFilesDir()
-        val availableSizeInBytes = StatFs(internalStorageFile.getPath()).availableBytes
-        val number = NumberFormat.getInstance().format(availableSizeInBytes);
-        Log.d("storage","$number")
-    }
-
 
 }

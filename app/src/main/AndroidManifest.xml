@@ -25,20 +25,22 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/atto_icon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Atto"
-        tools:targetApi="31">
+        tools:targetApi="31"
+        android:largeHeap="true"
+        android:hardwareAccelerated="true">
+
         <activity
             android:name=".AlarmActivity"
             android:exported="false"
+            android:launchMode="singleTask"
             />
         <activity
             android:name=".SettingActivity"
             android:exported="true"
-            android:label="Atto Setting"
             android:windowSoftInputMode="adjustNothing">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -54,16 +56,14 @@
             android:windowSoftInputMode="adjustPan|stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <receiver android:name=".component.AlarmReceiver" />
 
-        <service android:name=".component.UsageTimerService" />
+        <service android:name=".component.CountDownTimerService" />
 
         <meta-data
             android:name="preloaded_fonts"

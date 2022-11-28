@@ -5,7 +5,7 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import com.chihwhsu.atto.data.database.AttoDatabase
+import com.chihwhsu.atto.data.database.local.AttoDatabase
 import java.util.*
 import java.util.concurrent.TimeUnit
 

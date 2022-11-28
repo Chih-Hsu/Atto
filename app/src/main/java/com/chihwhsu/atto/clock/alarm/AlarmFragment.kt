@@ -1,9 +1,7 @@
 package com.chihwhsu.atto.clock.alarm
 
 
-import android.media.MediaPlayer
 import android.os.Bundle
-import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +10,6 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.chihwhsu.atto.R
 import com.chihwhsu.atto.databinding.FragmentAlarmBinding
@@ -22,56 +19,65 @@ import com.chihwhsu.atto.ext.getCurrentDay
 import com.chihwhsu.atto.ext.getVmFactory
 import com.google.android.material.timepicker.MaterialTimePicker
 import java.text.SimpleDateFormat
+import java.util.*
 
 class AlarmFragment : Fragment() {
 
     private lateinit var binding: FragmentAlarmBinding
     private val viewModel by viewModels<AlarmViewModel> { getVmFactory() }
 
-    private lateinit var mediaPlayer: MediaPlayer
-    private lateinit var vibrator: Vibrator
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentAlarmBinding.inflate(inflater, container, false)
 
         viewModel.getRingTone(requireContext())
 
-        val list = listOf(
-            binding.monday,
-            binding.tuesday,
-            binding.wednesday,
-            binding.thursday,
-            binding.friday,
-            binding.saturday,
-            binding.sunday
-        )
+        setRoutineDays()
+        setCurrentTime()
+        setRingToneSpinner()
+        setTimePicker()
 
-        for (item in list) {
-            item.setOnClickListener {
-                viewModel.setWeekRepeat(list.indexOf(item))
+        binding.vibrationSwitch.setOnCheckedChangeListener { _, _ ->
+            viewModel.setVibration()
+        }
+
+        binding.snoozeSwitch.setOnCheckedChangeListener { _, _ ->
+            viewModel.setSnooze()
+        }
+
+        binding.button.setOnClickListener {
+            viewModel.saveEvent()
+        }
+
+        viewModel.event.observe(viewLifecycleOwner) {
+            it.setAlarmTime(requireActivity().applicationContext, it.id)
+        }
+
+        viewModel.navigateToAlarmList.observe(viewLifecycleOwner) {
+            if (it == true) {
+                findNavController().navigate(AlarmFragmentDirections.actionAlarmFragmentToClockFragment())
+                viewModel.doneNavigation()
             }
         }
 
 
-        viewModel.dayList.observe(viewLifecycleOwner, Observer {
-            setBackground(list, it)
-        })
 
+        return binding.root
+    }
+
+    private fun setCurrentTime() {
         // Set current time
-        val currentTime = System.currentTimeMillis() + 600000
-        val simpleFormat = SimpleDateFormat("a  hh:mm")
+        val currentTime = System.currentTimeMillis() + 10 * MINUTE
+        val simpleFormat = SimpleDateFormat(TIME_PATTERN, Locale.getDefault())
         binding.hourMinute.text = simpleFormat.format(currentTime)
+    }
 
-        binding.button.setOnClickListener {
-        }
-
-        // RingTone Spinner
-        viewModel.ringToneList.observe(viewLifecycleOwner, Observer {
-            binding.ringtoneSpinner.adapter = ArrayAdapter<String>(
+    private fun setRingToneSpinner() {
+        viewModel.ringToneList.observe(viewLifecycleOwner) {
+            binding.ringtoneSpinner.adapter = ArrayAdapter(
                 requireContext(),
                 R.layout.item_ringtone_spinner,
                 it
@@ -89,12 +95,13 @@ class AlarmFragment : Fragment() {
                         id: Long
                     ) {
 
-                       viewModel.setRingTonePosition(position)
+                        viewModel.setRingTonePosition(position)
                     }
                 }
-        })
+        }
+    }
 
-
+    private fun setTimePicker() {
 
         // TimePicker
         val timePicker = MaterialTimePicker.Builder()
@@ -103,16 +110,16 @@ class AlarmFragment : Fragment() {
         binding.imageTimeEdit.setOnClickListener {
             timePicker.show(parentFragmentManager, "TimePicker")
         }
-
         timePicker.apply {
             addOnPositiveButtonClickListener {
 
-                val time = getCurrentDay() + hour.toLong()*60*60*1000 + minute.toLong()*60*1000
+                val time =
+                    getCurrentDay() + hour.toLong() * HOUR + minute.toLong() * MINUTE
 
                 viewModel.setAlarmTime(time)
 
                 // replace textview text
-                val amPm = if (hour<=12)"AM" else "PM"
+                val amPm = if (hour <= 12) "AM" else "PM"
                 binding.hourMinute.text = resources.getString(
                     R.string.a_hh_mm,
                     amPm,
@@ -122,32 +129,28 @@ class AlarmFragment : Fragment() {
 
             }
         }
-        binding.vibrationSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
-                viewModel.setVibration()
-        }
+    }
 
-        binding.snoozeSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
-                viewModel.setSnooze()
-        }
+    private fun setRoutineDays() {
+        val list = listOf(
+            binding.monday,
+            binding.tuesday,
+            binding.wednesday,
+            binding.thursday,
+            binding.friday,
+            binding.saturday,
+            binding.sunday
+        )
 
-        binding.button.setOnClickListener {
-            viewModel.saveEvent()
-        }
-
-        viewModel.event.observe(viewLifecycleOwner, Observer {
-            it.setAlarmTime(requireActivity().applicationContext,it.id)
-        })
-
-        viewModel.navigateToAlarmList.observe(viewLifecycleOwner, Observer {
-            if (it == true) {
-                findNavController().navigate(AlarmFragmentDirections.actionAlarmFragmentToClockFragment())
-                viewModel.doneNavigation()
+        for (item in list) {
+            item.setOnClickListener {
+                viewModel.setWeekRepeat(list.indexOf(item))
             }
-        })
+        }
 
-
-
-        return binding.root
+        viewModel.dayList.observe(viewLifecycleOwner) {
+            setBackground(list, it)
+        }
     }
 
     private fun setBackground(viewList: List<TextView>, isSelect: List<Boolean>) {
@@ -159,6 +162,12 @@ class AlarmFragment : Fragment() {
                 item.setBackgroundResource(R.drawable.week_corner_background)
             }
         }
+    }
+
+    companion object {
+        const val MINUTE = 60L * 1000L
+        const val HOUR = 60L * MINUTE
+        const val TIME_PATTERN = "a  hh:mm"
     }
 
 }

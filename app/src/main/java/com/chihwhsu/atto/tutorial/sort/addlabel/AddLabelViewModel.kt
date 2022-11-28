@@ -69,33 +69,39 @@ class AddLabelViewModel(private val repository: AttoRepository) : ViewModel() {
     }
 
     fun updateAppLabel(label : String){
-        coroutineScope.launch(Dispatchers.IO){
 
-
+//        coroutineScope.launch(Dispatchers.Default) {
             val oldLabelList = originalList.filter{it.label == editLabel }
 
             if (oldLabelList.size > remainList.size){
                 for (app in oldLabelList){
-                    if (remainList.filter { it.appLabel == app.appLabel }.isEmpty()){
-                        // if true means the app already removed from the remainList,so remove it's label and sort
-                        repository.updateLabel(app.appLabel,null)
-                        repository.updateSort(app.appLabel,-1)
+
+                        if (remainList.filter { it.appLabel == app.appLabel }.isEmpty()) {
+                            // if true means the app already removed from the remainList,so remove it's label and sort
+                            coroutineScope.launch(Dispatchers.IO) {
+                                repository.updateLabel(app.appLabel, null)
+                                repository.updateSort(app.appLabel, -1)
+                            }
+                        }
                     }
-                }
-            }
+//                }
+
 
             for (app in remainList) {
 
-                repository.updateLabel(app.appLabel,label.lowercase())
-                repository.updateSort(app.appLabel,remainList.indexOf(app))
+                coroutineScope.launch(Dispatchers.IO) {
+                    repository.updateLabel(app.appLabel, label.lowercase())
+                    repository.updateSort(app.appLabel, remainList.indexOf(app))
+                }
             }
 
 
 
-            withContext(Dispatchers.Main){
+//            withContext(Dispatchers.Main){
                 _navigateToSort.value = true
+//            }
             }
-        }
+//        }
     }
 
     fun doneNavigation(){

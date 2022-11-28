@@ -2,12 +2,8 @@ package com.chihwhsu.atto.data.database.local
 
 import android.content.Context
 import androidx.lifecycle.LiveData
-import com.chihwhsu.atto.data.App
-import com.chihwhsu.atto.data.AppLockTimer
-import com.chihwhsu.atto.data.Event
-import com.chihwhsu.atto.data.Widget
+import com.chihwhsu.atto.data.*
 import com.chihwhsu.atto.data.database.AttoDataSource
-import com.chihwhsu.atto.data.database.AttoDatabase
 
 class AttoLocalDataSource(private val context: Context) : AttoDataSource {
 
@@ -27,6 +23,10 @@ class AttoLocalDataSource(private val context: Context) : AttoDataSource {
         AttoDatabase.getInstance(context).attoDatabaseDao.insert(widget)
     }
 
+    override fun insert(timeZone: AttoTimeZone) {
+        AttoDatabase.getInstance(context).attoDatabaseDao.insert(timeZone)
+    }
+
     override suspend fun update(app: App) {
         AttoDatabase.getInstance(context).attoDatabaseDao.update(app)
     }
@@ -43,6 +43,10 @@ class AttoLocalDataSource(private val context: Context) : AttoDataSource {
         AttoDatabase.getInstance(context).attoDatabaseDao.updateTheme(appName, theme)
     }
 
+    override fun updateAppInstalled(appName: String) {
+        AttoDatabase.getInstance(context).attoDatabaseDao.updateAppInstalled(appName, true)
+    }
+
     override suspend fun updateAppData() {
         TODO("Not yet implemented")
     }
@@ -57,6 +61,10 @@ class AttoLocalDataSource(private val context: Context) : AttoDataSource {
 
     override fun updateIconPath(appName: String, path: String) {
         AttoDatabase.getInstance(context).attoDatabaseDao.updateIconPath(appName, path)
+    }
+
+    override fun getAppDataCount(): Int {
+        return AttoDatabase.getInstance(context).attoDatabaseDao.getAppDataCount()
     }
 
     override suspend fun lockApp(packageName: String) {
@@ -154,7 +162,6 @@ class AttoLocalDataSource(private val context: Context) : AttoDataSource {
         AttoDatabase.getInstance(context).attoDatabaseDao.updateTimer(remainTime)
     }
 
-
     override suspend fun getTimer(packageName: String): AppLockTimer? {
         return AttoDatabase.getInstance(context).attoDatabaseDao.getTimer(packageName)
     }
@@ -171,5 +178,36 @@ class AttoLocalDataSource(private val context: Context) : AttoDataSource {
         return AttoDatabase.getInstance(context).attoDatabaseDao.deleteWidget(id)
     }
 
+    override suspend fun getUser(email: String): Result<User> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun syncRemoteData(
+        context: Context,
+        user: User,
+        appList: List<App>
+    ): Result<List<App>> {
+        TODO()
+    }
+
+    override suspend fun uploadData(
+        context: Context,
+        localAppList: List<App>,
+        email: String
+    ): Result<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun uploadUser(user: User): Result<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getAllTimeZone(): LiveData<List<AttoTimeZone>> {
+        return AttoDatabase.getInstance(context).attoDatabaseDao.getAllTimeZone()
+    }
+
+    override fun deleteTimeZone(id: Long) {
+        AttoDatabase.getInstance(context).attoDatabaseDao.deleteTimeZone(id)
+    }
 
 }

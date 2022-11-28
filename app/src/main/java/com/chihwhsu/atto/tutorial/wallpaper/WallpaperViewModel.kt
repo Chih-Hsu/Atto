@@ -43,13 +43,19 @@ class WallpaperViewModel(private val resource: Resources) : ViewModel() {
             Wallpaper(
                 1, ResourcesCompat.getDrawable(
                     resource,
-                    R.drawable.girlstyle, null
+                    R.drawable.cliff, null
                 )!!
             ),
             Wallpaper(
                 1, ResourcesCompat.getDrawable(
                     resource,
-                    R.drawable.wood_floor, null
+                    R.drawable.house, null
+                )!!
+            ),
+            Wallpaper(
+                1, ResourcesCompat.getDrawable(
+                    resource,
+                    R.drawable.sunset, null
                 )!!
             ),
             Wallpaper(

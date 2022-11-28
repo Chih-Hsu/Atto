@@ -5,16 +5,18 @@ import android.content.Context
 import android.content.Intent
 import com.chihwhsu.atto.AlarmActivity
 import com.chihwhsu.atto.util.AlarmManagerUtil
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class AlarmReceiver : BroadcastReceiver() {
 
-
+    val scope = CoroutineScope(Dispatchers.Main)
 
     override fun onReceive(context: Context?, intent: Intent?) {
 
         val ringTone = intent!!.getStringExtra("ringTone")
         val intervalMillis = intent.getLongExtra("intervalMillis", 0)
-        val duration = intent.getLongExtra("duration",0L)
         if (intervalMillis != 0L) {
             AlarmManagerUtil.setAlarmTime(
                 context!!, System.currentTimeMillis() + intervalMillis,
@@ -30,12 +32,8 @@ class AlarmReceiver : BroadcastReceiver() {
         clockIntent.putExtra("id",id)
         clockIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
-
-        context?.let {
-            val serviceIntent = Intent(it,UsageTimerService::class.java)
-            serviceIntent.putExtra("duration",duration)
-            it.startService(serviceIntent)
-            it.startActivity(clockIntent)
+        context?.let { thisContext ->
+            thisContext.startActivity(clockIntent)
         }
 
     }

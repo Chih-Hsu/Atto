@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer"
+    android:layout_width="200dp"
+    android:layout_height="match_parent"
+    android:layout_marginStart="0dp"
+    app:layout_constraintStart_toStartOf="parent">
+
+    <LinearLayout
+        android:id="@+id/linear_setting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/large_margin"
+        android:layout_marginTop="100dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/image_setting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_baseline_settings_24" />
+
+        <TextView
+            android:id="@+id/text_setting"
+            style="@style/standard_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/standard_margin"
+            android:text="SETTING"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_clock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/large_margin"
+        android:layout_marginTop="@dimen/large_margin"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linear_setting">
+
+        <ImageView
+            android:id="@+id/image_clock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_baseline_access_time_24" />
+
+        <TextView
+            android:id="@+id/text_clock"
+            style="@style/standard_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/standard_margin"
+            android:text="CLOCK"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_alarm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/large_margin"
+        android:layout_marginTop="@dimen/large_margin"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linear_clock">
+
+        <ImageView
+            android:id="@+id/image_alarm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_baseline_alarm_24" />
+
+        <TextView
+            android:id="@+id/text_alarm"
+            style="@style/standard_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/standard_margin"
+            android:text="ALARM"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/linear_user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/large_margin"
+        android:layout_marginBottom="150dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/image_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_baseline_account_circle_24" />
+
+        <TextView
+            android:id="@+id/text_user"
+            style="@style/standard_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/standard_margin"
+            android:text="HELLO"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/linear_loggin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/large_margin"
+        android:layout_marginTop="@dimen/large_margin"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linear_user">
+
+        <ImageView
+            android:id="@+id/image_loggin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_baseline_login_24" />
+
+        <TextView
+            android:id="@+id/text_loggin"
+            style="@style/standard_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/standard_margin"
+            android:text="LOG OUT"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/text_recommend"
+        style="@style/standard_text_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="RECOMMEND"
+        android:textSize="20sp"
+        android:textColor="@color/light_grey"
+        app:layout_constraintStart_toStartOf="@+id/linear_alarm"
+        app:layout_constraintTop_toBottomOf="@+id/linear_alarm" />
+
+    <LinearLayout
+        android:id="@+id/linear_myha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/large_margin"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_recommend">
+
+    <ImageView
+        android:id="@+id/image_myha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/ic_baseline_star_24" />
+    <TextView
+        android:id="@+id/text_MyHa"
+        style="@style/standard_text_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MY HA"
+        android:textSize="20sp"
+        android:layout_marginStart="@dimen/standard_margin"
+        app:layout_constraintStart_toStartOf="@+id/guideline9"
+        app:layout_constraintTop_toBottomOf="@+id/text_recommend" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_Miru"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/large_margin"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linear_myha">
+
+    <ImageView
+        android:id="@+id/image_Miru"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/ic_baseline_star_24" />
+
+    <TextView
+        android:id="@+id/text_Miru"
+        style="@style/standard_text_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MIRU HIRU"
+        android:textSize="20sp"
+        android:layout_marginStart="@dimen/standard_margin"
+        app:layout_constraintStart_toStartOf="@+id/guideline9"
+        app:layout_constraintTop_toBottomOf="@+id/text_MyHa" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_BornMeme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/large_margin"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linear_Miru">
+
+    <ImageView
+        android:id="@+id/image_BornMeme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/ic_baseline_star_24" />
+
+    <TextView
+        android:id="@+id/text_BornMeme"
+        style="@style/standard_text_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="BORN MEME"
+        android:textSize="20sp"
+        android:layout_marginStart="@dimen/standard_margin"
+        app:layout_constraintStart_toStartOf="@+id/guideline9"
+        app:layout_constraintTop_toBottomOf="@+id/text_Miru" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_MinMap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/large_margin"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linear_BornMeme">
+
+    <ImageView
+        android:id="@+id/image_MinMap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/ic_baseline_star_24" />
+    <TextView
+        android:id="@+id/text_MinMap"
+        style="@style/standard_text_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MIN MAP"
+        android:textSize="20sp"
+        android:layout_marginStart="@dimen/standard_margin"
+        app:layout_constraintStart_toStartOf="@+id/guideline9"
+        app:layout_constraintTop_toBottomOf="@+id/text_BornMeme" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_Pinpisode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/large_margin"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linear_MinMap">
+
+    <ImageView
+        android:id="@+id/image_Pinpisode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/ic_baseline_star_24" />
+
+    <TextView
+        android:id="@+id/text_Pinpisode"
+        style="@style/standard_text_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PINPISODE"
+        android:textSize="20sp"
+        android:layout_marginStart="@dimen/standard_margin"
+        app:layout_constraintStart_toStartOf="@+id/guideline9"
+        app:layout_constraintTop_toBottomOf="@+id/text_MinMap" />
+
+    </LinearLayout>
+
+
+
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="50dp" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
