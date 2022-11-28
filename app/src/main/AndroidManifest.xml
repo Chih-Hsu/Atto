@@ -37,11 +37,12 @@
             android:name=".AlarmActivity"
             android:exported="false"
             android:launchMode="singleTask"
-            />
+            android:screenOrientation="sensorPortrait" />
         <activity
             android:name=".SettingActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustNothing">
+            android:windowSoftInputMode="adjustNothing"
+            android:screenOrientation="sensorPortrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -53,7 +54,8 @@
             android:name=".MainActivity"
             android:exported="true"
             android:theme="@style/HomeTheme"
-            android:windowSoftInputMode="adjustPan|stateHidden">
+            android:windowSoftInputMode="adjustPan|stateHidden"
+            android:screenOrientation="sensorPortrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.HOME" />
