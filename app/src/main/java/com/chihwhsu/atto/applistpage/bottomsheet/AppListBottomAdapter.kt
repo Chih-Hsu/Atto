@@ -63,10 +63,11 @@ class AppListBottomAdapter(
 
             binding.appName.text = item.app.appLabel
 
+            setAlphaByInstallState(item)  // App is installed or not
             setIcon(item)
             setBackground(item)   // set background color according to app theme
             setAppClickableStateByEnable(item)  // App is locked or not
-            setAlphaByInstallState(item)  // App is installed or not
+
 
             itemView.setOnLongClickListener {
                 longClickListener.onClick(item.app)
@@ -176,7 +177,6 @@ class AppListBottomAdapter(
             is AppViewHolder -> {
                 holder.bind((getItem(position) as AppListItem.AppItem))
             }
-
         }
     }
 

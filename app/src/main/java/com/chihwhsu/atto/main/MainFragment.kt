@@ -1,11 +1,9 @@
 package com.chihwhsu.atto.main
 
 
-import android.animation.ObjectAnimator
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,10 +17,10 @@ import com.chihwhsu.atto.SettingActivity
 import com.chihwhsu.atto.applistpage.bottomsheet.AppListBottomFragment
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.databinding.FragmentMainBinding
-import com.chihwhsu.atto.ext.dpToFloat
 import com.chihwhsu.atto.ext.getVmFactory
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
-import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder
 
 class MainFragment : Fragment() {
 
@@ -40,7 +38,6 @@ class MainFragment : Fragment() {
         binding.lottieLoading.visibility = View.VISIBLE
 
         setSlideDrawer()
-
 
         // set ViewPager2
         val adapter = MainViewPagerAdapter(this)
@@ -66,7 +63,6 @@ class MainFragment : Fragment() {
             }
         })
 
-
         viewModel.timerList.observe(viewLifecycleOwner, Observer {
             viewModel.checkUsageTimer(requireContext())
         })
@@ -78,7 +74,6 @@ class MainFragment : Fragment() {
             }
         })
 
-
         return binding.root
     }
 
@@ -89,10 +84,27 @@ class MainFragment : Fragment() {
 
             val user = FirebaseAuth.getInstance().currentUser
             textUser.text = user?.displayName ?: "Please Login"
+
             if (user == null) {
                 textLoggin.text = "LOG IN"
                 linearLoggin.setOnClickListener {
-                    findNavController().navigate(MainFragmentDirections.actionMainFragmentToLoginFragment())
+                    val intent = Intent(requireContext(), SettingActivity::class.java)
+                    startActivity(intent)
+                }
+            }else{
+                textLoggin.text = "LOG OUT"
+                linearLoggin.setOnClickListener {
+                    val options = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                        .requestIdToken(getString(R.string.default_web_client_id))
+                        .requestEmail()
+                        .build()
+
+                    val signInClient = GoogleSignIn.getClient(requireActivity(), options)
+                    signInClient.signOut()
+                    val  auth = FirebaseAuth.getInstance()
+                    auth.signOut()
+
+                    requireActivity().recreate()
                 }
             }
             linearAlarm.setOnClickListener {
@@ -118,10 +130,7 @@ class MainFragment : Fragment() {
                     requireContext().packageManager.getLaunchIntentForPackage("com.neil.miruhiru")
                 startActivity(launchAppIntent)
             }
-
-
         }
-
     }
 
 
@@ -138,12 +147,9 @@ class MainFragment : Fragment() {
         val user = auth.currentUser
 
         user?.email?.let {
-            Log.d("TEST", "$it")
             viewModel.uploadData(requireContext(), it)
         }
         super.onDestroy()
-
-
     }
 
     private fun navigateByPackageName(app: App) {
@@ -166,6 +172,4 @@ class MainFragment : Fragment() {
             }
         }
     }
-
-
 }
