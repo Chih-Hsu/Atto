@@ -42,7 +42,8 @@
             android:name=".SettingActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustNothing"
-            android:screenOrientation="sensorPortrait">
+            android:screenOrientation="sensorPortrait"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -55,7 +56,9 @@
             android:exported="true"
             android:theme="@style/HomeTheme"
             android:windowSoftInputMode="adjustPan|stateHidden"
-            android:screenOrientation="sensorPortrait">
+            android:screenOrientation="sensorPortrait"
+            android:clearTaskOnLaunch="true"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.HOME" />

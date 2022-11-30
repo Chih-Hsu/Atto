@@ -66,6 +66,22 @@
         app:layout_constraintStart_toStartOf="@+id/button_sync"
         app:layout_constraintTop_toBottomOf="@id/button_sync" />
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_to_main"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="4dp"
+        android:insetLeft="4dp"
+        android:insetTop="4dp"
+        android:insetRight="4dp"
+        android:insetBottom="4dp"
+        android:text="回 到 桌 面"
+        android:textColor="@color/light_grey"
+        android:layout_marginBottom="4dp"
+        app:layout_constraintBottom_toTopOf="@+id/button_sync"
+        app:layout_constraintEnd_toEndOf="@+id/button_sync"
+        app:layout_constraintStart_toStartOf="@+id/button_sync" />
+
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lottie_loading"
         android:layout_width="wrap_content"

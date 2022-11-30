@@ -17,18 +17,17 @@ class SetDefaultFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val binding = FragmentSetDefaultBinding.inflate(inflater,container,false)
-
 
         binding.textSetDefault.setOnClickListener {
             openAppSystemSettings()
-
         }
 
         binding.checkButton.setOnClickListener {
             val intent = Intent(this.requireActivity(),MainActivity::class.java)
             startActivity(intent)
+            requireActivity().finish()
         }
 
 

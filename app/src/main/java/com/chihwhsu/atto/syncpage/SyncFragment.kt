@@ -58,6 +58,12 @@ class SyncFragment : Fragment() {
         binding.buttonToTutorial.setOnClickListener {
             findNavController().navigate(SyncFragmentDirections.actionSyncFragmentToWallpaperFragment())
         }
+
+        binding.buttonToMain.setOnClickListener {
+            val intent = Intent(this.requireActivity(), MainActivity::class.java)
+            startActivity(intent)
+        }
+
         return binding.root
     }
 }

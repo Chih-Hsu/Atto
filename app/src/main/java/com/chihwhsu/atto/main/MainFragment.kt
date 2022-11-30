@@ -1,12 +1,14 @@
 package com.chihwhsu.atto.main
 
 
+import android.animation.ObjectAnimator
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -83,7 +85,7 @@ class MainFragment : Fragment() {
         drawerBinding.apply {
 
             val user = FirebaseAuth.getInstance().currentUser
-            textUser.text = user?.displayName ?: "Please Login"
+            textUser.text = user?.displayName ?: ""
 
             if (user == null) {
                 textLoggin.text = "LOG IN"
@@ -110,6 +112,7 @@ class MainFragment : Fragment() {
             linearAlarm.setOnClickListener {
                 findNavController().navigate(NavigationDirections.actionGlobalClockFragment())
             }
+
             linearSetting.setOnClickListener {
                 val intent = Intent(requireContext(), SettingActivity::class.java)
                 startActivity(intent)
@@ -131,6 +134,11 @@ class MainFragment : Fragment() {
                 startActivity(launchAppIntent)
             }
         }
+
+        setTransitionListener()
+
+
+
     }
 
 
@@ -172,4 +180,72 @@ class MainFragment : Fragment() {
             }
         }
     }
+
+    private fun setTransitionListener(){
+        binding.motion.addTransitionListener(object :MotionLayout.TransitionListener{
+            override fun onTransitionStarted(
+                motionLayout: MotionLayout?,
+                startId: Int,
+                endId: Int
+            ) {
+                if (startId == R.id.start) {
+                    ObjectAnimator.ofFloat(
+                        binding.drawerArrow,
+                        "rotation",
+                        0f,
+                        180F
+                    ).apply {
+                        duration = 500
+                        start()
+                    }
+                } else {
+                    ObjectAnimator.ofFloat(
+                        binding.drawerArrow,
+                        "rotation",
+                        180f,
+                        360F
+                    ).apply {
+                        duration = 500
+                        start()
+                    }
+                }
+
+            }
+
+            override fun onTransitionChange(
+                motionLayout: MotionLayout?,
+                startId: Int,
+                endId: Int,
+                progress: Float
+            ) {
+//                while (progress == 0f) {
+
+//                }
+
+            }
+
+            override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
+//                if (currentId == R.id.end) {
+//                    binding.drawerButton.rotation = 180f
+//                }else{
+//                    binding.drawerButton.rotation = 0f
+//                }
+            }
+
+            override fun onTransitionTrigger(
+                motionLayout: MotionLayout?,
+                triggerId: Int,
+                positive: Boolean,
+                progress: Float
+            ) {
+
+            }
+
+        })
+
+    }
+
+
+
+
 }

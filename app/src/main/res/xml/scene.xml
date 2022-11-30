@@ -5,31 +5,24 @@
 
     <Transition
         motion:constraintSetEnd="@+id/end"
-        motion:constraintSetStart="@+id/start">
+        motion:constraintSetStart="@+id/start"
+        motion:duration="500">
 
-        <OnSwipe
-            motion:dragDirection="dragLeft"
-            motion:touchAnchorId="@id/drawer"
-            motion:touchAnchorSide="left"
-            motion:onTouchUp="autoComplete"/>
+        <OnClick
+            motion:clickAction="transitionToEnd"
+            motion:targetId="@+id/drawer_button" />
     </Transition>
 
-<!--    <Transition-->
-<!--        motion:constraintSetEnd="@+id/start"-->
-<!--        motion:constraintSetStart="@+id/end">-->
+    <Transition
+        motion:constraintSetEnd="@id/start"
+        motion:constraintSetStart="@id/end"
+        motion:duration="500">
 
-<!--        <OnSwipe-->
-<!--            motion:dragDirection="dragLeft"-->
-<!--            motion:touchAnchorId="@id/drawer"-->
-<!--            motion:touchAnchorSide="left"-->
-<!--            motion:onTouchUp="autoCompleteToEnd"/>-->
-<!--        <OnClick-->
-<!--            motion:targetId="@+id/testButton"-->
-<!--            motion:clickAction="jumpToEnd"/>-->
+        <OnClick
+            motion:clickAction="transitionToEnd"
+            motion:targetId="@+id/drawer_button" />
 
-<!--    </Transition>-->
-
-
+    </Transition>
 
     <ConstraintSet android:id="@+id/start">
         <Constraint
@@ -54,9 +47,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
 
-            android:translationX="180dp"
             android:scaleX="0.8"
             android:scaleY="0.8"
+            android:translationX="180dp"
             motion:layout_constraintLeft_toLeftOf="parent"
             motion:layout_constraintTop_toTopOf="parent"
             motion:layout_constraintWidth_default="percent"
@@ -67,6 +60,7 @@
             android:layout_height="match_parent"
             android:layout_marginStart="0dp"
             motion:layout_constraintStart_toStartOf="parent" />
+
     </ConstraintSet>
 
 </MotionScene>

@@ -33,6 +33,7 @@ class WallpaperViewModel(private val resource: Resources) : ViewModel() {
     }
 
     private fun initWallpaperResource() {
+
         val wallpaperList = mutableListOf(
             Wallpaper(
                 1, ResourcesCompat.getDrawable(

@@ -24,23 +24,24 @@ class WallpaperFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentWallpaperBinding.inflate(inflater, container, false)
 
-        setRecyclerview()
+        binding = FragmentWallpaperBinding.inflate(inflater, container, false)
 
         binding.checkButton.setOnClickListener {
             setWallPaper(adapter)
         }
+
+        binding.textKeepWallpaper.setOnClickListener {
+            findNavController().navigate(WallpaperFragmentDirections.actionWallpaperFragmentToDockSelectFragment())
+        }
+
+        setRecyclerview()
 
         viewModel.navigationToNext.observe(viewLifecycleOwner) { canNavigate ->
             if (canNavigate) {
                 findNavController().navigate(WallpaperFragmentDirections.actionWallpaperFragmentToDockSelectFragment())
                 viewModel.doneNavigateToNext()
             }
-        }
-
-        binding.textKeepWallpaper.setOnClickListener {
-            findNavController().navigate(WallpaperFragmentDirections.actionWallpaperFragmentToDockSelectFragment())
         }
 
         return binding.root
@@ -64,11 +65,14 @@ class WallpaperFragment : Fragment() {
 
         val layoutManager =
             CenterZoomLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+
         binding.wallpaperRecyclerview.layoutManager = layoutManager
         binding.wallpaperRecyclerview.scrollToPosition(1)
 
         viewModel.wallpapers.observe(viewLifecycleOwner) {
             adapter.submitList(it)
         }
+
+
     }
 }

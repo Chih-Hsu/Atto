@@ -1,10 +1,12 @@
 package com.chihwhsu.atto
 
 import android.os.Bundle
+import android.util.Log
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.chihwhsu.atto.workmanager.ResetWorker
@@ -22,8 +24,6 @@ class MainActivity : AppCompatActivity() {
         window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
 
         setResetWorker()
-
-
 
     }
 
