@@ -33,15 +33,13 @@ class WidgetFragment : Fragment() {
 
     private lateinit var appWidgetHost: AppWidgetHost
 
-
     private val viewModel by viewModels<WidgetViewModel> { getVmFactory() }
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         val binding = FragmentWidgetBinding.inflate(inflater, container, false)
 

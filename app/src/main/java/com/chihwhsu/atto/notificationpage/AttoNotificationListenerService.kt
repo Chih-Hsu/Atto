@@ -7,22 +7,13 @@ import android.util.Log
 class AttoNotificationListenerService : NotificationListenerService(),NoticeCreateListener {
 
     init {
-////        NotifyHelper.getInstance().setInitNotification(activeNotifications)
         CreateFragmentHelper.getInstance().setCreateListener(this)
     }
-
-    override fun onCreate() {
-        super.onCreate()
-
-    }
-
-
 
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
         super.onNotificationPosted(sbn)
 
         NotifyHelper.getInstance().setInitNotification(activeNotifications)
-
 
         sbn?.let {
             NotifyHelper.getInstance().onReceive(it)
@@ -45,7 +36,6 @@ class AttoNotificationListenerService : NotificationListenerService(),NoticeCrea
     override fun cancelCurrentNotification(key: String) {
         cancelNotification(key)
     }
-
 
 }
 

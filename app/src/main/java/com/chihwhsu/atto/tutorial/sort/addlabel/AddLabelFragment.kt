@@ -21,7 +21,7 @@ class AddLabelFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         val binding = FragmentAddLabelBinding.inflate(inflater, container, false)
 
@@ -31,7 +31,6 @@ class AddLabelFragment : Fragment() {
         editLabel?.let {
             viewModel.setEditLabel(it)
             binding.editTextLabel.setText(it.uppercase())
-
         }
 
         val listAdapter =
@@ -62,7 +61,6 @@ class AddLabelFragment : Fragment() {
             } else {
                 viewModel.updateAppLabel(label)
             }
-
         }
 
         viewModel.navigateToSort.observe(viewLifecycleOwner, Observer { canNavigate ->

@@ -64,8 +64,6 @@ class AddLabelViewModel(private val repository: AttoRepository) : ViewModel() {
         }
 
         _labelAppList.value = originalList.filter { it.label?.lowercase() == editLabel?.lowercase() }
-//        Log.i("AddLabel","${originalList}")
-//        Log.d("AddLabel","${originalList.filter { it.label?.lowercase() == editLabel?.lowercase() }}")
     }
 
     fun updateAppLabel(label : String){
@@ -74,6 +72,7 @@ class AddLabelViewModel(private val repository: AttoRepository) : ViewModel() {
             val oldLabelList = originalList.filter{it.label == editLabel }
 
             if (oldLabelList.size > remainList.size){
+
                 for (app in oldLabelList){
 
                         if (remainList.filter { it.appLabel == app.appLabel }.isEmpty()) {
@@ -84,8 +83,6 @@ class AddLabelViewModel(private val repository: AttoRepository) : ViewModel() {
                             }
                         }
                     }
-//                }
-
 
             for (app in remainList) {
 
@@ -94,14 +91,8 @@ class AddLabelViewModel(private val repository: AttoRepository) : ViewModel() {
                     repository.updateSort(app.appLabel, remainList.indexOf(app))
                 }
             }
-
-
-
-//            withContext(Dispatchers.Main){
                 _navigateToSort.value = true
-//            }
             }
-//        }
     }
 
     fun doneNavigation(){

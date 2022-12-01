@@ -1,8 +1,6 @@
 package com.chihwhsu.atto.notificationpage
 
-import android.app.Notification
 import android.service.notification.StatusBarNotification
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -26,7 +24,6 @@ class NotificationAdapter : ListAdapter<StatusBarNotification,NotificationAdapte
     }
 
 }) {
-
 
     inner class NotificationViewHolder(val binding:ItemNotificationBinding):RecyclerView.ViewHolder(binding.root){
 

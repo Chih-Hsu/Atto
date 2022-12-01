@@ -41,9 +41,7 @@ class AppListFragment : Fragment() {
             if (list.isNotEmpty()){
                 binding.lottieLoading.visibility = View.GONE
             }
-
             viewModel.resetList(list.filter { it.appLabel != MY_APP_LABEL }, requireContext())
-
         }
 
         viewModel.appGroupList.observe(viewLifecycleOwner) {

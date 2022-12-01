@@ -114,6 +114,7 @@ class MainViewModel(private val repository: AttoRepository) : ViewModel() {
     }
 
 
+
     companion object {
         private const val DOCK = "dock"
     }

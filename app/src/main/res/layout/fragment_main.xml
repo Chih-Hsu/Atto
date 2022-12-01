@@ -87,6 +87,7 @@
             android:layout_marginEnd="@dimen/large_margin"
             android:layout_marginBottom="60dp"
             android:background="@drawable/dock_outline"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent">
 
             <androidx.recyclerview.widget.RecyclerView

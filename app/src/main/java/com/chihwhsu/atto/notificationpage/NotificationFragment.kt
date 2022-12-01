@@ -18,10 +18,8 @@ import com.chihwhsu.atto.timezonepage.TimeZoneAdapter
 
 class NotificationFragment : Fragment(), NotifyListener {
 
-    val CHANNEL_ID = "channelId"
-    val CHANNEL_NAME = "foreground_service"
-    val NOTIFICATION_ID = 1
-    val REQUEST_CODE = 999
+
+    private val REQUEST_CODE = 999
 
     private lateinit var adapter: NotificationAdapter
     private lateinit var viewModel: NotificationViewModel
