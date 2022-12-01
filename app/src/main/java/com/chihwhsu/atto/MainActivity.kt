@@ -27,11 +27,16 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onBackPressed() {
+        findNavController(R.id.fragment_container_view).navigate(NavigationDirections.actionGlobalMainFragment())
+//        super.onBackPressed()
+    }
+
 
     override fun onStop() {
         super.onStop()
         // close desktop entry activity when onStop,then setting activity can work as expect
-        finish()
+//        finish()
     }
 
     private fun setResetWorker(){

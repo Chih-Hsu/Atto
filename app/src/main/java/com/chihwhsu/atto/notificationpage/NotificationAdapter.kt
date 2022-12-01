@@ -2,6 +2,7 @@ package com.chihwhsu.atto.notificationpage
 
 import android.app.Notification
 import android.service.notification.StatusBarNotification
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -31,13 +32,20 @@ class NotificationAdapter : ListAdapter<StatusBarNotification,NotificationAdapte
 
         fun bind(item : StatusBarNotification){
 
+
             val extras = item.notification.extras
             binding.textTitle.text = extras.get("android.title").toString()
             binding.textContent.text = extras.get("android.text").toString()
-            binding.textSubtitle.text = extras.get("android.subText").toString()
-
             val icon = item.notification.smallIcon
             binding.imageIcon.setImageDrawable(icon.loadDrawable(itemView.context))
+
+            // intent
+            val intent = item.notification.contentIntent
+            intent?.let { currentIntent ->
+                itemView.setOnClickListener {
+                    currentIntent.send()
+                }
+            }
         }
     }
 

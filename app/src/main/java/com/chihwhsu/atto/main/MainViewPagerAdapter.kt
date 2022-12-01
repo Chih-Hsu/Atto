@@ -12,6 +12,7 @@ class MainViewPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) 
 
     override fun getItemCount(): Int = 4
 
+
     override fun createFragment(position: Int): Fragment {
 
         return when (position) {
@@ -23,4 +24,5 @@ class MainViewPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) 
             else -> throw IllegalArgumentException("Unknown Fragment")
         }
     }
+
 }

@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.service.notification.NotificationListenerService
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.viewpager2.widget.ViewPager2
 import com.chihwhsu.atto.NavigationDirections
 import com.chihwhsu.atto.R
 import com.chihwhsu.atto.SettingActivity
@@ -23,6 +25,7 @@ import com.chihwhsu.atto.databinding.FragmentMainBinding
 import com.chihwhsu.atto.ext.getVmFactory
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
 
 class MainFragment : Fragment() {
@@ -45,11 +48,60 @@ class MainFragment : Fragment() {
         // set ViewPager2
         val adapter = MainViewPagerAdapter(this)
         binding.viewPager.adapter = adapter
+//        binding.viewPager.setCurrentItem(3,false)
+        binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                Log.d("test","${binding.viewPager.currentItem}")
+                when(binding.viewPager.currentItem){
+                    0 -> {
+                        binding.dot1.setBackgroundResource(R.drawable.select_dot)
+                        binding.dot2.setBackgroundResource(R.drawable.default_dot)
+                        binding.dot3.setBackgroundResource(R.drawable.default_dot)
+                        binding.dot4.setBackgroundResource(R.drawable.default_dot)
+                        binding.dot5.setBackgroundResource(R.drawable.default_dot)
+                    }
+
+                    1-> {
+                        binding.dot1.setBackgroundResource(R.drawable.default_dot)
+                        binding.dot2.setBackgroundResource(R.drawable.select_dot)
+                        binding.dot3.setBackgroundResource(R.drawable.default_dot)
+                        binding.dot4.setBackgroundResource(R.drawable.default_dot)
+                        binding.dot5.setBackgroundResource(R.drawable.select_dot)
+                    }
+                    2->{
+                        binding.dot1.setBackgroundResource(R.drawable.default_dot)
+                        binding.dot2.setBackgroundResource(R.drawable.default_dot)
+                        binding.dot3.setBackgroundResource(R.drawable.select_dot)
+                        binding.dot4.setBackgroundResource(R.drawable.default_dot)
+                        binding.dot5.setBackgroundResource(R.drawable.default_dot)
+                    }
+                    3-> {
+                        binding.dot1.setBackgroundResource(R.drawable.default_dot)
+                        binding.dot2.setBackgroundResource(R.drawable.default_dot)
+                        binding.dot3.setBackgroundResource(R.drawable.default_dot)
+                        binding.dot4.setBackgroundResource(R.drawable.select_dot)
+                        binding.dot5.setBackgroundResource(R.drawable.default_dot)
+                    }
+                    else-> {
+                        binding.dot1.setBackgroundResource(R.drawable.default_dot)
+                        binding.dot2.setBackgroundResource(R.drawable.default_dot)
+                        binding.dot3.setBackgroundResource(R.drawable.default_dot)
+                        binding.dot4.setBackgroundResource(R.drawable.default_dot)
+                        binding.dot5.setBackgroundResource(R.drawable.default_dot)
+                    }
+                }
+            }
+        })
+
+
+
+//        val myFragment = parentFragment.findFragmentByTag("f" + viewpager.currentItem)
+
+
 
         val dockAdapter = DockAdapter(DockAdapter.DockOnClickListener { app ->
-
             navigateByPackageName(app)
-
         })
 
         binding.dockRecyclerview.adapter = dockAdapter

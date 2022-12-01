@@ -37,3 +37,4 @@ object NotifyHelper {
         return newInstance as NotifyHelper
     }
 }
+

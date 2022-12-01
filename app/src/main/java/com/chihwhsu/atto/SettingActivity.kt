@@ -47,5 +47,9 @@ class SettingActivity : AppCompatActivity() {
 
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+    }
+
 
 }

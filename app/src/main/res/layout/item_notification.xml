@@ -44,9 +44,13 @@
             <TextView
                 android:id="@+id/text_content"
                 style="@style/standard_text_style"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:layout_marginEnd="@dimen/standard_margin"
+                app:layout_constraintEnd_toStartOf="@+id/image_icon"
                 app:layout_constraintStart_toStartOf="@+id/text_title"
                 app:layout_constraintTop_toBottomOf="@+id/text_title"
                 tools:text="Content" />

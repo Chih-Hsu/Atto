@@ -60,8 +60,9 @@ class SyncFragment : Fragment() {
         }
 
         binding.buttonToMain.setOnClickListener {
-            val intent = Intent(this.requireActivity(), MainActivity::class.java)
+            val intent = Intent(requireContext(), MainActivity::class.java)
             startActivity(intent)
+            requireActivity().finish()
         }
 
         return binding.root

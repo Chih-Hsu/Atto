@@ -1,6 +1,7 @@
 package com.chihwhsu.atto.notificationpage
 
 import android.service.notification.StatusBarNotification
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,18 +14,18 @@ class NotificationViewModel : ViewModel() {
 
     fun receiveNotification(sbn : StatusBarNotification){
         val list = mutableListOf<StatusBarNotification>()
-        notificationList.value?.let {
-            list.addAll(it)
-        }
-
-        for (i in list){
-            if (i.notification.channelId == sbn.notification.channelId){
-                list.remove(i)
-            }
-        }
-        list.add(sbn)
-
-        _notificationList.value = list
+//        notificationList.value?.let {
+//            list.addAll(it)
+//        }
+//
+//        for (i in list){
+//            if (i.notification.channelId == sbn.notification.channelId){
+//                list.remove(i)
+//            }
+//        }
+//        list.add(sbn)
+//
+//        _notificationList.value = list
     }
 
     fun removeNotification(sbn : StatusBarNotification){

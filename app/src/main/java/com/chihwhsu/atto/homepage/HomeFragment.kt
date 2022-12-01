@@ -40,6 +40,7 @@ class HomeFragment : Fragment() {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
+
         Log.d("LaunchTest", "HomeFragment Work")
 
         setGestureListener()

@@ -21,6 +21,8 @@ class AppListContainerFragment : Fragment() {
         val adapter = AppListPagerAdapter(this)
         binding.viewPager.adapter = adapter
 
+//        binding.viewPager.registerOnPageChangeCallback(object :)
+
         return binding.root
     }
 }

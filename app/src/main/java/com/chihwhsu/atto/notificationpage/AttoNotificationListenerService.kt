@@ -1,29 +1,28 @@
 package com.chihwhsu.atto.notificationpage
 
-import android.content.Intent
-import android.os.IBinder
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import android.util.Log
 
-class AttoNotificationListenerService : NotificationListenerService() {
+class AttoNotificationListenerService : NotificationListenerService(),NoticeCreateListener {
 
     init {
-        NotifyHelper.getInstance().setInitNotification(activeNotifications)
+////        NotifyHelper.getInstance().setInitNotification(activeNotifications)
+        CreateFragmentHelper.getInstance().setCreateListener(this)
     }
 
+    override fun onCreate() {
+        super.onCreate()
 
-
-    override fun onBind(intent: Intent?): IBinder? {
-        return super.onBind(intent)
     }
+
 
 
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
         super.onNotificationPosted(sbn)
-        for (i in sbn?.notification?.extras!!.keySet()){
-            Log.d("notificationTest"," $i")
-        }
+
+        NotifyHelper.getInstance().setInitNotification(activeNotifications)
+
 
         sbn?.let {
             NotifyHelper.getInstance().onReceive(it)
@@ -37,4 +36,11 @@ class AttoNotificationListenerService : NotificationListenerService() {
         }
     }
 
+    override fun notifyCreate(boolean: Boolean) {
+        if (boolean){
+            NotifyHelper.getInstance().setInitNotification(activeNotifications)
+        }
+    }
+
 }
+

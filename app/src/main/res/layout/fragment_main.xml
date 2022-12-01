@@ -19,7 +19,63 @@
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/view_pager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
+
+
+        </androidx.viewpager2.widget.ViewPager2>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/dot_container"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/dot_4"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:src="@drawable/default_dot"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginEnd="@dimen/standard_margin"
+                android:layout_marginTop="40dp"/>
+
+            <ImageView
+                android:id="@+id/dot_3"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:src="@drawable/default_dot"
+                app:layout_constraintEnd_toStartOf="@id/dot_4"
+                app:layout_constraintTop_toTopOf="@id/dot_4"
+                android:layout_marginEnd="8dp"/>
+            <ImageView
+                android:id="@+id/dot_2"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:src="@drawable/default_dot"
+                app:layout_constraintEnd_toStartOf="@id/dot_3"
+                app:layout_constraintTop_toTopOf="@id/dot_4"
+                android:layout_marginEnd="8dp"/>
+            <ImageView
+                android:id="@+id/dot_1"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:src="@drawable/default_dot"
+                app:layout_constraintEnd_toStartOf="@id/dot_2"
+                app:layout_constraintTop_toTopOf="@id/dot_4"
+                android:layout_marginEnd="8dp"/>
+            <ImageView
+                android:id="@+id/dot_5"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:src="@drawable/default_dot"
+                app:layout_constraintEnd_toEndOf="@id/dot_2"
+                app:layout_constraintTop_toBottomOf="@id/dot_2"
+                android:layout_marginTop="8dp"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -62,17 +118,16 @@
             android:layout_width="35dp"
             android:layout_height="35dp"
 
-            android:background="@drawable/drawer_background"
             android:layout_marginBottom="160dp"
+            android:background="@drawable/drawer_background"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" >
+            app:layout_constraintStart_toStartOf="parent">
 
             <ImageView
                 android:id="@+id/drawer_arrow"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_arrow_right"
-                />
+                android:src="@drawable/ic_arrow_right" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
