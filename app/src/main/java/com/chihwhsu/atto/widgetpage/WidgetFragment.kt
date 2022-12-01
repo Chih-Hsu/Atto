@@ -45,7 +45,7 @@ class WidgetFragment : Fragment() {
 
         val binding = FragmentWidgetBinding.inflate(inflater, container, false)
 
-        Log.d("LaunchTest","WidgetFragment Work")
+        Log.d("LaunchTest", "WidgetFragment Work")
 
         binding.root.setOnLongClickListener {
             findNavController().navigate(NavigationDirections.actionGlobalWidgetBottomSheetFragment())
@@ -84,7 +84,10 @@ class WidgetFragment : Fragment() {
 //                    binding.containerWidget.addView(widgetView)
 
 
-                        val layoutParam = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT)
+                        val layoutParam = LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT
+                        )
                         layoutParam.topMargin = 30
 //                        binding.containerWidget.addView(
 //                            widgetView,
@@ -100,7 +103,11 @@ class WidgetFragment : Fragment() {
                         widgetView.setOnLongClickListener {
                             viewModel.deleteWidget(widget.id)
                             appWidgetHost.deleteHost()
-                            findNavController().navigate(NavigationDirections.actionGlobalWidgetRemoveDialog(widget))
+                            findNavController().navigate(
+                                NavigationDirections.actionGlobalWidgetRemoveDialog(
+                                    widget
+                                )
+                            )
                             true
                         }
 //                        val layoutParam = ViewGroup.LayoutParams(
@@ -120,18 +127,6 @@ class WidgetFragment : Fragment() {
             }
 
         })
-
-
-
-        val list = listOf<Boolean>(true,false,false,false,false,false,true)
-        val start = Calendar.getInstance()
-        start.set(2022,10,1)
-        val end = Calendar.getInstance()
-        end.set(2022,11,6)
-
-        Log.d("testee","${calS(start.time,end.time,list)}")
-
-
 
 //        setBlurView(binding)
 
@@ -173,51 +168,5 @@ class WidgetFragment : Fragment() {
         appWidgetHost.stopListening()
     }
 
-
-    fun calS(start:Date,end:Date,list:List<Boolean>) : Int{
-
-        var workDay = 0
-        val cal = Calendar.getInstance()
-        cal.time = start
-        cal.time.toInstant().epochSecond
-
-        while (cal.toInstant().epochSecond <= end.toInstant().epochSecond) {
-            if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY && list[0] == true) {
-                workDay += 1
-                Log.d("testee","time = ${cal.time} day = ${cal.get(Calendar.DAY_OF_WEEK)}")
-            }
-            if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.TUESDAY && list[1] == true) {
-                workDay += 1
-                Log.d("testee","time = ${cal.time} day = ${cal.get(Calendar.DAY_OF_WEEK)}")
-            }
-            if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.WEDNESDAY && list[2] == true) {
-                workDay += 1
-                Log.d("testee","time = ${cal.time} day = ${cal.get(Calendar.DAY_OF_WEEK)}")
-            }
-            if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.TUESDAY && list[3] == true) {
-                workDay += 1
-                Log.d("testee","time = ${cal.time} day = ${cal.get(Calendar.DAY_OF_WEEK)}")
-            }
-            if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY && list[4] == true) {
-                workDay += 1
-                Log.d("testee","time = ${cal.time} day = ${cal.get(Calendar.DAY_OF_WEEK)}")
-            }
-            if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY && list[5] == true) {
-                workDay += 1
-                Log.d("testee","time = ${cal.time} day = ${cal.get(Calendar.DAY_OF_WEEK)}")
-            }
-            if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY && list[6] == true) {
-                workDay += 1
-                Log.d("testee","time = ${cal.time} day = ${cal.get(Calendar.DAY_OF_WEEK)}")
-            }
-            cal.add(Calendar.DATE,1)
-        }
-
-
-
-
-        return workDay
-
-    }
 
 }

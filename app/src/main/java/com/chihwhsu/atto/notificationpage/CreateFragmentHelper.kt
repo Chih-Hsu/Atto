@@ -20,5 +20,9 @@ object CreateFragmentHelper {
         this.createListener = notifyListener
     }
 
+    fun cancelNotification(key:String){
+        createListener?.cancelCurrentNotification(key)
+    }
+
 }
 

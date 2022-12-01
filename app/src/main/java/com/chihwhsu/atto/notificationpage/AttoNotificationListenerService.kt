@@ -42,5 +42,10 @@ class AttoNotificationListenerService : NotificationListenerService(),NoticeCrea
         }
     }
 
+    override fun cancelCurrentNotification(key: String) {
+        cancelNotification(key)
+    }
+
+
 }
 

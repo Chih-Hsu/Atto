@@ -12,8 +12,8 @@ class NotificationViewModel : ViewModel() {
     val notificationList : LiveData<List<StatusBarNotification>> get() = _notificationList
 
 
-    fun receiveNotification(sbn : StatusBarNotification){
-        val list = mutableListOf<StatusBarNotification>()
+//    fun receiveNotification(sbn : StatusBarNotification){
+//        val list = mutableListOf<StatusBarNotification>()
 //        notificationList.value?.let {
 //            list.addAll(it)
 //        }
@@ -26,7 +26,7 @@ class NotificationViewModel : ViewModel() {
 //        list.add(sbn)
 //
 //        _notificationList.value = list
-    }
+//    }
 
     fun removeNotification(sbn : StatusBarNotification){
         val list = mutableListOf<StatusBarNotification>()
@@ -42,6 +42,10 @@ class NotificationViewModel : ViewModel() {
     fun setInitNotification(notifications: List<StatusBarNotification>) {
         _notificationList.value = notifications
 
+    }
+
+    fun remove(sbn : StatusBarNotification){
+        CreateFragmentHelper.getInstance().cancelNotification(sbn.key)
     }
 
 
