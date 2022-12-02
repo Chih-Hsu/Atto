@@ -9,7 +9,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -17,11 +16,8 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.chihwhsu.atto.NavigationDirections
 import com.chihwhsu.atto.R
-import com.chihwhsu.atto.component.CountDownTimerService
 import com.chihwhsu.atto.databinding.FragmentWidgetBinding
 import com.chihwhsu.atto.ext.getVmFactory
-import eightbitlab.com.blurview.RenderScriptBlur
-import java.util.*
 
 
 class WidgetFragment : Fragment() {
@@ -32,6 +28,7 @@ class WidgetFragment : Fragment() {
     }
 
     private lateinit var appWidgetHost: AppWidgetHost
+    private lateinit var binding: FragmentWidgetBinding
 
     private val viewModel by viewModels<WidgetViewModel> { getVmFactory() }
 
@@ -41,7 +38,7 @@ class WidgetFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        val binding = FragmentWidgetBinding.inflate(inflater, container, false)
+        binding = FragmentWidgetBinding.inflate(inflater, container, false)
 
         Log.d("LaunchTest", "WidgetFragment Work")
 
@@ -130,6 +127,7 @@ class WidgetFragment : Fragment() {
 
         return binding.root
     }
+
 
 //    private fun setBlurView(binding: FragmentWidgetBinding) {
 //        val radius = 7f

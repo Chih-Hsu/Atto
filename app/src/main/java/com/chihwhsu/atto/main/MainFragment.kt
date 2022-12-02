@@ -266,7 +266,6 @@ class MainFragment : Fragment() {
                         start()
                     }
                 }
-
             }
 
             override fun onTransitionChange(
@@ -275,9 +274,7 @@ class MainFragment : Fragment() {
                 endId: Int,
                 progress: Float
             ) {
-//                while (progress == 0f) {
 
-//                }
 
             }
 

@@ -38,15 +38,18 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
+        Log.d("LaunchTest", "HomeFragment Work")
+
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-
-        Log.d("LaunchTest", "HomeFragment Work")
+        // Only Show First Time
+//        if (UserPreference.isHomeFirstTimeLaunch) {
+            findNavController().navigate(NavigationDirections.actionGlobalIntroDialog("Home"))
+//        }
 
         setGestureListener()
         setRecyclerView()
         setClockDisplayMode()
-
 
         // set event detail on card
         viewModel.event.observe(viewLifecycleOwner, Observer { event ->
@@ -82,14 +85,12 @@ class HomeFragment : Fragment() {
 //        }
 
 
-
-
         return binding.root
     }
 
     private fun setClockDisplayMode() {
 
-        if (UserPreference.showSingleTimeZoneClock){
+        if (UserPreference.showSingleTimeZoneClock) {
 
             binding.apply {
                 clockMinutes.visibility = View.VISIBLE
@@ -97,7 +98,7 @@ class HomeFragment : Fragment() {
                 recyclerviewMultiClock.visibility = View.GONE
             }
 
-        }else{
+        } else {
 
             binding.apply {
                 clockMinutes.visibility = View.GONE
@@ -105,25 +106,20 @@ class HomeFragment : Fragment() {
                 recyclerviewMultiClock.visibility = View.VISIBLE
             }
 
-
             val timeAdapter = TimeZoneAdapter(TimeZoneAdapter.HOME_FRAGMENT)
             binding.recyclerviewMultiClock.adapter = timeAdapter
 
             viewModel.timeZoneList.observe(viewLifecycleOwner, Observer {
-                if (it.isNotEmpty()){
+                if (it.isNotEmpty()) {
                     timeAdapter.submitList(it.take(3))
-                }else{
+                } else {
                     binding.apply {
                         clockMinutes.visibility = View.VISIBLE
                         clockMonth.visibility = View.VISIBLE
                         recyclerviewMultiClock.visibility = View.GONE
                     }
-
                 }
-
             })
-
-
         }
     }
 
@@ -208,16 +204,33 @@ class HomeFragment : Fragment() {
         adapter: HomeAdapter
     ) {
         binding.eventTitle.text = when (event.type) {
+
             ALARM_TYPE -> "Wake Up"
+
             TODO_TYPE -> "NEXT TODO"
+
             POMODORO_WORK_TYPE -> "IT'S POMODORO"
+
             POMODORO_BREAK_TYPE -> "IT'S POMODORO"
+
             else -> "No Event"
         }
 
         binding.eventContent.text = when (event.type) {
+
             TODO_TYPE -> event.content
-            else -> "No Content"
+
+            POMODORO_WORK_TYPE -> "Time to Break \n\n" +
+                    "${getTimeFromStartOfDay(event.startTime!!).toFormat()} " +
+                    "to " +
+                    "${getTimeFromStartOfDay(event.alarmTime).toFormat()}"
+
+            POMODORO_BREAK_TYPE -> "Time to Break \n\n" +
+                    "${getTimeFromStartOfDay(event.startTime!!).toFormat()} " +
+                    "to " +
+                    "${getTimeFromStartOfDay(event.alarmTime).toFormat()}"
+
+            else -> "It's Alarm"
         }
 
         binding.eventAlarmTime.text = if (event.type == ALARM_TYPE || event.type == TODO_TYPE

@@ -1,6 +1,9 @@
 package com.chihwhsu.atto.notificationpage
 
+import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.service.notification.StatusBarNotification
 import android.view.LayoutInflater
@@ -51,9 +54,6 @@ class NotificationFragment : Fragment(), NotifyListener {
 
         setItemTouchHelper()
 
-//        binding.testButton.setOnClickListener {
-//            createNotificationChannel()
-//        }
 
         return binding.root
     }
@@ -68,7 +68,7 @@ class NotificationFragment : Fragment(), NotifyListener {
             )
         } else {
 //            Toast.makeText(requireContext(),"通知服务已开启",Toast.LENGTH_SHORT).show()
-//            toggleNotificationListenerService()
+            toggleNotificationListenerService(requireContext())
         }
     }
 
@@ -78,17 +78,17 @@ class NotificationFragment : Fragment(), NotifyListener {
         return packageNames.contains("com.chihwhsu.atto")
     }
 
-//    private fun toggleNotificationListenerService(context: Context) {
-//        val pm = context.packageManager
-//        pm.setComponentEnabledSetting(
-//            ComponentName(context, AttoNotificationListenerService::class.java),
-//            PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP
-//        )
-//        pm.setComponentEnabledSetting(
-//            ComponentName(context, AttoNotificationListenerService::class.java),
-//            PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP
-//        )
-//    }
+    private fun toggleNotificationListenerService(context: Context) {
+        val pm = context.packageManager
+        pm.setComponentEnabledSetting(
+            ComponentName(context, AttoNotificationListenerService::class.java),
+            PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP
+        )
+        pm.setComponentEnabledSetting(
+            ComponentName(context, AttoNotificationListenerService::class.java),
+            PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP
+        )
+    }
 
     override fun onReceiveMessage(sbn: StatusBarNotification) {
 

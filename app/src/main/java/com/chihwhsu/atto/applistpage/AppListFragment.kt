@@ -19,6 +19,7 @@ import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.databinding.FragmentAppListBinding
 import com.chihwhsu.atto.ext.getVmFactory
 import com.chihwhsu.atto.tutorial.sort.SortAdapter
+import com.chihwhsu.atto.util.UserPreference
 
 class AppListFragment : Fragment() {
 
@@ -35,10 +36,14 @@ class AppListFragment : Fragment() {
         binding = FragmentAppListBinding.inflate(inflater, container, false)
         Log.d("LaunchTest", "AppListFragment Work")
 
+        if (UserPreference.isHomeFirstTimeLaunch) {
+            findNavController().navigate(NavigationDirections.actionGlobalIntroDialog("AppList"))
+        }
+
         setRecyclerview()
 
         viewModel.appList.observe(viewLifecycleOwner) { list ->
-            if (list.isNotEmpty()){
+            if (list.isNotEmpty()) {
                 binding.lottieLoading.visibility = View.GONE
             }
             viewModel.resetList(list.filter { it.appLabel != MY_APP_LABEL }, requireContext())
