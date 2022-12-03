@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/wallpaperFragment"
-        android:name="com.chihwhsu.atto.tutorial.wallpaper.WallpaperFragment"
+        android:name="com.chihwhsu.atto.setting.wallpaper.WallpaperFragment"
         android:label="WallpaperFragment"
         tools:layout="@layout/fragment_wallpaper">
         <action
@@ -18,7 +18,7 @@
     </fragment>
     <fragment
         android:id="@+id/dockSelectFragment"
-        android:name="com.chihwhsu.atto.tutorial.dock.DockSelectFragment"
+        android:name="com.chihwhsu.atto.setting.dock.DockSelectFragment"
         android:label="DockSelectFragment"
         tools:layout="@layout/fragment_dock_select">
         <action
@@ -34,7 +34,7 @@
     </fragment>
     <fragment
         android:id="@+id/sortFragment"
-        android:name="com.chihwhsu.atto.tutorial.sort.SortFragment"
+        android:name="com.chihwhsu.atto.setting.sort.SortFragment"
         android:label="SortFragment"
         tools:layout="@layout/fragment_app_sortting">
         <action
@@ -56,7 +56,7 @@
     </fragment>
     <fragment
         android:id="@+id/addLabelFragment"
-        android:name="com.chihwhsu.atto.tutorial.sort.addlabel.AddLabelFragment"
+        android:name="com.chihwhsu.atto.setting.sort.addlabel.AddLabelFragment"
         android:label="AddLabelFragment"
         tools:layout="@layout/fragment_add_label">
         <action
@@ -72,7 +72,7 @@
     </fragment>
     <fragment
         android:id="@+id/getUsageFragment"
-        android:name="com.chihwhsu.atto.tutorial.usagepermission.GetUsageFragment"
+        android:name="com.chihwhsu.atto.setting.usagepermission.GetUsageFragment"
         android:label="GetUsageFragment"
         tools:layout="@layout/fragment_get_usage">
         <action
@@ -88,7 +88,7 @@
     </fragment>
     <fragment
         android:id="@+id/setDefaultFragment"
-        android:name="com.chihwhsu.atto.tutorial.setdefault.SetDefaultFragment"
+        android:name="com.chihwhsu.atto.setting.setdefault.SetDefaultFragment"
         android:label="SetDefaultFragment"
         tools:layout="@layout/fragment_set_default"/>
     <fragment

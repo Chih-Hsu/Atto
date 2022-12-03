@@ -6,12 +6,9 @@ import android.view.View
 import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.chihwhsu.atto.ext.getVmFactory
-import com.chihwhsu.atto.login.LoginViewModel
-import com.chihwhsu.atto.main.MainViewModel
-import com.chihwhsu.atto.tutorial.SettingViewModel
+import com.chihwhsu.atto.setting.SettingViewModel
 
 
 class SettingActivity : AppCompatActivity() {

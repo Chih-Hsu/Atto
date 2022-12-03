@@ -1,6 +1,7 @@
 package com.chihwhsu.atto.appdetail
 
 
+import android.animation.Animator
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -22,6 +23,7 @@ import com.chihwhsu.atto.databinding.FragmentAppDetailBinding
 import com.chihwhsu.atto.ext.dpToFloat
 import com.chihwhsu.atto.ext.getVmFactory
 import com.chihwhsu.atto.ext.toFormat
+import com.chihwhsu.atto.util.UserPreference
 
 class AppDetailFragment : Fragment() {
 
@@ -44,6 +46,10 @@ class AppDetailFragment : Fragment() {
         binding = FragmentAppDetailBinding.inflate(inflater, container, false)
 
         setAppDetailInfo()
+
+        if (UserPreference.showBackgroundSlideAnimation) {
+            setTutorialAnimation()
+        }
 
         viewModel.dataPerHourList.observe(viewLifecycleOwner) {
             viewModel.create24HBarSet(it)
@@ -102,6 +108,32 @@ class AppDetailFragment : Fragment() {
 
 
         return binding.root
+    }
+
+    private fun setTutorialAnimation() {
+        binding.lottieSlide.visibility = View.VISIBLE
+        binding.lottieSlide.repeatCount = 3
+        binding.lottieSlide.addAnimatorListener(object :
+            Animator.AnimatorListener {
+            override fun onAnimationStart(animation: Animator?) {
+
+            }
+
+            override fun onAnimationEnd(animation: Animator?) {
+                binding.lottieSlide.visibility = View.GONE
+                UserPreference.showBackgroundSlideAnimation = false
+            }
+
+            override fun onAnimationCancel(animation: Animator?) {
+                binding.lottieSlide.visibility = View.GONE
+                UserPreference.showBackgroundSlideAnimation = false
+
+            }
+
+            override fun onAnimationRepeat(animation: Animator?) {
+
+            }
+        })
     }
 
     private fun getThemePositionAndUpdate() {

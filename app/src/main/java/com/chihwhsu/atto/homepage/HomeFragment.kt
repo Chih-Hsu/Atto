@@ -1,14 +1,17 @@
 package com.chihwhsu.atto.homepage
 
+import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.view.animation.AnimationUtils
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.airbnb.lottie.animation.keyframe.BaseKeyframeAnimation
 import com.chihwhsu.atto.NavigationDirections
 import com.chihwhsu.atto.R
 import com.chihwhsu.atto.component.GestureListener
@@ -42,9 +45,15 @@ class HomeFragment : Fragment() {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        // Only Show First Time
-//        if (UserPreference.isHomeFirstTimeLaunch) {
-            findNavController().navigate(NavigationDirections.actionGlobalIntroDialog("Home"))
+
+
+
+
+//        binding.animationSlideup.tutorialArrow.addAnimatorUpdateListener {
+//
+//            if (it.addPauseListener(){
+//                Toast.makeText(requireContext(),"HIHIHI",Toast.LENGTH_SHORT).show()
+//            }
 //        }
 
         setGestureListener()
@@ -87,6 +96,8 @@ class HomeFragment : Fragment() {
 
         return binding.root
     }
+
+
 
     private fun setClockDisplayMode() {
 
@@ -177,8 +188,8 @@ class HomeFragment : Fragment() {
 
     private fun setShowCardAnimation(showCard: Boolean) {
         if (showCard) {
-            binding.gestureArea.visibility = View.VISIBLE
 
+            binding.gestureArea.visibility = View.VISIBLE
             val height = binding.eventList.height
             ObjectAnimator.ofFloat(
                 binding.eventList,
@@ -196,6 +207,12 @@ class HomeFragment : Fragment() {
                 duration = 500
                 start()
             }
+
+            // Only Show First Time
+
+        if (UserPreference.isHomeFirstTimeLaunch) {
+            findNavController().navigate(NavigationDirections.actionGlobalIntroDialog())
+        }
         }
     }
 
@@ -207,11 +224,11 @@ class HomeFragment : Fragment() {
 
             ALARM_TYPE -> "Wake Up"
 
-            TODO_TYPE -> "NEXT TODO"
+            TODO_TYPE -> "${event.title}"
 
-            POMODORO_WORK_TYPE -> "IT'S POMODORO"
+            POMODORO_WORK_TYPE -> "Time to Work"
 
-            POMODORO_BREAK_TYPE -> "IT'S POMODORO"
+            POMODORO_BREAK_TYPE -> "Time to Break"
 
             else -> "No Event"
         }

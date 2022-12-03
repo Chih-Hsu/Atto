@@ -17,6 +17,7 @@ object UserPreference {
             return userPreference.getBoolean("displayMode", false)
         }
 
+    // Home
     var isHomeFirstTimeLaunch: Boolean
         set(value) {
             userPreference.edit().putBoolean("homeFirstTime", value).apply()
@@ -25,13 +26,33 @@ object UserPreference {
             return userPreference.getBoolean("homeFirstTime", true)
         }
 
-    var isListFirstTimeLaunch: Boolean
+    // AppList
+    var showLabelAnimation: Boolean
         set(value) {
-            userPreference.edit().putBoolean("listFirstTime", value).apply()
+            userPreference.edit().putBoolean("showLabelAnimation", value).apply()
         }
         get() {
-            return userPreference.getBoolean("listFirstTime", true)
+            return userPreference.getBoolean("showLabelAnimation", true)
         }
+
+    var showLongClickAnimation: Boolean
+        set(value) {
+            userPreference.edit().putBoolean("showLongClickAnimation", value).apply()
+        }
+        get() {
+            return userPreference.getBoolean("showLongClickAnimation", true)
+        }
+
+    var showBackgroundSlideAnimation: Boolean
+        set(value) {
+            userPreference.edit().putBoolean("showBackgroundSlideAnimation", value).apply()
+        }
+        get() {
+            return userPreference.getBoolean("showBackgroundSlideAnimation", true)
+        }
+
+
+
 
 
 }

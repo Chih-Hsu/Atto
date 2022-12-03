@@ -16,9 +16,9 @@ import com.chihwhsu.atto.main.MainViewModel
 import com.chihwhsu.atto.syncpage.SyncViewModel
 import com.chihwhsu.atto.timezonepage.TimeZoneViewModel
 import com.chihwhsu.atto.timezonepage.dialog.TimeZoneDialogViewModel
-import com.chihwhsu.atto.tutorial.SettingViewModel
-import com.chihwhsu.atto.tutorial.sort.SortViewModel
-import com.chihwhsu.atto.tutorial.sort.addlabel.AddLabelViewModel
+import com.chihwhsu.atto.setting.SettingViewModel
+import com.chihwhsu.atto.setting.sort.SortViewModel
+import com.chihwhsu.atto.setting.sort.addlabel.AddLabelViewModel
 import com.chihwhsu.atto.usagelimit.UsageLimitViewModel
 import com.chihwhsu.atto.widgetpage.WidgetViewModel
 import com.chihwhsu.atto.widgetpage.remove_dialog.WidgetRemoveViewModel

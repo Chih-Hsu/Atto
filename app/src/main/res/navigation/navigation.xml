@@ -113,11 +113,13 @@
         android:label="TimeZoneDialog" />
     <dialog
         android:id="@+id/introDialog"
-        android:name="com.chihwhsu.atto.introDialog"
-        android:label="introDialog" >
-        <argument
-            android:name="entry"
-            app:argType="string" />
-    </dialog>
-    <action android:id="@+id/action_global_introDialog" app:destination="@id/introDialog" />
+        android:name="com.chihwhsu.atto.tutorial.TutorialDialog"
+        android:label="introDialog" />
+    <action
+        android:id="@+id/action_global_introDialog"
+        app:destination="@id/introDialog"
+        app:enterAnim="@android:anim/fade_in"
+        app:exitAnim="@android:anim/fade_out"
+        app:popEnterAnim="@android:anim/fade_in"
+        app:popExitAnim="@anim/fade_out" />
 </navigation>

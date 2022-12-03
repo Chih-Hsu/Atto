@@ -17,6 +17,7 @@ import com.chihwhsu.atto.data.Theme
 import com.chihwhsu.atto.databinding.ItemAppListBinding
 import com.chihwhsu.atto.databinding.ItemLabelBinding
 import com.chihwhsu.atto.ext.toFormat
+import com.chihwhsu.atto.util.UserPreference
 
 class AppListAdapter(
     val appOnClickListener: AppOnClickListener,
@@ -62,6 +63,8 @@ class AppListAdapter(
                 if (viewModel.isHide.containsKey(item.title)) {
                     val value = viewModel.isHide[item.title] as Boolean
                     viewModel.isHide[item.title] = !value
+
+                    UserPreference.showLabelAnimation = false
 
                 } else {
                     viewModel.isHide[item.title] = true
