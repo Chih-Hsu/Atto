@@ -44,7 +44,6 @@ class MainViewModel(private val repository: AttoRepository) : ViewModel() {
             withContext(Dispatchers.Main) {
                 _appNumber.value = number
             }
-
         }
     }
 
@@ -112,6 +111,7 @@ class MainViewModel(private val repository: AttoRepository) : ViewModel() {
             }
         }
     }
+
 
 
     companion object {

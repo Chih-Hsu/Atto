@@ -1,5 +1,6 @@
 package com.chihwhsu.atto.applistpage
 
+import android.animation.Animator
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -18,7 +19,8 @@ import com.chihwhsu.atto.SettingActivity
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.databinding.FragmentAppListBinding
 import com.chihwhsu.atto.ext.getVmFactory
-import com.chihwhsu.atto.tutorial.sort.SortAdapter
+import com.chihwhsu.atto.setting.sort.SortAdapter
+import com.chihwhsu.atto.util.UserPreference
 
 class AppListFragment : Fragment() {
 
@@ -35,15 +37,17 @@ class AppListFragment : Fragment() {
         binding = FragmentAppListBinding.inflate(inflater, container, false)
         Log.d("LaunchTest", "AppListFragment Work")
 
+        if (UserPreference.showLabelAnimation) {
+            setTutorialAnimation()
+        }
+
         setRecyclerview()
 
         viewModel.appList.observe(viewLifecycleOwner) { list ->
-            if (list.isNotEmpty()){
+            if (list.isNotEmpty()) {
                 binding.lottieLoading.visibility = View.GONE
             }
-
             viewModel.resetList(list.filter { it.appLabel != MY_APP_LABEL }, requireContext())
-
         }
 
         viewModel.appGroupList.observe(viewLifecycleOwner) {
@@ -51,6 +55,35 @@ class AppListFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+
+    private fun setTutorialAnimation() {
+        binding.lottieClick.visibility = View.VISIBLE
+        binding.lottieClick.repeatCount = 4
+        binding.lottieClick.addAnimatorListener(object :
+            Animator.AnimatorListener {
+            override fun onAnimationStart(animation: Animator?) {
+
+            }
+
+            override fun onAnimationEnd(animation: Animator?) {
+                // if user do now click label , run this
+                binding.lottieClick.visibility = View.GONE
+                UserPreference.showLabelAnimation = false
+            }
+
+            override fun onAnimationCancel(animation: Animator?) {
+
+            }
+
+            override fun onAnimationRepeat(animation: Animator?) {
+                // if user click label , run this
+                if (UserPreference.showLabelAnimation == false) {
+                    binding.lottieClick.visibility = View.GONE
+                }
+            }
+        })
     }
 
     private fun setRecyclerview() {
@@ -147,6 +180,7 @@ class AppListFragment : Fragment() {
             }
         }
     }
+
 
     companion object {
         const val MY_PACKAGE_NAME = "com.chihwhsu.atto"

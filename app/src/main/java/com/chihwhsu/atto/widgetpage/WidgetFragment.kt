@@ -9,7 +9,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -17,11 +16,8 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.chihwhsu.atto.NavigationDirections
 import com.chihwhsu.atto.R
-import com.chihwhsu.atto.component.CountDownTimerService
 import com.chihwhsu.atto.databinding.FragmentWidgetBinding
 import com.chihwhsu.atto.ext.getVmFactory
-import eightbitlab.com.blurview.RenderScriptBlur
-import java.util.*
 
 
 class WidgetFragment : Fragment() {
@@ -32,20 +28,19 @@ class WidgetFragment : Fragment() {
     }
 
     private lateinit var appWidgetHost: AppWidgetHost
-
+    private lateinit var binding: FragmentWidgetBinding
 
     private val viewModel by viewModels<WidgetViewModel> { getVmFactory() }
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
-        val binding = FragmentWidgetBinding.inflate(inflater, container, false)
+        binding = FragmentWidgetBinding.inflate(inflater, container, false)
 
-        Log.d("LaunchTest","WidgetFragment Work")
+        Log.d("LaunchTest", "WidgetFragment Work")
 
         binding.root.setOnLongClickListener {
             findNavController().navigate(NavigationDirections.actionGlobalWidgetBottomSheetFragment())
@@ -84,7 +79,10 @@ class WidgetFragment : Fragment() {
 //                    binding.containerWidget.addView(widgetView)
 
 
-                        val layoutParam = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT)
+                        val layoutParam = LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT
+                        )
                         layoutParam.topMargin = 30
 //                        binding.containerWidget.addView(
 //                            widgetView,
@@ -100,7 +98,11 @@ class WidgetFragment : Fragment() {
                         widgetView.setOnLongClickListener {
                             viewModel.deleteWidget(widget.id)
                             appWidgetHost.deleteHost()
-                            findNavController().navigate(NavigationDirections.actionGlobalWidgetRemoveDialog(widget))
+                            findNavController().navigate(
+                                NavigationDirections.actionGlobalWidgetRemoveDialog(
+                                    widget
+                                )
+                            )
                             true
                         }
 //                        val layoutParam = ViewGroup.LayoutParams(
@@ -121,12 +123,11 @@ class WidgetFragment : Fragment() {
 
         })
 
-
-
 //        setBlurView(binding)
 
         return binding.root
     }
+
 
 //    private fun setBlurView(binding: FragmentWidgetBinding) {
 //        val radius = 7f
@@ -162,5 +163,6 @@ class WidgetFragment : Fragment() {
         super.onDestroy()
         appWidgetHost.stopListening()
     }
+
 
 }

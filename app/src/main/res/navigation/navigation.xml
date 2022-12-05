@@ -111,4 +111,15 @@
         android:id="@+id/timeZoneDialog"
         android:name="com.chihwhsu.atto.timezonepage.dialog.TimeZoneDialog"
         android:label="TimeZoneDialog" />
+    <dialog
+        android:id="@+id/introDialog"
+        android:name="com.chihwhsu.atto.tutorial.TutorialDialog"
+        android:label="introDialog" />
+    <action
+        android:id="@+id/action_global_introDialog"
+        app:destination="@id/introDialog"
+        app:enterAnim="@android:anim/fade_in"
+        app:exitAnim="@android:anim/fade_out"
+        app:popEnterAnim="@android:anim/fade_in"
+        app:popExitAnim="@anim/fade_out" />
 </navigation>

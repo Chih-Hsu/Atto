@@ -1,14 +1,17 @@
 package com.chihwhsu.atto.homepage
 
+import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.view.animation.AnimationUtils
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.airbnb.lottie.animation.keyframe.BaseKeyframeAnimation
 import com.chihwhsu.atto.NavigationDirections
 import com.chihwhsu.atto.R
 import com.chihwhsu.atto.component.GestureListener
@@ -38,14 +41,21 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
+        Log.d("LaunchTest", "HomeFragment Work")
+
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        Log.d("LaunchTest", "HomeFragment Work")
+
+//        binding.animationSlideup.tutorialArrow.addAnimatorUpdateListener {
+//
+//            if (it.addPauseListener(){
+//                Toast.makeText(requireContext(),"HIHIHI",Toast.LENGTH_SHORT).show()
+//            }
+//        }
 
         setGestureListener()
         setRecyclerView()
         setClockDisplayMode()
-
 
         // set event detail on card
         viewModel.event.observe(viewLifecycleOwner, Observer { event ->
@@ -76,19 +86,18 @@ class HomeFragment : Fragment() {
             }
         })
 
-//        binding.clockMinutes.setOnClickListener {
-//            findNavController().navigate(NavigationDirections.actionGlobalClockFragment())
-//        }
-
-
+        binding.clockMinutes.setOnClickListener {
+            findNavController().navigate(NavigationDirections.actionGlobalClockFragment())
+        }
 
 
         return binding.root
     }
 
+
     private fun setClockDisplayMode() {
 
-        if (UserPreference.showSingleTimeZoneClock){
+        if (UserPreference.showSingleTimeZoneClock) {
 
             binding.apply {
                 clockMinutes.visibility = View.VISIBLE
@@ -96,7 +105,7 @@ class HomeFragment : Fragment() {
                 recyclerviewMultiClock.visibility = View.GONE
             }
 
-        }else{
+        } else {
 
             binding.apply {
                 clockMinutes.visibility = View.GONE
@@ -104,25 +113,20 @@ class HomeFragment : Fragment() {
                 recyclerviewMultiClock.visibility = View.VISIBLE
             }
 
-
             val timeAdapter = TimeZoneAdapter(TimeZoneAdapter.HOME_FRAGMENT)
             binding.recyclerviewMultiClock.adapter = timeAdapter
 
             viewModel.timeZoneList.observe(viewLifecycleOwner, Observer {
-                if (it.isNotEmpty()){
+                if (it.isNotEmpty()) {
                     timeAdapter.submitList(it.take(3))
-                }else{
+                } else {
                     binding.apply {
                         clockMinutes.visibility = View.VISIBLE
                         clockMonth.visibility = View.VISIBLE
                         recyclerviewMultiClock.visibility = View.GONE
                     }
-
                 }
-
             })
-
-
         }
     }
 
@@ -180,8 +184,8 @@ class HomeFragment : Fragment() {
 
     private fun setShowCardAnimation(showCard: Boolean) {
         if (showCard) {
-            binding.gestureArea.visibility = View.VISIBLE
 
+            binding.gestureArea.visibility = View.VISIBLE
             val height = binding.eventList.height
             ObjectAnimator.ofFloat(
                 binding.eventList,
@@ -199,6 +203,12 @@ class HomeFragment : Fragment() {
                 duration = 500
                 start()
             }
+
+            // Only Show First Time
+
+            if (UserPreference.isHomeFirstTimeLaunch) {
+                findNavController().navigate(NavigationDirections.actionGlobalIntroDialog())
+            }
         }
     }
 
@@ -207,16 +217,33 @@ class HomeFragment : Fragment() {
         adapter: HomeAdapter
     ) {
         binding.eventTitle.text = when (event.type) {
+
             ALARM_TYPE -> "Wake Up"
-            TODO_TYPE -> "NEXT TODO"
-            POMODORO_WORK_TYPE -> "IT'S POMODORO"
-            POMODORO_BREAK_TYPE -> "IT'S POMODORO"
+
+            TODO_TYPE -> "${event.title}"
+
+            POMODORO_WORK_TYPE -> "Time to Work"
+
+            POMODORO_BREAK_TYPE -> "Time to Break"
+
             else -> "No Event"
         }
 
         binding.eventContent.text = when (event.type) {
+
             TODO_TYPE -> event.content
-            else -> "No Content"
+
+            POMODORO_WORK_TYPE -> "Time to Break \n\n" +
+                    "${getTimeFromStartOfDay(event.startTime!!).toFormat()} " +
+                    "to " +
+                    "${getTimeFromStartOfDay(event.alarmTime).toFormat()}"
+
+            POMODORO_BREAK_TYPE -> "Time to Break \n\n" +
+                    "${getTimeFromStartOfDay(event.startTime!!).toFormat()} " +
+                    "to " +
+                    "${getTimeFromStartOfDay(event.alarmTime).toFormat()}"
+
+            else -> "It's Alarm"
         }
 
         binding.eventAlarmTime.text = if (event.type == ALARM_TYPE || event.type == TODO_TYPE

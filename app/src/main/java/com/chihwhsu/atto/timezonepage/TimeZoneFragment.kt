@@ -26,9 +26,7 @@ class TimeZoneFragment : Fragment() {
 
         binding = FragmentTimezoneBinding.inflate(inflater, container, false)
 
-
         setClockDisplayMode()
-
 
         val adapter = TimeZoneAdapter(TimeZoneAdapter.TIMEZONE_FRAGMENT)
         binding.recyclerviewTimezone.adapter = adapter

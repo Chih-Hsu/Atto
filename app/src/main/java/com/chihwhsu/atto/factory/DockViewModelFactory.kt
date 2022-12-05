@@ -5,7 +5,7 @@ import android.content.res.Resources
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.chihwhsu.atto.data.database.AttoRepository
-import com.chihwhsu.atto.tutorial.dock.DockViewModel
+import com.chihwhsu.atto.setting.dock.DockViewModel
 
 class DockViewModelFactory(
     val packageManager: PackageManager,

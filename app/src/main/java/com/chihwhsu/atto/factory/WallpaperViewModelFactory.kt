@@ -3,7 +3,7 @@ package com.chihwhsu.atto.factory
 import android.content.res.Resources
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.chihwhsu.atto.tutorial.wallpaper.WallpaperViewModel
+import com.chihwhsu.atto.setting.wallpaper.WallpaperViewModel
 
 class WallpaperViewModelFactory(val resources: Resources) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

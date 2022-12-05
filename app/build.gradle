@@ -15,8 +15,8 @@ android {
         applicationId "com.chihwhsu.atto"
         minSdk 26
         targetSdk 32
-        versionCode 6
-        versionName "1.0.5"
+        versionCode 7
+        versionName "1.0.6"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -91,6 +91,7 @@ dependencies {
 
     // Slide Root Nav
     implementation "com.yarolegovich:sliding-root-nav:1.1.1"
+
 
 
 

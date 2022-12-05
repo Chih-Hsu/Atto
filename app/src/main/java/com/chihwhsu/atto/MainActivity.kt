@@ -1,10 +1,12 @@
 package com.chihwhsu.atto
 
 import android.os.Bundle
+import android.util.Log
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.chihwhsu.atto.workmanager.ResetWorker
@@ -23,15 +25,18 @@ class MainActivity : AppCompatActivity() {
 
         setResetWorker()
 
+    }
 
-
+    override fun onBackPressed() {
+        findNavController(R.id.fragment_container_view).navigate(NavigationDirections.actionGlobalMainFragment())
+//        super.onBackPressed()
     }
 
 
     override fun onStop() {
         super.onStop()
         // close desktop entry activity when onStop,then setting activity can work as expect
-        finish()
+//        finish()
     }
 
     private fun setResetWorker(){

@@ -12,6 +12,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="-150dp"
+            android:visibility="gone"
             app:layout_constraintHorizontal_bias="0.5" />
         <Constraint
             android:id="@+id/button_SignIn"
@@ -32,6 +33,15 @@
             android:alpha="0"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+        <Constraint
+            android:id="@+id/logo"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="-150dp" />
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end">
@@ -43,6 +53,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="300dp"
+            android:visibility="gone"
             app:layout_constraintHorizontal_bias="0.5" />
         <Constraint
             android:id="@+id/button_SignIn"
@@ -63,6 +74,15 @@
             android:alpha="1"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+        <Constraint
+            android:id="@+id/logo"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="230dp" />
     </ConstraintSet>
 
     <Transition
