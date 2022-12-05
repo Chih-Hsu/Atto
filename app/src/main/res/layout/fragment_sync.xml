@@ -39,7 +39,7 @@
         android:layout_height="60dp"
         android:layout_marginStart="@dimen/standard_margin"
         android:layout_marginEnd="@dimen/standard_margin"
-        android:layout_marginBottom="160dp"
+        android:layout_marginBottom="120dp"
         android:insetLeft="4dp"
         android:insetTop="4dp"
         android:insetRight="4dp"

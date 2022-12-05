@@ -46,9 +46,6 @@ class HomeFragment : Fragment() {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
 
-
-
-
 //        binding.animationSlideup.tutorialArrow.addAnimatorUpdateListener {
 //
 //            if (it.addPauseListener(){
@@ -89,14 +86,13 @@ class HomeFragment : Fragment() {
             }
         })
 
-//        binding.clockMinutes.setOnClickListener {
-//            findNavController().navigate(NavigationDirections.actionGlobalClockFragment())
-//        }
+        binding.clockMinutes.setOnClickListener {
+            findNavController().navigate(NavigationDirections.actionGlobalClockFragment())
+        }
 
 
         return binding.root
     }
-
 
 
     private fun setClockDisplayMode() {
@@ -210,9 +206,9 @@ class HomeFragment : Fragment() {
 
             // Only Show First Time
 
-        if (UserPreference.isHomeFirstTimeLaunch) {
-            findNavController().navigate(NavigationDirections.actionGlobalIntroDialog())
-        }
+            if (UserPreference.isHomeFirstTimeLaunch) {
+                findNavController().navigate(NavigationDirections.actionGlobalIntroDialog())
+            }
         }
     }
 
