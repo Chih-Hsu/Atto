@@ -3,20 +3,20 @@ package com.chihwhsu.atto.data.database.system
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ApplicationInfo
+import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.graphics.Bitmap
-import android.util.Log
-import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.chihwhsu.atto.AttoApplication
 import com.chihwhsu.atto.data.*
 import com.chihwhsu.atto.data.database.AttoDataSource
 import com.chihwhsu.atto.ext.convertToBitmap
-import kotlinx.coroutines.*
 import java.io.IOException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class AttoSystemDataSource(val context: Context, val currentCoroutine: CoroutineScope) :
+class AttoSystemDataSource(val context: Context, private val currentCoroutine: CoroutineScope) :
     AttoDataSource {
 
     override suspend fun insert(app: App) {
@@ -84,57 +84,6 @@ class AttoSystemDataSource(val context: Context, val currentCoroutine: Coroutine
     }
 
     override fun getAllApps(): LiveData<List<App>> {
-
-
-//        val intent = Intent(Intent.ACTION_MAIN, null)
-//        val currentAppList = mutableListOf<App>()
-//        val allApps = MutableLiveData<List<App>>()
-//
-//        intent.addCategory(Intent.CATEGORY_LAUNCHER)
-//
-//        val manager = context.packageManager
-//        val untreatedAppList: List<ResolveInfo> = manager.queryIntentActivities(intent, 0)
-//
-//        for (app in untreatedAppList) {
-////            currentCoroutine.launch(Dispatchers.Default) {
-//                val appName = app.activityInfo.loadLabel(manager).toString()
-//                val appPackageName = app.activityInfo.packageName
-//                val appImage = app.activityInfo.loadIcon(manager)
-//
-//                val category =
-//                    ApplicationInfo.getCategoryTitle(
-//                        AttoApplication.instance.applicationContext,
-//                        app.activityInfo.applicationInfo.category
-//                    ) ?: null
-//
-//                val newCategory = if (category == null) {
-//                    null
-//                } else {
-//                    category.toString()
-//                }
-//
-//                currentCoroutine.launch(Dispatchers.IO) {
-//                    saveFile(appName, appImage.convertToBitmap())
-//                }
-//
-//                val newApp = App(
-//                    appName,
-//                    appPackageName,
-//                    context.filesDir.absolutePath + "/" + "$appName.png",
-//                    label = newCategory?.split(" ")?.first()
-//                )
-//
-//                currentAppList.add(newApp)
-////            }
-//
-//            }
-//
-//            currentCoroutine.launch(Dispatchers.Main) {
-//                allApps.value = currentAppList
-//            }
-//
-//
-//        return allApps
         TODO("Not yet implemented")
     }
 
@@ -158,19 +107,24 @@ class AttoSystemDataSource(val context: Context, val currentCoroutine: Coroutine
         TODO("Not yet implemented")
     }
 
-    override fun getAllAppNotLiveData(): List<App>? {
+    override fun getAllAppNotLiveData(): List<App> {
 
         val intent = Intent(Intent.ACTION_MAIN, null)
-        val currentAppList = mutableListOf<App>()
-        val allApps = MutableLiveData<List<App>>()
-
         intent.addCategory(Intent.CATEGORY_LAUNCHER)
 
         val manager = context.packageManager
         val untreatedAppList: List<ResolveInfo> = manager.queryIntentActivities(intent, 0)
 
+        return createAppList(untreatedAppList, manager)
+    }
+
+    private fun createAppList(
+        untreatedAppList: List<ResolveInfo>,
+        manager: PackageManager
+    ): List<App> {
+
+        val currentAppList = mutableListOf<App>()
         for (app in untreatedAppList) {
-//            currentCoroutine.launch(Dispatchers.Default) {
             val appName = app.activityInfo.loadLabel(manager).toString()
             val appPackageName = app.activityInfo.packageName
             val appImage = app.activityInfo.loadIcon(manager)
@@ -181,11 +135,7 @@ class AttoSystemDataSource(val context: Context, val currentCoroutine: Coroutine
                     app.activityInfo.applicationInfo.category
                 ) ?: null
 
-            val newCategory = if (category == null) {
-                null
-            } else {
-                category.toString()
-            }
+            val newCategory = category?.toString()
 
             currentCoroutine.launch(Dispatchers.IO) {
                 saveFile(appName, appImage.convertToBitmap())
@@ -197,13 +147,8 @@ class AttoSystemDataSource(val context: Context, val currentCoroutine: Coroutine
                 context.filesDir.absolutePath + "/" + "$appName.png",
                 label = newCategory?.split(" ")?.first()
             )
-
             currentAppList.add(newApp)
-//            }
-
         }
-
-
         return currentAppList
     }
 
@@ -291,7 +236,11 @@ class AttoSystemDataSource(val context: Context, val currentCoroutine: Coroutine
         TODO()
     }
 
-    override suspend fun uploadData(context: Context, localAppList: List<App>,email: String): Result<Boolean> {
+    override suspend fun uploadData(
+        context: Context,
+        localAppList: List<App>,
+        email: String
+    ): Result<Boolean> {
         TODO("Not yet implemented")
     }
 
@@ -325,5 +274,4 @@ class AttoSystemDataSource(val context: Context, val currentCoroutine: Coroutine
             false
         }
     }
-
 }

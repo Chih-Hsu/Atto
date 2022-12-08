@@ -24,7 +24,7 @@ class AppListBottomViewModel(val repository: AttoRepository) : ViewModel() {
     }
 
     fun toAppListItem(appList: List<App>): List<AppListItem> {
-        return appList.filter { it.appLabel != "Atto" }  // Don't show this in itself
+        return appList.filter { it.appLabel != APP_NAME } // Don't show this in itself
             .map { AppListItem.AppItem(it) }
             .sortedBy { it.app.appLabel.first() }
     }
@@ -32,11 +32,14 @@ class AppListBottomViewModel(val repository: AttoRepository) : ViewModel() {
     fun filterList(text: String?) {
 
         if (!text.isNullOrEmpty()) {
-
             _filterList.value =
                 originalList.filter { it.appLabel.lowercase().contains(text.lowercase()) }
         } else {
             _filterList.value = originalList
         }
+    }
+
+    companion object {
+        const val APP_NAME = "Atto"
     }
 }

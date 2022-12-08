@@ -12,26 +12,24 @@ import com.chihwhsu.atto.data.AppListItem
 import com.chihwhsu.atto.databinding.ItemAppListBinding
 import com.chihwhsu.atto.databinding.ItemLabelSettingBinding
 
-
 class SortAdapter(
     val deleteOnClickListener: DeleteOnClickListener,
     val editOnClickListener: EditOnClickListener
 ) : ListAdapter<AppListItem, RecyclerView.ViewHolder>(object :
-    DiffUtil.ItemCallback<AppListItem>() {
-    override fun areItemsTheSame(oldItem: AppListItem, newItem: AppListItem): Boolean {
-        return oldItem.id == newItem.id
-    }
+        DiffUtil.ItemCallback<AppListItem>() {
+        override fun areItemsTheSame(oldItem: AppListItem, newItem: AppListItem): Boolean {
+            return oldItem.id == newItem.id
+        }
 
-    override fun areContentsTheSame(oldItem: AppListItem, newItem: AppListItem): Boolean {
-        return oldItem == newItem
-    }
-}) {
+        override fun areContentsTheSame(oldItem: AppListItem, newItem: AppListItem): Boolean {
+            return oldItem == newItem
+        }
+    }) {
 
     companion object {
         const val APP_ITEM_VIEW_TYPE_LABEL = 0x00
         const val APP_ITEM_VIEW_TYPE_APP = 0x01
     }
-
 
     class DeleteOnClickListener(val onClickListener: (label: String) -> Unit) {
         fun onClick(label: String) = onClickListener(label)
@@ -94,7 +92,6 @@ class SortAdapter(
             }
             else -> throw ClassCastException("Unknown viewType $viewType")
         }
-
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -107,7 +104,6 @@ class SortAdapter(
             is AppViewHolder -> {
                 holder.bind((getItem(position) as AppListItem.AppItem))
             }
-
         }
     }
 
@@ -117,5 +113,4 @@ class SortAdapter(
             is AppListItem.AppItem -> APP_ITEM_VIEW_TYPE_APP
         }
     }
-
 }

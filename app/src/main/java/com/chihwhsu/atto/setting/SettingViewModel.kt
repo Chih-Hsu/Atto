@@ -16,7 +16,6 @@ class SettingViewModel(val repository: AttoRepository) : ViewModel() {
 
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-
     init {
         getAppCount()
     }
@@ -28,7 +27,6 @@ class SettingViewModel(val repository: AttoRepository) : ViewModel() {
             withContext(Dispatchers.Main) {
                 _appNumber.value = number
             }
-
         }
     }
 

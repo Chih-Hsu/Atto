@@ -36,31 +36,36 @@ class WallpaperViewModel(private val resource: Resources) : ViewModel() {
 
         val wallpaperList = mutableListOf(
             Wallpaper(
-                1, ResourcesCompat.getDrawable(
+                1,
+                ResourcesCompat.getDrawable(
                     resource,
                     R.drawable.wallpaper_plant, null
                 )!!
             ),
             Wallpaper(
-                1, ResourcesCompat.getDrawable(
+                1,
+                ResourcesCompat.getDrawable(
                     resource,
                     R.drawable.cliff, null
                 )!!
             ),
             Wallpaper(
-                1, ResourcesCompat.getDrawable(
+                1,
+                ResourcesCompat.getDrawable(
                     resource,
                     R.drawable.house, null
                 )!!
             ),
             Wallpaper(
-                1, ResourcesCompat.getDrawable(
+                1,
+                ResourcesCompat.getDrawable(
                     resource,
                     R.drawable.sunset, null
                 )!!
             ),
             Wallpaper(
-                1, ResourcesCompat.getDrawable(
+                1,
+                ResourcesCompat.getDrawable(
                     resource,
                     R.drawable.blank_tradingcard, null
                 )!!

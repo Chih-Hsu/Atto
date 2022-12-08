@@ -7,11 +7,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.data.database.AttoRepository
+import java.util.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import java.util.*
 
 class DockViewModel(
     private val packageManager: PackageManager,
@@ -42,7 +42,6 @@ class DockViewModel(
         }
     }
 
-
     fun selectApp(appLabel: String) {
 
         val allAppList = appList.value
@@ -55,7 +54,6 @@ class DockViewModel(
 
         allAppList?.let { apps ->
             dockAppList.let { dockApps ->
-
 
                 val currentApp = apps.first { it.appLabel == appLabel }
                 if (dockApps.size < 5 && dockApps.none { it.appLabel == appLabel }) {
@@ -77,8 +75,6 @@ class DockViewModel(
                         repository.updateSort(appLabel, -1)
                     }
                 } else {
-
-
                 }
             }
         }
@@ -97,14 +93,13 @@ class DockViewModel(
         }
     }
 
-
     fun filterList(text: String?) {
         if (!text.isNullOrEmpty()) {
             val list = mutableListOf<App>()
             originalList.let {
                 for (item in it) {
                     if (item.appLabel.lowercase(Locale.ROOT)
-                            .contains(text.lowercase(Locale.ROOT))
+                        .contains(text.lowercase(Locale.ROOT))
                     ) {
                         list.add(item)
                     }
@@ -115,6 +110,4 @@ class DockViewModel(
             _appList.value = originalList
         }
     }
-
-
 }

@@ -19,7 +19,6 @@ import com.chihwhsu.atto.R
 import com.chihwhsu.atto.databinding.FragmentWidgetBinding
 import com.chihwhsu.atto.ext.getVmFactory
 
-
 class WidgetFragment : Fragment() {
 
     companion object {
@@ -51,39 +50,39 @@ class WidgetFragment : Fragment() {
         val appWidgetManager = AppWidgetManager.getInstance(requireActivity().applicationContext)
         appWidgetHost.startListening()
 
-        viewModel.widgets.observe(viewLifecycleOwner, Observer { widgets ->
+        viewModel.widgets.observe(
+            viewLifecycleOwner,
+            Observer { widgets ->
 
-            for (widget in widgets) {
+                for (widget in widgets) {
 
-                if (viewModel.checkWidgetVisible(widget.label)) {
-                    viewModel.setCatchWidget(widget)
+                    if (viewModel.checkWidgetVisible(widget.label)) {
+                        viewModel.setCatchWidget(widget)
 
-                    val widgetInfo =
-                        appWidgetManager.installedProviders.filter { it.label == widget.label }
-                            .first()
-                    val appWidgetId = appWidgetHost.allocateAppWidgetId()
-                    val canBind =
-                        appWidgetManager.bindAppWidgetIdIfAllowed(appWidgetId, widgetInfo.provider)
+                        val widgetInfo =
+                            appWidgetManager.installedProviders.filter { it.label == widget.label }
+                                .first()
+                        val appWidgetId = appWidgetHost.allocateAppWidgetId()
+                        val canBind =
+                            appWidgetManager.bindAppWidgetIdIfAllowed(appWidgetId, widgetInfo.provider)
 
 //                val viewR = RemoteViews(widgetInfo.provider.packageName,widgetInfo.initialLayout)
-                    if (canBind) {
-                        val widgetView = appWidgetHost.createView(
-                            requireActivity().applicationContext,
-                            appWidgetId,
-                            widgetInfo
-                        ).apply {
-                            background = resources.getDrawable(R.drawable.widget_rounded_background)
-                            setAppWidget(appWidgetId, widgetInfo)
-
-                        }
+                        if (canBind) {
+                            val widgetView = appWidgetHost.createView(
+                                requireActivity().applicationContext,
+                                appWidgetId,
+                                widgetInfo
+                            ).apply {
+                                background = resources.getDrawable(R.drawable.widget_rounded_background)
+                                setAppWidget(appWidgetId, widgetInfo)
+                            }
 //                    binding.containerWidget.addView(widgetView)
 
-
-                        val layoutParam = LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.MATCH_PARENT,
-                            LinearLayout.LayoutParams.WRAP_CONTENT
-                        )
-                        layoutParam.topMargin = 30
+                            val layoutParam = LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT
+                            )
+                            layoutParam.topMargin = 30
 //                        binding.containerWidget.addView(
 //                            widgetView,
 //                            WindowManager.LayoutParams.MATCH_PARENT,
@@ -94,17 +93,16 @@ class WidgetFragment : Fragment() {
 //                            layoutParam
 //                        )
 
-
-                        widgetView.setOnLongClickListener {
-                            viewModel.deleteWidget(widget.id)
-                            appWidgetHost.deleteHost()
-                            findNavController().navigate(
-                                NavigationDirections.actionGlobalWidgetRemoveDialog(
-                                    widget
+                            widgetView.setOnLongClickListener {
+                                viewModel.deleteWidget(widget.id)
+                                appWidgetHost.deleteHost()
+                                findNavController().navigate(
+                                    NavigationDirections.actionGlobalWidgetRemoveDialog(
+                                        widget
+                                    )
                                 )
-                            )
-                            true
-                        }
+                                true
+                            }
 //                        val layoutParam = ViewGroup.LayoutParams(
 //                            WindowManager.LayoutParams.MATCH_PARENT,
 //                            widgetInfo.minHeight
@@ -114,20 +112,19 @@ class WidgetFragment : Fragment() {
 //                    layoutParam.width = WindowManager.LayoutParams.MATCH_PARENT
 //                    layoutParam.height = widgetInfo.minHeight
 
-                        binding.containerWidget.addView(widgetView, layoutParam)
-                    } else {
-                        getWidgetPermission(appWidgetId, widgetInfo)
+                            binding.containerWidget.addView(widgetView, layoutParam)
+                        } else {
+                            getWidgetPermission(appWidgetId, widgetInfo)
+                        }
                     }
                 }
             }
-
-        })
+        )
 
 //        setBlurView(binding)
 
         return binding.root
     }
-
 
 //    private fun setBlurView(binding: FragmentWidgetBinding) {
 //        val radius = 7f
@@ -149,7 +146,6 @@ class WidgetFragment : Fragment() {
 //            .setBlurRadius(radius)
 //    }
 
-
     private fun getWidgetPermission(appWidgetId: Int, info: AppWidgetProviderInfo) {
 
         val intent = Intent(AppWidgetManager.ACTION_APPWIDGET_BIND).apply {
@@ -163,6 +159,4 @@ class WidgetFragment : Fragment() {
         super.onDestroy()
         appWidgetHost.stopListening()
     }
-
-
 }

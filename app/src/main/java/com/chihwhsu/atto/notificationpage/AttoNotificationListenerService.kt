@@ -2,9 +2,8 @@ package com.chihwhsu.atto.notificationpage
 
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
-import android.util.Log
 
-class AttoNotificationListenerService : NotificationListenerService(),NoticeCreateListener {
+class AttoNotificationListenerService : NotificationListenerService(), NoticeCreateListener {
 
     init {
         CreateFragmentHelper.getInstance().setCreateListener(this)
@@ -28,7 +27,7 @@ class AttoNotificationListenerService : NotificationListenerService(),NoticeCrea
     }
 
     override fun notifyCreate(boolean: Boolean) {
-        if (boolean){
+        if (boolean) {
             NotifyHelper.getInstance().setInitNotification(activeNotifications)
         }
     }
@@ -36,6 +35,4 @@ class AttoNotificationListenerService : NotificationListenerService(),NoticeCrea
     override fun cancelCurrentNotification(key: String) {
         cancelNotification(key)
     }
-
 }
-

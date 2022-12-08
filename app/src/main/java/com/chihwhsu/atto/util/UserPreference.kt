@@ -3,7 +3,6 @@ package com.chihwhsu.atto.util
 import android.content.Context
 import com.chihwhsu.atto.AttoApplication
 
-
 object UserPreference {
 
     private val userPreference =
@@ -50,9 +49,4 @@ object UserPreference {
         get() {
             return userPreference.getBoolean("showBackgroundSlideAnimation", true)
         }
-
-
-
-
-
 }

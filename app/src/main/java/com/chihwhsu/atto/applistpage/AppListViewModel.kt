@@ -43,7 +43,6 @@ class AppListViewModel(val repository: AttoRepository) : ViewModel() {
             withContext(Dispatchers.Main) {
                 _appGroupList.value = newList
             }
-
         }
     }
 
@@ -69,5 +68,4 @@ class AppListViewModel(val repository: AttoRepository) : ViewModel() {
         }
         return labelStringList
     }
-
 }

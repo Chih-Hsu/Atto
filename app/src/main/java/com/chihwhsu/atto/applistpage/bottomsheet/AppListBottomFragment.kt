@@ -34,7 +34,9 @@ class AppListBottomFragment : Fragment() {
 
         Log.d("LaunchTest", "AppListBottomFragment Work")
 
+        // Change SoftInputMode
         requireActivity().window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING or WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
+
         val binding = DialogAppListBinding.inflate(inflater, container, false)
         setRecyclerView(binding)
 
@@ -57,7 +59,6 @@ class AppListBottomFragment : Fragment() {
             }
         })
 
-
         return binding.root
     }
 
@@ -66,15 +67,14 @@ class AppListBottomFragment : Fragment() {
             // ClickListener
             AppListBottomAdapter.AppOnClickListener { app ->
                 navigateByPackageName(app)
-
-            }   // LongClickListener
-            , AppListBottomAdapter.LongClickListener { app ->
+            }, // LongClickListener
+            AppListBottomAdapter.LongClickListener { app ->
                 findNavController().navigate(NavigationDirections.actionGlobalAppInfoDialog(app))
-            })
+            }
+        )
 
         binding.appRecyclerView.adapter = adapter
         setItemTouchHelper()
-
     }
 
     private fun navigateByPackageName(app: App) {
@@ -86,7 +86,6 @@ class AppListBottomFragment : Fragment() {
                 val launchAppIntent =
                     requireContext().packageManager.getLaunchIntentForPackage(app.packageName)
                 startActivity(launchAppIntent)
-
             } else {
                 // if app is not installed ,  navigate to GooglePlay
                 val intent = Intent(
@@ -127,7 +126,7 @@ class AppListBottomFragment : Fragment() {
         //        itemHelper.attachToRecyclerView(binding.appRecyclerView)
     }
 
-    companion object{
+    companion object {
         const val MY_PACKAGE_NAME = "com.chihwhsu.atto"
         const val GOOGLE_PLAY_LINK = "market://details?"
     }

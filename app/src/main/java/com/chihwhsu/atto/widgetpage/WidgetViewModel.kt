@@ -1,6 +1,5 @@
 package com.chihwhsu.atto.widgetpage
 
-
 import androidx.lifecycle.ViewModel
 import com.chihwhsu.atto.data.Widget
 import com.chihwhsu.atto.data.database.AttoRepository
@@ -17,25 +16,22 @@ class WidgetViewModel(val repository: AttoRepository) : ViewModel() {
     // the Coroutine runs using the Main (UI) dispatcher
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-
     val widgets = repository.getAllWidget()
-
 
     val catchWidget = mutableMapOf<String, Boolean>()
 
     fun setCatchWidget(widget: Widget) {
 
-            catchWidget.put(widget.label, true)
-
+        catchWidget.put(widget.label, true)
     }
 
     fun checkWidgetVisible(widgetLabel: String): Boolean {
         return !catchWidget.containsKey(widgetLabel)
     }
 
-    fun deleteWidget(id:Long){
+    fun deleteWidget(id: Long) {
         coroutineScope.launch(Dispatchers.Default) {
-              repository.deleteWidget(id)
+            repository.deleteWidget(id)
         }
     }
 }

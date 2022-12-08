@@ -30,28 +30,27 @@ class UsageLimitViewModel(private val repository: AttoRepository) : ViewModel() 
         _newMinutes.value = 0
     }
 
-
     fun addHour(currentHour: Int) {
-       _newHour.value =  if (currentHour < 1){
+        _newHour.value = if (currentHour < 1) {
             1
-        } else if (currentHour in 1..23){
-           (currentHour + 1)
+        } else if (currentHour in 1..23) {
+            (currentHour + 1)
         } else {
             24
         }
     }
 
     fun addMinutes(currentMinutes: Int) {
-        if (currentMinutes in 0..54){
-            _newMinutes.value =  currentMinutes + 5
-        } else if (currentMinutes == 55){
+        if (currentMinutes in 0..54) {
+            _newMinutes.value = currentMinutes + 5
+        } else if (currentMinutes == 55) {
             _newHour.value = _newHour.value?.plus(1)
             _newMinutes.value = 0
         }
     }
 
     fun subHour(currentHour: Int) {
-        _newHour.value =  if (currentHour in 1..23){
+        _newHour.value = if (currentHour in 1..23) {
             currentHour - 1
         } else {
             0
@@ -59,29 +58,25 @@ class UsageLimitViewModel(private val repository: AttoRepository) : ViewModel() 
     }
 
     fun subMinutes(currentMinutes: Int) {
-        if (currentMinutes in 5..55){
-            _newMinutes.value =  currentMinutes - 5
-        } else if (currentMinutes <= 5 && _newHour.value!! > 0){
+        if (currentMinutes in 5..55) {
+            _newMinutes.value = currentMinutes - 5
+        } else if (currentMinutes <= 5 && _newHour.value!! > 0) {
             _newHour.value = _newHour.value?.minus(1)
             _newMinutes.value = 55
-        } else{
+        } else {
             _newMinutes.value = 0
         }
-
     }
 
-    fun lockApp(app:App){
+    fun lockApp(app: App) {
 
         val hour = newHour.value ?: 0
         val minutes = newMinutes.value ?: 0
-        val time = hour.toLong()*60*60*1000 + minutes.toLong()*60*1000
-        val newAppLockTimer = AppLockTimer(0,app.packageName,System.currentTimeMillis(),time)
+        val time = hour.toLong() * 60 * 60 * 1000 + minutes.toLong() * 60 * 1000
+        val newAppLockTimer = AppLockTimer(0, app.packageName, System.currentTimeMillis(), time)
 
         coroutineScope.launch(Dispatchers.IO) {
             repository.insert(newAppLockTimer)
         }
-
-
     }
-
 }

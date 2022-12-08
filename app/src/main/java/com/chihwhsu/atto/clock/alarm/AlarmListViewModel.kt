@@ -18,11 +18,9 @@ class AlarmListViewModel(private val repository: AttoRepository) : ViewModel() {
     // the Coroutine runs using the Main (UI) dispatcher
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-
-    fun deleteEvent(id : Int){
-        coroutineScope.launch(Dispatchers.IO){
+    fun deleteEvent(id: Int) {
+        coroutineScope.launch(Dispatchers.IO) {
             repository.deleteEvent(id)
         }
-
     }
 }

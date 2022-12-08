@@ -1,6 +1,5 @@
 package com.chihwhsu.atto.main
 
-
 import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
 import android.view.LayoutInflater
@@ -12,34 +11,35 @@ import com.bumptech.glide.Glide
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.databinding.ItemDockBinding
 
+class DockAdapter(val onClickListener: DockOnClickListener) :
+    ListAdapter<App, DockAdapter.AppViewHolder>(object :
+            DiffUtil.ItemCallback<App>() {
+            override fun areItemsTheSame(oldItem: App, newItem: App): Boolean {
+                return oldItem.packageName == newItem.packageName
+            }
 
-class DockAdapter (val onClickListener : DockOnClickListener) : ListAdapter<App, DockAdapter.AppViewHolder>(object :
-    DiffUtil.ItemCallback<App>(){
-    override fun areItemsTheSame(oldItem: App, newItem: App): Boolean {
-        return oldItem.packageName == newItem.packageName
+            override fun areContentsTheSame(oldItem: App, newItem: App): Boolean {
+                return oldItem == newItem
+            }
+        }) {
+
+    class DockOnClickListener(val onClickListener: (app: App) -> Unit) {
+        fun onClick(app: App) = onClickListener(app)
     }
 
-    override fun areContentsTheSame(oldItem: App, newItem: App): Boolean {
-        return oldItem == newItem
-    }
-}) {
-
-    class DockOnClickListener(val onClickListener:(app:App)->Unit){
-        fun onClick(app:App)=onClickListener(app)
-
-    }
-
-    inner class AppViewHolder(val binding: ItemDockBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(item: App){
-
-//            item.icon?.let {
-//                binding.dockIconImage.setImageBitmap(it.createGrayscale())
-//            }
+    inner class AppViewHolder(val binding: ItemDockBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: App) {
 
             Glide.with(itemView.context).load(item.iconPath).into(binding.dockIconImage)
             itemView.setOnClickListener {
                 onClickListener.onClick(item)
             }
+
+            setIconColorFilter()
+        }
+
+        private fun setIconColorFilter() {
             val colorMatrix = ColorMatrix()
             colorMatrix.setSaturation(0f)
             val filter = ColorMatrixColorFilter(colorMatrix)
@@ -50,7 +50,8 @@ class DockAdapter (val onClickListener : DockOnClickListener) : ListAdapter<App,
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AppViewHolder {
         val view = ItemDockBinding.inflate(
             LayoutInflater.from(parent.context),
-            parent,false)
+            parent, false
+        )
         return AppViewHolder(view)
     }
 
@@ -58,5 +59,4 @@ class DockAdapter (val onClickListener : DockOnClickListener) : ListAdapter<App,
         val currentItem = getItem(position)
         holder.bind(currentItem)
     }
-
 }

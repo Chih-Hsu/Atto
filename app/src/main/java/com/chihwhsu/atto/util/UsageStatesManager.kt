@@ -8,9 +8,7 @@ import java.time.LocalDate
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
-
 object UsageStatesManager {
-
 
     fun getTodayUsage(context: Context, packageName: String): Long {
 
@@ -37,7 +35,6 @@ object UsageStatesManager {
         }
 
         return usageTime
-
     }
 
     fun getTotalUsage(context: Context, packageName: String): Long {
@@ -66,14 +63,11 @@ object UsageStatesManager {
         }
 
         return usageTime
-
     }
-
 
     fun getWeekUsageList(context: Context, packageName: String): MutableList<Float> {
         val usageStateManager =
             context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
-
 
         val start = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()
             .toEpochMilli() - 6 * DAY
@@ -99,12 +93,12 @@ object UsageStatesManager {
 
                 if (currentEvent.packageName == packageName) {
 
-                    if (currentEvent.eventType == UsageEvents.Event.ACTIVITY_RESUMED || currentEvent.eventType == UsageEvents.Event.ACTIVITY_PAUSED || currentEvent.eventType == UsageEvents.Event.ACTIVITY_STOPPED) {
+                    if (currentEvent.eventType == UsageEvents.Event.ACTIVITY_RESUMED
+                        || currentEvent.eventType == UsageEvents.Event.ACTIVITY_PAUSED || currentEvent.eventType == UsageEvents.Event.ACTIVITY_STOPPED) {
 
                         val newMap = Pair(currentEvent.eventType, currentEvent.timeStamp)
 
                         weekEventList.add(newMap)
-
                     }
                 }
             }
@@ -127,7 +121,7 @@ object UsageStatesManager {
 
             val day = currentDayUsage.toFloat() / MINUTE.toFloat()
             list.add(day)
-            Log.d("usage","$currentDayUsage")
+            Log.d("usage", "$currentDayUsage")
         }
 
         if (list.size < 7) {
@@ -137,8 +131,6 @@ object UsageStatesManager {
         }
 
         return list
-
-
     }
 
     fun get24hrUsageList(context: Context, packageName: String): MutableList<Float> {
@@ -192,10 +184,8 @@ object UsageStatesManager {
                 }
             }
 
-
             val hours = currentHourUsage.toFloat() / MINUTE.toFloat()
             list.add(hours)
-
         }
 
         if (list.size < 24) {
@@ -205,8 +195,6 @@ object UsageStatesManager {
         }
 
         return list
-
-
     }
 
     fun getUsageFromStartTime(context: Context, packageName: String, startTime: Long): Long {
@@ -247,15 +235,11 @@ object UsageStatesManager {
             }
         }
 
-
         return currentHourUsage
     }
-
 
     private const val SECOND = 1000L
     private const val MINUTE = SECOND * 60L
     private const val HOUR = MINUTE * 60L
     private const val DAY = MINUTE * 24L
-
-
 }

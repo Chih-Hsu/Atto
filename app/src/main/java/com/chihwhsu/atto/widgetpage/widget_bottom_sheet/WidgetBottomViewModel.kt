@@ -10,7 +10,7 @@ import kotlinx.coroutines.*
 class WidgetBottomViewModel(val repository: AttoRepository) : ViewModel() {
 
     private var _navigateUp = MutableLiveData<Boolean>()
-    val navigateUp : LiveData<Boolean> get() = _navigateUp
+    val navigateUp: LiveData<Boolean> get() = _navigateUp
 
     // Create a Coroutine scope using a job to be able to cancel when needed
     private var viewModelJob = Job()
@@ -18,15 +18,14 @@ class WidgetBottomViewModel(val repository: AttoRepository) : ViewModel() {
     // the Coroutine runs using the Main (UI) dispatcher
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
+    fun saveWidget(widgetLabel: String) {
+        coroutineScope.launch(Dispatchers.Default) {
+            val newWidget = Widget(label = widgetLabel)
+            repository.insert(newWidget)
 
-    fun saveWidget(widgetLabel : String){
-        coroutineScope.launch(Dispatchers.Default){
-        val newWidget = Widget(label = widgetLabel)
-        repository.insert(newWidget)
-
-        withContext(Dispatchers.Main){
-        _navigateUp.value = true
+            withContext(Dispatchers.Main) {
+                _navigateUp.value = true
+            }
         }
-    }
     }
 }

@@ -76,7 +76,6 @@ interface AttoDatabaseDao {
     @Query("SELECT count(appLabel) from app_table")
     fun getAppDataCount(): Int
 
-
     // Event
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -102,7 +101,6 @@ interface AttoDatabaseDao {
 
     @Query("SELECT EXISTS(SELECT * FROM event_table WHERE type = :type or :type2)")
     fun isPomodoroIsExist(type: Int, type2: Int): Boolean
-
 
     // AppLockTimer
 
@@ -135,7 +133,6 @@ interface AttoDatabaseDao {
     @Query("SELECT * FROM widget_table")
     fun getAllWidget(): LiveData<List<Widget>>
 
-
     // TimeZone
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
@@ -146,7 +143,4 @@ interface AttoDatabaseDao {
 
     @Query("DELETE FROM timezone_table WHERE id = :id")
     fun deleteTimeZone(id: Long)
-
-
 }
-

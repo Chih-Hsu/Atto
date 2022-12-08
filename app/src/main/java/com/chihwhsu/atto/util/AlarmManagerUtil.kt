@@ -10,7 +10,6 @@ import java.util.*
 
 object AlarmManagerUtil {
 
-
     fun setAlarmTime(context: Context, time: Long, intent: Intent) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val sender = PendingIntent
@@ -86,7 +85,6 @@ object AlarmManagerUtil {
             intervalMillis, sender
         )
         Log.d("clockS", "${calMethod(week, calendar.timeInMillis)}")
-
     }
 
     private fun calMethod(weekFlag: Int, dateTime: Long): Long {
@@ -129,14 +127,8 @@ object AlarmManagerUtil {
             }
         }
 
-
         time -= 10000L
-
-
-
 
         return time
     }
-
-
 }

@@ -1,6 +1,5 @@
 package com.chihwhsu.atto.syncpage
 
-
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -39,21 +38,26 @@ class SyncFragment : Fragment() {
             }
         }
 
-        viewModel.status.observe(viewLifecycleOwner, Observer {
-            if (it == LoadStatus.LOADING) {
-                binding.lottieLoading.visibility = View.VISIBLE
-
-            } else {
-                binding.lottieLoading.visibility = View.GONE
+        viewModel.status.observe(
+            viewLifecycleOwner,
+            Observer {
+                if (it == LoadStatus.LOADING) {
+                    binding.lottieLoading.visibility = View.VISIBLE
+                } else {
+                    binding.lottieLoading.visibility = View.GONE
+                }
             }
-        })
+        )
 
-        viewModel.navigateToMain.observe(viewLifecycleOwner, Observer {
-            if (it == true) {
-                val intent = Intent(this.requireActivity(), MainActivity::class.java)
-                startActivity(intent)
+        viewModel.navigateToMain.observe(
+            viewLifecycleOwner,
+            Observer {
+                if (it == true) {
+                    val intent = Intent(this.requireActivity(), MainActivity::class.java)
+                    startActivity(intent)
+                }
             }
-        })
+        )
 
         binding.buttonToTutorial.setOnClickListener {
             findNavController().navigate(SyncFragmentDirections.actionSyncFragmentToWallpaperFragment())

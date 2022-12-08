@@ -21,7 +21,6 @@ class AppDetailAdapter :
         override fun areItemsTheSame(oldItem: Theme, newItem: Theme): Boolean {
             return oldItem.index == newItem.index
         }
-
     }) {
 
     class ThemeViewHolder(val binding: ItemBackgroundListBinding) :
@@ -53,7 +52,6 @@ class AppDetailAdapter :
                     binding.kanaImage.visibility = View.VISIBLE
                 }
             }
-
         }
     }
 

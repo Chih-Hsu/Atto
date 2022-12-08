@@ -4,4 +4,13 @@
     <string name="MM_DD">%1s %2s</string>
     <string name="remove_widget">你要移除%1s嗎？</string>
     <string name="hello_user">Hello \n%1s</string>
+    <string name="log_in">LOG IN</string>
+    <string name="log_out">LOG OUT</string>
+    <string name="wake_up">Wake Up</string>
+    <string name="time_to_work">Time to Work</string>
+    <string name="time_to_break">Time to Break</string>
+    <string name="no_event">No Event</string>
+
+    <string name="pomodoro_content">Time to Work \n\n %1s to %2s</string>
+    <string name="pomodoro_break_content">Time to Break \n\n %1s to %2s</string>
 </resources>

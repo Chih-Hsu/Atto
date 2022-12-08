@@ -31,16 +31,18 @@ class SortFragment : Fragment() {
             )
         }
 
-        val adapter = SortAdapter(SortAdapter.DeleteOnClickListener { label ->
-            viewModel.deleteLabel(label)
-        },
+        val adapter = SortAdapter(
+            SortAdapter.DeleteOnClickListener { label ->
+                viewModel.deleteLabel(label)
+            },
             SortAdapter.EditOnClickListener {
                 findNavController().navigate(
                     SortFragmentDirections.actionSortFragmentToAddLabelFragment(
                         it
                     )
                 )
-            })
+            }
+        )
 
         binding.sortRecyclerView.adapter = adapter
         val layoutManager = binding.sortRecyclerView.layoutManager as GridLayoutManager
@@ -54,9 +56,12 @@ class SortFragment : Fragment() {
                 }
             }
         }
-        viewModel.appList.observe(viewLifecycleOwner, Observer {
-            adapter.submitList(viewModel.resetList(it, requireContext()))
-        })
+        viewModel.appList.observe(
+            viewLifecycleOwner,
+            Observer {
+                adapter.submitList(viewModel.resetList(it, requireContext()))
+            }
+        )
 
         binding.buttonPrevious.setOnClickListener {
             findNavController().navigate(SortFragmentDirections.actionSortFragmentToDockSelectFragment())
@@ -65,12 +70,6 @@ class SortFragment : Fragment() {
         binding.buttonNext.setOnClickListener {
             findNavController().navigate(SortFragmentDirections.actionSortFragmentToGetUsageFragment())
         }
-
-
-
-
-
-
 
         return binding.root
     }

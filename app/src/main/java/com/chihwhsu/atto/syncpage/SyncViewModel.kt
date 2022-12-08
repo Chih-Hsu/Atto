@@ -1,11 +1,8 @@
 package com.chihwhsu.atto.syncpage
 
-
 import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
-import android.provider.Settings
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,9 +11,6 @@ import com.chihwhsu.atto.data.Result
 import com.chihwhsu.atto.data.User
 import com.chihwhsu.atto.data.database.AttoRepository
 import com.chihwhsu.atto.data.database.remote.LoadStatus
-import com.chihwhsu.atto.data.succeeded
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
@@ -40,7 +34,7 @@ class SyncViewModel(private val repository: AttoRepository) : ViewModel() {
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     private var _navigateToMain = MutableLiveData<Boolean>()
-    val navigateToMain : LiveData<Boolean> get() = _navigateToMain
+    val navigateToMain: LiveData<Boolean> get() = _navigateToMain
 
     private var _user = MutableLiveData<User>()
     val user: LiveData<User> get() = _user
@@ -54,13 +48,13 @@ class SyncViewModel(private val repository: AttoRepository) : ViewModel() {
     }
 
     @SuppressLint("NullSafeMutableLiveData")
-    fun getUser(email : String){
+    fun getUser(email: String) {
 
         _status.value = LoadStatus.LOADING
 
         coroutineScope.launch {
 
-            when(val result = repository.getUser(email)){
+            when (val result = repository.getUser(email)) {
 
                 is Result.Success -> {
                     _error.value = null
@@ -71,13 +65,11 @@ class SyncViewModel(private val repository: AttoRepository) : ViewModel() {
                 is Result.Fail -> {
                     _error.value = result.error
                     _status.value = LoadStatus.ERROR
-
                 }
 
                 is Result.Error -> {
                     _error.value = result.exception.toString()
                     _status.value = LoadStatus.ERROR
-
                 }
 
                 else -> {
@@ -105,7 +97,6 @@ class SyncViewModel(private val repository: AttoRepository) : ViewModel() {
 //                }
 //        }
 //    }
-
 
 //    fun getData(user: User, context: Context) {
 //
@@ -143,7 +134,7 @@ class SyncViewModel(private val repository: AttoRepository) : ViewModel() {
 //
 //    }
 
-    fun syncData(context: Context,user: User){
+    fun syncData(context: Context, user: User) {
 
         _status.value = LoadStatus.LOADING
 
@@ -152,15 +143,15 @@ class SyncViewModel(private val repository: AttoRepository) : ViewModel() {
             val appList = getAppList()
             appList?.let {
 
-                when(val result = repository.syncRemoteData(context,user,it)){
+                when (val result = repository.syncRemoteData(context, user, it)) {
 
                     is Result.Success -> {
 
-                        for (app in result.data){
-                            runDataSync(context,user,app)
+                        for (app in result.data) {
+                            runDataSync(context, user, app)
                         }
 
-                        withContext(Dispatchers.Main){
+                        withContext(Dispatchers.Main) {
                             _error.value = null
                             _status.value = LoadStatus.DONE
                             _navigateToMain.value = true
@@ -187,7 +178,6 @@ class SyncViewModel(private val repository: AttoRepository) : ViewModel() {
                             _status.value = LoadStatus.ERROR
                         }
                     }
-
                 }
             }
         }
@@ -210,8 +200,7 @@ class SyncViewModel(private val repository: AttoRepository) : ViewModel() {
         repository.insert(newApp)
     }
 
-    fun doneNavigation(){
+    fun doneNavigation() {
         _navigateToMain.value = false
     }
-
 }

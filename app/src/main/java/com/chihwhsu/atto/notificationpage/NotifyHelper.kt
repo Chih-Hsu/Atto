@@ -2,12 +2,10 @@ package com.chihwhsu.atto.notificationpage
 
 import android.service.notification.StatusBarNotification
 
-
 object NotifyHelper {
 
-    var newInstance :NotifyHelper? = null
+    var newInstance: NotifyHelper? = null
     private var notifyListener: NotifyListener? = null
-
 
     fun onReceive(sbn: StatusBarNotification) {
         notifyListener?.onReceiveMessage(sbn)
@@ -21,20 +19,18 @@ object NotifyHelper {
         this.notifyListener = notifyListener
     }
 
-    fun setInitNotification(notifications : Array<StatusBarNotification>){
+    fun setInitNotification(notifications: Array<StatusBarNotification>) {
         val newList = mutableListOf<StatusBarNotification>()
-        for (i in notifications){
+        for (i in notifications) {
             newList.add(i)
         }
         notifyListener?.setInitNotification(newList)
     }
 
-
-    fun getInstance():NotifyHelper{
-        if (newInstance == null){
+    fun getInstance(): NotifyHelper {
+        if (newInstance == null) {
             newInstance = this
         }
         return newInstance as NotifyHelper
     }
 }
-

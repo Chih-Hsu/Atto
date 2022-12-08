@@ -7,7 +7,6 @@ import com.chihwhsu.atto.AlarmActivity
 import com.chihwhsu.atto.util.AlarmManagerUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class AlarmReceiver : BroadcastReceiver() {
 
@@ -25,16 +24,13 @@ class AlarmReceiver : BroadcastReceiver() {
         }
 
         val flag = intent.getIntExtra("soundOrVibrator", 0)
-        val id = intent.getIntExtra("id",0)
+        val id = intent.getIntExtra("id", 0)
         val clockIntent = Intent(context, AlarmActivity::class.java)
         clockIntent.putExtra("ringTone", ringTone)
         clockIntent.putExtra("flag", flag)
-        clockIntent.putExtra("id",id)
+        clockIntent.putExtra("id", id)
         clockIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
-        context?.let { thisContext ->
-            thisContext.startActivity(clockIntent)
-        }
-
+        context?.startActivity(clockIntent)
     }
 }

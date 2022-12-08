@@ -1,19 +1,18 @@
 package com.chihwhsu.atto.main
 
-
 import android.animation.ObjectAnimator
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.PackageManager.NameNotFoundException
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.chihwhsu.atto.NavigationDirections
@@ -26,7 +25,6 @@ import com.chihwhsu.atto.ext.getVmFactory
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
-
 
 class MainFragment : Fragment() {
 
@@ -47,61 +45,16 @@ class MainFragment : Fragment() {
         // set ViewPager2
         val adapter = MainViewPagerAdapter(this)
         binding.viewPager.adapter = adapter
-//        binding.viewPager.setCurrentItem(3,false)
-        binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-                when (binding.viewPager.currentItem) {
-                    0 -> {
-                        binding.dot1.setBackgroundResource(R.drawable.select_dot)
-                        binding.dot2.setBackgroundResource(R.drawable.default_dot)
-                        binding.dot3.setBackgroundResource(R.drawable.default_dot)
-                        binding.dot4.setBackgroundResource(R.drawable.default_dot)
-                        binding.dot5.setBackgroundResource(R.drawable.default_dot)
-                    }
+        setViewPagerIndicator()
 
-                    1 -> {
-                        binding.dot1.setBackgroundResource(R.drawable.default_dot)
-                        binding.dot2.setBackgroundResource(R.drawable.select_dot)
-                        binding.dot3.setBackgroundResource(R.drawable.default_dot)
-                        binding.dot4.setBackgroundResource(R.drawable.default_dot)
-                        binding.dot5.setBackgroundResource(R.drawable.select_dot)
-                    }
-                    2 -> {
-                        binding.dot1.setBackgroundResource(R.drawable.default_dot)
-                        binding.dot2.setBackgroundResource(R.drawable.default_dot)
-                        binding.dot3.setBackgroundResource(R.drawable.select_dot)
-                        binding.dot4.setBackgroundResource(R.drawable.default_dot)
-                        binding.dot5.setBackgroundResource(R.drawable.default_dot)
-                    }
-                    3 -> {
-                        binding.dot1.setBackgroundResource(R.drawable.default_dot)
-                        binding.dot2.setBackgroundResource(R.drawable.default_dot)
-                        binding.dot3.setBackgroundResource(R.drawable.default_dot)
-                        binding.dot4.setBackgroundResource(R.drawable.select_dot)
-                        binding.dot5.setBackgroundResource(R.drawable.default_dot)
-                    }
-                    else -> {
-                        binding.dot1.setBackgroundResource(R.drawable.default_dot)
-                        binding.dot2.setBackgroundResource(R.drawable.default_dot)
-                        binding.dot3.setBackgroundResource(R.drawable.default_dot)
-                        binding.dot4.setBackgroundResource(R.drawable.default_dot)
-                        binding.dot5.setBackgroundResource(R.drawable.default_dot)
-                    }
-                }
+        val dockAdapter = DockAdapter(
+            DockAdapter.DockOnClickListener { app ->
+                navigateByPackageName(app)
             }
-        })
-
-
-//        val myFragment = parentFragment.findFragmentByTag("f" + viewpager.currentItem)
-
-
-        val dockAdapter = DockAdapter(DockAdapter.DockOnClickListener { app ->
-            navigateByPackageName(app)
-        })
+        )
 
         binding.dockRecyclerview.adapter = dockAdapter
-        viewModel.dockList.observe(viewLifecycleOwner, Observer { list ->
+        viewModel.dockList.observe(viewLifecycleOwner) { list ->
 
             if (list.isNotEmpty()) {
                 list.sortedBy {
@@ -112,23 +65,61 @@ class MainFragment : Fragment() {
             } else {
                 binding.constraintLayout.visibility = View.GONE
             }
-        })
+        }
 
-        viewModel.timerList.observe(viewLifecycleOwner, Observer {
+        viewModel.timerList.observe(viewLifecycleOwner) {
             viewModel.checkUsageTimer(requireContext())
-        })
+        }
 
         // Only run this function in first start
-        viewModel.appNumber.observe(viewLifecycleOwner, Observer {
+        viewModel.appNumber.observe(viewLifecycleOwner) {
             if (it == 0) {
                 viewModel.updateApp()
             }
-        })
-
+        }
 
         return binding.root
     }
 
+    private fun setViewPagerIndicator() {
+
+        binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+
+                val list =
+                    listOf(binding.dot1, binding.dot2, binding.dot3, binding.dot4, binding.dot5)
+
+                when (binding.viewPager.currentItem) {
+
+                    0 -> {
+                        list.forEach { it.setBackgroundResource(R.drawable.default_dot) }
+                        list[0].setBackgroundResource(R.drawable.select_dot)
+                    }
+
+                    1 -> {
+                        list.forEach { it.setBackgroundResource(R.drawable.default_dot) }
+                        list[1].setBackgroundResource(R.drawable.select_dot)
+                        list[4].setBackgroundResource(R.drawable.select_dot)
+                    }
+
+                    2 -> {
+                        list.forEach { it.setBackgroundResource(R.drawable.default_dot) }
+                        list[2].setBackgroundResource(R.drawable.select_dot)
+                    }
+
+                    3 -> {
+                        list.forEach { it.setBackgroundResource(R.drawable.default_dot) }
+                        list[3].setBackgroundResource(R.drawable.select_dot)
+                    }
+
+                    else -> {
+                        list.forEach { it.setBackgroundResource(R.drawable.default_dot) }
+                    }
+                }
+            }
+        })
+    }
 
     private fun setSlideDrawer() {
         val drawerBinding = binding.drawer
@@ -137,24 +128,27 @@ class MainFragment : Fragment() {
             val user = FirebaseAuth.getInstance().currentUser
             textUser.text = user?.displayName ?: ""
 
+            Log.d("test", "fragment user = $user")
             if (user == null) {
-                textLoggin.text = "LOG IN"
+
+                textLoggin.text = getString(R.string.log_in)
                 linearLoggin.setOnClickListener {
                     val intent = Intent(requireContext(), SettingActivity::class.java)
                     startActivity(intent)
                 }
             } else {
-                textLoggin.text = "LOG OUT"
+                textLoggin.text = getString(R.string.log_out)
                 linearLoggin.setOnClickListener {
-                    val options = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                        .requestIdToken(getString(R.string.default_web_client_id))
-                        .requestEmail()
-                        .build()
-
-                    val signInClient = GoogleSignIn.getClient(requireActivity(), options)
-                    signInClient.signOut()
-                    val auth = FirebaseAuth.getInstance()
-                    auth.signOut()
+//                    val options = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+//                        .requestIdToken(getString(R.string.default_web_client_id))
+//                        .requestEmail()
+//                        .build()
+//
+//                    val signInClient = GoogleSignIn.getClient(requireActivity(), options)
+//                    signInClient.signOut()
+//                    val auth = FirebaseAuth.getInstance()
+//                    auth.signOut()
+                    viewModel.logOut(requireContext())
 
                     requireActivity().recreate()
                 }
@@ -173,31 +167,28 @@ class MainFragment : Fragment() {
             }
 
             textMyHa.setOnClickListener {
-                navigateAdvertiseApp("com.cleo.myha")
+                navigateAdvertiseApp(MY_HA)
             }
 
             textMiru.setOnClickListener {
-                navigateAdvertiseApp("com.neil.miruhiru")
+                navigateAdvertiseApp(MIRU_HIRU)
             }
 
             textBornMeme.setOnClickListener {
-                navigateAdvertiseApp("com.beva.bornmeme")
+                navigateAdvertiseApp(BORN_MEME)
             }
 
             textPinpisode.setOnClickListener {
-                navigateAdvertiseApp("com.tzuhsien.immediat")
+                navigateAdvertiseApp(PINPISODE)
             }
 
             textMinMap.setOnClickListener {
-                navigateAdvertiseApp("com.mindyhsu.minmap")
+                navigateAdvertiseApp(MIN_MAP)
             }
-
         }
 
         setTransitionListener()
-
     }
-
 
     override fun onResume() {
         super.onResume()
@@ -226,7 +217,6 @@ class MainFragment : Fragment() {
                 val launchAppIntent =
                     requireContext().packageManager.getLaunchIntentForPackage(app.packageName)
                 startActivity(launchAppIntent)
-
             } else {
                 // if app is not installed ,  navigate to GooglePlay
                 val intent = Intent(
@@ -248,7 +238,7 @@ class MainFragment : Fragment() {
                 if (startId == R.id.start) {
                     ObjectAnimator.ofFloat(
                         binding.drawerArrow,
-                        "rotation",
+                        ROTATION,
                         0f,
                         180F
                     ).apply {
@@ -258,7 +248,7 @@ class MainFragment : Fragment() {
                 } else {
                     ObjectAnimator.ofFloat(
                         binding.drawerArrow,
-                        "rotation",
+                        ROTATION,
                         180f,
                         360F
                     ).apply {
@@ -274,16 +264,9 @@ class MainFragment : Fragment() {
                 endId: Int,
                 progress: Float
             ) {
-
-
             }
 
             override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
-//                if (currentId == R.id.end) {
-//                    binding.drawerButton.rotation = 180f
-//                }else{
-//                    binding.drawerButton.rotation = 0f
-//                }
             }
 
             override fun onTransitionTrigger(
@@ -292,11 +275,8 @@ class MainFragment : Fragment() {
                 positive: Boolean,
                 progress: Float
             ) {
-
             }
-
         })
-
     }
 
     private fun navigateAdvertiseApp(packageName: String) {
@@ -304,12 +284,11 @@ class MainFragment : Fragment() {
             val launchAppIntent =
                 requireContext().packageManager.getLaunchIntentForPackage(packageName)
             startActivity(launchAppIntent)
-
         } else {
             // if app is not installed ,  navigate to GooglePlay
             val intent = Intent(
                 Intent.ACTION_VIEW,
-                Uri.parse("${AppListBottomFragment.GOOGLE_PLAY_LINK}id=${packageName}")
+                Uri.parse("${AppListBottomFragment.GOOGLE_PLAY_LINK}id=$packageName")
             )
             startActivity(intent)
         }
@@ -324,5 +303,13 @@ class MainFragment : Fragment() {
         }
     }
 
+    companion object {
+        private const val MY_HA = "com.cleo.myha"
+        private const val MIRU_HIRU = "com.neil.miruhiru"
+        private const val BORN_MEME = "com.beva.bornmeme"
+        private const val PINPISODE = "com.tzuhsien.immediat"
+        private const val MIN_MAP = "com.mindyhsu.minmap"
 
+        private const val ROTATION = "rotation"
+    }
 }

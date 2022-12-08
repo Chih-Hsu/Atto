@@ -3,14 +3,11 @@ package com.chihwhsu.atto.ext
 import android.content.res.Resources
 import android.graphics.*
 import android.graphics.drawable.Drawable
-import android.graphics.drawable.ShapeDrawable
 import androidx.core.graphics.drawable.toBitmap
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.shape.CornerFamily
-import com.google.android.material.shape.CornerTreatment
 import java.time.LocalDate
 import java.time.ZoneId
-
 
 // check icon is drawable or AdaptiveIconDrawable
 fun Drawable.convertToBitmap(): Bitmap = this.toBitmap(this.minimumWidth, this.minimumHeight, Bitmap.Config.ARGB_8888)
@@ -28,20 +25,18 @@ fun Bitmap.createGrayscale(): Bitmap? {
     return bmOut
 }
 
-
 fun Long.toFormat(): String? {
     val hours = this / (1000 * 60 * 60)
     val minutes = this / (1000 * 60) - hours * 60
     return "${hours}h${minutes}m"
 }
 
-fun Long.toMinuteSecondFormat():String{
+fun Long.toMinuteSecondFormat(): String {
     val minutes = this / (1000 * 60)
-    val second = this / (1000) - minutes*60
-    val displaySecond :String = if (second >= 10) second.toString() else "0$second"
+    val second = this / (1000) - minutes * 60
+    val displaySecond: String = if (second >= 10) second.toString() else "0$second"
 
-
-    return "${minutes}:${displaySecond}"
+    return "$minutes:$displaySecond"
 }
 
 fun Int.formatHour(): String {
@@ -52,7 +47,7 @@ fun Int.formatHour(): String {
     }
 
     return if (newHour < 10) {
-        "0${newHour}"
+        "0$newHour"
     } else {
         "$newHour"
     }
@@ -64,18 +59,17 @@ fun Int.formatMinutes(): String {
     } else {
         this.toString()
     }
-
 }
 
-fun ShapeableImageView.circle(){
-    this.shapeAppearanceModel.toBuilder().setAllCorners(CornerFamily.ROUNDED,50f)
+fun ShapeableImageView.circle() {
+    this.shapeAppearanceModel.toBuilder().setAllCorners(CornerFamily.ROUNDED, 50f)
 }
 
 fun Float.toDp(): Int {
     return (this / Resources.getSystem().displayMetrics.density).toInt()
 }
 
-fun dpToFloat(dp:Int,resources:Resources):Float{
+fun dpToFloat(dp: Int, resources: Resources): Float {
     return resources.displayMetrics.density * dp.toFloat()
 }
 

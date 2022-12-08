@@ -16,19 +16,19 @@ object ServiceLocator {
     var attoRepository: AttoRepository? = null
         @VisibleForTesting set
 
-    fun provideTasksRepository(context: Context,currentCoroutine: CoroutineScope): AttoRepository {
+    fun provideTasksRepository(context: Context, currentCoroutine: CoroutineScope): AttoRepository {
         synchronized(this) {
             return attoRepository
                 ?: attoRepository
-                ?: createStylishRepository(context,currentCoroutine)
+                ?: createStylishRepository(context, currentCoroutine)
         }
     }
 
-    private fun createStylishRepository(context: Context,currentCoroutine: CoroutineScope): AttoRepository {
+    private fun createStylishRepository(context: Context, currentCoroutine: CoroutineScope): AttoRepository {
         return DefaultAttoRepository(
             AttoRemoteDataSource,
             createLocalDataSource(context),
-            createSystemDataSource(context,currentCoroutine)
+            createSystemDataSource(context, currentCoroutine)
         )
     }
 
@@ -36,7 +36,7 @@ object ServiceLocator {
         return AttoLocalDataSource(context)
     }
 
-    private fun createSystemDataSource(context: Context,currentCoroutine: CoroutineScope): AttoDataSource {
-        return AttoSystemDataSource(context,currentCoroutine)
+    private fun createSystemDataSource(context: Context, currentCoroutine: CoroutineScope): AttoDataSource {
+        return AttoSystemDataSource(context, currentCoroutine)
     }
 }

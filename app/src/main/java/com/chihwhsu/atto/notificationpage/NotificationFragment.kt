@@ -16,18 +16,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.chihwhsu.atto.databinding.FragmentNotificationBinding
-import com.chihwhsu.atto.timezonepage.TimeZoneAdapter
-
 
 class NotificationFragment : Fragment(), NotifyListener {
-
 
     private val REQUEST_CODE = 999
 
     private lateinit var adapter: NotificationAdapter
     private lateinit var viewModel: NotificationViewModel
     private lateinit var binding: FragmentNotificationBinding
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,18 +42,19 @@ class NotificationFragment : Fragment(), NotifyListener {
         adapter = NotificationAdapter()
         binding.recyclerviewNotification.adapter = adapter
 
-        viewModel.notificationList.observe(viewLifecycleOwner, Observer {
-            adapter.submitList(it)
-        })
+        viewModel.notificationList.observe(
+            viewLifecycleOwner,
+            Observer {
+                adapter.submitList(it)
+            }
+        )
 
         requestPermission()
 
         setItemTouchHelper()
 
-
         return binding.root
     }
-
 
     private fun requestPermission() {
 
@@ -130,5 +127,4 @@ class NotificationFragment : Fragment(), NotifyListener {
         val itemHelper = ItemTouchHelper(simpleCallback)
         itemHelper.attachToRecyclerView(binding.recyclerviewNotification)
     }
-
 }

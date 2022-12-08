@@ -14,10 +14,8 @@ import com.chihwhsu.atto.NavigationDirections
 import com.chihwhsu.atto.R
 import com.chihwhsu.atto.databinding.DialogWidgetRemoveBinding
 import com.chihwhsu.atto.ext.getVmFactory
-import com.chihwhsu.atto.widgetpage.WidgetViewModel
 
 class WidgetRemoveDialog : DialogFragment() {
-
 
     private val viewModel by viewModels<WidgetRemoveViewModel> { getVmFactory() }
 
@@ -26,11 +24,11 @@ class WidgetRemoveDialog : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = DialogWidgetRemoveBinding.inflate(inflater,container,false)
+        val binding = DialogWidgetRemoveBinding.inflate(inflater, container, false)
 
         val widget = WidgetRemoveDialogArgs.fromBundle(requireArguments()).widget
 
-        binding.textTitle.text = getString(R.string.remove_widget,widget.label)
+        binding.textTitle.text = getString(R.string.remove_widget, widget.label)
 
         binding.buttonPositive.setOnClickListener {
             viewModel.removeWidget(widget)
@@ -40,13 +38,14 @@ class WidgetRemoveDialog : DialogFragment() {
 //            findNavController().navigateUp()
 //        }
 
-        viewModel.navigateToHome.observe(viewLifecycleOwner, Observer {
-            if (it == true){
-                findNavController().navigate(NavigationDirections.actionGlobalMainFragment())
+        viewModel.navigateToHome.observe(
+            viewLifecycleOwner,
+            Observer {
+                if (it == true) {
+                    findNavController().navigate(NavigationDirections.actionGlobalMainFragment())
+                }
             }
-        })
-
-
+        )
 
         return binding.root
     }

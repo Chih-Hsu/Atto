@@ -72,7 +72,5 @@ class WallpaperFragment : Fragment() {
         viewModel.wallpapers.observe(viewLifecycleOwner) {
             adapter.submitList(it)
         }
-
-
     }
 }

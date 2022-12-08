@@ -7,7 +7,7 @@ import com.chihwhsu.atto.setting.wallpaper.WallpaperViewModel
 
 class WallpaperViewModelFactory(val resources: Resources) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(WallpaperViewModel::class.java)){
+        if (modelClass.isAssignableFrom(WallpaperViewModel::class.java)) {
             return WallpaperViewModel(resources) as T
         } else {
             throw IllegalArgumentException("Unknown ViewModel Class")

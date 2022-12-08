@@ -17,20 +17,19 @@ import com.chihwhsu.atto.data.Theme
 import com.chihwhsu.atto.databinding.ItemAppListBinding
 import com.chihwhsu.atto.databinding.ItemLabelBinding
 
-
 class AppListBottomAdapter(
     val appOnClickListener: AppOnClickListener,
     val longClickListener: LongClickListener
 ) : ListAdapter<AppListItem, RecyclerView.ViewHolder>(object :
-    DiffUtil.ItemCallback<AppListItem>() {
-    override fun areItemsTheSame(oldItem: AppListItem, newItem: AppListItem): Boolean {
-        return oldItem.id == newItem.id
-    }
+        DiffUtil.ItemCallback<AppListItem>() {
+        override fun areItemsTheSame(oldItem: AppListItem, newItem: AppListItem): Boolean {
+            return oldItem.id == newItem.id
+        }
 
-    override fun areContentsTheSame(oldItem: AppListItem, newItem: AppListItem): Boolean {
-        return oldItem == newItem
-    }
-}) {
+        override fun areContentsTheSame(oldItem: AppListItem, newItem: AppListItem): Boolean {
+            return oldItem == newItem
+        }
+    }) {
 
     companion object {
         const val APP_ITEM_VIEW_TYPE_LABEL = 0x00
@@ -44,7 +43,6 @@ class AppListBottomAdapter(
     class LongClickListener(val onClickListener: (app: App) -> Unit) {
         fun onClick(app: App) = onClickListener(app)
     }
-
 
     inner class LabelViewHolder(val binding: ItemLabelBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -63,11 +61,10 @@ class AppListBottomAdapter(
 
             binding.appName.text = item.app.appLabel
 
-            setAlphaByInstallState(item)  // App is installed or not
+            setAlphaByInstallState(item) // App is installed or not
             setIcon(item)
-            setBackground(item)   // set background color according to app theme
-            setAppClickableStateByEnable(item)  // App is locked or not
-
+            setBackground(item) // set background color according to app theme
+            setAppClickableStateByEnable(item) // App is locked or not
 
             itemView.setOnLongClickListener {
                 longClickListener.onClick(item.app)
@@ -94,7 +91,6 @@ class AppListBottomAdapter(
 
                 binding.iconBackground.foreground = null
                 binding.lockImage.visibility = View.GONE
-
             } else {
 
                 binding.iconBackground.foreground = ResourcesCompat.getDrawable(
@@ -103,7 +99,6 @@ class AppListBottomAdapter(
                     null
                 )
                 binding.lockImage.visibility = View.VISIBLE
-
             }
         }
 
@@ -164,7 +159,6 @@ class AppListBottomAdapter(
             }
             else -> throw ClassCastException("Unknown viewType $viewType")
         }
-
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -186,6 +180,4 @@ class AppListBottomAdapter(
             is AppListItem.AppItem -> APP_ITEM_VIEW_TYPE_APP
         }
     }
-
-
 }

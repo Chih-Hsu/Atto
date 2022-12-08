@@ -14,19 +14,18 @@ import com.chihwhsu.atto.databinding.ItemAppListBinding
 
 class AppListAdapter(val viewModel: DockViewModel, val onClickListener: AppOnClickListener) :
     ListAdapter<App, AppListAdapter.AppViewHolder>(object :
-        DiffUtil.ItemCallback<App>() {
-        override fun areItemsTheSame(oldItem: App, newItem: App): Boolean {
-            return oldItem.packageName == newItem.packageName
-        }
+            DiffUtil.ItemCallback<App>() {
+            override fun areItemsTheSame(oldItem: App, newItem: App): Boolean {
+                return oldItem.packageName == newItem.packageName
+            }
 
-        override fun areContentsTheSame(oldItem: App, newItem: App): Boolean {
-            return oldItem == newItem
-        }
-    }) {
+            override fun areContentsTheSame(oldItem: App, newItem: App): Boolean {
+                return oldItem == newItem
+            }
+        }) {
 
     class AppOnClickListener(val onClickListener: (appLabel: String) -> Unit) {
         fun onClick(appLabel: String) = onClickListener(appLabel)
-
     }
 
     inner class AppViewHolder(val binding: ItemAppListBinding) :
@@ -77,5 +76,4 @@ class AppListAdapter(val viewModel: DockViewModel, val onClickListener: AppOnCli
         val currentItem = getItem(position)
         holder.bind(currentItem)
     }
-
 }

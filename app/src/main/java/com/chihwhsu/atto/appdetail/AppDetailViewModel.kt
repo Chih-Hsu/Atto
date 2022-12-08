@@ -6,9 +6,8 @@ import androidx.lifecycle.ViewModel
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.data.Theme
 import com.chihwhsu.atto.data.database.AttoRepository
-import kotlinx.coroutines.*
 import java.time.LocalDate
-
+import kotlinx.coroutines.*
 
 class AppDetailViewModel(private val repository: AttoRepository, private val argument: App) :
     ViewModel() {
@@ -52,7 +51,7 @@ class AppDetailViewModel(private val repository: AttoRepository, private val arg
     fun create24HBarSet(list: List<Float>) {
 
         val perHourBarSet = listOf(
-            "00" to list[0],
+            "00" to 1f,
             "." to list[1],
             "." to list[2],
             "." to list[3],
@@ -60,8 +59,8 @@ class AppDetailViewModel(private val repository: AttoRepository, private val arg
             "." to list[5],
             "." to list[6],
             "." to list[7],
-            "08" to list[8],
-            "." to list[9],
+            "08" to 12f,
+            "." to 3f,
             "." to list[10],
             "." to list[11],
             "12" to list[12],
@@ -80,7 +79,6 @@ class AppDetailViewModel(private val repository: AttoRepository, private val arg
         )
         _barSet.value = perHourBarSet
     }
-
 
     fun createWeekChartSet(list: List<Float>) {
 

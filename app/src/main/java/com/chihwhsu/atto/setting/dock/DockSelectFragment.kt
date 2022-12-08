@@ -28,9 +28,12 @@ class DockSelectFragment : Fragment() {
 
         // set app list recyclerview
         val appListAdapter =
-            AppListAdapter(viewModel, AppListAdapter.AppOnClickListener { appLabel ->
-                viewModel.selectApp(appLabel)
-            })
+            AppListAdapter(
+                viewModel,
+                AppListAdapter.AppOnClickListener { appLabel ->
+                    viewModel.selectApp(appLabel)
+                }
+            )
         binding.appListRecyclerview.adapter = appListAdapter
 
         viewModel.dataList.observe(viewLifecycleOwner) {
@@ -40,7 +43,6 @@ class DockSelectFragment : Fragment() {
         viewModel.appList.observe(viewLifecycleOwner) {
             appListAdapter.submitList(it)
         }
-
 
         // set dock list recyclerview
         val dockListAdapter = DockAppListAdapter()
@@ -54,7 +56,6 @@ class DockSelectFragment : Fragment() {
         viewModel.dockAppList.observe(viewLifecycleOwner) {
             dockListAdapter.submitList(it)
         }
-
 
         // set button navigation
         binding.buttonNext.setOnClickListener {
@@ -82,6 +83,4 @@ class DockSelectFragment : Fragment() {
             }
         })
     }
-
-
 }

@@ -32,35 +32,35 @@ class TimeZoneFragment : Fragment() {
         binding.recyclerviewTimezone.adapter = adapter
         setItemTouchHelper(adapter)
 
-        viewModel.timeZoneList.observe(viewLifecycleOwner, androidx.lifecycle.Observer { list ->
-            adapter.submitList(list.sortedBy { it.sort })
-        })
-
+        viewModel.timeZoneList.observe(
+            viewLifecycleOwner,
+            androidx.lifecycle.Observer { list ->
+                adapter.submitList(list.sortedBy { it.sort })
+            }
+        )
 
         binding.buttonAdd.setOnClickListener {
             findNavController().navigate(TimeZoneFragmentDirections.actionTimeZoneFragmentToTimeZoneDialog())
         }
 
-
         return binding.root
     }
 
     private fun setClockDisplayMode() {
-        if (UserPreference.showSingleTimeZoneClock){
+        if (UserPreference.showSingleTimeZoneClock) {
             binding.singleCheckbox.isChecked = true
         } else {
             binding.multiCheckbox.isChecked = true
         }
 
-
         binding.singleCheckbox.addOnCheckedStateChangedListener { checkBox, state ->
-            if (checkBox.isChecked){
+            if (checkBox.isChecked) {
                 binding.multiCheckbox.isChecked = false
                 UserPreference.showSingleTimeZoneClock = true
             }
         }
         binding.multiCheckbox.addOnCheckedStateChangedListener { checkBox, state ->
-            if (checkBox.isChecked){
+            if (checkBox.isChecked) {
                 binding.singleCheckbox.isChecked = false
                 UserPreference.showSingleTimeZoneClock = false
             }

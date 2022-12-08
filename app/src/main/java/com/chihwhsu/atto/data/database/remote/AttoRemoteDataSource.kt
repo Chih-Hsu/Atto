@@ -4,11 +4,9 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
 import android.provider.Settings
-import android.util.Log
 import androidx.lifecycle.LiveData
 import com.chihwhsu.atto.data.*
 import com.chihwhsu.atto.data.database.AttoDataSource
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import java.io.File
@@ -18,7 +16,10 @@ import kotlin.coroutines.suspendCoroutine
 object AttoRemoteDataSource : AttoDataSource {
 
     private const val STORAGE_PATH = "gs://atto-eaae3.appspot.com"
-
+    private const val USER = "user"
+    private const val APP = "App"
+    private const val DEVICE_ID = "deviceId"
+    private const val EMAIL = "email"
 
     override suspend fun insert(app: App) {
         TODO("Not yet implemented")
@@ -186,12 +187,11 @@ object AttoRemoteDataSource : AttoDataSource {
 
     override suspend fun getUser(email: String): Result<User> = suspendCoroutine { continuation ->
 
-//        val auth = FirebaseAuth.getInstance()
         val dataBase = FirebaseFirestore.getInstance()
 
         var currentUser: User?
 
-        dataBase.collection("user")
+        dataBase.collection(USER)
             .document(email)
             .get()
             .addOnCompleteListener { task ->
@@ -205,7 +205,6 @@ object AttoRemoteDataSource : AttoDataSource {
                     } else {
                         continuation.resume(Result.Fail("No User"))
                     }
-
                 } else {
 
                     task.exception?.let { e ->
@@ -215,7 +214,6 @@ object AttoRemoteDataSource : AttoDataSource {
                     }
                     continuation.resume(Result.Fail("Get User Fail"))
                 }
-
             }
     }
 
@@ -229,9 +227,9 @@ object AttoRemoteDataSource : AttoDataSource {
 
         updateDeviceId(user, context)
 
-        dataBase.collection("user")
+        dataBase.collection(USER)
             .document(user.email!!)
-            .collection("App")
+            .collection(APP)
             .get()
             .addOnCompleteListener { task ->
 
@@ -250,7 +248,6 @@ object AttoRemoteDataSource : AttoDataSource {
                         context.filesDir.absolutePath + "/" + "${newApp.appLabel}.png"
 
                     newAppList.add(newApp)
-
                 }
 
                 if (newAppList.isNotEmpty()) {
@@ -262,14 +259,18 @@ object AttoRemoteDataSource : AttoDataSource {
     }
 
     @SuppressLint("HardwareIds")
-    override suspend fun uploadData(context: Context, localAppList: List<App>, email:String): Result<Boolean> =
+    override suspend fun uploadData(
+        context: Context,
+        localAppList: List<App>,
+        email: String
+    ): Result<Boolean> =
         suspendCoroutine { continuation ->
 
             val dataBase = FirebaseFirestore.getInstance()
             val remoteAppList = mutableListOf<App>()
 
-            dataBase.collection("user")
-                .whereEqualTo("email", email)
+            dataBase.collection(USER)
+                .whereEqualTo(EMAIL, email)
                 .get()
                 .addOnCompleteListener { task ->
 
@@ -321,7 +322,7 @@ object AttoRemoteDataSource : AttoDataSource {
             val newApp = App(
                 app.appLabel,
                 app.packageName,
-                "$STORAGE_PATH/${email}/${app.appLabel}.png",
+                "$STORAGE_PATH/$email/${app.appLabel}.png",
                 app.label,
                 app.isEnable,
                 app.theme,
@@ -329,16 +330,14 @@ object AttoRemoteDataSource : AttoDataSource {
                 app.sort
             )
 
-                dataBase.collection("user")
-                    .document(email)
-                    .collection("App")
-                    .document(app.appLabel)
-                    .set(newApp)
+            dataBase.collection(USER)
+                .document(email)
+                .collection(APP)
+                .document(app.appLabel)
+                .set(newApp)
 
-                // Upload AppIconImage
-                uploadImage(email, app)
-
-
+            // Upload AppIconImage
+            uploadImage(email, app)
         }
     }
 
@@ -348,28 +347,27 @@ object AttoRemoteDataSource : AttoDataSource {
         remoteAppList: MutableList<App>,
         localAppList: List<App>
     ) {
-            dataBase.collection("user")
-                .document(email)
-                .collection("App")
-                .get()
-                .addOnSuccessListener { apps ->
+        dataBase.collection(USER)
+            .document(email)
+            .collection(APP)
+            .get()
+            .addOnSuccessListener { apps ->
 
-                    if (!apps.isEmpty) {
-                        remoteAppList.addAll(apps.toObjects(App::class.java))
+                if (!apps.isEmpty) {
+                    remoteAppList.addAll(apps.toObjects(App::class.java))
 
-                        for (app in remoteAppList) {
+                    for (app in remoteAppList) {
 
-                            if (localAppList.none { it.appLabel == app.appLabel }) {
-                                dataBase.collection("user")
-                                    .document(email)
-                                    .collection("App")
-                                    .document(app.appLabel)
-                                    .delete()
-                            }
+                        if (localAppList.none { it.appLabel == app.appLabel }) {
+                            dataBase.collection(USER)
+                                .document(email)
+                                .collection(APP)
+                                .document(app.appLabel)
+                                .delete()
                         }
                     }
-
-        }
+                }
+            }
     }
 
     override suspend fun uploadUser(user: User): Result<Boolean> =
@@ -378,8 +376,8 @@ object AttoRemoteDataSource : AttoDataSource {
             val dataBase = FirebaseFirestore.getInstance()
 
             // Check user data before upload
-            dataBase.collection("user")
-                .whereEqualTo("email", user.email)
+            dataBase.collection(USER)
+                .whereEqualTo(EMAIL, user.email)
                 .get()
                 .addOnCompleteListener { task ->
 
@@ -391,8 +389,6 @@ object AttoRemoteDataSource : AttoDataSource {
                                     .toObject(User::class.java)
                             } else null
 
-                        Log.d("test","remote = ${remoteUser?.deviceId}  local = ${user.deviceId}")
-
                         // Do not update deviceId , if device is different
                         val newUser = User(
                             user.id,
@@ -403,13 +399,12 @@ object AttoRemoteDataSource : AttoDataSource {
                         )
 
                         user.email?.let { email ->
-                            dataBase.collection("user")
+                            dataBase.collection(USER)
                                 .document(email)
                                 .set(newUser)
 
                             continuation.resume(Result.Success(true))
                         }
-
                     } else {
 
                         task.exception?.let { e ->
@@ -421,7 +416,7 @@ object AttoRemoteDataSource : AttoDataSource {
                 }
         }
 
-    override fun getAllTimeZone():LiveData<List<AttoTimeZone>> {
+    override fun getAllTimeZone(): LiveData<List<AttoTimeZone>> {
         TODO("Not yet implemented")
     }
 
@@ -432,20 +427,18 @@ object AttoRemoteDataSource : AttoDataSource {
     private fun uploadImage(email: String, app: App) {
 
         val storage = FirebaseStorage.getInstance().reference
-        val imageRef = storage.child("${email}/${app.appLabel}.png")
+        val imageRef = storage.child("$email/${app.appLabel}.png")
         val file = Uri.fromFile(File(app.iconPath))
         imageRef.putFile(file)
-
     }
-
 
     @SuppressLint("HardwareIds")
     private fun updateDeviceId(user: User, context: Context) {
         val dataBase = FirebaseFirestore.getInstance()
-        dataBase.collection("user")
+        dataBase.collection(USER)
             .document(user.email!!)
             .update(
-                "deviceId",
+                DEVICE_ID,
                 Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
             )
     }

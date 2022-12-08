@@ -34,25 +34,36 @@ class AddLabelFragment : Fragment() {
         }
 
         val listAdapter =
-            AddLabelListAdapter(viewModel, AddLabelListAdapter.AppOnClickListener { app ->
-                viewModel.addToList(app)
-            })
+            AddLabelListAdapter(
+                viewModel,
+                AddLabelListAdapter.AppOnClickListener { app ->
+                    viewModel.addToList(app)
+                }
+            )
         binding.appListRecyclerview.adapter = listAdapter
 
-
-        viewModel.appList.observe(viewLifecycleOwner, Observer {
-            viewModel.getData()
-        })
-
-        viewModel.labelAppList.observe(viewLifecycleOwner, Observer {
-            if (editLabel != null) {
-                viewModel.setRemainList(it)
+        viewModel.appList.observe(
+            viewLifecycleOwner,
+            Observer {
+                viewModel.getData()
             }
-        })
+        )
 
-        viewModel.filterList.observe(viewLifecycleOwner, Observer {
-            listAdapter.submitList(it)
-        })
+        viewModel.labelAppList.observe(
+            viewLifecycleOwner,
+            Observer {
+                if (editLabel != null) {
+                    viewModel.setRemainList(it)
+                }
+            }
+        )
+
+        viewModel.filterList.observe(
+            viewLifecycleOwner,
+            Observer {
+                listAdapter.submitList(it)
+            }
+        )
 
         binding.buttonCheck.setOnClickListener {
             val label = binding.editTextLabel.text.toString()
@@ -63,12 +74,15 @@ class AddLabelFragment : Fragment() {
             }
         }
 
-        viewModel.navigateToSort.observe(viewLifecycleOwner, Observer { canNavigate ->
-            if (canNavigate) {
-                findNavController().navigate(AddLabelFragmentDirections.actionAddLabelFragmentToSortFragment())
-                viewModel.doneNavigation()
+        viewModel.navigateToSort.observe(
+            viewLifecycleOwner,
+            Observer { canNavigate ->
+                if (canNavigate) {
+                    findNavController().navigate(AddLabelFragmentDirections.actionAddLabelFragmentToSortFragment())
+                    viewModel.doneNavigation()
+                }
             }
-        })
+        )
 
         // searchView
         binding.appSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -82,10 +96,6 @@ class AddLabelFragment : Fragment() {
             }
         })
 
-
-
         return binding.root
     }
-
-
 }

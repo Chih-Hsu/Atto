@@ -35,7 +35,6 @@ class AlarmActivity : AppCompatActivity() {
     val NOTIFICATION_ID = 1
     val BREAK_NOTIFICATION_ID = 2
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityAlarmBinding.inflate(layoutInflater)
@@ -54,107 +53,56 @@ class AlarmActivity : AppCompatActivity() {
 
         val intent = this.intent
         viewModel.setIntent(intent)
-        viewModel.currentIntent.observe(this, Observer {
-            val id = intent.getIntExtra("id", 0)
-            viewModel.getEvent(id)
-        })
+        viewModel.currentIntent.observe(
+            this,
+            Observer {
+                val id = intent.getIntExtra("id", 0)
+                viewModel.getEvent(id)
+            }
+        )
 
+        viewModel.event.observe(
+            this,
+            Observer { event ->
 
-        viewModel.event.observe(this, Observer { event ->
+                ringTone = intent.getStringExtra("ringTone")
+                flag = intent.getIntExtra("flag", 0)
 
-            ringTone = intent.getStringExtra("ringTone")
-            flag = intent.getIntExtra("flag", 0)
+                when (event.type) {
 
-            when (event.type) {
+                    // Pomodoro Work
+                    Event.POMODORO_WORK_TYPE -> {
+                        binding.animationWork.visibility = View.VISIBLE
+                        binding.animationAlarm.visibility = View.GONE
+                        binding.animationBreak.visibility = View.GONE
+                        binding.textTimeToWork.text = "Time To \nWork !"
+                        binding.materialButton.text = "Fuck Work"
 
-                // Pomodoro Work
-                Event.POMODORO_WORK_TYPE -> {
-                    binding.animationWork.visibility = View.VISIBLE
-                    binding.animationAlarm.visibility = View.GONE
-                    binding.animationBreak.visibility = View.GONE
-                    binding.textTimeToWork.text = "Time To \nWork !"
-                    binding.materialButton.text = "Fuck Work"
-
-                    event.lockAppLabel?.let {
-                        viewModel.lockApp(it)
-                    }
-
-                    createNotificationChannel()
-
-                    // when this countdown close , break countdown will start,
-                    // so the startActivity will close break countdown in the same time
-                    // the purpose of minus 1000 is to stagger two timer
-                    val countDownTimer = object :
-                        CountDownTimer(event.alarmTime - event.startTime!! - 1000L, 1000L) {
-
-
-
-                        override fun onTick(millisUntilFinished: Long) {
-                            binding.textCountDown.text = millisUntilFinished.toMinuteSecondFormat()
-
-                            val notificationIntent =
-                                Intent(this@AlarmActivity, AlarmActivity::class.java)
-                            val pendingIntent = PendingIntent.getActivity(
-                                this@AlarmActivity,
-                                0, notificationIntent, PendingIntent.FLAG_IMMUTABLE
-                            )
-
-                            val notification: Notification =
-                                NotificationCompat.Builder(this@AlarmActivity, CHANNEL_ID)
-                                    .setContentTitle("該 工 作 囉 ~")
-                                    .setContentText("剩餘時間 : ${millisUntilFinished.toMinuteSecondFormat()} ")
-                                    .setSmallIcon(R.drawable.ic_launcher_foreground)
-                                    .setContentIntent(pendingIntent)
-                                    .build()
-
-                            val notificationManager =
-                                NotificationManagerCompat.from(this@AlarmActivity)
-
-                            notificationManager.notify(NOTIFICATION_ID, notification)
-
+                        event.lockAppLabel?.let {
+                            viewModel.lockApp(it)
                         }
 
-                        override fun onFinish() {
-                            val newIntent = Intent(applicationContext, MainActivity::class.java)
-                            newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-                            startActivity(newIntent)
-                            finish()
-                        }
-                    }
-                    countDownTimer.start()
-                }
+                        createNotificationChannel()
 
-                // Pomodoro break
-                Event.POMODORO_BREAK_TYPE -> {
-                    binding.animationWork.visibility = View.GONE
-                    binding.animationAlarm.visibility = View.GONE
-                    binding.animationBreak.visibility = View.VISIBLE
-                    binding.textCountDown.text =
-                        getTimeFromStartOfDay(System.currentTimeMillis()).toFormat()
-                    binding.textTimeToWork.text = "Time To \nTake a Break !"
-                    binding.materialButton.text = "Close"
+                        // when this countdown close , break countdown will start,
+                        // so the startActivity will close break countdown in the same time
+                        // the purpose of minus 1000 is to stagger two timer
+                        val countDownTimer = object :
+                            CountDownTimer(event.alarmTime - event.startTime!! - 1000L, 1000L) {
 
-                    event.lockAppLabel?.let {
-                        viewModel.unLockApp(it)
-                    }
-
-                    val countDownTimer =
-                        object : CountDownTimer(event.alarmTime - event.startTime!! - 1000, 1000L) {
                             override fun onTick(millisUntilFinished: Long) {
-
-                                binding.textCountDown.text =
-                                    millisUntilFinished.toMinuteSecondFormat()
+                                binding.textCountDown.text = millisUntilFinished.toMinuteSecondFormat()
 
                                 val notificationIntent =
                                     Intent(this@AlarmActivity, AlarmActivity::class.java)
                                 val pendingIntent = PendingIntent.getActivity(
                                     this@AlarmActivity,
-                                    1, notificationIntent, PendingIntent.FLAG_IMMUTABLE
+                                    0, notificationIntent, PendingIntent.FLAG_IMMUTABLE
                                 )
 
                                 val notification: Notification =
                                     NotificationCompat.Builder(this@AlarmActivity, CHANNEL_ID)
-                                        .setContentTitle("該 休 息 囉 ~")
+                                        .setContentTitle("該 工 作 囉 ~")
                                         .setContentText("剩餘時間 : ${millisUntilFinished.toMinuteSecondFormat()} ")
                                         .setSmallIcon(R.drawable.ic_launcher_foreground)
                                         .setContentIntent(pendingIntent)
@@ -163,8 +111,7 @@ class AlarmActivity : AppCompatActivity() {
                                 val notificationManager =
                                     NotificationManagerCompat.from(this@AlarmActivity)
 
-                                notificationManager.notify(BREAK_NOTIFICATION_ID, notification)
-
+                                notificationManager.notify(NOTIFICATION_ID, notification)
                             }
 
                             override fun onFinish() {
@@ -174,23 +121,74 @@ class AlarmActivity : AppCompatActivity() {
                                 finish()
                             }
                         }
-                    countDownTimer.start()
+                        countDownTimer.start()
+                    }
 
-                }
+                    // Pomodoro break
+                    Event.POMODORO_BREAK_TYPE -> {
+                        binding.animationWork.visibility = View.GONE
+                        binding.animationAlarm.visibility = View.GONE
+                        binding.animationBreak.visibility = View.VISIBLE
+                        binding.textCountDown.text =
+                            getTimeFromStartOfDay(System.currentTimeMillis()).toFormat()
+                        binding.textTimeToWork.text = "Time To \nTake a Break !"
+                        binding.materialButton.text = "Close"
 
-                else -> {
-                    binding.animationWork.visibility = View.GONE
-                    binding.animationAlarm.visibility = View.VISIBLE
-                    binding.animationBreak.visibility = View.GONE
-                    binding.textCountDown.text =
-                        getTimeFromStartOfDay(System.currentTimeMillis()).toFormat()
-                    binding.textTimeToWork.text = "Time To \nWake Up !"
-                    binding.materialButton.text = "Close"
-                    setVibratorAndRingTone(flag!!, ringTone!!)
+                        event.lockAppLabel?.let {
+                            viewModel.unLockApp(it)
+                        }
+
+                        val countDownTimer =
+                            object : CountDownTimer(event.alarmTime - event.startTime!! - 1000, 1000L) {
+                                override fun onTick(millisUntilFinished: Long) {
+
+                                    binding.textCountDown.text =
+                                        millisUntilFinished.toMinuteSecondFormat()
+
+                                    val notificationIntent =
+                                        Intent(this@AlarmActivity, AlarmActivity::class.java)
+                                    val pendingIntent = PendingIntent.getActivity(
+                                        this@AlarmActivity,
+                                        1, notificationIntent, PendingIntent.FLAG_IMMUTABLE
+                                    )
+
+                                    val notification: Notification =
+                                        NotificationCompat.Builder(this@AlarmActivity, CHANNEL_ID)
+                                            .setContentTitle("該 休 息 囉 ~")
+                                            .setContentText("剩餘時間 : ${millisUntilFinished.toMinuteSecondFormat()} ")
+                                            .setSmallIcon(R.drawable.ic_launcher_foreground)
+                                            .setContentIntent(pendingIntent)
+                                            .build()
+
+                                    val notificationManager =
+                                        NotificationManagerCompat.from(this@AlarmActivity)
+
+                                    notificationManager.notify(BREAK_NOTIFICATION_ID, notification)
+                                }
+
+                                override fun onFinish() {
+                                    val newIntent = Intent(applicationContext, MainActivity::class.java)
+                                    newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                                    startActivity(newIntent)
+                                    finish()
+                                }
+                            }
+                        countDownTimer.start()
+                    }
+
+                    else -> {
+                        binding.animationWork.visibility = View.GONE
+                        binding.animationAlarm.visibility = View.VISIBLE
+                        binding.animationBreak.visibility = View.GONE
+                        binding.textCountDown.text =
+                            getTimeFromStartOfDay(System.currentTimeMillis()).toFormat()
+                        binding.textTimeToWork.text = "Time To \nWake Up !"
+                        binding.materialButton.text = "Close"
+                        setVibratorAndRingTone(flag!!, ringTone!!)
+                    }
                 }
             }
-        })
-
+        )
 
         binding.materialButton.setOnClickListener {
             if (flag == 1 || flag == 2) {
@@ -202,8 +200,6 @@ class AlarmActivity : AppCompatActivity() {
             val newIntent = Intent(applicationContext, MainActivity::class.java)
             startActivity(newIntent)
         }
-
-
     }
 
     private fun setVibratorAndRingTone(flag: Int, ringTone: String) {
@@ -215,7 +211,6 @@ class AlarmActivity : AppCompatActivity() {
                     Uri.parse(ringTone)
                 )
             currentRingtone?.play()
-
         }
 
         if (flag == 0 || flag == 2) {
@@ -227,9 +222,7 @@ class AlarmActivity : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-
     }
-
 
     private fun createNotificationChannel() {
         val channel = NotificationChannel(
@@ -239,6 +232,4 @@ class AlarmActivity : AppCompatActivity() {
         val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         manager.createNotificationChannel(channel)
     }
-
-
 }
