@@ -4,7 +4,7 @@ import android.service.notification.StatusBarNotification
 
 object NotifyHelper {
 
-    var newInstance: NotifyHelper? = null
+    private var newInstance: NotifyHelper? = null
     private var notifyListener: NotifyListener? = null
 
     fun onReceive(sbn: StatusBarNotification) {

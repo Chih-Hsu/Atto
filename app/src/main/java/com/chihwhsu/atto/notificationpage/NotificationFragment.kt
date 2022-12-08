@@ -11,15 +11,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.chihwhsu.atto.databinding.FragmentNotificationBinding
 
 class NotificationFragment : Fragment(), NotifyListener {
-
-    private val REQUEST_CODE = 999
 
     private lateinit var adapter: NotificationAdapter
     private lateinit var viewModel: NotificationViewModel
@@ -31,7 +28,7 @@ class NotificationFragment : Fragment(), NotifyListener {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentNotificationBinding.inflate(inflater, container, false)
-        viewModel = ViewModelProvider(this).get(NotificationViewModel::class.java)
+        viewModel = ViewModelProvider(this)[NotificationViewModel::class.java]
 
         // Get NotificationListenerService Data
         NotifyHelper.getInstance().setNotifyListener(this)
@@ -43,11 +40,10 @@ class NotificationFragment : Fragment(), NotifyListener {
         binding.recyclerviewNotification.adapter = adapter
 
         viewModel.notificationList.observe(
-            viewLifecycleOwner,
-            Observer {
-                adapter.submitList(it)
-            }
-        )
+            viewLifecycleOwner
+        ) {
+            adapter.submitList(it)
+        }
 
         requestPermission()
 
@@ -60,11 +56,12 @@ class NotificationFragment : Fragment(), NotifyListener {
 
         if (!isNLServiceEnabled()) {
             startActivityForResult(
-                Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"),
+                Intent(ACTION_NOTIFICATION_LISTENER_SETTINGS),
                 REQUEST_CODE
             )
         } else {
-//            Toast.makeText(requireContext(),"通知服务已开启",Toast.LENGTH_SHORT).show()
+            // Reset Notification Listener Service
+            // If No this function , sometimes it will not work,so need to reset evey time is better
             toggleNotificationListenerService(requireContext())
         }
     }
@@ -72,7 +69,7 @@ class NotificationFragment : Fragment(), NotifyListener {
     private fun isNLServiceEnabled(): Boolean {
         val packageNames = NotificationManagerCompat.getEnabledListenerPackages(requireActivity())
 
-        return packageNames.contains("com.chihwhsu.atto")
+        return packageNames.contains(ATTO)
     }
 
     private fun toggleNotificationListenerService(context: Context) {
@@ -103,7 +100,7 @@ class NotificationFragment : Fragment(), NotifyListener {
     private fun setItemTouchHelper() {
         val simpleCallback = object : ItemTouchHelper.SimpleCallback(
             ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.START or ItemTouchHelper.END,
-            100
+            MIN_DISTANCE
         ) {
 
             override fun onMove(
@@ -126,5 +123,12 @@ class NotificationFragment : Fragment(), NotifyListener {
         }
         val itemHelper = ItemTouchHelper(simpleCallback)
         itemHelper.attachToRecyclerView(binding.recyclerviewNotification)
+    }
+
+    companion object {
+        private const val REQUEST_CODE = 999
+        private const val ATTO = "com.chihwhsu.atto"
+        private const val ACTION_NOTIFICATION_LISTENER_SETTINGS = "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"
+        private const val MIN_DISTANCE = 100
     }
 }

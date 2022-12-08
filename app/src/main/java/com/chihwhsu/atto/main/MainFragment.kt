@@ -22,8 +22,6 @@ import com.chihwhsu.atto.applistpage.bottomsheet.AppListBottomFragment
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.databinding.FragmentMainBinding
 import com.chihwhsu.atto.ext.getVmFactory
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 
 class MainFragment : Fragment() {
@@ -139,17 +137,7 @@ class MainFragment : Fragment() {
             } else {
                 textLoggin.text = getString(R.string.log_out)
                 linearLoggin.setOnClickListener {
-//                    val options = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//                        .requestIdToken(getString(R.string.default_web_client_id))
-//                        .requestEmail()
-//                        .build()
-//
-//                    val signInClient = GoogleSignIn.getClient(requireActivity(), options)
-//                    signInClient.signOut()
-//                    val auth = FirebaseAuth.getInstance()
-//                    auth.signOut()
                     viewModel.logOut(requireContext())
-
                     requireActivity().recreate()
                 }
             }

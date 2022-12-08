@@ -13,4 +13,5 @@
 
     <string name="pomodoro_content">Time to Work \n\n %1s to %2s</string>
     <string name="pomodoro_break_content">Time to Break \n\n %1s to %2s</string>
+    <string name="success_login">Successfully Logged in</string>
 </resources>

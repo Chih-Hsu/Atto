@@ -26,6 +26,40 @@ class DockSelectFragment : Fragment() {
 
         setSearchView()
 
+        setAppListRecyclerview()
+
+        setDockListRecyclerview()
+
+        // set button navigation
+        binding.buttonNext.setOnClickListener {
+            findNavController()
+                .navigate(DockSelectFragmentDirections.actionDockSelectFragmentToSortFragment())
+        }
+
+        binding.buttonPrevious.setOnClickListener {
+            findNavController()
+                .navigate(DockSelectFragmentDirections.actionDockSelectFragmentToWallpaperFragment())
+        }
+
+        return binding.root
+    }
+
+    private fun setDockListRecyclerview() {
+        // set dock list recyclerview
+        val dockListAdapter = DockAppListAdapter()
+
+        binding.dockRecyclerview.adapter = dockListAdapter
+
+        viewModel.dockList.observe(viewLifecycleOwner) {
+            viewModel.setDockList(it)
+        }
+
+        viewModel.dockAppList.observe(viewLifecycleOwner) {
+            dockListAdapter.submitList(it)
+        }
+    }
+
+    private fun setAppListRecyclerview() {
         // set app list recyclerview
         val appListAdapter =
             AppListAdapter(
@@ -43,32 +77,6 @@ class DockSelectFragment : Fragment() {
         viewModel.appList.observe(viewLifecycleOwner) {
             appListAdapter.submitList(it)
         }
-
-        // set dock list recyclerview
-        val dockListAdapter = DockAppListAdapter()
-
-        binding.dockRecyclerview.adapter = dockListAdapter
-
-        viewModel.dockList.observe(viewLifecycleOwner) {
-            viewModel.setDockList(it)
-        }
-
-        viewModel.dockAppList.observe(viewLifecycleOwner) {
-            dockListAdapter.submitList(it)
-        }
-
-        // set button navigation
-        binding.buttonNext.setOnClickListener {
-            findNavController()
-                .navigate(DockSelectFragmentDirections.actionDockSelectFragmentToSortFragment())
-        }
-
-        binding.buttonPrevious.setOnClickListener {
-            findNavController()
-                .navigate(DockSelectFragmentDirections.actionDockSelectFragmentToWallpaperFragment())
-        }
-
-        return binding.root
     }
 
     private fun setSearchView() {

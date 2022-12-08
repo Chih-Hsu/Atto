@@ -26,6 +26,10 @@ class DockAppListAdapter : ListAdapter<App, DockAppListAdapter.AppViewHolder>(ob
 
         fun bind(item: App) {
 
+            setIcon(item)
+        }
+
+        private fun setIcon(item: App) {
             Glide.with(itemView.context)
                 .load(item.iconPath)
                 .into(binding.dockIconImage)

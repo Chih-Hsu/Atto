@@ -26,7 +26,7 @@ class DockViewModel(
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     val dataList = repository.getAllApps()
-    val dockList = repository.getSpecificLabelApps("dock")
+    val dockList = repository.getSpecificLabelApps(DOCK)
 
     private var _appList = MutableLiveData<List<App>>()
     val appList: LiveData<List<App>> get() = _appList
@@ -46,6 +46,7 @@ class DockViewModel(
 
         val allAppList = appList.value
 
+        // if dockList is not null , add all app in dockList
         val dockAppList = mutableListOf<App>().also { newList ->
             dockAppList.value?.let {
                 newList.addAll(it)
@@ -56,13 +57,14 @@ class DockViewModel(
             dockAppList.let { dockApps ->
 
                 val currentApp = apps.first { it.appLabel == appLabel }
+
                 if (dockApps.size < 5 && dockApps.none { it.appLabel == appLabel }) {
 
                     dockApps.add(currentApp)
                     _dockAppList.value = dockApps
 
                     coroutineScope.launch(Dispatchers.IO) {
-                        repository.updateLabel(appLabel, "dock")
+                        repository.updateLabel(appLabel, DOCK)
                         repository.updateSort(appLabel, dockApps.indexOf(currentApp))
                     }
                 } else if (!dockApps.none { it.appLabel == appLabel }) {
@@ -75,10 +77,12 @@ class DockViewModel(
                         repository.updateSort(appLabel, -1)
                     }
                 } else {
+
                 }
             }
         }
     }
+
 
     fun setAppList(list: List<App>) {
         if (appList.value.isNullOrEmpty()) {
@@ -109,5 +113,9 @@ class DockViewModel(
         } else {
             _appList.value = originalList
         }
+    }
+
+    companion object{
+        private const val DOCK = "dock"
     }
 }

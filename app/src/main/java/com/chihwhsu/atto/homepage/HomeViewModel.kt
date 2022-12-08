@@ -72,7 +72,6 @@ class HomeViewModel(private val repository: AttoRepository) : ViewModel() {
             showEdit.value?.let {
                 _showEdit.value = !it
             }
-//            _navigateToEdit.value = !navigateToEdit.value!!
         }
     }
 }

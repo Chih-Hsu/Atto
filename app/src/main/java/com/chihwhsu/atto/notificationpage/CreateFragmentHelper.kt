@@ -2,14 +2,14 @@ package com.chihwhsu.atto.notificationpage
 
 object CreateFragmentHelper {
 
-    var newInstance: CreateFragmentHelper? = null
+    private var newInstance: CreateFragmentHelper? = null
     private var createListener: NoticeCreateListener? = null
 
     fun getInstance(): CreateFragmentHelper {
-        if (CreateFragmentHelper.newInstance == null) {
-            CreateFragmentHelper.newInstance = this
+        if (newInstance == null) {
+            newInstance = this
         }
-        return CreateFragmentHelper.newInstance as CreateFragmentHelper
+        return newInstance as CreateFragmentHelper
     }
 
     fun notifyFragmentCreate(boolean: Boolean) {

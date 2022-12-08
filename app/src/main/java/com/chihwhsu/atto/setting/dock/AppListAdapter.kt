@@ -35,6 +35,17 @@ class AppListAdapter(val viewModel: DockViewModel, val onClickListener: AppOnCli
 
             checkItemInDock(item)
 
+            setIcon(item)
+
+            binding.appName.text = item.appLabel
+
+            itemView.setOnClickListener {
+                onClickListener.onClick(item.appLabel)
+                checkItemInDock(item)
+            }
+        }
+
+        private fun setIcon(item: App) {
             Glide.with(itemView.context)
                 .load(item.iconPath)
                 .into(binding.iconImage)
@@ -44,13 +55,6 @@ class AppListAdapter(val viewModel: DockViewModel, val onClickListener: AppOnCli
             val filter = ColorMatrixColorFilter(colorMatrix)
 
             binding.iconImage.colorFilter = filter
-
-            binding.appName.text = item.appLabel
-
-            itemView.setOnClickListener {
-                onClickListener.onClick(item.appLabel)
-                checkItemInDock(item)
-            }
         }
 
         private fun checkItemInDock(item: App) {

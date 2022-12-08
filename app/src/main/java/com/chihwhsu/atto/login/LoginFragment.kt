@@ -88,7 +88,6 @@ class LoginFragment : Fragment() {
                     )
                 )
             }
-
         })
 
 
@@ -103,7 +102,7 @@ class LoginFragment : Fragment() {
             try {
                 auth.signInWithCredential(credentials).await()
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(requireContext(), "Successfully Logged in", Toast.LENGTH_SHORT)
+                    Toast.makeText(requireContext(), getString(R.string.success_login), Toast.LENGTH_SHORT)
                         .show()
                 }
             } catch (e: Exception) {
