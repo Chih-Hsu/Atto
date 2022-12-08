@@ -56,31 +56,36 @@ class DockViewModel(
         allAppList?.let { apps ->
             dockAppList.let { dockApps ->
 
+                // Get first app in filter list,
+                // Because appLabel is unique, so only have an app or empty
                 val currentApp = apps.first { it.appLabel == appLabel }
 
                 if (dockApps.size < 5 && dockApps.none { it.appLabel == appLabel }) {
-
                     dockApps.add(currentApp)
                     _dockAppList.value = dockApps
 
-                    coroutineScope.launch(Dispatchers.IO) {
-                        repository.updateLabel(appLabel, DOCK)
-                        repository.updateSort(appLabel, dockApps.indexOf(currentApp))
-                    }
-                } else if (!dockApps.none { it.appLabel == appLabel }) {
+                    updateLabelAndSort(appLabel, DOCK, dockApps.indexOf(currentApp))
 
+                } else if (dockApps.any { it.appLabel == appLabel }) {
                     dockApps.remove(currentApp)
                     _dockAppList.value = dockApps
 
-                    coroutineScope.launch(Dispatchers.IO) {
-                        repository.updateLabel(appLabel, null)
-                        repository.updateSort(appLabel, -1)
-                    }
-                } else {
+                    updateLabelAndSort(appLabel, null, DEFAULT_SORT)
 
+                } else {
+                    // If dockApps is more than 5 app, don't do anything
                 }
             }
         }
+    }
+
+    private fun updateLabelAndSort(
+        appLabel: String,
+        label: String?,
+        sort: Int
+    ) = coroutineScope.launch(Dispatchers.IO) {
+        repository.updateLabel(appLabel, label)
+        repository.updateSort(appLabel, sort)
     }
 
 
@@ -103,7 +108,7 @@ class DockViewModel(
             originalList.let {
                 for (item in it) {
                     if (item.appLabel.lowercase(Locale.ROOT)
-                        .contains(text.lowercase(Locale.ROOT))
+                            .contains(text.lowercase(Locale.ROOT))
                     ) {
                         list.add(item)
                     }
@@ -115,7 +120,8 @@ class DockViewModel(
         }
     }
 
-    companion object{
+    companion object {
         private const val DOCK = "dock"
+        private const val DEFAULT_SORT = -1
     }
 }

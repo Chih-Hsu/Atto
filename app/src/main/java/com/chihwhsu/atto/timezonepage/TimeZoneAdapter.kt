@@ -27,6 +27,7 @@ class TimeZoneAdapter(val parent: Int) : ListAdapter<AttoTimeZone, TimeZoneAdapt
             binding.textTimezoneName.text = item.name.uppercase()
             binding.textclockTimezone.timeZone = item.locale
 
+            // If show on home fragment, change color to white else black
             if (parent == HOME_FRAGMENT) {
                 binding.apply {
                     textTimezoneName.setTextColor(ResourcesCompat.getColor(itemView.resources, R.color.light_grey, null))

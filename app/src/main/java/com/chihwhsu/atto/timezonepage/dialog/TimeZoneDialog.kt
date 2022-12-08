@@ -11,7 +11,6 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.chihwhsu.atto.databinding.DialogTimezoneBinding
 import com.chihwhsu.atto.ext.getVmFactory
-import java.util.*
 
 class TimeZoneDialog : DialogFragment() {
 
@@ -32,20 +31,18 @@ class TimeZoneDialog : DialogFragment() {
         binding.recyclerviewTimezoneName.adapter = adapter
 
         viewModel.timeZoneIds.observe(
-            viewLifecycleOwner,
-            androidx.lifecycle.Observer { list ->
-                adapter.submitList(list)
-            }
-        )
+            viewLifecycleOwner
+        ) { list ->
+            adapter.submitList(list)
+        }
 
         viewModel.navigateUp.observe(
-            viewLifecycleOwner,
-            androidx.lifecycle.Observer {
-                if (it == true) {
-                    findNavController().navigateUp()
-                }
+            viewLifecycleOwner
+        ) {
+            if (it == true) {
+                findNavController().navigateUp()
             }
-        )
+        }
 
         return binding.root
     }

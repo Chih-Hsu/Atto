@@ -20,7 +20,7 @@ class SortViewModel(private val repository: AttoRepository) : ViewModel() {
 
     val appList = repository.getAllAppsWithoutDock()
 
-    fun resetList(appList: List<App>, context: Context): List<AppListItem> {
+    fun createListWithLabel(appList: List<App>, context: Context): List<AppListItem> {
 
         // Get all label
         val labelStringList = mutableListOf<String>()
@@ -47,7 +47,6 @@ class SortViewModel(private val repository: AttoRepository) : ViewModel() {
             newList.addAll(list)
         }
 
-//        Log.d("select","$newList")
 
         return newList
     }

@@ -42,6 +42,7 @@ class SetDefaultFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
+        // Don't let user back here when click back button
         requireActivity().finish()
     }
 }

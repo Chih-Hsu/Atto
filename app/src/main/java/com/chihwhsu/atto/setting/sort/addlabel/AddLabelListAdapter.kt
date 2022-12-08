@@ -36,9 +36,17 @@ class AddLabelListAdapter(
 
             checkItemInRemain(item)
 
-//            item.icon?.let {
-//                binding.iconImage.setImageBitmap(it.createGrayscale())
-//            }
+            setIcon(item)
+
+            binding.appName.text = item.appLabel
+
+            itemView.setOnClickListener {
+                onClickListener.onClick(item)
+                checkItemInRemain(item)
+            }
+        }
+
+        private fun setIcon(item: App) {
             Glide.with(itemView.context)
                 .load(item.iconPath)
                 .into(binding.iconImage)
@@ -48,21 +56,11 @@ class AddLabelListAdapter(
             val filter = ColorMatrixColorFilter(colorMatrix)
 
             binding.iconImage.colorFilter = filter
-
-            binding.appName.text = item.appLabel
-
-            // Default background
-//            binding.iconBackground.setBackgroundResource(R.drawable.icon_background)
-
-            itemView.setOnClickListener {
-                onClickListener.onClick(item)
-                checkItemInRemain(item)
-            }
         }
 
         private fun checkItemInRemain(item: App) {
 
-            if (!viewModel.remainList.filter { it.appLabel == item.appLabel }.isEmpty()) {
+            if (viewModel.remainList.any { it.appLabel == item.appLabel }) {
                 binding.iconBackground.setBackgroundResource(R.drawable.icon_background_selected)
             } else {
                 binding.iconBackground.setBackgroundResource(R.drawable.icon_background)

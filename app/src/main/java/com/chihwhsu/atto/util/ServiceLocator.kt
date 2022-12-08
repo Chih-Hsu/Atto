@@ -19,7 +19,6 @@ object ServiceLocator {
     fun provideTasksRepository(context: Context, currentCoroutine: CoroutineScope): AttoRepository {
         synchronized(this) {
             return attoRepository
-                ?: attoRepository
                 ?: createStylishRepository(context, currentCoroutine)
         }
     }

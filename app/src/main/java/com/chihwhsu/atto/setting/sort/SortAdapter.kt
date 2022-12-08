@@ -26,10 +26,6 @@ class SortAdapter(
         }
     }) {
 
-    companion object {
-        const val APP_ITEM_VIEW_TYPE_LABEL = 0x00
-        const val APP_ITEM_VIEW_TYPE_APP = 0x01
-    }
 
     class DeleteOnClickListener(val onClickListener: (label: String) -> Unit) {
         fun onClick(label: String) = onClickListener(label)
@@ -55,10 +51,12 @@ class SortAdapter(
 
     class AppViewHolder(val binding: ItemAppListBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: AppListItem.AppItem) {
-//            binding.iconImage.setImageDrawable(item.icon)
-//            item.app.icon?.let {
-//                binding.iconImage.setImageBitmap(it.createGrayscale())
-//            }
+
+            setIcon(item)
+            binding.appName.text = item.app.appLabel
+        }
+
+        private fun setIcon(item: AppListItem.AppItem) {
             Glide.with(itemView.context)
                 .load(item.app.iconPath)
                 .into(binding.iconImage)
@@ -68,7 +66,6 @@ class SortAdapter(
             val filter = ColorMatrixColorFilter(colorMatrix)
 
             binding.iconImage.colorFilter = filter
-            binding.appName.text = item.app.appLabel
         }
     }
 
@@ -112,5 +109,11 @@ class SortAdapter(
             is AppListItem.LabelItem -> APP_ITEM_VIEW_TYPE_LABEL
             is AppListItem.AppItem -> APP_ITEM_VIEW_TYPE_APP
         }
+    }
+
+
+    companion object {
+        const val APP_ITEM_VIEW_TYPE_LABEL = 0x00
+        const val APP_ITEM_VIEW_TYPE_APP = 0x01
     }
 }

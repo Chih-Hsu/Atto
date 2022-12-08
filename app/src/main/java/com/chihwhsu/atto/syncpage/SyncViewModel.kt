@@ -1,6 +1,5 @@
 package com.chihwhsu.atto.syncpage
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.LiveData
@@ -39,15 +38,12 @@ class SyncViewModel(private val repository: AttoRepository) : ViewModel() {
     private var _user = MutableLiveData<User>()
     val user: LiveData<User> get() = _user
 
-    init {
-//        getUser()
-    }
 
     private fun getAppList(): List<App>? {
         return repository.getAllAppNotLiveData()
     }
 
-    @SuppressLint("NullSafeMutableLiveData")
+
     fun getUser(email: String) {
 
         _status.value = LoadStatus.LOADING
@@ -80,59 +76,6 @@ class SyncViewModel(private val repository: AttoRepository) : ViewModel() {
         }
     }
 
-//    private fun getUser() {
-//
-//        auth.currentUser?.email?.let {
-//            dataBase.collection("user")
-//                .document(it)
-//                .get()
-//                .addOnSuccessListener { document ->
-//
-//                    val currentUser = document.toObject(User::class.java)
-//
-//                    currentUser?.let { newUser ->
-//                        _user.value = newUser
-//                    }
-//
-//                }
-//        }
-//    }
-
-//    fun getData(user: User, context: Context) {
-//
-//        coroutineScope.launch(Dispatchers.Default) {
-//
-//            updateDeviceId(user, context)
-//
-//            val appList = getAppList()
-//
-//            dataBase.collection("user")
-//                .document(user.email!!)
-//                .collection("App")
-//                .get()
-//                .addOnSuccessListener { list ->
-//                    for (item in list) {
-//                        coroutineScope.launch(Dispatchers.IO) {
-//                            val newApp = item.toObject(App::class.java)
-//
-//                            // Check which app is not installed
-//                            if (appList?.filter { it.appLabel == newApp.appLabel }
-//                                    .isNullOrEmpty()) {
-//                                newApp.installed = false
-//                            }
-//
-//                            newApp.iconPath =
-//                                context.filesDir.absolutePath + "/" + "${newApp.appLabel}.png"
-//
-//                            runDataSync(context, user, newApp)
-//
-//                        }
-//                    }
-//                }
-//        }
-//
-//
-//    }
 
     fun syncData(context: Context, user: User) {
 

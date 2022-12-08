@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.chihwhsu.atto.R
 import com.chihwhsu.atto.databinding.DialogUsageLimitBinding
@@ -37,7 +36,7 @@ class UsageLimitDialog : BottomSheetDialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val binding = DialogUsageLimitBinding.inflate(inflater, container, false)
         val app = UsageLimitDialogArgs.fromBundle(requireArguments()).app
 
@@ -74,18 +73,16 @@ class UsageLimitDialog : BottomSheetDialogFragment() {
         }
 
         viewModel.newHour.observe(
-            viewLifecycleOwner,
-            Observer {
-                binding.textHour.text = it.toString()
-            }
-        )
+            viewLifecycleOwner
+        ) {
+            binding.textHour.text = it.toString()
+        }
 
         viewModel.newMinutes.observe(
-            viewLifecycleOwner,
-            Observer {
-                binding.textMinutes.text = it.toString()
-            }
-        )
+            viewLifecycleOwner
+        ) {
+            binding.textMinutes.text = it.toString()
+        }
 
         binding.buttonSend.setOnClickListener {
             viewModel.lockApp(app)

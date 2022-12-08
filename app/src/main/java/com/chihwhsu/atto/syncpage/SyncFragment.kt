@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.chihwhsu.atto.MainActivity
 import com.chihwhsu.atto.R
@@ -39,25 +38,23 @@ class SyncFragment : Fragment() {
         }
 
         viewModel.status.observe(
-            viewLifecycleOwner,
-            Observer {
-                if (it == LoadStatus.LOADING) {
-                    binding.lottieLoading.visibility = View.VISIBLE
-                } else {
-                    binding.lottieLoading.visibility = View.GONE
-                }
+            viewLifecycleOwner
+        ) {
+            if (it == LoadStatus.LOADING) {
+                binding.lottieLoading.visibility = View.VISIBLE
+            } else {
+                binding.lottieLoading.visibility = View.GONE
             }
-        )
+        }
 
         viewModel.navigateToMain.observe(
-            viewLifecycleOwner,
-            Observer {
-                if (it == true) {
-                    val intent = Intent(this.requireActivity(), MainActivity::class.java)
-                    startActivity(intent)
-                }
+            viewLifecycleOwner
+        ) {
+            if (it == true) {
+                val intent = Intent(this.requireActivity(), MainActivity::class.java)
+                startActivity(intent)
             }
-        )
+        }
 
         binding.buttonToTutorial.setOnClickListener {
             findNavController().navigate(SyncFragmentDirections.actionSyncFragmentToWallpaperFragment())

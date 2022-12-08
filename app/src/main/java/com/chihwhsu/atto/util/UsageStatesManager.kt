@@ -17,9 +17,6 @@ object UsageStatesManager {
         val start = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
         val now = ZonedDateTime.now().toInstant().toEpochMilli()
 
-        // from 0:00 to now
-//        val states = usageStateManager.queryAndAggregateUsageStats(start, now)
-
         val states = usageStateManager.queryUsageStats(
             UsageStatsManager.INTERVAL_DAILY, start, now
         )
@@ -41,14 +38,11 @@ object UsageStatesManager {
 
         val usageStateManager =
             context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
-//        val start = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
         val start =
             LocalDate.now().withDayOfYear(1).atStartOfDay(ZoneId.systemDefault()).toInstant()
                 .toEpochMilli()
         val now = ZonedDateTime.now().toInstant().toEpochMilli()
 
-        // from 0:00 to now
-//        val states = usageStateManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST,0,now)
         val states = usageStateManager.queryUsageStats(
             UsageStatsManager.INTERVAL_YEARLY, start, now
         )
@@ -72,7 +66,6 @@ object UsageStatesManager {
         val start = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()
             .toEpochMilli() - 6 * DAY
 
-        val now = ZonedDateTime.now().toInstant().toEpochMilli()
 
         val list = mutableListOf<Float>()
         var currentDayUsage = 0L
@@ -121,7 +114,7 @@ object UsageStatesManager {
 
             val day = currentDayUsage.toFloat() / MINUTE.toFloat()
             list.add(day)
-            Log.d("usage", "$currentDayUsage")
+
         }
 
         if (list.size < 7) {

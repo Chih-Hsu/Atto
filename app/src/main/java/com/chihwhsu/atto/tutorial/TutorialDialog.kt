@@ -14,8 +14,6 @@ import com.chihwhsu.atto.util.UserPreference
 class TutorialDialog : DialogFragment() {
 
     private lateinit var binding: DialogIntroApplistBinding
-//    private val viewModel by viewModels<AppListViewModel> { getVmFactory() }
-//    private lateinit var adapter: AppListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

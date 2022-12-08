@@ -102,7 +102,7 @@ class AlarmActivity : AppCompatActivity() {
 
                                 val notification: Notification =
                                     NotificationCompat.Builder(this@AlarmActivity, CHANNEL_ID)
-                                        .setContentTitle("該 工 作 囉 ~")
+                                        .setContentTitle(getString(R.string.time_to_work_alarm))
                                         .setContentText("剩餘時間 : ${millisUntilFinished.toMinuteSecondFormat()} ")
                                         .setSmallIcon(R.drawable.ic_launcher_foreground)
                                         .setContentIntent(pendingIntent)

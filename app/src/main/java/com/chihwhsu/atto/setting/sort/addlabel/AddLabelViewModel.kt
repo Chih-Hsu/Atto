@@ -39,9 +39,10 @@ class AddLabelViewModel(private val repository: AttoRepository) : ViewModel() {
             remainList.addAll(it)
         }
     }
+
     fun addToList(app: App) {
 
-        if (remainList.filter { it.appLabel == app.appLabel }.isEmpty()) {
+        if (remainList.none { it.appLabel == app.appLabel }) {
             remainList.add(app)
         } else {
             remainList.remove(app)
@@ -61,36 +62,27 @@ class AddLabelViewModel(private val repository: AttoRepository) : ViewModel() {
             originalList.addAll(it)
         }
 
-        _labelAppList.value = originalList.filter { it.label?.lowercase() == editLabel?.lowercase() }
+        _labelAppList.value =
+            originalList.filter { it.label?.lowercase() == editLabel?.lowercase() }
     }
 
     fun updateAppLabel(label: String) {
 
-//        coroutineScope.launch(Dispatchers.Default) {
         val oldLabelList = originalList.filter { it.label == editLabel }
-
-        if (oldLabelList.size > remainList.size) {
 
             for (app in oldLabelList) {
 
-                if (remainList.filter { it.appLabel == app.appLabel }.isEmpty()) {
+                if (remainList.none { it.appLabel == app.appLabel }) {
                     // if true means the app already removed from the remainList,so remove it's label and sort
-                    coroutineScope.launch(Dispatchers.IO) {
-                        repository.updateLabel(app.appLabel, null)
-                        repository.updateSort(app.appLabel, -1)
-                    }
+                    updateLabelAndSort(app.appLabel, null, DEFAULT_SORT)
                 }
             }
 
             for (app in remainList) {
 
-                coroutineScope.launch(Dispatchers.IO) {
-                    repository.updateLabel(app.appLabel, label.lowercase())
-                    repository.updateSort(app.appLabel, remainList.indexOf(app))
-                }
+                updateLabelAndSort(app.appLabel, label.lowercase(), remainList.indexOf(app))
             }
             _navigateToSort.value = true
-        }
     }
 
     fun doneNavigation() {
@@ -103,7 +95,7 @@ class AddLabelViewModel(private val repository: AttoRepository) : ViewModel() {
             originalList.let {
                 for (item in it) {
                     if (item.appLabel.lowercase(Locale.ROOT)
-                        .contains(text.lowercase(Locale.ROOT))
+                            .contains(text.lowercase(Locale.ROOT))
                     ) {
                         list.add(item)
                     }
@@ -113,5 +105,18 @@ class AddLabelViewModel(private val repository: AttoRepository) : ViewModel() {
         } else {
             _filterList.value = originalList
         }
+    }
+
+    private fun updateLabelAndSort(
+        appLabel: String,
+        label: String?,
+        sort: Int
+    ) = coroutineScope.launch(Dispatchers.IO) {
+        repository.updateLabel(appLabel, label)
+        repository.updateSort(appLabel, sort)
+    }
+
+    companion object{
+        private const val DEFAULT_SORT = -1
     }
 }

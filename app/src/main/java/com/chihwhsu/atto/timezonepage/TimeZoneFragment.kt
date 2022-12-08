@@ -33,11 +33,10 @@ class TimeZoneFragment : Fragment() {
         setItemTouchHelper(adapter)
 
         viewModel.timeZoneList.observe(
-            viewLifecycleOwner,
-            androidx.lifecycle.Observer { list ->
-                adapter.submitList(list.sortedBy { it.sort })
-            }
-        )
+            viewLifecycleOwner
+        ) { list ->
+            adapter.submitList(list.sortedBy { it.sort })
+        }
 
         binding.buttonAdd.setOnClickListener {
             findNavController().navigate(TimeZoneFragmentDirections.actionTimeZoneFragmentToTimeZoneDialog())
@@ -53,13 +52,13 @@ class TimeZoneFragment : Fragment() {
             binding.multiCheckbox.isChecked = true
         }
 
-        binding.singleCheckbox.addOnCheckedStateChangedListener { checkBox, state ->
+        binding.singleCheckbox.addOnCheckedStateChangedListener { checkBox, _ ->
             if (checkBox.isChecked) {
                 binding.multiCheckbox.isChecked = false
                 UserPreference.showSingleTimeZoneClock = true
             }
         }
-        binding.multiCheckbox.addOnCheckedStateChangedListener { checkBox, state ->
+        binding.multiCheckbox.addOnCheckedStateChangedListener { checkBox, _ ->
             if (checkBox.isChecked) {
                 binding.singleCheckbox.isChecked = false
                 UserPreference.showSingleTimeZoneClock = false
@@ -70,7 +69,7 @@ class TimeZoneFragment : Fragment() {
     private fun setItemTouchHelper(adapter: TimeZoneAdapter) {
         val simpleCallback = object : ItemTouchHelper.SimpleCallback(
             ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.START or ItemTouchHelper.END,
-            100
+            MIN_DISTANCE
         ) {
 
             override fun onMove(
@@ -88,12 +87,14 @@ class TimeZoneFragment : Fragment() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
 
-//                adapter.notifyItemRemoved(position)
                 viewModel.remove(adapter.currentList[position])
-//                adapter.notifyDataSetChanged()
             }
         }
         val itemHelper = ItemTouchHelper(simpleCallback)
         itemHelper.attachToRecyclerView(binding.recyclerviewTimezone)
+    }
+
+    companion object{
+        private const val MIN_DISTANCE = 100
     }
 }

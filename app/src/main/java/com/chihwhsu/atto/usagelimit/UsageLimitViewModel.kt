@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.data.AppLockTimer
 import com.chihwhsu.atto.data.database.AttoRepository
+import com.chihwhsu.atto.util.HOUR
+import com.chihwhsu.atto.util.MINUTE
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -72,7 +74,7 @@ class UsageLimitViewModel(private val repository: AttoRepository) : ViewModel() 
 
         val hour = newHour.value ?: 0
         val minutes = newMinutes.value ?: 0
-        val time = hour.toLong() * 60 * 60 * 1000 + minutes.toLong() * 60 * 1000
+        val time = hour.toLong() * HOUR + minutes.toLong() * MINUTE
         val newAppLockTimer = AppLockTimer(0, app.packageName, System.currentTimeMillis(), time)
 
         coroutineScope.launch(Dispatchers.IO) {
