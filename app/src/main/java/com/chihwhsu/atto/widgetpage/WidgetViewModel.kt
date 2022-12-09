@@ -18,11 +18,10 @@ class WidgetViewModel(val repository: AttoRepository) : ViewModel() {
 
     val widgets = repository.getAllWidget()
 
-    val catchWidget = mutableMapOf<String, Boolean>()
+    private val catchWidget = mutableMapOf<String, Boolean>()
 
     fun setCatchWidget(widget: Widget) {
-
-        catchWidget.put(widget.label, true)
+        catchWidget[widget.label] = true
     }
 
     fun checkWidgetVisible(widgetLabel: String): Boolean {

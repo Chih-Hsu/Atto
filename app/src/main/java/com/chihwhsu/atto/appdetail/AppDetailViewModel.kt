@@ -51,7 +51,7 @@ class AppDetailViewModel(private val repository: AttoRepository, private val arg
     fun create24HBarSet(list: List<Float>) {
 
         val perHourBarSet = listOf(
-            "00" to 1f,
+            "00" to list[0],
             "." to list[1],
             "." to list[2],
             "." to list[3],
@@ -59,8 +59,8 @@ class AppDetailViewModel(private val repository: AttoRepository, private val arg
             "." to list[5],
             "." to list[6],
             "." to list[7],
-            "08" to 12f,
-            "." to 3f,
+            "08" to list[8],
+            "." to list[9],
             "." to list[10],
             "." to list[11],
             "12" to list[12],

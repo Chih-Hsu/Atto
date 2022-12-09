@@ -10,21 +10,21 @@ import com.chihwhsu.atto.databinding.ItemWidgetBinding
 
 class WidgetAdapter(val onClickListener: WidgetOnClickListener) :
     ListAdapter<AppWidgetProviderInfo, WidgetAdapter.WidgetViewHolder>(object :
-            DiffUtil.ItemCallback<AppWidgetProviderInfo>() {
-            override fun areItemsTheSame(
-                oldItem: AppWidgetProviderInfo,
-                newItem: AppWidgetProviderInfo
-            ): Boolean {
-                return oldItem.label == newItem.label
-            }
+        DiffUtil.ItemCallback<AppWidgetProviderInfo>() {
+        override fun areItemsTheSame(
+            oldItem: AppWidgetProviderInfo,
+            newItem: AppWidgetProviderInfo
+        ): Boolean {
+            return oldItem.label == newItem.label
+        }
 
-            override fun areContentsTheSame(
-                oldItem: AppWidgetProviderInfo,
-                newItem: AppWidgetProviderInfo
-            ): Boolean {
-                return oldItem.describeContents() == newItem.describeContents()
-            }
-        }) {
+        override fun areContentsTheSame(
+            oldItem: AppWidgetProviderInfo,
+            newItem: AppWidgetProviderInfo
+        ): Boolean {
+            return oldItem.describeContents() == newItem.describeContents()
+        }
+    }) {
 
     class WidgetOnClickListener(val onClickListener: (label: String) -> Unit) {
         fun onClick(label: String) = onClickListener(label)
@@ -34,7 +34,12 @@ class WidgetAdapter(val onClickListener: WidgetOnClickListener) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: AppWidgetProviderInfo) {
-            binding.imageWidgetIcon.setImageDrawable(item.loadPreviewImage(itemView.context, itemView.resources.displayMetrics.density.toInt()))
+            binding.imageWidgetIcon.setImageDrawable(
+                item.loadPreviewImage(
+                    itemView.context,
+                    itemView.resources.displayMetrics.density.toInt()
+                )
+            )
 
             binding.textWidget.text = item.label
             itemView.setOnClickListener {

@@ -10,21 +10,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.chihwhsu.atto.NavigationDirections
 import com.chihwhsu.atto.R
+import com.chihwhsu.atto.data.Widget
 import com.chihwhsu.atto.databinding.FragmentWidgetBinding
 import com.chihwhsu.atto.ext.getVmFactory
 
 class WidgetFragment : Fragment() {
 
-    companion object {
-        const val HOST_ID = 1
-        const val REQUEST_BIND_APPWIDGET = 99
-    }
 
     private lateinit var appWidgetHost: AppWidgetHost
     private lateinit var binding: FragmentWidgetBinding
@@ -51,100 +48,70 @@ class WidgetFragment : Fragment() {
         appWidgetHost.startListening()
 
         viewModel.widgets.observe(
-            viewLifecycleOwner,
-            Observer { widgets ->
+            viewLifecycleOwner
+        ) { widgets ->
 
-                for (widget in widgets) {
+            for (widget in widgets) {
 
-                    if (viewModel.checkWidgetVisible(widget.label)) {
-                        viewModel.setCatchWidget(widget)
+                // if Widget already display , don't add again
+                if (viewModel.checkWidgetVisible(widget.label)) {
+                    viewModel.setCatchWidget(widget)
 
-                        val widgetInfo =
-                            appWidgetManager.installedProviders.filter { it.label == widget.label }
-                                .first()
-                        val appWidgetId = appWidgetHost.allocateAppWidgetId()
-                        val canBind =
-                            appWidgetManager.bindAppWidgetIdIfAllowed(appWidgetId, widgetInfo.provider)
+                    // Get widget info
+                    val widgetInfo =
+                        appWidgetManager.installedProviders.first { it.label == widget.label }
+                    val appWidgetId = appWidgetHost.allocateAppWidgetId()
+                    val canBind =
+                        appWidgetManager.bindAppWidgetIdIfAllowed(appWidgetId, widgetInfo.provider)
 
-//                val viewR = RemoteViews(widgetInfo.provider.packageName,widgetInfo.initialLayout)
-                        if (canBind) {
-                            val widgetView = appWidgetHost.createView(
-                                requireActivity().applicationContext,
-                                appWidgetId,
-                                widgetInfo
-                            ).apply {
-                                background = resources.getDrawable(R.drawable.widget_rounded_background)
-                                setAppWidget(appWidgetId, widgetInfo)
-                            }
-//                    binding.containerWidget.addView(widgetView)
-
-                            val layoutParam = LinearLayout.LayoutParams(
-                                LinearLayout.LayoutParams.MATCH_PARENT,
-                                LinearLayout.LayoutParams.WRAP_CONTENT
-                            )
-                            layoutParam.topMargin = 30
-//                        binding.containerWidget.addView(
-//                            widgetView,
-//                            WindowManager.LayoutParams.MATCH_PARENT,
-//                            WindowManager.LayoutParams.WRAP_CONTENT
-//                        )
-//                        binding.containerWidget.addView(
-//                            widgetView,
-//                            layoutParam
-//                        )
-
-                            widgetView.setOnLongClickListener {
-                                viewModel.deleteWidget(widget.id)
-                                appWidgetHost.deleteHost()
-                                findNavController().navigate(
-                                    NavigationDirections.actionGlobalWidgetRemoveDialog(
-                                        widget
-                                    )
-                                )
-                                true
-                            }
-//                        val layoutParam = ViewGroup.LayoutParams(
-//                            WindowManager.LayoutParams.MATCH_PARENT,
-//                            widgetInfo.minHeight
-//                        )
-//
-//
-//                    layoutParam.width = WindowManager.LayoutParams.MATCH_PARENT
-//                    layoutParam.height = widgetInfo.minHeight
-
-                            binding.containerWidget.addView(widgetView, layoutParam)
-                        } else {
-                            getWidgetPermission(appWidgetId, widgetInfo)
-                        }
+                    if (canBind) {
+                        addWidgetView(appWidgetId, widgetInfo, widget)
+                    } else {
+                        getWidgetPermission(appWidgetId, widgetInfo)
                     }
                 }
             }
-        )
+        }
 
-//        setBlurView(binding)
 
         return binding.root
     }
 
-//    private fun setBlurView(binding: FragmentWidgetBinding) {
-//        val radius = 7f
-//        val decorView = requireActivity().window.decorView
-//        // ViewGroup you want to start blur from. Choose root as close to BlurView in hierarchy as possible.
-//        val rootView = decorView.findViewById(android.R.id.content) as ViewGroup
-//
-//        // Optional:
-//        // Set drawable to draw in the beginning of each blurred frame.
-//        // Can be used in case your layout has a lot of transparent space and your content
-//        // gets a too low alpha value after blur is applied.
-//        val windowBackground = decorView.background
-//
-//        binding.blurView.setupWith(
-//            rootView,
-//            RenderScriptBlur(requireContext())
-//        ) // or RenderEffectBlur
-//            .setFrameClearDrawable(windowBackground) // Optional
-//            .setBlurRadius(radius)
-//    }
+    private fun addWidgetView(
+        appWidgetId: Int,
+        widgetInfo: AppWidgetProviderInfo?,
+        widget: Widget
+    ) {
+        val widgetView = appWidgetHost.createView(
+            requireActivity().applicationContext,
+            appWidgetId,
+            widgetInfo
+        ).apply {
+            background = ResourcesCompat.getDrawable(resources,R.drawable.widget_rounded_background,null)
+            setAppWidget(appWidgetId, widgetInfo)
+        }
+
+        val layoutParam = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+
+        layoutParam.topMargin = MARGIN
+
+        widgetView.setOnLongClickListener {
+            viewModel.deleteWidget(widget.id)
+            appWidgetHost.deleteHost()
+            findNavController().navigate(
+                NavigationDirections.actionGlobalWidgetRemoveDialog(
+                    widget
+                )
+            )
+            true
+        }
+
+        binding.containerWidget.addView(widgetView, layoutParam)
+    }
+
 
     private fun getWidgetPermission(appWidgetId: Int, info: AppWidgetProviderInfo) {
 
@@ -158,5 +125,11 @@ class WidgetFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         appWidgetHost.stopListening()
+    }
+
+    companion object {
+        const val HOST_ID = 1
+        const val REQUEST_BIND_APPWIDGET = 99
+        const val MARGIN = 30
     }
 }

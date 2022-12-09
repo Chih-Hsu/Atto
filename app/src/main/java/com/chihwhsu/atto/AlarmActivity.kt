@@ -30,10 +30,6 @@ class AlarmActivity : AppCompatActivity() {
     private var ringTone: String? = null
     private var flag: Int? = null
 
-    val CHANNEL_ID = "channelId"
-    val CHANNEL_NAME = "foreground_service"
-    val NOTIFICATION_ID = 1
-    val BREAK_NOTIFICATION_ID = 2
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -231,5 +227,14 @@ class AlarmActivity : AppCompatActivity() {
         )
         val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         manager.createNotificationChannel(channel)
+    }
+
+
+
+    companion object{
+        private const val CHANNEL_ID = "channelId"
+        private const val CHANNEL_NAME = "foreground_service"
+        private const val NOTIFICATION_ID = 1
+        private const val BREAK_NOTIFICATION_ID = 2
     }
 }

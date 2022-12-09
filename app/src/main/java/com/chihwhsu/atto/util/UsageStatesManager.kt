@@ -3,7 +3,6 @@ package com.chihwhsu.atto.util
 import android.app.usage.UsageEvents
 import android.app.usage.UsageStatsManager
 import android.content.Context
-import android.util.Log
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -43,9 +42,11 @@ object UsageStatesManager {
                 .toEpochMilli()
         val now = ZonedDateTime.now().toInstant().toEpochMilli()
 
+        // Get this year data
         val states = usageStateManager.queryUsageStats(
             UsageStatsManager.INTERVAL_YEARLY, start, now
         )
+
         var usageTime = 0L
 
         for (state in states) {
@@ -60,18 +61,18 @@ object UsageStatesManager {
     }
 
     fun getWeekUsageList(context: Context, packageName: String): MutableList<Float> {
+
         val usageStateManager =
             context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
 
+        // Start form six day ago , End in end of today
         val start = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()
             .toEpochMilli() - 6 * DAY
 
-
         val list = mutableListOf<Float>()
-        var currentDayUsage = 0L
 
         for (count in 0 until 6) {
-
+            var currentDayUsage = 0L
             val usageEvents = usageStateManager.queryEvents(
                 start + count * DAY,
                 start + (count + 1) * DAY
@@ -80,43 +81,20 @@ object UsageStatesManager {
             val weekEventList = mutableListOf<Pair<Int, Long>>()
 
             while (usageEvents.hasNextEvent()) {
-
-                val currentEvent = UsageEvents.Event()
-                usageEvents.getNextEvent(currentEvent)
-
-                if (currentEvent.packageName == packageName) {
-
-                    if (currentEvent.eventType == UsageEvents.Event.ACTIVITY_RESUMED
-                        || currentEvent.eventType == UsageEvents.Event.ACTIVITY_PAUSED || currentEvent.eventType == UsageEvents.Event.ACTIVITY_STOPPED) {
-
-                        val newMap = Pair(currentEvent.eventType, currentEvent.timeStamp)
-
-                        weekEventList.add(newMap)
-                    }
-                }
+                // Filter correct event in all events, and add to weekEventList
+                getExistEvents(usageEvents, packageName, weekEventList)
             }
 
-            if (weekEventList.size != 0) {
-                for (position in 0 until weekEventList.size - 1) {
-
-                    if (weekEventList[position].first == UsageEvents.Event.ACTIVITY_RESUMED) {
-                        if (weekEventList[position + 1].first == UsageEvents.Event.ACTIVITY_PAUSED || weekEventList.get(
-                                position + 1
-                            ).first == UsageEvents.Event.ACTIVITY_STOPPED
-                        ) {
-                            val startTime = weekEventList.get(position).second
-                            val endTime = weekEventList.get(position + 1).second
-                            currentDayUsage += (endTime - startTime)
-                        }
-                    }
-                }
+            if (weekEventList.isNotEmpty()) {
+                // add all current day event
+                currentDayUsage = calculateTime(weekEventList)
             }
 
             val day = currentDayUsage.toFloat() / MINUTE.toFloat()
             list.add(day)
-
         }
 
+        // if data size is less 7 , add to 7
         if (list.size < 7) {
             for (i in list.size until 7) {
                 list.add(0f)
@@ -142,39 +120,16 @@ object UsageStatesManager {
                 start + count * HOUR,
                 start + (count + 1) * HOUR
             )
+
             val currentHourEventList = mutableListOf<Pair<Int, Long>>()
-
-            var currentHourUsage = 0L
-
             while (usageEvents.hasNextEvent()) {
 
-                val currentEvent = UsageEvents.Event()
-                usageEvents.getNextEvent(currentEvent)
-
-                if (currentEvent.packageName == packageName) {
-                    if (currentEvent.eventType == UsageEvents.Event.ACTIVITY_RESUMED || currentEvent.eventType == UsageEvents.Event.ACTIVITY_PAUSED || currentEvent.eventType == UsageEvents.Event.ACTIVITY_STOPPED) {
-                        val newMap = Pair(currentEvent.eventType, currentEvent.timeStamp)
-                        currentHourEventList.add(newMap)
-                    }
-                }
+                getExistEvents(usageEvents, packageName, currentHourEventList)
             }
 
+            var currentHourUsage = 0L
             if (currentHourEventList.size != 0) {
-
-                for (position in 0 until currentHourEventList.size - 1) {
-
-                    if (currentHourEventList[position].first == UsageEvents.Event.ACTIVITY_RESUMED) {
-
-                        if (currentHourEventList[position + 1].first == UsageEvents.Event.ACTIVITY_PAUSED || currentHourEventList.get(
-                                position + 1
-                            ).first == UsageEvents.Event.ACTIVITY_STOPPED
-                        ) {
-                            val startTime = currentHourEventList[position].second
-                            val endTime = currentHourEventList[position + 1].second
-                            currentHourUsage += (endTime - startTime)
-                        }
-                    }
-                }
+                currentHourUsage = calculateTime(currentHourEventList)
             }
 
             val hours = currentHourUsage.toFloat() / MINUTE.toFloat()
@@ -191,44 +146,76 @@ object UsageStatesManager {
     }
 
     fun getUsageFromStartTime(context: Context, packageName: String, startTime: Long): Long {
+
         val usageStateManager =
             context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
-
         val now = System.currentTimeMillis()
-
         val usageEvents = usageStateManager.queryEvents(startTime, now)
 
+        // For calculate
         val currentHourEventList = mutableListOf<Pair<Int, Long>>()
         var currentHourUsage = 0L
+
+        // If have event , do calculate
         while (usageEvents.hasNextEvent()) {
-            val currentEvent = UsageEvents.Event()
-            usageEvents.getNextEvent(currentEvent)
-            if (currentEvent.packageName == packageName) {
-                if (currentEvent.eventType == UsageEvents.Event.ACTIVITY_RESUMED || currentEvent.eventType == UsageEvents.Event.ACTIVITY_PAUSED || currentEvent.eventType == UsageEvents.Event.ACTIVITY_STOPPED) {
-                    val newMap = Pair<Int, Long>(currentEvent.eventType, currentEvent.timeStamp)
-                    currentHourEventList.add(newMap)
-                }
-            }
+
+            getExistEvents(usageEvents, packageName, currentHourEventList)
         }
 
         if (currentHourEventList.size != 0) {
             for (position in 0 until currentHourEventList.size - 1) {
-
-                if (currentHourEventList.get(position).first == UsageEvents.Event.ACTIVITY_RESUMED) {
-
-                    if (currentHourEventList.get(position + 1).first == UsageEvents.Event.ACTIVITY_PAUSED || currentHourEventList.get(
-                            position + 1
-                        ).first == UsageEvents.Event.ACTIVITY_STOPPED
-                    ) {
-                        val start = currentHourEventList.get(position).second
-                        val end = currentHourEventList.get(position + 1).second
-                        currentHourUsage += (end - start)
-                    }
-                }
+                currentHourUsage = calculateTime(currentHourEventList)
             }
         }
 
         return currentHourUsage
+    }
+
+    private fun calculateTime(
+        eventList: MutableList<Pair<Int, Long>>
+    ): Long {
+        var total = 0L
+        for (position in 0 until eventList.size - 1) {
+            val nextPosition = position + 1
+
+            if (eventList[position].first == UsageEvents.Event.ACTIVITY_RESUMED &&
+                (eventList[nextPosition].first == UsageEvents.Event.ACTIVITY_PAUSED ||
+                        eventList[nextPosition].first == UsageEvents.Event.ACTIVITY_STOPPED
+                        )
+            ) {
+                val startTime = eventList[position].second
+                val endTime = eventList[nextPosition].second
+                total += (endTime - startTime)
+            }
+        }
+        return total
+    }
+
+    private fun getExistEvents(
+        usageEvents: UsageEvents,
+        packageName: String,
+        weekEventList: MutableList<Pair<Int, Long>>
+    ) {
+        val currentEvent = UsageEvents.Event()
+        usageEvents.getNextEvent(currentEvent)
+
+        if (isCurrentPackageName(currentEvent.packageName,packageName) &&
+            (currentEvent.eventType == UsageEvents.Event.ACTIVITY_RESUMED ||   // Get Screen Time Event
+                    currentEvent.eventType == UsageEvents.Event.ACTIVITY_PAUSED ||   // Get Pause Event
+                    currentEvent.eventType == UsageEvents.Event.ACTIVITY_STOPPED     // Get Stop Event
+                    )
+        ) {
+
+            val newMap = Pair(currentEvent.eventType, currentEvent.timeStamp)
+
+            // Save Event in List
+            weekEventList.add(newMap)
+        }
+    }
+
+    private fun isCurrentPackageName(currentPackageName:String, packageName: String):Boolean{
+        return currentPackageName == packageName
+
     }
 
     private const val SECOND = 1000L

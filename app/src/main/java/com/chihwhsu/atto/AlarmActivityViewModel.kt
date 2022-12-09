@@ -37,8 +37,8 @@ class AlarmActivityViewModel(val repository: AttoRepository) : ViewModel() {
     }
 
     fun lockApp(label: String) {
-        if (event.value!!.lockApp == true) {
-            if (label == "全部") {
+        event.value?.let {
+            if (it.lockApp == true && label == ALL) {
                 coroutineScope.launch(Dispatchers.IO) {
                     repository.lockAllApp()
                 }
@@ -50,8 +50,9 @@ class AlarmActivityViewModel(val repository: AttoRepository) : ViewModel() {
         }
     }
 
+
     fun unLockApp(label: String) {
-        if (label == "全部") {
+        if (label == ALL) {
             coroutineScope.launch(Dispatchers.IO) {
                 repository.unLockAllApp()
             }
@@ -64,5 +65,9 @@ class AlarmActivityViewModel(val repository: AttoRepository) : ViewModel() {
 
     fun setIntent(newIntent: Intent) {
         _currentIntent.value = newIntent
+    }
+
+    companion object {
+        private const val ALL = "全部"
     }
 }

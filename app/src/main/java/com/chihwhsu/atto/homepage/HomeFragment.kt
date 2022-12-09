@@ -260,7 +260,6 @@ class HomeFragment : Fragment() {
             }
         }
 
-//        adapter.notifyDataSetChanged()
 
         binding.buttonDelete.setOnClickListener {
             viewModel.deleteEvent(listOf(event))

@@ -23,7 +23,7 @@ class WidgetRemoveDialog : DialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val binding = DialogWidgetRemoveBinding.inflate(inflater, container, false)
 
         val widget = WidgetRemoveDialogArgs.fromBundle(requireArguments()).widget
@@ -34,18 +34,13 @@ class WidgetRemoveDialog : DialogFragment() {
             viewModel.removeWidget(widget)
         }
 
-//        binding.buttonNegative.setOnClickListener {
-//            findNavController().navigateUp()
-//        }
-
         viewModel.navigateToHome.observe(
-            viewLifecycleOwner,
-            Observer {
-                if (it == true) {
-                    findNavController().navigate(NavigationDirections.actionGlobalMainFragment())
-                }
+            viewLifecycleOwner
+        ) {
+            if (it == true) {
+                findNavController().navigate(NavigationDirections.actionGlobalMainFragment())
             }
-        )
+        }
 
         return binding.root
     }

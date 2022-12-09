@@ -80,23 +80,23 @@ class AppDetailFragment : Fragment() {
         binding.lottieSlide.visibility = View.VISIBLE
         binding.lottieSlide.repeatCount = 3
         binding.lottieSlide.addAnimatorListener(object :
-            Animator.AnimatorListener {
-            override fun onAnimationStart(animation: Animator?) {
-            }
+                Animator.AnimatorListener {
+                override fun onAnimationStart(animation: Animator?) {
+                }
 
-            override fun onAnimationEnd(animation: Animator?) {
-                binding.lottieSlide.visibility = View.GONE
-                UserPreference.showBackgroundSlideAnimation = false
-            }
+                override fun onAnimationEnd(animation: Animator?) {
+                    binding.lottieSlide.visibility = View.GONE
+                    UserPreference.showBackgroundSlideAnimation = false
+                }
 
-            override fun onAnimationCancel(animation: Animator?) {
-                binding.lottieSlide.visibility = View.GONE
-                UserPreference.showBackgroundSlideAnimation = false
-            }
+                override fun onAnimationCancel(animation: Animator?) {
+                    binding.lottieSlide.visibility = View.GONE
+                    UserPreference.showBackgroundSlideAnimation = false
+                }
 
-            override fun onAnimationRepeat(animation: Animator?) {
-            }
-        })
+                override fun onAnimationRepeat(animation: Animator?) {
+                }
+            })
     }
 
     private fun getThemePositionAndUpdate() {
@@ -116,7 +116,7 @@ class AppDetailFragment : Fragment() {
             labelsColor = ResourcesCompat.getColor(resources, R.color.brown, null)
 
             // show data
-            animation.duration = 1000L
+            animation.duration = LONG_DURATION
             animate(barSet)
             show(barSet)
         }
@@ -129,8 +129,8 @@ class AppDetailFragment : Fragment() {
             binding.apply {
                 appName.text = app.appLabel
                 Glide.with(requireContext()).load(app.iconPath).into(iconImage)
-//                totalUsageTime.text = app.getTotalUsage(requireContext()).toFormat()
-                totalUsageTime.text = "2h18m"
+                totalUsageTime.text = app.getTotalUsage(requireContext()).toFormat()
+//             totalUsageTime.text = "2h18m"
             }
 
             getAppUsageTime(app)
@@ -172,7 +172,8 @@ class AppDetailFragment : Fragment() {
         }
     }
 
-    companion object {
+    companion object{
         private const val SCHEME = "package"
+        private const val LONG_DURATION = 1000L
     }
 }
