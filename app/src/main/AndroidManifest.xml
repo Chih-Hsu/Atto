@@ -36,20 +36,21 @@
         <activity
             android:name=".AlarmActivity"
             android:exported="false"
-            android:launchMode="singleTask"
+            android:launchMode="singleInstance"
             android:screenOrientation="sensorPortrait" />
+
         <activity
             android:name=".SettingActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustNothing"
-            android:screenOrientation="sensorPortrait">
-
+            android:screenOrientation="sensorPortrait"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -57,7 +58,7 @@
             android:windowSoftInputMode="adjustPan|stateHidden"
             android:screenOrientation="sensorPortrait"
             android:clearTaskOnLaunch="true"
-            android:launchMode="singleTop">
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.HOME" />
@@ -68,11 +69,11 @@
         <receiver android:name=".component.AlarmReceiver" />
 
         <service android:name=".component.CountDownTimerService" />
+
         <service android:name=".notificationpage.AttoNotificationListenerService"
             android:exported="false"
             android:enabled="true"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
-
             <intent-filter>
                 <action android:name="android.service.notification.NotificationListenerService"/>
             </intent-filter>

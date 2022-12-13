@@ -85,7 +85,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="80dp"
         android:background="@drawable/rounded_background"
-        android:text="Fuck Work"
+        android:text="Close"
         app:backgroundTint="@color/red"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

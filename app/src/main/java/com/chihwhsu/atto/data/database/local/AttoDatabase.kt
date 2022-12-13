@@ -15,17 +15,14 @@ abstract class AttoDatabase : RoomDatabase() {
 
     abstract val attoDatabaseDao: AttoDatabaseDao
 
-
     companion object {
 
         @Volatile
         private var INSTANCE: AttoDatabase? = null
 
-
         fun getInstance(context: Context): AttoDatabase {
 
             synchronized(this) {
-
 
                 var instance = INSTANCE
 
@@ -35,7 +32,6 @@ abstract class AttoDatabase : RoomDatabase() {
                         AttoDatabase::class.java,
                         "app_database"
                     )
-
                         .fallbackToDestructiveMigration()
                         .build()
 

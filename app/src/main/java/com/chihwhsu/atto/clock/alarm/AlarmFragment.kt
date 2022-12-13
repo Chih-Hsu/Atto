@@ -1,6 +1,5 @@
 package com.chihwhsu.atto.clock.alarm
 
-
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -63,8 +62,6 @@ class AlarmFragment : Fragment() {
             }
         }
 
-
-
         return binding.root
     }
 
@@ -108,7 +105,7 @@ class AlarmFragment : Fragment() {
             .build()
 
         binding.imageTimeEdit.setOnClickListener {
-            timePicker.show(parentFragmentManager, "TimePicker")
+            timePicker.show(parentFragmentManager, TAG)
         }
         timePicker.apply {
             addOnPositiveButtonClickListener {
@@ -119,14 +116,13 @@ class AlarmFragment : Fragment() {
                 viewModel.setAlarmTime(time)
 
                 // replace textview text
-                val amPm = if (hour <= 12) "AM" else "PM"
+                val amPm = if (hour <= 12) AM else PM
                 binding.hourMinute.text = resources.getString(
                     R.string.a_hh_mm,
                     amPm,
                     hour.formatHour(),
                     minute.formatMinutes()
                 )
-
             }
         }
     }
@@ -168,6 +164,8 @@ class AlarmFragment : Fragment() {
         const val MINUTE = 60L * 1000L
         const val HOUR = 60L * MINUTE
         const val TIME_PATTERN = "a  hh:mm"
+        const val AM = "AM"
+        const val PM = "PM"
+        const val TAG = "TimePicker"
     }
-
 }

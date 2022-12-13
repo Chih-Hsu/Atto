@@ -6,6 +6,12 @@ plugins {
     id 'kotlin-parcelize'
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
+    id("org.jlleitschuh.gradle.ktlint")
+}
+
+ktlint {
+    android.set(true)
+    outputColorName.set("RED")
 }
 
 android {
@@ -15,8 +21,8 @@ android {
         applicationId "com.chihwhsu.atto"
         minSdk 26
         targetSdk 32
-        versionCode 7
-        versionName "1.0.6"
+        versionCode 8
+        versionName "1.0.7"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

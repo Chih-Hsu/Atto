@@ -11,7 +11,7 @@ import kotlinx.coroutines.*
 class AlarmActivityViewModel(val repository: AttoRepository) : ViewModel() {
 
     private var _event = MutableLiveData<Event>()
-    val event : LiveData<Event> get() = _event
+    val event: LiveData<Event> get() = _event
 
     // Create a Coroutine scope using a job to be able to cancel when needed
     private var viewModelJob = Job()
@@ -19,27 +19,26 @@ class AlarmActivityViewModel(val repository: AttoRepository) : ViewModel() {
     // the Coroutine runs using the Main (UI) dispatcher
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-    private var eventId : Int? = null
+    private var eventId: Int? = null
 
     private var _currentIntent = MutableLiveData<Intent>()
-    val currentIntent : LiveData<Intent> get() = _currentIntent
+    val currentIntent: LiveData<Intent> get() = _currentIntent
 
-    fun getEvent(id : Int){
+    fun getEvent(id: Int) {
         eventId = id
         coroutineScope.launch(Dispatchers.Default) {
             val newEvent = repository.getEvent(id)
-            withContext(Dispatchers.Main){
+            withContext(Dispatchers.Main) {
                 newEvent?.let {
                     _event.value = it
                 }
-
             }
         }
     }
 
-    fun lockApp(label : String){
-        if (event.value!!.lockApp == true) {
-            if (label == "全部") {
+    fun lockApp(label: String) {
+        event.value?.let {
+            if (it.lockApp == true && label == ALL) {
                 coroutineScope.launch(Dispatchers.IO) {
                     repository.lockAllApp()
                 }
@@ -51,19 +50,24 @@ class AlarmActivityViewModel(val repository: AttoRepository) : ViewModel() {
         }
     }
 
-    fun unLockApp(label : String){
-        if (label == "全部") {
+
+    fun unLockApp(label: String) {
+        if (label == ALL) {
             coroutineScope.launch(Dispatchers.IO) {
                 repository.unLockAllApp()
             }
-        }else {
+        } else {
             coroutineScope.launch(Dispatchers.IO) {
                 repository.unLockSpecificLabelApp(label)
             }
         }
     }
 
-    fun setIntent(newIntent:Intent){
+    fun setIntent(newIntent: Intent) {
         _currentIntent.value = newIntent
+    }
+
+    companion object {
+        private const val ALL = "全部"
     }
 }

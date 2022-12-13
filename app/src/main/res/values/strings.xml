@@ -4,4 +4,25 @@
     <string name="MM_DD">%1s %2s</string>
     <string name="remove_widget">你要移除%1s嗎？</string>
     <string name="hello_user">Hello \n%1s</string>
+    <string name="log_in">LOG IN</string>
+    <string name="log_out">LOG OUT</string>
+    <string name="wake_up">Wake Up</string>
+    <string name="time_to_work">Time to Work</string>
+    <string name="time_to_break">Time to Break</string>
+    <string name="no_event">No Event</string>
+
+    <string name="pomodoro_content">Time to Work \n\n %1s to %2s</string>
+    <string name="pomodoro_break_content">Time to Break \n\n %1s to %2s</string>
+    <string name="success_login">Successfully Logged in</string>
+    <string name="please_enter_tag_name">請輸入標籤名稱</string>
+    <string name="switch_on">On</string>
+    <string name="switch_off">Off</string>
+    <string name="time_to_work_alarm">該 工 作 囉 ~</string>
+    <string name="time_to_break_text">該 休 息 囉 ~</string>
+    <string name="time_to_activity_text"> "Time To \n%1s !"</string>
+    <string name="wake_up_text">Wake Up !</string>
+    <string name="work_text">Work !</string>
+    <string name="take_a_break_text">Take a Break !</string>
+
+    <string name="remain_time">剩餘時間 : %1s </string>
 </resources>

@@ -1,6 +1,5 @@
 package com.chihwhsu.atto.timezonepage
 
-
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
@@ -11,7 +10,7 @@ import com.chihwhsu.atto.R
 import com.chihwhsu.atto.data.AttoTimeZone
 import com.chihwhsu.atto.databinding.ItemTimezoneBinding
 
-class TimeZoneAdapter(val parent:Int) : ListAdapter<AttoTimeZone, TimeZoneAdapter.TimeZoneViewHolder>(object :DiffUtil.ItemCallback<AttoTimeZone>(){
+class TimeZoneAdapter(val parent: Int) : ListAdapter<AttoTimeZone, TimeZoneAdapter.TimeZoneViewHolder>(object : DiffUtil.ItemCallback<AttoTimeZone>() {
 
     override fun areContentsTheSame(oldItem: AttoTimeZone, newItem: AttoTimeZone): Boolean {
         return oldItem == newItem
@@ -20,32 +19,31 @@ class TimeZoneAdapter(val parent:Int) : ListAdapter<AttoTimeZone, TimeZoneAdapte
     override fun areItemsTheSame(oldItem: AttoTimeZone, newItem: AttoTimeZone): Boolean {
         return oldItem.id == newItem.id
     }
-
 }) {
 
-   inner class TimeZoneViewHolder(val binding: ItemTimezoneBinding):RecyclerView.ViewHolder(binding.root){
+    inner class TimeZoneViewHolder(val binding: ItemTimezoneBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item:AttoTimeZone){
+        fun bind(item: AttoTimeZone) {
             binding.textTimezoneName.text = item.name.uppercase()
             binding.textclockTimezone.timeZone = item.locale
 
-            if (parent == HOME_FRAGMENT){
+            // If show on home fragment, change color to white else black
+            if (parent == HOME_FRAGMENT) {
                 binding.apply {
-                    textTimezoneName.setTextColor(ResourcesCompat.getColor(itemView.resources,R.color.light_grey,null))
-                    textclockTimezone.setTextColor(ResourcesCompat.getColor(itemView.resources,R.color.light_grey,null))
+                    textTimezoneName.setTextColor(ResourcesCompat.getColor(itemView.resources, R.color.light_grey, null))
+                    textclockTimezone.setTextColor(ResourcesCompat.getColor(itemView.resources, R.color.light_grey, null))
                 }
-            }else{
+            } else {
                 binding.apply {
-                    textTimezoneName.setTextColor(ResourcesCompat.getColor(itemView.resources,R.color.black,null))
-                    textclockTimezone.setTextColor(ResourcesCompat.getColor(itemView.resources,R.color.black,null))
+                    textTimezoneName.setTextColor(ResourcesCompat.getColor(itemView.resources, R.color.black, null))
+                    textclockTimezone.setTextColor(ResourcesCompat.getColor(itemView.resources, R.color.black, null))
                 }
-
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TimeZoneViewHolder {
-        val view = ItemTimezoneBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        val view = ItemTimezoneBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return TimeZoneViewHolder(view)
     }
 
@@ -54,10 +52,8 @@ class TimeZoneAdapter(val parent:Int) : ListAdapter<AttoTimeZone, TimeZoneAdapte
         holder.bind(currentItem)
     }
 
-    companion object{
+    companion object {
         const val HOME_FRAGMENT = 1
         const val TIMEZONE_FRAGMENT = 2
     }
-
-
 }

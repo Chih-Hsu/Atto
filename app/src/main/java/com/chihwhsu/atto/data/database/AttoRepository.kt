@@ -52,9 +52,7 @@ interface AttoRepository {
 
     fun getAppDataCount(): Int
 
-
     // Event
-
 
     suspend fun insert(event: Event)
 
@@ -74,9 +72,7 @@ interface AttoRepository {
 
     fun isPomodoroIsExist(): Boolean
 
-
     // AppLockTimer
-
 
     suspend fun insert(appLockTimer: AppLockTimer)
 
@@ -90,7 +86,6 @@ interface AttoRepository {
 
     fun getAllTimer(): LiveData<List<AppLockTimer>>
 
-
     // Widget
 
     fun getAllWidget(): LiveData<List<Widget>>
@@ -98,7 +93,6 @@ interface AttoRepository {
     fun insert(widget: Widget)
 
     fun deleteWidget(id: Long)
-
 
     // Remote
 
@@ -118,7 +112,6 @@ interface AttoRepository {
 
     suspend fun uploadUser(user: User): Result<Boolean>
 
-
     // TimeZone
 
     fun insert(timeZone: AttoTimeZone)
@@ -126,5 +119,4 @@ interface AttoRepository {
     fun getAllTimeZone(): LiveData<List<AttoTimeZone>>
 
     fun deleteTimeZone(id: Long)
-
 }

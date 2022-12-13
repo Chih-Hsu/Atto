@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.chihwhsu.atto.databinding.FragmentAppSorttingBinding
@@ -20,7 +19,7 @@ class SortFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val binding = FragmentAppSorttingBinding.inflate(inflater, container, false)
 
         binding.addButton.setOnClickListener {
@@ -31,16 +30,18 @@ class SortFragment : Fragment() {
             )
         }
 
-        val adapter = SortAdapter(SortAdapter.DeleteOnClickListener { label ->
-            viewModel.deleteLabel(label)
-        },
+        val adapter = SortAdapter(
+            SortAdapter.DeleteOnClickListener { label ->
+                viewModel.deleteLabel(label)
+            },
             SortAdapter.EditOnClickListener {
                 findNavController().navigate(
                     SortFragmentDirections.actionSortFragmentToAddLabelFragment(
                         it
                     )
                 )
-            })
+            }
+        )
 
         binding.sortRecyclerView.adapter = adapter
         val layoutManager = binding.sortRecyclerView.layoutManager as GridLayoutManager
@@ -54,9 +55,11 @@ class SortFragment : Fragment() {
                 }
             }
         }
-        viewModel.appList.observe(viewLifecycleOwner, Observer {
-            adapter.submitList(viewModel.resetList(it, requireContext()))
-        })
+        viewModel.appList.observe(
+            viewLifecycleOwner
+        ) {
+            adapter.submitList(viewModel.createListWithLabel(it, requireContext()))
+        }
 
         binding.buttonPrevious.setOnClickListener {
             findNavController().navigate(SortFragmentDirections.actionSortFragmentToDockSelectFragment())
@@ -65,12 +68,6 @@ class SortFragment : Fragment() {
         binding.buttonNext.setOnClickListener {
             findNavController().navigate(SortFragmentDirections.actionSortFragmentToGetUsageFragment())
         }
-
-
-
-
-
-
 
         return binding.root
     }

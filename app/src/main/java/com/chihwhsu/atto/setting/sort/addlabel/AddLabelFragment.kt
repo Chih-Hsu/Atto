@@ -8,8 +8,8 @@ import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.chihwhsu.atto.R
 import com.chihwhsu.atto.databinding.FragmentAddLabelBinding
 import com.chihwhsu.atto.ext.getVmFactory
 
@@ -34,41 +34,45 @@ class AddLabelFragment : Fragment() {
         }
 
         val listAdapter =
-            AddLabelListAdapter(viewModel, AddLabelListAdapter.AppOnClickListener { app ->
-                viewModel.addToList(app)
-            })
+            AddLabelListAdapter(
+                viewModel,
+                AddLabelListAdapter.AppOnClickListener { app ->
+                    viewModel.addToList(app)
+                }
+            )
         binding.appListRecyclerview.adapter = listAdapter
 
-
-        viewModel.appList.observe(viewLifecycleOwner, Observer {
+        // get apps
+        viewModel.appList.observe(
+            viewLifecycleOwner
+        ) {
             viewModel.getData()
-        })
+        }
 
-        viewModel.labelAppList.observe(viewLifecycleOwner, Observer {
+        // if from edit, get apps with editLabel, and set background color
+        viewModel.labelAppList.observe(
+            viewLifecycleOwner
+        ) {
             if (editLabel != null) {
                 viewModel.setRemainList(it)
             }
-        })
-
-        viewModel.filterList.observe(viewLifecycleOwner, Observer {
-            listAdapter.submitList(it)
-        })
-
-        binding.buttonCheck.setOnClickListener {
-            val label = binding.editTextLabel.text.toString()
-            if (label.isEmpty()) {
-                Toast.makeText(requireContext(), "請輸入標籤名稱", Toast.LENGTH_SHORT).show()
-            } else {
-                viewModel.updateAppLabel(label)
-            }
         }
 
-        viewModel.navigateToSort.observe(viewLifecycleOwner, Observer { canNavigate ->
+        viewModel.filterList.observe(
+            viewLifecycleOwner
+        ) {
+            listAdapter.submitList(it)
+        }
+
+        viewModel.navigateToSort.observe(
+            viewLifecycleOwner
+        ) { canNavigate ->
             if (canNavigate) {
-                findNavController().navigate(AddLabelFragmentDirections.actionAddLabelFragmentToSortFragment())
+                findNavController()
+                    .navigate(AddLabelFragmentDirections.actionAddLabelFragmentToSortFragment())
                 viewModel.doneNavigation()
             }
-        })
+        }
 
         // searchView
         binding.appSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -82,10 +86,20 @@ class AddLabelFragment : Fragment() {
             }
         })
 
+        binding.buttonCheck.setOnClickListener {
 
+            val label = binding.editTextLabel.text.toString()
+            if (label.isEmpty()) {
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.please_enter_tag_name),
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                viewModel.updateAppLabel(label)
+            }
+        }
 
         return binding.root
     }
-
-
 }

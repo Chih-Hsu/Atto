@@ -1,6 +1,5 @@
 package com.chihwhsu.atto.appinfodialog
 
-
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -25,7 +24,7 @@ class AppInfoDialog : DialogFragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        val binding = DialogAppInfoBinding.inflate(inflater,container,false)
+        val binding = DialogAppInfoBinding.inflate(inflater, container, false)
         val app = AppInfoDialogArgs.fromBundle(requireArguments()).app
         // Icon
         Glide.with(requireContext()).load(app.iconPath).into(binding.iconImage)
@@ -79,6 +78,5 @@ class AppInfoDialog : DialogFragment() {
     override fun onStart() {
         super.onStart()
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
     }
 }

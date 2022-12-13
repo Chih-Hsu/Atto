@@ -2,7 +2,6 @@ package com.chihwhsu.atto.clock.alarm
 
 import android.content.Context
 import android.media.RingtoneManager
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,6 +9,7 @@ import com.chihwhsu.atto.data.Event
 import com.chihwhsu.atto.data.Event.Companion.ALARM_TYPE
 import com.chihwhsu.atto.data.RingTone
 import com.chihwhsu.atto.data.database.AttoRepository
+import com.chihwhsu.atto.util.MINUTE
 import kotlinx.coroutines.*
 
 class AlarmViewModel(private val repository: AttoRepository) : ViewModel() {
@@ -27,24 +27,23 @@ class AlarmViewModel(private val repository: AttoRepository) : ViewModel() {
     val ringToneList: LiveData<List<String>> get() = _ringToneList
 
     private var _event = MutableLiveData<Event>()
-    val event : LiveData<Event> get() = _event
+    val event: LiveData<Event> get() = _event
 
     private var _navigateToAlarmList = MutableLiveData<Boolean>().also {
         it.value = false
     }
-    val navigateToAlarmList : LiveData<Boolean> get() = _navigateToAlarmList
+    val navigateToAlarmList: LiveData<Boolean> get() = _navigateToAlarmList
 
     // for create Event
-    private var alarmTime = System.currentTimeMillis()+600000
+    private var alarmTime = System.currentTimeMillis() + (10 * MINUTE)
 
-    //current time + 10 minutes
-    private var selectRingTonePosition : Int = 0
+    // current time + 10 minutes
+    private var selectRingTonePosition: Int = 0
     private val routineList = mutableListOf(false, false, false, false, false, false, false)
     private var needVibration = false
     private var needSnooze = false
 
     private val ringtoneList = mutableListOf<RingTone>()
-
 
     init {
         _dayList.value = routineList
@@ -75,7 +74,6 @@ class AlarmViewModel(private val repository: AttoRepository) : ViewModel() {
             val stringList = mutableListOf<String>()
             for (item in ringtoneList) {
                 stringList.add(item.name)
-
             }
             withContext(Dispatchers.Main) {
                 _ringToneList.value = stringList
@@ -83,47 +81,43 @@ class AlarmViewModel(private val repository: AttoRepository) : ViewModel() {
         }
     }
 
-    fun setAlarmTime(time : Long){
+    fun setAlarmTime(time: Long) {
         alarmTime = time
     }
 
-    fun setRingTonePosition(ringTonePosition : Int){
+    fun setRingTonePosition(ringTonePosition: Int) {
         selectRingTonePosition = ringTonePosition
     }
 
-    fun setVibration(){
+    fun setVibration() {
         needVibration = !needVibration
     }
 
-    fun setSnooze(){
+    fun setSnooze() {
         needSnooze = !needSnooze
     }
 
     fun saveEvent() {
         val ringTone = ringtoneList[selectRingTonePosition]
-            val newEvent = Event(
-                alarmTime = alarmTime,
-                alarmSoundName = ringTone.name,
-                alarmSoundUri = ringTone.path,
-                routine = routineList,
-                vibration = needVibration,
-                snoozeMode = needSnooze,
-                type = ALARM_TYPE
-            )
+        val newEvent = Event(
+            alarmTime = alarmTime,
+            alarmSoundName = ringTone.name,
+            alarmSoundUri = ringTone.path,
+            routine = routineList,
+            vibration = needVibration,
+            snoozeMode = needSnooze,
+            type = ALARM_TYPE
+        )
 
         _event.value = newEvent
         coroutineScope.launch(Dispatchers.IO) {
             repository.insert(newEvent)
         }
 
-
-
         _navigateToAlarmList.value = true
     }
 
-    fun  doneNavigation(){
+    fun doneNavigation() {
         _navigateToAlarmList.value = false
     }
-
-
 }
