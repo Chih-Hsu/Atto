@@ -27,6 +27,9 @@ class WallpaperFragment : Fragment() {
 
         binding = FragmentWallpaperBinding.inflate(inflater, container, false)
 
+
+        setRecyclerview()
+
         binding.checkButton.setOnClickListener {
             setWallPaper(adapter)
         }
@@ -34,8 +37,6 @@ class WallpaperFragment : Fragment() {
         binding.textKeepWallpaper.setOnClickListener {
             findNavController().navigate(WallpaperFragmentDirections.actionWallpaperFragmentToDockSelectFragment())
         }
-
-        setRecyclerview()
 
         viewModel.navigationToNext.observe(viewLifecycleOwner) { canNavigate ->
             if (canNavigate) {
@@ -72,7 +73,5 @@ class WallpaperFragment : Fragment() {
         viewModel.wallpapers.observe(viewLifecycleOwner) {
             adapter.submitList(it)
         }
-
-
     }
 }

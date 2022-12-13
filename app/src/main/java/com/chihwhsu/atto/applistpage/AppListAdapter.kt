@@ -24,21 +24,20 @@ class AppListAdapter(
     val longClickListener: LongClickListener,
     val viewModel: AppListViewModel
 ) : ListAdapter<AppListItem, RecyclerView.ViewHolder>(object :
-    DiffUtil.ItemCallback<AppListItem>() {
-    override fun areItemsTheSame(oldItem: AppListItem, newItem: AppListItem): Boolean {
-        return oldItem.id == newItem.id
-    }
+        DiffUtil.ItemCallback<AppListItem>() {
+        override fun areItemsTheSame(oldItem: AppListItem, newItem: AppListItem): Boolean {
+            return oldItem.id == newItem.id
+        }
 
-    override fun areContentsTheSame(oldItem: AppListItem, newItem: AppListItem): Boolean {
-        return oldItem == newItem
-    }
-}) {
+        override fun areContentsTheSame(oldItem: AppListItem, newItem: AppListItem): Boolean {
+            return oldItem == newItem
+        }
+    }) {
 
     companion object {
         const val APP_ITEM_VIEW_TYPE_LABEL = 0x00
         const val APP_ITEM_VIEW_TYPE_APP = 0x01
     }
-
 
     class AppOnClickListener(val onClickListener: (app: App) -> Unit) {
         fun onClick(app: App) = onClickListener(app)
@@ -65,7 +64,6 @@ class AppListAdapter(
                     viewModel.isHide[item.title] = !value
 
                     UserPreference.showLabelAnimation = false
-
                 } else {
                     viewModel.isHide[item.title] = true
                 }
@@ -83,7 +81,7 @@ class AppListAdapter(
             showAppOrNot(item.app)
             setIcon(item)
             setBackground(item)
-            setAppClickableStateByEnable(item)  // App is not locked
+            setAppClickableStateByEnable(item) // App is not locked
             setAlphaByInstallState(item)
 
             itemView.setOnLongClickListener {
@@ -99,7 +97,6 @@ class AppListAdapter(
             } else {
                 // if app is not installed , show half transparency
                 itemView.alpha = 0.3F
-
             }
         }
 
@@ -111,7 +108,6 @@ class AppListAdapter(
                 }
                 binding.iconBackground.foreground = null
                 binding.lockImage.visibility = View.GONE
-
             } else {
                 binding.iconBackground.foreground = ResourcesCompat.getDrawable(
                     itemView.resources,
@@ -187,7 +183,6 @@ class AppListAdapter(
             }
             else -> throw ClassCastException("Unknown viewType $viewType")
         }
-
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -200,7 +195,6 @@ class AppListAdapter(
             is AppViewHolder -> {
                 holder.bind((getItem(position) as AppListItem.AppItem))
             }
-
         }
     }
 
@@ -210,6 +204,4 @@ class AppListAdapter(
             is AppListItem.AppItem -> APP_ITEM_VIEW_TYPE_APP
         }
     }
-
-
 }

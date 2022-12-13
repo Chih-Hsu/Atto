@@ -25,13 +25,13 @@ data class Event(
     @ColumnInfo(name = "type")
     val type: Int = -1,
     @ColumnInfo(name = "routine")
-    val routine: List<Boolean>? = emptyList(), //only alarm
+    val routine: List<Boolean>? = emptyList(), // only alarm
     @ColumnInfo(name = "vibration")
-    val vibration: Boolean? = false, //only alarm
+    val vibration: Boolean? = false, // only alarm
     @ColumnInfo(name = "snooze_mode")
-    val snoozeMode: Boolean? = false, //only alarm
+    val snoozeMode: Boolean? = false, // only alarm
     @ColumnInfo(name = "title")
-    val title: String? = "", //only todolist
+    val title: String? = "", // only todolist
     @ColumnInfo(name = "content")
     val content: String? = "", // only todolist
     @ColumnInfo(name = "start_time")
@@ -39,7 +39,7 @@ data class Event(
     @ColumnInfo(name = "lock_app")
     val lockApp: Boolean? = false, // only pomodoro
     @ColumnInfo(name = "lock_app_label")
-    val lockAppLabel: String? = "",// label only pomodoro
+    val lockAppLabel: String? = "", // label only pomodoro
 
 ) {
 
@@ -48,7 +48,6 @@ data class Event(
         const val TODO_TYPE = 2
         const val POMODORO_WORK_TYPE = 3
         const val POMODORO_BREAK_TYPE = 4
-
     }
 
     fun setAlarmTime(applicationContext: Context, newId: Int) {
@@ -72,7 +71,7 @@ data class Event(
         routine?.let {
             for (boolean in it) {
                 if (boolean) {
-                    routineDays.add(it.indexOf(boolean) + 1)  // index of monday is 0 , so + 1
+                    routineDays.add(it.indexOf(boolean) + 1) // index of monday is 0 , so + 1
                 }
             }
         }
@@ -113,13 +112,11 @@ data class Event(
         )
     }
 
-
     fun setPomodoroAlarmTime(applicationContext: Context, newId: Int, duration: Long) {
 
         val time = getTimeFromStartOfDay(startTime!!)
         val hours = time / (1000 * 60 * 60)
         val minutes = time / (1000 * 60) - hours * 60
-
 
         AlarmManagerUtil.setAlarm(
             // applicationContext only
@@ -133,7 +130,5 @@ data class Event(
             1,
             duration
         )
-
     }
-
 }

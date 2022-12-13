@@ -11,22 +11,25 @@ import com.bumptech.glide.Glide
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.databinding.ItemDockBinding
 
-
 class DockAppListAdapter : ListAdapter<App, DockAppListAdapter.AppViewHolder>(object :
-    DiffUtil.ItemCallback<App>(){
-    override fun areItemsTheSame(oldItem: App, newItem: App): Boolean {
-        return oldItem.packageName == newItem.packageName
-    }
+        DiffUtil.ItemCallback<App>() {
+        override fun areItemsTheSame(oldItem: App, newItem: App): Boolean {
+            return oldItem.packageName == newItem.packageName
+        }
 
-    override fun areContentsTheSame(oldItem: App, newItem: App): Boolean {
-        return oldItem == newItem
-    }
-}) {
+        override fun areContentsTheSame(oldItem: App, newItem: App): Boolean {
+            return oldItem == newItem
+        }
+    }) {
 
-    inner class AppViewHolder(val binding: ItemDockBinding): RecyclerView.ViewHolder(binding.root){
+    inner class AppViewHolder(val binding: ItemDockBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: App){
+        fun bind(item: App) {
 
+            setIcon(item)
+        }
+
+        private fun setIcon(item: App) {
             Glide.with(itemView.context)
                 .load(item.iconPath)
                 .into(binding.dockIconImage)
@@ -42,7 +45,8 @@ class DockAppListAdapter : ListAdapter<App, DockAppListAdapter.AppViewHolder>(ob
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AppViewHolder {
         val view = ItemDockBinding.inflate(
             LayoutInflater.from(parent.context),
-            parent,false)
+            parent, false
+        )
         return AppViewHolder(view)
     }
 
@@ -50,5 +54,4 @@ class DockAppListAdapter : ListAdapter<App, DockAppListAdapter.AppViewHolder>(ob
         val currentItem = getItem(position)
         holder.bind(currentItem)
     }
-
 }

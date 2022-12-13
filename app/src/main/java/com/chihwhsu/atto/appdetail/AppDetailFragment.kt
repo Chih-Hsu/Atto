@@ -1,6 +1,5 @@
 package com.chihwhsu.atto.appdetail
 
-
 import android.animation.Animator
 import android.content.Intent
 import android.net.Uri
@@ -63,38 +62,6 @@ class AppDetailFragment : Fragment() {
             showBarChart(barSet)
         }
 
-        viewModel.weekBarSet.observe(viewLifecycleOwner) { weekBarSet ->
-
-//            binding.weekBarChart.apply {
-//
-//                //setting
-//                spacing = 20F
-//                labelsSize = dpToFloat(12)
-//                labelsFormatter = { it.toInt().toString() }
-//                labelsColor = resources.getColor(R.color.brown)
-//
-//                //show data
-//                animation.duration = 1000L
-//                animate(weekBarSet)
-//                show(weekBarSet)
-//            }
-//
-//        })
-//
-//        binding.buttonWeek.setOnClickListener {
-//            binding.apply {
-//                barChart.visibility = View.INVISIBLE
-//                weekBarChart.visibility = View.VISIBLE
-//            }
-//        }
-//
-//        binding.buttonDay.setOnClickListener {
-//            binding.apply {
-//                barChart.visibility = View.VISIBLE
-//                weekBarChart.visibility = View.INVISIBLE
-//            }
-        }
-
         viewModel.navigateUp.observe(viewLifecycleOwner) { canNavigate ->
             if (canNavigate) {
                 viewModel.doneNavigation()
@@ -106,7 +73,6 @@ class AppDetailFragment : Fragment() {
             getThemePositionAndUpdate()
         }
 
-
         return binding.root
     }
 
@@ -114,26 +80,23 @@ class AppDetailFragment : Fragment() {
         binding.lottieSlide.visibility = View.VISIBLE
         binding.lottieSlide.repeatCount = 3
         binding.lottieSlide.addAnimatorListener(object :
-            Animator.AnimatorListener {
-            override fun onAnimationStart(animation: Animator?) {
+                Animator.AnimatorListener {
+                override fun onAnimationStart(animation: Animator?) {
+                }
 
-            }
+                override fun onAnimationEnd(animation: Animator?) {
+                    binding.lottieSlide.visibility = View.GONE
+                    UserPreference.showBackgroundSlideAnimation = false
+                }
 
-            override fun onAnimationEnd(animation: Animator?) {
-                binding.lottieSlide.visibility = View.GONE
-                UserPreference.showBackgroundSlideAnimation = false
-            }
+                override fun onAnimationCancel(animation: Animator?) {
+                    binding.lottieSlide.visibility = View.GONE
+                    UserPreference.showBackgroundSlideAnimation = false
+                }
 
-            override fun onAnimationCancel(animation: Animator?) {
-                binding.lottieSlide.visibility = View.GONE
-                UserPreference.showBackgroundSlideAnimation = false
-
-            }
-
-            override fun onAnimationRepeat(animation: Animator?) {
-
-            }
-        })
+                override fun onAnimationRepeat(animation: Animator?) {
+                }
+            })
     }
 
     private fun getThemePositionAndUpdate() {
@@ -146,14 +109,14 @@ class AppDetailFragment : Fragment() {
     private fun showBarChart(barSet: List<Pair<String, Float>>) {
         binding.barChart.apply {
 
-            //setting
+            // setting
             spacing = 20F
             labelsSize = dpToFloat(12, resources)
             labelsFormatter = { it.toInt().toString() }
             labelsColor = ResourcesCompat.getColor(resources, R.color.brown, null)
 
-            //show data
-            animation.duration = 1000L
+            // show data
+            animation.duration = LONG_DURATION
             animate(barSet)
             show(barSet)
         }
@@ -167,6 +130,7 @@ class AppDetailFragment : Fragment() {
                 appName.text = app.appLabel
                 Glide.with(requireContext()).load(app.iconPath).into(iconImage)
                 totalUsageTime.text = app.getTotalUsage(requireContext()).toFormat()
+//             totalUsageTime.text = "2h18m"
             }
 
             getAppUsageTime(app)
@@ -176,8 +140,10 @@ class AppDetailFragment : Fragment() {
     }
 
     private fun setBackgroundRecyclerview(app: App) {
+
         adapter = AppDetailAdapter()
         val themeList = mutableListOf(Theme.DEFAULT, Theme.BLACK, Theme.HIGH_LIGHT, Theme.KANAHEI)
+
         binding.backgroundRecyclerview.adapter = adapter
         adapter.submitList(themeList)
         binding.backgroundRecyclerview.scrollToPosition(app.theme + 1)
@@ -193,7 +159,7 @@ class AppDetailFragment : Fragment() {
     }
 
     private fun navigateToInfoAndDelete(app: App) {
-        val appUri = Uri.fromParts("package", app.packageName, null)
+        val appUri = Uri.fromParts(SCHEME, app.packageName, null)
         binding.appInfo.setOnClickListener {
             val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
             intent.data = appUri
@@ -204,5 +170,10 @@ class AppDetailFragment : Fragment() {
             val intent = Intent(Intent.ACTION_DELETE, appUri)
             startActivity(intent)
         }
+    }
+
+    companion object{
+        private const val SCHEME = "package"
+        private const val LONG_DURATION = 1000L
     }
 }

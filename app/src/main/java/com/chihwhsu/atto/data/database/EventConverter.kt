@@ -16,7 +16,6 @@ class EventConverter {
         return null
     }
 
-
     @TypeConverter
     fun convertJsonToBooleanList(json: String?): List<Boolean>? {
         json?.let {
@@ -27,7 +26,6 @@ class EventConverter {
         }
 
         return null
-
     }
 //    @TypeConverter
 //    fun convertListToJson(list: List<String>?): String? {
@@ -54,12 +52,8 @@ class EventConverter {
         return uri.toString()
     }
 
-
     @TypeConverter
     fun convertStringToUri(path: String?): Uri? {
         return Uri.parse(path)
     }
-
-
-
 }

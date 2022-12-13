@@ -5,26 +5,19 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import com.chihwhsu.atto.homepage.HomeViewModel
 
-
 class GestureListener(val viewModel: HomeViewModel) : GestureDetector.OnGestureListener {
 
-    private val MIN_MOVE = 100
-
-    class OnScrollListener(val closeCard :()->Unit){
-        fun closeCard() = closeCard
-    }
-
     override fun onDown(e: MotionEvent?): Boolean {
-        Log.d("gesture","onDown")
+        Log.d(TAG, "onDown")
         return true
     }
 
     override fun onShowPress(e: MotionEvent?) {
-        Log.d("gesture","onShow")
+        Log.d(TAG, "onShow")
     }
 
     override fun onSingleTapUp(e: MotionEvent?): Boolean {
-        Log.d("gesture","onSingleTapUp")
+        Log.d(TAG, "onSingleTapUp")
         return false
     }
 
@@ -34,33 +27,30 @@ class GestureListener(val viewModel: HomeViewModel) : GestureDetector.OnGestureL
         distanceX: Float,
         distanceY: Float
     ): Boolean {
-        Log.d("gesture","onScroll")
-//        closeCard
 
+        Log.d(TAG, "onScroll")
         return true
     }
 
     override fun onLongPress(e: MotionEvent?) {
-        Log.d("gesture","onLongPress")
         viewModel.navigateToEdit()
     }
 
     override fun onFling(
-        e1: MotionEvent?,
-        e2: MotionEvent?,
+        event1: MotionEvent?,
+        event2: MotionEvent?,
         velocityX: Float,
         velocityY: Float
     ): Boolean {
 
-        if (e1!!.y - e2!!.y > MIN_MOVE) {
-
+        if (event1!!.y - event2!!.y > MIN_MOVE) {
             viewModel.beginCloseCard()
-
-
-
         }
         return true
     }
 
-
+    companion object {
+        private const val MIN_MOVE = 100
+        private const val TAG = "Gesture"
+    }
 }

@@ -57,33 +57,32 @@ class AppListFragment : Fragment() {
         return binding.root
     }
 
-
     private fun setTutorialAnimation() {
         binding.lottieClick.visibility = View.VISIBLE
         binding.lottieClick.repeatCount = 4
         binding.lottieClick.addAnimatorListener(object :
-            Animator.AnimatorListener {
-            override fun onAnimationStart(animation: Animator?) {
+                Animator.AnimatorListener {
+                override fun onAnimationStart(animation: Animator?) {
+                }
 
-            }
+                override fun onAnimationEnd(animation: Animator?) {
+                    // if user do now click label , run this
+                    binding.lottieClick.visibility = View.GONE
+                    UserPreference.showLabelAnimation = false
+                    animation?.cancel()
+                }
 
-            override fun onAnimationEnd(animation: Animator?) {
-                // if user do now click label , run this
-                binding.lottieClick.visibility = View.GONE
-                UserPreference.showLabelAnimation = false
-            }
-
-            override fun onAnimationCancel(animation: Animator?) {
-
-            }
-
-            override fun onAnimationRepeat(animation: Animator?) {
-                // if user click label , run this
-                if (UserPreference.showLabelAnimation == false) {
+                override fun onAnimationCancel(animation: Animator?) {
                     binding.lottieClick.visibility = View.GONE
                 }
-            }
-        })
+
+                override fun onAnimationRepeat(animation: Animator?) {
+                    // if user click label , run this
+                    if (!UserPreference.showLabelAnimation) {
+                        binding.lottieClick.visibility = View.GONE
+                    }
+                }
+            })
     }
 
     private fun setRecyclerview() {
@@ -92,9 +91,12 @@ class AppListFragment : Fragment() {
 
             AppListAdapter.AppOnClickListener { app ->
                 navigateByPackageName(app)
-            }, AppListAdapter.LongClickListener { app ->
+            },
+
+            AppListAdapter.LongClickListener { app ->
                 findNavController().navigate(NavigationDirections.actionGlobalAppInfoDialog(app))
-            }, viewModel
+            },
+            viewModel
         )
 
         binding.appRecyclerView.adapter = adapter
@@ -169,7 +171,6 @@ class AppListFragment : Fragment() {
                 val launchAppIntent =
                     requireContext().packageManager.getLaunchIntentForPackage(app.packageName)
                 startActivity(launchAppIntent)
-
             } else {
                 // if app is not installed , then navigate to GooglePlay
                 val intent = Intent(
@@ -180,7 +181,6 @@ class AppListFragment : Fragment() {
             }
         }
     }
-
 
     companion object {
         const val MY_PACKAGE_NAME = "com.chihwhsu.atto"

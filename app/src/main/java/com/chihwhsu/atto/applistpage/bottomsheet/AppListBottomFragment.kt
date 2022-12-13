@@ -12,14 +12,11 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.RecyclerView
 import com.chihwhsu.atto.NavigationDirections
 import com.chihwhsu.atto.SettingActivity
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.databinding.DialogAppListBinding
 import com.chihwhsu.atto.ext.getVmFactory
-import java.util.*
 
 class AppListBottomFragment : Fragment() {
 
@@ -34,7 +31,9 @@ class AppListBottomFragment : Fragment() {
 
         Log.d("LaunchTest", "AppListBottomFragment Work")
 
+        // Change SoftInputMode
         requireActivity().window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING or WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
+
         val binding = DialogAppListBinding.inflate(inflater, container, false)
         setRecyclerView(binding)
 
@@ -57,7 +56,6 @@ class AppListBottomFragment : Fragment() {
             }
         })
 
-
         return binding.root
     }
 
@@ -66,15 +64,13 @@ class AppListBottomFragment : Fragment() {
             // ClickListener
             AppListBottomAdapter.AppOnClickListener { app ->
                 navigateByPackageName(app)
-
-            }   // LongClickListener
-            , AppListBottomAdapter.LongClickListener { app ->
+            }, // LongClickListener
+            AppListBottomAdapter.LongClickListener { app ->
                 findNavController().navigate(NavigationDirections.actionGlobalAppInfoDialog(app))
-            })
+            }
+        )
 
         binding.appRecyclerView.adapter = adapter
-        setItemTouchHelper()
-
     }
 
     private fun navigateByPackageName(app: App) {
@@ -86,7 +82,6 @@ class AppListBottomFragment : Fragment() {
                 val launchAppIntent =
                     requireContext().packageManager.getLaunchIntentForPackage(app.packageName)
                 startActivity(launchAppIntent)
-
             } else {
                 // if app is not installed ,  navigate to GooglePlay
                 val intent = Intent(
@@ -98,36 +93,8 @@ class AppListBottomFragment : Fragment() {
         }
     }
 
-    private fun setItemTouchHelper() {
-        val simpleCallback = object : ItemTouchHelper.SimpleCallback(
-            ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.START or ItemTouchHelper.END,
-            0
-        ) {
 
-            override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
-            ): Boolean {
-                val fromPosition = viewHolder.adapterPosition
-                val toPosition = target.adapterPosition
-                val arrayList = ArrayList(adapter.currentList)
-                Collections.swap(arrayList, fromPosition, toPosition)
-                adapter.notifyItemMoved(fromPosition, toPosition)
-
-                return false
-            }
-
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                TODO("Not yet implemented")
-            }
-        }
-
-        //        val itemHelper = ItemTouchHelper(simpleCallback)
-        //        itemHelper.attachToRecyclerView(binding.appRecyclerView)
-    }
-
-    companion object{
+    companion object {
         const val MY_PACKAGE_NAME = "com.chihwhsu.atto"
         const val GOOGLE_PLAY_LINK = "market://details?"
     }

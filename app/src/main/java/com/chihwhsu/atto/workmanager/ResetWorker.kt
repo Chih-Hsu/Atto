@@ -9,8 +9,8 @@ import com.chihwhsu.atto.data.database.local.AttoDatabase
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class ResetWorker(appContext: Context, workerParams: WorkerParameters):
-    Worker(appContext, workerParams){
+class ResetWorker(appContext: Context, workerParams: WorkerParameters) :
+    Worker(appContext, workerParams) {
 
     override fun doWork(): Result {
 
@@ -20,13 +20,13 @@ class ResetWorker(appContext: Context, workerParams: WorkerParameters):
         return Result.success()
     }
 
-    private fun resetTimer(){
+    private fun resetTimer() {
         val databaseDao = AttoDatabase.getInstance(applicationContext).attoDatabaseDao
         databaseDao.deleteAllTimer()
-        databaseDao.unLockAllApp(true,false)
+        databaseDao.unLockAllApp(isEnable = true, notEnable = false)
     }
 
-    fun setResetWorker(context: Context){
+    private fun setResetWorker(context: Context) {
         val currentDate = Calendar.getInstance()
         val dueDate = Calendar.getInstance()
 
@@ -42,9 +42,13 @@ class ResetWorker(appContext: Context, workerParams: WorkerParameters):
         val timeDiff = dueDate.timeInMillis - currentDate.timeInMillis
         val dailyWorkRequest = OneTimeWorkRequestBuilder<ResetWorker>()
             .setInitialDelay(timeDiff, TimeUnit.MILLISECONDS)
-            .addTag("reset worker")
+            .addTag(TAG)
             .build()
 
         WorkManager.getInstance(context).enqueue(dailyWorkRequest)
+    }
+
+    companion object{
+        private const val TAG = "reset worker"
     }
 }

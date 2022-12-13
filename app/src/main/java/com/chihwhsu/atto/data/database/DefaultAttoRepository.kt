@@ -1,13 +1,11 @@
 package com.chihwhsu.atto.data.database
 
-
 import android.content.Context
 import androidx.lifecycle.LiveData
 import com.chihwhsu.atto.data.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-
 
 class DefaultAttoRepository(
     private val attoRemoteDataSource: AttoDataSource,
@@ -94,7 +92,6 @@ class DefaultAttoRepository(
         return attoLocalDataSource.getAllApps()
     }
 
-
     override fun getNoLabelApps(): LiveData<List<App>> {
         return attoLocalDataSource.getNoLabelApps()
     }
@@ -171,7 +168,7 @@ class DefaultAttoRepository(
         return attoLocalDataSource.deleteWidget(id)
     }
 
-    override suspend fun getUser(email:String): Result<User> {
+    override suspend fun getUser(email: String): Result<User> {
         return attoRemoteDataSource.getUser(email)
     }
 
@@ -179,11 +176,15 @@ class DefaultAttoRepository(
         context: Context,
         user: User,
         appList: List<App>
-    ): Result<List<App>>{
+    ): Result<List<App>> {
         return attoRemoteDataSource.syncRemoteData(context, user, appList)
     }
 
-    override suspend fun uploadData(context: Context,localAppList : List<App>,email: String) : Result<Boolean> {
+    override suspend fun uploadData(
+        context: Context,
+        localAppList: List<App>,
+        email: String
+    ): Result<Boolean> {
         return attoRemoteDataSource.uploadData(context, localAppList, email)
     }
 
@@ -191,7 +192,7 @@ class DefaultAttoRepository(
         return attoRemoteDataSource.uploadUser(user)
     }
 
-    override fun getAllTimeZone():LiveData<List<AttoTimeZone>> {
+    override fun getAllTimeZone(): LiveData<List<AttoTimeZone>> {
         return attoLocalDataSource.getAllTimeZone()
     }
 
@@ -211,55 +212,9 @@ class DefaultAttoRepository(
                 attoSystemDataSource.getAllAppNotLiveData()
             }
 
-            withContext(ioDispatcher) {
-
-                if (roomApps.isNullOrEmpty()) {
-                    systemApps?.let {
-
-                        for (app in it) {
-                            withContext(ioDispatcher){
-                                insert(app)
-                            }
-                        }
-                    }
-
-                } else {
-                    // 判斷system與room的差異
-                    // room有的app就不更新
-                    // room沒有的就insert
-                    systemApps?.let { systemList ->
-
-                        for (app in systemList) {
-                            withContext(Dispatchers.IO) {
-//                            if (!roomApps.contains(app)) {
-                                if (roomApps.none { it.appLabel == app.appLabel }) {
-                                    // room沒有的就insert
-                                    insert(app)
-                                } else {
-                                    // room有的就確認imageUrl是否一樣，若不是就更新
-                                    if (app.iconPath != roomApps.first { it.appLabel == app.appLabel }.iconPath) {
-                                        updateIconPath(app.appLabel, app.iconPath)
-                                    }
-
-                                    if (roomApps.any { it.appLabel == app.appLabel }) {
-                                        for (item in roomApps.filter { it.appLabel == app.appLabel }) {
-                                            if (!item.installed) {
-                                                updateAppInstalled(app.appLabel)
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-                            for (currentApp in roomApps) {
-                                // room有system沒有代表已刪除，就從room delete
-                                if (systemList.none { it.appLabel == currentApp.appLabel } && currentApp.installed) {
-                                    delete(currentApp.packageName)
-                                }
-                            }
-                        }
-                    }
-
+            roomApps?.let { room ->
+                systemApps?.let { system ->
+                    handleDifferentSourceData(room, system)
                 }
             }
         }
@@ -277,5 +232,60 @@ class DefaultAttoRepository(
         return attoLocalDataSource.getAppDataCount()
     }
 
+    private suspend fun handleDifferentSourceData(roomApps: List<App>, systemApps: List<App>) {
 
+        withContext(ioDispatcher) {
+
+            if (roomApps.isEmpty()) {
+                for (app in systemApps) {
+                    withContext(ioDispatcher) {
+                        insert(app)
+                    }
+                }
+            } else {
+                // 判斷system與room的差異
+                for (app in systemApps) {
+                    withContext(Dispatchers.IO) {
+                        // room沒有的就insert
+                        if (roomApps.none { it.appLabel == app.appLabel }) {
+                            insert(app)
+                        } else {
+                            updateAppData(app, roomApps)
+                        }
+                    }
+                    deleteRoomAppIfSystemNotContain(roomApps, systemApps)
+                }
+            }
+        }
+    }
+
+    private fun updateAppData(
+        app: App,
+        roomApps: List<App>
+    ) {
+        // room有的就確認imageUrl是否一樣，若不是就更新
+        if (app.iconPath != roomApps.first { it.appLabel == app.appLabel }.iconPath) {
+            updateIconPath(app.appLabel, app.iconPath)
+        }
+
+        if (roomApps.any { it.appLabel == app.appLabel }) {
+            for (item in roomApps.filter { it.appLabel == app.appLabel }) {
+                if (!item.installed) {
+                    updateAppInstalled(app.appLabel)
+                }
+            }
+        }
+    }
+
+    private suspend fun deleteRoomAppIfSystemNotContain(
+        roomApps: List<App>,
+        systemApps: List<App>
+    ) {
+        roomApps.forEach { roomApp ->
+            // room有system沒有代表已刪除，就從room delete
+            if (systemApps.none { it.appLabel == roomApp.appLabel } && roomApp.installed) {
+                delete(roomApp.packageName)
+            }
+        }
+    }
 }

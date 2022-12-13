@@ -9,15 +9,15 @@ import com.chihwhsu.atto.data.Wallpaper
 import com.chihwhsu.atto.databinding.ItemWallpaperBinding
 
 class WallpaperAdapter : ListAdapter<Wallpaper, WallpaperAdapter.WallpaperViewHolder>(object :
-    DiffUtil.ItemCallback<Wallpaper>() {
-    override fun areContentsTheSame(oldItem: Wallpaper, newItem: Wallpaper): Boolean {
-        return oldItem == newItem
-    }
+        DiffUtil.ItemCallback<Wallpaper>() {
+        override fun areContentsTheSame(oldItem: Wallpaper, newItem: Wallpaper): Boolean {
+            return oldItem == newItem
+        }
 
-    override fun areItemsTheSame(oldItem: Wallpaper, newItem: Wallpaper): Boolean {
-        return oldItem.id == newItem.id
-    }
-}) {
+        override fun areItemsTheSame(oldItem: Wallpaper, newItem: Wallpaper): Boolean {
+            return oldItem.id == newItem.id
+        }
+    }) {
 
     class WallpaperViewHolder(val binding: ItemWallpaperBinding) :
         RecyclerView.ViewHolder(binding.root) {

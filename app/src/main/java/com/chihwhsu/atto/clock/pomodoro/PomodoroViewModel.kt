@@ -8,10 +8,10 @@ import com.chihwhsu.atto.data.Event
 import com.chihwhsu.atto.data.Event.Companion.POMODORO_BREAK_TYPE
 import com.chihwhsu.atto.data.Event.Companion.POMODORO_WORK_TYPE
 import com.chihwhsu.atto.data.database.AttoRepository
+import com.chihwhsu.atto.util.MINUTE
 import kotlinx.coroutines.*
 
 class PomodoroViewModel(private val repository: AttoRepository) : ViewModel() {
-
 
     // Create a Coroutine scope using a job to be able to cancel when needed
     private var viewModelJob = Job()
@@ -26,30 +26,24 @@ class PomodoroViewModel(private val repository: AttoRepository) : ViewModel() {
 
     private var isOtherPomodoroInRoom = false
 
-
     // for create Event
-    private var beginTime: Long = System.currentTimeMillis() + 600000
-    private var workTime: Long = 45 * 60 * 1000
-    private var breakTime: Long = 15 * 60 * 1000
+    private var beginTime: Long = System.currentTimeMillis() + 10 * MINUTE
+    private var workTime: Long = 45 * MINUTE
+    private var breakTime: Long = 15 * MINUTE
     private var routineRound = 1
     private var lockAppMode = false
     private var lockAppLabel = ""
-
-    init {
-
-    }
-
 
     fun setBeginTime(time: Long) {
         beginTime = time
     }
 
     fun setWorkTime(time: Long) {
-        workTime = time * 60L * 1000L
+        workTime = time * MINUTE
     }
 
     fun setBreakTime(time: Long) {
-        breakTime = time * 60L * 1000L
+        breakTime = time * MINUTE
     }
 
     fun setRoutineRound(routine: Int) {
@@ -70,7 +64,6 @@ class PomodoroViewModel(private val repository: AttoRepository) : ViewModel() {
     }
 
     fun saveEvent(context: Context) {
-
 
         for (count in 0 until routineRound) {
             val workStartTime = beginTime + (workTime + breakTime) * count
@@ -107,11 +100,9 @@ class PomodoroViewModel(private val repository: AttoRepository) : ViewModel() {
                 repository.insert(workEvent)
                 repository.insert(breakEvent)
             }
-
         }
 
         _navigateToHome.value = true
-
     }
 
     private fun checkPomodoroInRoom() {

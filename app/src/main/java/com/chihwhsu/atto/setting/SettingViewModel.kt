@@ -1,6 +1,6 @@
 package com.chihwhsu.atto.setting
 
-import android.util.Log
+
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,7 +16,6 @@ class SettingViewModel(val repository: AttoRepository) : ViewModel() {
 
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-
     init {
         getAppCount()
     }
@@ -24,11 +23,9 @@ class SettingViewModel(val repository: AttoRepository) : ViewModel() {
     private fun getAppCount() {
         coroutineScope.launch(Dispatchers.Default) {
             val number = repository.getAppDataCount()
-            Log.d("Setting", "$number")
             withContext(Dispatchers.Main) {
                 _appNumber.value = number
             }
-
         }
     }
 

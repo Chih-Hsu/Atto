@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import com.chihwhsu.atto.data.*
 import com.chihwhsu.atto.data.database.AttoDataSource
+import com.chihwhsu.atto.util.MINUTE
 
 class AttoLocalDataSource(private val context: Context) : AttoDataSource {
 
@@ -72,7 +73,10 @@ class AttoLocalDataSource(private val context: Context) : AttoDataSource {
     }
 
     override suspend fun unLockAllApp() {
-        AttoDatabase.getInstance(context).attoDatabaseDao.unLockAllApp(true, false)
+        AttoDatabase.getInstance(context).attoDatabaseDao.unLockAllApp(
+            isEnable = true,
+            notEnable = false
+        )
     }
 
     override fun unLockSpecificLabelApp(label: String) {
@@ -119,7 +123,7 @@ class AttoLocalDataSource(private val context: Context) : AttoDataSource {
         AttoDatabase.getInstance(context).attoDatabaseDao.deleteEvent(id)
     }
 
-    override suspend fun getEvent(id: Int): Event? {
+    override suspend fun getEvent(id: Int): Event {
         return AttoDatabase.getInstance(context).attoDatabaseDao.getEvent(id)
     }
 
@@ -129,14 +133,17 @@ class AttoLocalDataSource(private val context: Context) : AttoDataSource {
 
     override suspend fun delayEvent5Minutes(id: Int) {
         val currentEvent = getEvent(id)
-        currentEvent?.let {
-            val newTime = currentEvent.alarmTime + 5 * 60 * 1000
+        currentEvent.let {
+            val newTime = currentEvent.alarmTime + 5 * MINUTE
             AttoDatabase.getInstance(context).attoDatabaseDao.delayEvent5Minutes(id, newTime)
         }
     }
 
     override fun lockAllApp() {
-        AttoDatabase.getInstance(context).attoDatabaseDao.lockAllApp(false, true)
+        AttoDatabase.getInstance(context).attoDatabaseDao.lockAllApp(
+            notEnable = false,
+            isEnable = true
+        )
     }
 
     override fun lockSpecificLabelApp(label: String) {
@@ -209,5 +216,4 @@ class AttoLocalDataSource(private val context: Context) : AttoDataSource {
     override fun deleteTimeZone(id: Long) {
         AttoDatabase.getInstance(context).attoDatabaseDao.deleteTimeZone(id)
     }
-
 }

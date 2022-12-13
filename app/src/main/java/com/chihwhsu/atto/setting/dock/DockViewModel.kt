@@ -7,11 +7,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.chihwhsu.atto.data.App
 import com.chihwhsu.atto.data.database.AttoRepository
+import java.util.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import java.util.*
 
 class DockViewModel(
     private val packageManager: PackageManager,
@@ -26,7 +26,7 @@ class DockViewModel(
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     val dataList = repository.getAllApps()
-    val dockList = repository.getSpecificLabelApps("dock")
+    val dockList = repository.getSpecificLabelApps(DOCK)
 
     private var _appList = MutableLiveData<List<App>>()
     val appList: LiveData<List<App>> get() = _appList
@@ -42,11 +42,11 @@ class DockViewModel(
         }
     }
 
-
     fun selectApp(appLabel: String) {
 
         val allAppList = appList.value
 
+        // if dockList is not null , add all app in dockList
         val dockAppList = mutableListOf<App>().also { newList ->
             dockAppList.value?.let {
                 newList.addAll(it)
@@ -56,33 +56,38 @@ class DockViewModel(
         allAppList?.let { apps ->
             dockAppList.let { dockApps ->
 
-
+                // Get first app in filter list,
+                // Because appLabel is unique, so only have an app or empty
                 val currentApp = apps.first { it.appLabel == appLabel }
-                if (dockApps.size < 5 && dockApps.none { it.appLabel == appLabel }) {
 
+                if (dockApps.size < 5 && dockApps.none { it.appLabel == appLabel }) {
                     dockApps.add(currentApp)
                     _dockAppList.value = dockApps
 
-                    coroutineScope.launch(Dispatchers.IO) {
-                        repository.updateLabel(appLabel, "dock")
-                        repository.updateSort(appLabel, dockApps.indexOf(currentApp))
-                    }
-                } else if (!dockApps.none { it.appLabel == appLabel }) {
+                    updateLabelAndSort(appLabel, DOCK, dockApps.indexOf(currentApp))
 
+                } else if (dockApps.any { it.appLabel == appLabel }) {
                     dockApps.remove(currentApp)
                     _dockAppList.value = dockApps
 
-                    coroutineScope.launch(Dispatchers.IO) {
-                        repository.updateLabel(appLabel, null)
-                        repository.updateSort(appLabel, -1)
-                    }
+                    updateLabelAndSort(appLabel, null, DEFAULT_SORT)
+
                 } else {
-
-
+                    // If dockApps is more than 5 app, don't do anything
                 }
             }
         }
     }
+
+    private fun updateLabelAndSort(
+        appLabel: String,
+        label: String?,
+        sort: Int
+    ) = coroutineScope.launch(Dispatchers.IO) {
+        repository.updateLabel(appLabel, label)
+        repository.updateSort(appLabel, sort)
+    }
+
 
     fun setAppList(list: List<App>) {
         if (appList.value.isNullOrEmpty()) {
@@ -96,7 +101,6 @@ class DockViewModel(
             _dockAppList.value = list
         }
     }
-
 
     fun filterList(text: String?) {
         if (!text.isNullOrEmpty()) {
@@ -116,5 +120,8 @@ class DockViewModel(
         }
     }
 
-
+    companion object {
+        private const val DOCK = "dock"
+        private const val DEFAULT_SORT = -1
+    }
 }

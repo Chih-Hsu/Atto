@@ -6,9 +6,7 @@ import android.widget.TextClock
 import com.chihwhsu.atto.R
 import java.util.*
 
-
 class CustomTextClock : TextClock {
-
 
     constructor(context: Context?) : super(context) {
         setLocaleDateFormat()
@@ -27,7 +25,6 @@ class CustomTextClock : TextClock {
 
         setLocaleDateFormat()
     }
-
 
     private fun setLocaleDateFormat() {
         val currentLocale = Locale.ENGLISH
@@ -50,6 +47,5 @@ class CustomTextClock : TextClock {
                 this.format24Hour = null
             }
         }
-
     }
 }

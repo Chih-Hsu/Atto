@@ -1,6 +1,5 @@
 package com.chihwhsu.atto.homepage
 
-
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
@@ -16,7 +15,7 @@ import com.chihwhsu.atto.data.Event.Companion.TODO_TYPE
 import com.chihwhsu.atto.databinding.ItemEventBinding
 import com.chihwhsu.atto.ext.getTimeFromStartOfDay
 
-class HomeAdapter(val onClickListener: EventClickListener,val viewModel :HomeViewModel) :
+class HomeAdapter(val onClickListener: EventClickListener, val viewModel: HomeViewModel) :
     ListAdapter<Event, HomeAdapter.EventViewHolder>(object : DiffUtil.ItemCallback<Event>() {
         override fun areContentsTheSame(oldItem: Event, newItem: Event): Boolean {
             return oldItem == newItem
@@ -40,30 +39,44 @@ class HomeAdapter(val onClickListener: EventClickListener,val viewModel :HomeVie
                 onClickListener.onClick(event)
             }
 
-            val color = when(event.type){
-                ALARM_TYPE -> ResourcesCompat.getColor(itemView.resources,R.color.yellow,null)
-                TODO_TYPE -> ResourcesCompat.getColor(itemView.resources,R.color.mid_gray,null)
-                POMODORO_WORK_TYPE -> ResourcesCompat.getColor(itemView.resources,R.color.red,null)
-                POMODORO_BREAK_TYPE -> ResourcesCompat.getColor(itemView.resources,R.color.brown,null)
-                else -> ResourcesCompat.getColor(itemView.resources,R.color.light_grey,null)
+            setEventImageColor(event)
+            showEvent(event)
+        }
+
+        private fun setEventImageColor(event: Event) {
+            val color = when (event.type) {
+                ALARM_TYPE -> ResourcesCompat.getColor(itemView.resources, R.color.yellow, null)
+                TODO_TYPE -> ResourcesCompat.getColor(itemView.resources, R.color.mid_gray, null)
+                POMODORO_WORK_TYPE -> ResourcesCompat.getColor(
+                    itemView.resources,
+                    R.color.red,
+                    null
+                )
+                POMODORO_BREAK_TYPE -> ResourcesCompat.getColor(
+                    itemView.resources,
+                    R.color.brown,
+                    null
+                )
+                else -> ResourcesCompat.getColor(itemView.resources, R.color.light_grey, null)
             }
 
             binding.eventImage.setColorFilter(color)
+        }
 
-
+        private fun showEvent(event: Event) {
 
             if (getTimeFromStartOfDay(System.currentTimeMillis()) > event.alarmTime) {
-                if (event == viewModel.event.value){
+
+                if (event == viewModel.event.value) {
                     binding.eventImage.setImageResource(R.drawable.event_done_select)
-
-                }else{
+                } else {
                     binding.eventImage.setImageResource(R.drawable.event_done)
-
                 }
             } else {
-                if (event == viewModel.event.value){
+
+                if (event == viewModel.event.value) {
                     binding.eventImage.setImageResource(R.drawable.event_doing_select)
-                }else{
+                } else {
                     binding.eventImage.setImageResource(R.drawable.event_doing)
                 }
             }
@@ -82,5 +95,4 @@ class HomeAdapter(val onClickListener: EventClickListener,val viewModel :HomeVie
         }
         holder.bind(currentItem)
     }
-
 }

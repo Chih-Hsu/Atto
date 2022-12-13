@@ -2,8 +2,6 @@ package com.chihwhsu.atto.component
 
 import android.content.Context
 import android.gesture.GestureOverlayView.ORIENTATION_HORIZONTAL
-import android.os.Parcel
-import android.os.Parcelable
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
@@ -12,7 +10,6 @@ import android.widget.FrameLayout
 import androidx.viewpager2.widget.ViewPager2
 import kotlin.math.absoluteValue
 import kotlin.math.sign
-
 
 class NestedScrollableHost : FrameLayout {
 
@@ -32,7 +29,6 @@ class NestedScrollableHost : FrameLayout {
         }
 
     private val child: View? get() = if (childCount > 0) getChildAt(0) else null
-
 
     init {
         touchSlop = ViewConfiguration.get(context).scaledTouchSlop

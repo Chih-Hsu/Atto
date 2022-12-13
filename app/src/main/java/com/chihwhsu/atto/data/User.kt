@@ -1,6 +1,5 @@
 package com.chihwhsu.atto.data
 
-import android.net.Uri
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
@@ -10,6 +9,5 @@ data class User(
     val email: String? = null,
     val name: String? = null,
     val image: String? = null,
-    val deviceId :String? = null
-) : Parcelable {
-}
+    val deviceId: String? = null
+) : Parcelable

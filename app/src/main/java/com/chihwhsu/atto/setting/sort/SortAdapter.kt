@@ -12,25 +12,19 @@ import com.chihwhsu.atto.data.AppListItem
 import com.chihwhsu.atto.databinding.ItemAppListBinding
 import com.chihwhsu.atto.databinding.ItemLabelSettingBinding
 
-
 class SortAdapter(
     val deleteOnClickListener: DeleteOnClickListener,
     val editOnClickListener: EditOnClickListener
 ) : ListAdapter<AppListItem, RecyclerView.ViewHolder>(object :
-    DiffUtil.ItemCallback<AppListItem>() {
-    override fun areItemsTheSame(oldItem: AppListItem, newItem: AppListItem): Boolean {
-        return oldItem.id == newItem.id
-    }
+        DiffUtil.ItemCallback<AppListItem>() {
+        override fun areItemsTheSame(oldItem: AppListItem, newItem: AppListItem): Boolean {
+            return oldItem.id == newItem.id
+        }
 
-    override fun areContentsTheSame(oldItem: AppListItem, newItem: AppListItem): Boolean {
-        return oldItem == newItem
-    }
-}) {
-
-    companion object {
-        const val APP_ITEM_VIEW_TYPE_LABEL = 0x00
-        const val APP_ITEM_VIEW_TYPE_APP = 0x01
-    }
+        override fun areContentsTheSame(oldItem: AppListItem, newItem: AppListItem): Boolean {
+            return oldItem == newItem
+        }
+    }) {
 
 
     class DeleteOnClickListener(val onClickListener: (label: String) -> Unit) {
@@ -57,10 +51,12 @@ class SortAdapter(
 
     class AppViewHolder(val binding: ItemAppListBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: AppListItem.AppItem) {
-//            binding.iconImage.setImageDrawable(item.icon)
-//            item.app.icon?.let {
-//                binding.iconImage.setImageBitmap(it.createGrayscale())
-//            }
+
+            setIcon(item)
+            binding.appName.text = item.app.appLabel
+        }
+
+        private fun setIcon(item: AppListItem.AppItem) {
             Glide.with(itemView.context)
                 .load(item.app.iconPath)
                 .into(binding.iconImage)
@@ -70,7 +66,6 @@ class SortAdapter(
             val filter = ColorMatrixColorFilter(colorMatrix)
 
             binding.iconImage.colorFilter = filter
-            binding.appName.text = item.app.appLabel
         }
     }
 
@@ -94,7 +89,6 @@ class SortAdapter(
             }
             else -> throw ClassCastException("Unknown viewType $viewType")
         }
-
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -107,7 +101,6 @@ class SortAdapter(
             is AppViewHolder -> {
                 holder.bind((getItem(position) as AppListItem.AppItem))
             }
-
         }
     }
 
@@ -118,4 +111,9 @@ class SortAdapter(
         }
     }
 
+
+    companion object {
+        const val APP_ITEM_VIEW_TYPE_LABEL = 0x00
+        const val APP_ITEM_VIEW_TYPE_APP = 0x01
+    }
 }

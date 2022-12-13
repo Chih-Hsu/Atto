@@ -10,13 +10,11 @@ import kotlinx.coroutines.launch
 
 class TimeZoneViewModel(val repository: AttoRepository) : ViewModel() {
 
-
     val timeZoneList = repository.getAllTimeZone()
 
     private var viewModelJob = Job()
 
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
-
 
     fun remove(attoTimeZone: AttoTimeZone) {
         coroutineScope.launch(Dispatchers.IO) {

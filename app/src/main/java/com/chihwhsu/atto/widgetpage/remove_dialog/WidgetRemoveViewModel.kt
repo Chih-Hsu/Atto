@@ -19,18 +19,16 @@ class WidgetRemoveViewModel(val repository: AttoRepository) : ViewModel() {
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     private var _navigateToHome = MutableLiveData<Boolean>()
-    val navigateToHome : LiveData<Boolean> get() = _navigateToHome
+    val navigateToHome: LiveData<Boolean> get() = _navigateToHome
 
     fun removeWidget(widget: Widget) {
-        coroutineScope.launch(Dispatchers.Default){
+        coroutineScope.launch(Dispatchers.Default) {
             repository.deleteWidget(widget.id)
         }
         _navigateToHome.value = true
     }
 
-    fun doneNavigation(){
+    fun doneNavigation() {
         _navigateToHome.value = false
     }
-
-
 }

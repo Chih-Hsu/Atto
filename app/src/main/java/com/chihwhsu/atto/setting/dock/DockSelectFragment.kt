@@ -25,36 +25,8 @@ class DockSelectFragment : Fragment() {
         binding = FragmentDockSelectBinding.inflate(inflater, container, false)
 
         setSearchView()
-
-        // set app list recyclerview
-        val appListAdapter =
-            AppListAdapter(viewModel, AppListAdapter.AppOnClickListener { appLabel ->
-                viewModel.selectApp(appLabel)
-            })
-        binding.appListRecyclerview.adapter = appListAdapter
-
-        viewModel.dataList.observe(viewLifecycleOwner) {
-            viewModel.setAppList(it)
-        }
-
-        viewModel.appList.observe(viewLifecycleOwner) {
-            appListAdapter.submitList(it)
-        }
-
-
-        // set dock list recyclerview
-        val dockListAdapter = DockAppListAdapter()
-
-        binding.dockRecyclerview.adapter = dockListAdapter
-
-        viewModel.dockList.observe(viewLifecycleOwner) {
-            viewModel.setDockList(it)
-        }
-
-        viewModel.dockAppList.observe(viewLifecycleOwner) {
-            dockListAdapter.submitList(it)
-        }
-
+        setAppListRecyclerview()
+        setDockListRecyclerview()
 
         // set button navigation
         binding.buttonNext.setOnClickListener {
@@ -70,6 +42,41 @@ class DockSelectFragment : Fragment() {
         return binding.root
     }
 
+    private fun setDockListRecyclerview() {
+        // set dock list recyclerview
+        val dockListAdapter = DockAppListAdapter()
+
+        binding.dockRecyclerview.adapter = dockListAdapter
+
+        viewModel.dockList.observe(viewLifecycleOwner) {
+            viewModel.setDockList(it)
+        }
+
+        viewModel.dockAppList.observe(viewLifecycleOwner) {
+            dockListAdapter.submitList(it)
+        }
+    }
+
+    private fun setAppListRecyclerview() {
+        // set app list recyclerview
+        val appListAdapter =
+            AppListAdapter(
+                viewModel,
+                AppListAdapter.AppOnClickListener { appLabel ->
+                    viewModel.selectApp(appLabel)
+                }
+            )
+        binding.appListRecyclerview.adapter = appListAdapter
+
+        viewModel.dataList.observe(viewLifecycleOwner) {
+            viewModel.setAppList(it)
+        }
+
+        viewModel.appList.observe(viewLifecycleOwner) {
+            appListAdapter.submitList(it)
+        }
+    }
+
     private fun setSearchView() {
         binding.appSearchView.setOnQueryTextListener(object : OnQueryTextListener {
             override fun onQueryTextChange(newText: String?): Boolean {
@@ -82,6 +89,4 @@ class DockSelectFragment : Fragment() {
             }
         })
     }
-
-
 }
