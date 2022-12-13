@@ -4,7 +4,6 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import com.chihwhsu.atto.component.AlarmReceiver
 import java.util.*
 
@@ -15,12 +14,12 @@ object AlarmManagerUtil {
         val sender = PendingIntent
             .getBroadcast(
                 context,
-                intent.getIntExtra("id", 0),
+                intent.getIntExtra(ID, 0),
                 intent,
                 PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
 
-        val interval = intent.getLongExtra("intervalMills", 0)
+        val interval = intent.getLongExtra(INTERVAL_MILLIS, 0)
         alarmManager.setWindow(AlarmManager.RTC_WAKEUP, time, interval, sender)
     }
 
@@ -54,25 +53,23 @@ object AlarmManagerUtil {
         calendar[calendar[Calendar.YEAR], calendar[Calendar.MONTH], calendar[Calendar.DAY_OF_MONTH], hour, minute] =
             10
 
-//        calendar.set(calendar[Calendar.SECOND],0)
         when (flag) {
             0 -> {
                 intervalMillis = 0
             }
             1 -> {
-                intervalMillis = (24 * 3600 * 1000).toLong()
+                intervalMillis = DAY
             }
             2 -> {
-                intervalMillis = (24 * 3600 * 1000 * 7).toLong()
+                intervalMillis = WEEK
             }
         }
         val intent = Intent(context, AlarmReceiver::class.java)
-//        val intent = Intent(ALARM_ACTION)
-        intent.putExtra("intervalMillis", intervalMillis)
-        intent.putExtra("ringTone", ringTone)
-        intent.putExtra("id", id)
-        intent.putExtra("soundOrVibrator", soundOrVibrator)
-        intent.putExtra("duration", duration)
+        intent.putExtra(INTERVAL_MILLIS, intervalMillis)
+        intent.putExtra(RINGTONE, ringTone)
+        intent.putExtra(ID, id)
+        intent.putExtra(SOUND_OR_VIBRATOR, soundOrVibrator)
+        intent.putExtra(DURATION, duration)
         val sender =
             PendingIntent.getBroadcast(
                 context,
@@ -84,7 +81,6 @@ object AlarmManagerUtil {
             AlarmManager.RTC_WAKEUP, calMethod(week, calendar.timeInMillis),
             intervalMillis, sender
         )
-        Log.d("clockS", "${calMethod(week, calendar.timeInMillis)}")
     }
 
     private fun calMethod(weekFlag: Int, dateTime: Long): Long {
@@ -93,37 +89,45 @@ object AlarmManagerUtil {
         if (weekFlag != 0) {
             val c = Calendar.getInstance()
             var week = c[Calendar.DAY_OF_WEEK]
-            if (1 == week) {
-                week = 7
-            } else if (2 == week) {
-                week = 1
-            } else if (3 == week) {
-                week = 2
-            } else if (4 == week) {
-                week = 3
-            } else if (5 == week) {
-                week = 4
-            } else if (6 == week) {
-                week = 5
-            } else if (7 == week) {
-                week = 6
+            when (week) {
+                1 -> {
+                    week = 7
+                }
+                2 -> {
+                    week = 1
+                }
+                3 -> {
+                    week = 2
+                }
+                4 -> {
+                    week = 3
+                }
+                5 -> {
+                    week = 4
+                }
+                6 -> {
+                    week = 5
+                }
+                7 -> {
+                    week = 6
+                }
             }
             if (weekFlag == week) {
                 time = if (dateTime > System.currentTimeMillis()) {
                     dateTime
                 } else {
-                    dateTime + 7 * 24 * 3600 * 1000
+                    dateTime + WEEK
                 }
             } else if (weekFlag > week) {
-                time = dateTime + (weekFlag - week) * 24 * 3600 * 1000
+                time = dateTime + (weekFlag - week) * DAY
             } else if (weekFlag < week) {
-                time = dateTime + (weekFlag - week + 7) * 24 * 3600 * 1000
+                time = dateTime + (weekFlag - week + 7) * DAY
             }
         } else {
             time = if (dateTime > System.currentTimeMillis()) {
                 dateTime
             } else {
-                dateTime + 24 * 3600 * 1000
+                dateTime + DAY
             }
         }
 
@@ -131,4 +135,12 @@ object AlarmManagerUtil {
 
         return time
     }
+
+
+    private const val RINGTONE = "ringTone"
+    private const val ID = "id"
+    private const val SOUND_OR_VIBRATOR = "soundOrVibrator"
+    private const val INTERVAL_MILLIS = "intervalMillis"
+    private const val DURATION = "duration"
+
 }

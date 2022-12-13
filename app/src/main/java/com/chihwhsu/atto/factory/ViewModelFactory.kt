@@ -2,6 +2,7 @@ package com.chihwhsu.atto.factory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.chihwhsu.atto.AlarmActivityViewModel
 import com.chihwhsu.atto.appinfodialog.AppInfoViewModel
 import com.chihwhsu.atto.applistpage.AppListViewModel
 import com.chihwhsu.atto.applistpage.bottomsheet.AppListBottomViewModel
@@ -91,6 +92,9 @@ class ViewModelFactory constructor(
 
                 isAssignableFrom(SettingViewModel::class.java) ->
                     SettingViewModel(repository)
+
+                isAssignableFrom(AlarmActivityViewModel::class.java) ->
+                    AlarmActivityViewModel(repository)
 
                 else ->
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")

@@ -36,7 +36,6 @@ class SortViewModel(private val repository: AttoRepository) : ViewModel() {
         for (label in labelStringList) {
 
             val list = appList.filter { it.label == label }.map { AppListItem.AppItem(it) }
-
             val totalAppUsage = 0L
             for (item in list) {
                 totalAppUsage + item.app.getTodayUsage(context)

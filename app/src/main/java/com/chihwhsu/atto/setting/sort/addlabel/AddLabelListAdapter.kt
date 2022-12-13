@@ -35,7 +35,6 @@ class AddLabelListAdapter(
         fun bind(item: App) {
 
             checkItemInRemain(item)
-
             setIcon(item)
 
             binding.appName.text = item.appLabel

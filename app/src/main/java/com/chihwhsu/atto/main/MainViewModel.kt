@@ -58,7 +58,6 @@ class MainViewModel(private val repository: AttoRepository) : ViewModel() {
                 for (timer in timers) {
 
                     val app = repository.getApp(timer.packageName)
-
                     app?.let {
                         val usageTime = it.getUsageTimeFromStart(context, timer.startTime)
                         if (usageTime >= timer.targetTime) {
@@ -86,7 +85,6 @@ class MainViewModel(private val repository: AttoRepository) : ViewModel() {
         coroutineScope.launch(Dispatchers.Default) {
 
             val localAppList = repository.getAllAppNotLiveData()
-
             localAppList?.let { appList ->
                 when (val result = repository.uploadData(context, appList, email)) {
 

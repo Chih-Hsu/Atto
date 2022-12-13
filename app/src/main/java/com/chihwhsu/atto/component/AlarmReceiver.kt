@@ -14,8 +14,8 @@ class AlarmReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
 
-        val ringTone = intent!!.getStringExtra("ringTone")
-        val intervalMillis = intent.getLongExtra("intervalMillis", 0)
+        val ringTone = intent!!.getStringExtra(RINGTONE)
+        val intervalMillis = intent.getLongExtra(INTERVAL_MILLIS, 0)
         if (intervalMillis != 0L) {
             AlarmManagerUtil.setAlarmTime(
                 context!!, System.currentTimeMillis() + intervalMillis,
@@ -23,14 +23,23 @@ class AlarmReceiver : BroadcastReceiver() {
             )
         }
 
-        val flag = intent.getIntExtra("soundOrVibrator", 0)
-        val id = intent.getIntExtra("id", 0)
+        val flag = intent.getIntExtra(SOUND_OR_VIBRATOR, 0)
+        val id = intent.getIntExtra(ID, 0)
         val clockIntent = Intent(context, AlarmActivity::class.java)
-        clockIntent.putExtra("ringTone", ringTone)
-        clockIntent.putExtra("flag", flag)
-        clockIntent.putExtra("id", id)
+        clockIntent.putExtra(RINGTONE, ringTone)
+        clockIntent.putExtra(FLAG, flag)
+        clockIntent.putExtra(ID, id)
         clockIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
         context?.startActivity(clockIntent)
+    }
+
+    companion object {
+        private const val RINGTONE = "ringTone"
+        private const val FLAG = "flag"
+        private const val ID = "id"
+        private const val SOUND_OR_VIBRATOR = "soundOrVibrator"
+        private const val INTERVAL_MILLIS = "intervalMillis"
+
     }
 }

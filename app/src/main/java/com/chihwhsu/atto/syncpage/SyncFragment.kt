@@ -31,6 +31,16 @@ class SyncFragment : Fragment() {
 
         binding.textHello.text = getString(R.string.hello_user, userName)
 
+        binding.buttonToTutorial.setOnClickListener {
+            findNavController().navigate(SyncFragmentDirections.actionSyncFragmentToWallpaperFragment())
+        }
+
+        binding.buttonToMain.setOnClickListener {
+            val intent = Intent(requireContext(), MainActivity::class.java)
+            startActivity(intent)
+            requireActivity().finish()
+        }
+
         viewModel.user.observe(viewLifecycleOwner) { user ->
             binding.buttonSync.setOnClickListener {
                 viewModel.syncData(requireContext(), user)
@@ -56,15 +66,7 @@ class SyncFragment : Fragment() {
             }
         }
 
-        binding.buttonToTutorial.setOnClickListener {
-            findNavController().navigate(SyncFragmentDirections.actionSyncFragmentToWallpaperFragment())
-        }
 
-        binding.buttonToMain.setOnClickListener {
-            val intent = Intent(requireContext(), MainActivity::class.java)
-            startActivity(intent)
-            requireActivity().finish()
-        }
 
         return binding.root
     }

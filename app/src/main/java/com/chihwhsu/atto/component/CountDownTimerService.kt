@@ -61,7 +61,7 @@ class CountDownTimerService : Service() {
                         NotificationCompat.Builder(this@CountDownTimerService, CHANNEL_ID)
                             .setContentTitle("Atto Usage Limit Countdown")
                             .setContentText("剩餘時間  ${millisUntilFinished.toMinuteSecondFormat()} ")
-                            .setSmallIcon(R.drawable.ic_launcher_foreground)
+                            .setSmallIcon(R.drawable.atto_icon)
                             .setContentIntent(pendingIntent)
                             .build()
 

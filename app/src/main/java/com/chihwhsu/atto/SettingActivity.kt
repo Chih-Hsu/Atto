@@ -21,9 +21,9 @@ class SettingActivity : AppCompatActivity() {
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS) // Cancel Half Transparent
         window.decorView.systemUiVisibility =
             (
-                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN // Fullscreen，do not hide status bar
-                    or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                )
+                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN // Fullscreen，do not hide status bar
+                            or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    )
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS) // render statusBar background
         window.statusBarColor = Color.TRANSPARENT
 
@@ -36,11 +36,20 @@ class SettingActivity : AppCompatActivity() {
         // Only run this function in first start
         viewModel.appNumber.observe(
             this
-        ) {
-            if (it == 0) {
+        ) { roomDataSize ->
+            if (isNoData(roomDataSize)) {
                 viewModel.updateApp()
             }
         }
+    }
+
+    private fun isNoData(roomDataSize: Int): Boolean {
+        return roomDataSize == EMPTY
+    }
+
+
+    companion object{
+        private const val EMPTY = 0
     }
 
 }

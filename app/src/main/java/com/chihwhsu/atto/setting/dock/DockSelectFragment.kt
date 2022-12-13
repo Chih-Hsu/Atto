@@ -25,9 +25,7 @@ class DockSelectFragment : Fragment() {
         binding = FragmentDockSelectBinding.inflate(inflater, container, false)
 
         setSearchView()
-
         setAppListRecyclerview()
-
         setDockListRecyclerview()
 
         // set button navigation
